@@ -18,11 +18,9 @@ export default function Home() {
           >
             <source src="/videos/masking-before-after-demo.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)/40%] to-black/10" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent" />
+          {/* Gentle scrim confined to the bottom third — keeps the video clear up top, just enough contrast for the text */}
+          <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/55 to-transparent" />
         </div>
-
-        <div className="premium-blur w-[500px] h-[500px] top-[-10%] right-[-10%]" />
 
         <div className="absolute bottom-8 right-6 lg:right-10 hidden sm:block">
           <span className="inline-flex items-center gap-2 text-xs font-semibold text-[rgb(var(--fg-rgb))] bg-[rgb(var(--accent-600)/85%)] px-4 py-2 rounded-full backdrop-blur">
@@ -33,20 +31,20 @@ export default function Home() {
 
         <div className="relative w-full max-w-7xl mx-auto px-6 pb-20 lg:pb-28 pt-40">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-[rgb(var(--accent-300))] text-sm font-medium mb-6">
+            <div className="hero-rise inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-[rgb(var(--accent-300))] text-sm font-medium mb-6">
               <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))] animate-pulse" />
               Professional Photo Editing Services
             </div>
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.95] text-[rgb(var(--fg-rgb))]">
+            <h1 className="hero-rise [animation-delay:120ms] text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.95] text-[rgb(var(--fg-rgb))] [text-shadow:0_2px_24px_rgba(0,0,0,0.55)]">
               Transform Your Photos
               <br />
               <span className="text-[rgb(var(--accent-400))]">with Precision</span>
             </h1>
-            <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/70%)] leading-relaxed max-w-lg">
+            <p className="hero-rise [animation-delay:240ms] mt-6 text-lg text-[rgb(var(--fg-rgb)/80%)] leading-relaxed max-w-lg [text-shadow:0_1px_16px_rgba(0,0,0,0.6)]">
               From flawless clipping paths to high-end retouching — pixel-perfect results
               with fast turnaround for e-commerce, fashion, and advertising.
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
+            <div className="hero-rise [animation-delay:360ms] mt-10 flex flex-col sm:flex-row items-center gap-4">
               <Link
                 href="/contact"
                 className="group px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm inline-flex items-center gap-2"
@@ -86,27 +84,15 @@ export default function Home() {
             <div className="relative aspect-[4/3] lg:aspect-auto lg:h-[26rem] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)]">
               {[
                 { src: "/images/bicycle.jpg", alt: "Product photo editing showcase - bicycle rendered in studio light", delay: "0s" },
-                { src: "/images/car-editing-1.jpg", alt: "Product photo editing showcase - car", delay: "-4s" },
-                { src: "/images/25RN718SOK_BEP-original.jpg", alt: "Product photo editing showcase", delay: "-8s" },
-                { src: "/images/Ghost manipulation services.jpg", alt: "Product photo editing showcase", delay: "-12s" },
+                { src: "/images/car-editing-1.jpg", alt: "Product photo editing showcase - red sports car", delay: "-5s" },
               ].map((slide) => (
                 <div key={slide.src} className="absolute inset-0 hero-slide" style={{ animationDelay: slide.delay }}>
-                  {/* Blurred fill so the frame is never empty around the image */}
-                  <Image
-                    src={slide.src}
-                    alt=""
-                    aria-hidden="true"
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover scale-125 blur-3xl opacity-50"
-                  />
-                  {/* Full, uncropped image */}
                   <Image
                     src={slide.src}
                     alt={slide.alt}
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-contain"
+                    className="object-cover"
                   />
                 </div>
               ))}
@@ -159,10 +145,10 @@ export default function Home() {
                 <Image src="/images/25RN718SOK_BEP-original.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
               </div>
               <div className="aspect-square rounded-3xl overflow-hidden glass-card -mt-8">
-                <Image src="/images/Ghost manipulation services.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
+                <Image src="/images/ghost-manipulation-services.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
               </div>
               <div className="aspect-square rounded-3xl overflow-hidden glass-card">
-                <Image src="/images/before after.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
+                <Image src="/images/before-after.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
               </div>
             </div>
             <div>

@@ -1,12 +1,12 @@
 import Image from "next/image";
 
 const portfolioItems = [
-  { title: "Clipping Path", img: "/images/before after.jpg", category: "Cutouts" },
-  { title: "Ghost Mannequin", img: "/images/Ghost manipulation services.jpg", category: "Apparel" },
-  { title: "Wrinkle Removal", img: "/images/Wrinkle remove.jpg", category: "Retouching" },
+  { title: "Clipping Path", img: "/images/before-after.jpg", category: "Cutouts" },
+  { title: "Ghost Mannequin", img: "/images/ghost-manipulation-services.jpg", category: "Apparel" },
+  { title: "Wrinkle Removal", img: "/images/wrinkle-remove.jpg", category: "Retouching" },
   { title: "Jewelry Retouching", img: "/images/467730158_122106679586616641_5666634243268131988_n.jpg", category: "Product" },
   { title: "Color Change", img: "/images/25RN718SOK_BEP-original.jpg", category: "Color" },
-  { title: "Path & Shadow", img: "/images/Shoe-path-&-shadow-before-after.gif", category: "Shadow" },
+  { title: "Path & Shadow", img: "/images/shoe-path-and-shadow-before-after.gif", category: "Shadow" },
   { title: "Background Removal", img: "/images/Remove-background-before-after.gif", category: "Background" },
   { title: "Dust Removal", img: "/images/before.jpg", category: "Retouching" },
   { title: "Shirt Edit", img: "/images/Shirt-before-after.gif", category: "Editing" },

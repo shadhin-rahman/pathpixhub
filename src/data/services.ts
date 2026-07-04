@@ -30,7 +30,7 @@ export const services: Service[] = [
     details: "Our background removal service uses a combination of advanced techniques including layer masks for non-destructive edits, ensuring perfect results that highlight your images.",
     features: ["White background ready", "Complex edge handling", "Bulk processing available", "Platform optimized"],
     icon: "🖼️",
-    image: "/images/Background Removal.jpg",
+    image: "/images/background-removal.jpg",
   },
   {
     id: "image-masking",
@@ -50,7 +50,7 @@ export const services: Service[] = [
     details: "We use drop shadows, natural shadows, and reflection shadows to create natural-looking results so your visuals pop and grab attention.",
     features: ["Natural shadows", "Drop shadows", "Reflection shadows", "Floating shadows"],
     icon: "🌓",
-    image: "/images/Shadow Creation.gif",
+    image: "/images/shadow-creation.gif",
   },
   {
     id: "ghost-mannequin",
@@ -60,7 +60,7 @@ export const services: Service[] = [
     details: "This innovative technique removes mannequins from your apparel photos, leaving behind a realistic 3D effect that highlights every detail of your garments.",
     features: ["3D realistic effect", "Neck & sleeve precision", "Bulk apparel editing", "E-commerce optimized"],
     icon: "👕",
-    image: "/images/Ghost Mannequin.jpeg",
+    image: "/images/ghost-mannequin.jpeg",
   },
   {
     id: "color-change",
@@ -70,7 +70,7 @@ export const services: Service[] = [
     details: "Our expert team ensures flawless and natural-looking color edits. From subtle enhancements to complete color overhauls, we preserve texture, shadows, and lighting.",
     features: ["Multiple color variants", "Brand color matching", "Natural preservation", "Bulk color editing"],
     icon: "🎨",
-    image: "/images/Color Change.jpg",
+    image: "/images/color-change.jpg",
   },
   {
     id: "photo-retouching",
@@ -100,7 +100,7 @@ export const services: Service[] = [
     details: "From cleaning up backgrounds to refining every detail, we deliver polished, professional images optimized for Amazon, Shopify, eBay, and Etsy.",
     features: ["Platform optimization", "Background cleanup", "Color consistency", "Bulk catalog editing"],
     icon: "🛒",
-    image: "/images/E-commerce Image Editing.jpg",
+    image: "/images/ecommerce-image-editing.jpg",
   },
   {
     id: "car-editing",
