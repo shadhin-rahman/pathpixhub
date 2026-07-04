@@ -42,40 +42,45 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-            <div className="relative lg:h-[30rem] grid grid-cols-2 gap-4">
-              <div className="relative row-span-2 rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)]">
-                <Image
-                  src="/images/bicycle.jpg"
-                  alt="Product photo editing showcase - bicycle"
-                  fill
-                  sizes="(max-width: 1024px) 50vw, 30vw"
-                  className="object-cover ken-burns"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                <div className="absolute bottom-5 left-5">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[rgb(var(--fg-rgb))] bg-[rgb(var(--accent-600)/90%)] px-3 py-1.5 rounded-full backdrop-blur">
-                    Before & After
-                  </span>
-                </div>
-              </div>
-              <div className="relative rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)]">
-                <Image
-                  src="/images/25RN718SOK_BEP-original.jpg"
-                  alt="Product photo editing showcase"
-                  fill
-                  sizes="(max-width: 1024px) 50vw, 22vw"
-                  className="object-cover ken-burns ken-burns-delay"
-                />
-              </div>
-              <div className="relative rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)]">
-                <Image
-                  src="/images/Ghost manipulation services.jpg"
-                  alt="Product photo editing showcase"
-                  fill
-                  sizes="(max-width: 1024px) 50vw, 22vw"
-                  className="object-cover ken-burns"
-                />
+            <div className="relative aspect-[4/3] lg:aspect-auto lg:h-[30rem] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)]">
+              <Image
+                src="/images/bicycle.jpg"
+                alt="Product photo editing showcase - bicycle"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover hero-slide"
+                style={{ animationDelay: "0s" }}
+                priority
+              />
+              <Image
+                src="/images/car-editing-1.jpg"
+                alt="Product photo editing showcase - car"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover hero-slide"
+                style={{ animationDelay: "-4s" }}
+              />
+              <Image
+                src="/images/25RN718SOK_BEP-original.jpg"
+                alt="Product photo editing showcase"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover hero-slide"
+                style={{ animationDelay: "-8s" }}
+              />
+              <Image
+                src="/images/Ghost manipulation services.jpg"
+                alt="Product photo editing showcase"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover hero-slide"
+                style={{ animationDelay: "-12s" }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+              <div className="absolute bottom-5 left-5">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[rgb(var(--fg-rgb))] bg-[rgb(var(--accent-600)/90%)] px-3 py-1.5 rounded-full backdrop-blur">
+                  Before & After
+                </span>
               </div>
             </div>
           </div>
