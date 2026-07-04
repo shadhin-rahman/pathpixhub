@@ -30,12 +30,12 @@ export default function PortfolioPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {portfolioItems.map((item, i) => (
               <div key={i} className="group glass-card rounded-[2rem] overflow-hidden border border-[rgb(var(--fg-rgb)/5%)] hover:bg-[rgb(var(--fg-rgb)/5%)] transition-all duration-500">
-                <div className="relative aspect-[4/3] overflow-hidden bg-[var(--bg-subtle)]">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-[var(--bg-subtle)]">
                   <Image
                     src={item.img}
                     alt={item.title}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
+                    className="object-contain p-2 group-hover:scale-105 transition-transform duration-700 opacity-100"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 </div>

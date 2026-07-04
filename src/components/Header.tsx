@@ -88,7 +88,7 @@ export default function Header() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 200 }}
-              className="fixed top-0 right-0 h-screen w-full md:w-[500px] bg-[var(--bg-alt)] border-l border-[rgb(var(--fg-rgb)/5%)] z-[56] p-12 flex flex-col justify-center overflow-y-auto"
+              className="fixed top-0 right-0 h-screen w-full md:w-[500px] bg-[var(--bg-alt)] border-l border-[rgb(var(--fg-rgb)/5%)] z-[56] px-12 pb-12 pt-28 flex flex-col justify-center overflow-y-auto"
             >
               <div className="space-y-8">
                 <span className="text-[rgb(var(--accent-400))] text-xs uppercase tracking-[0.5em] font-bold block mb-6">Navigation</span>

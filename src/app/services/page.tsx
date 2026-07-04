@@ -49,12 +49,12 @@ export default function ServicesPage() {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </Link>
               </div>
-              <div className={`relative aspect-[4/3] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/5%)] ${index % 2 === 1 ? "lg:order-1" : ""}`}>
+              <div className={`relative aspect-[4/3] rounded-3xl overflow-hidden glass-card bg-[var(--bg-subtle)] border-[rgb(var(--fg-rgb)/5%)] ${index % 2 === 1 ? "lg:order-1" : ""}`}>
                 <Image
                   src={service.image}
                   alt={service.title}
                   fill
-                  className="object-cover"
+                  className="object-contain p-3"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>

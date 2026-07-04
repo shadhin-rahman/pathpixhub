@@ -18,8 +18,8 @@ export default function Home() {
           >
             <source src="/videos/masking-before-after-demo.mp4" type="video/mp4" />
           </video>
-          {/* Gentle scrim confined to the bottom third — keeps the video clear up top, just enough contrast for the text */}
-          <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/55 to-transparent" />
+          <div className="absolute inset-0 bg-[var(--bg)]/70" />
+          <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/85 to-transparent" />
         </div>
 
         <div className="absolute bottom-8 right-6 lg:right-10 hidden sm:block">
@@ -120,7 +120,7 @@ export default function Home() {
                     src={service.image}
                     alt={service.title}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
+                    className="object-contain p-2 group-hover:scale-105 transition-transform duration-700 opacity-90"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 </div>
@@ -138,17 +138,17 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="grid grid-cols-2 gap-4">
-              <div className="aspect-square rounded-3xl overflow-hidden glass-card">
-                <Image src="/images/before.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
+              <div className="aspect-square rounded-3xl overflow-hidden glass-card bg-[var(--bg-subtle)]">
+                <Image src="/images/before.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-contain p-2" />
               </div>
-              <div className="aspect-square rounded-3xl overflow-hidden glass-card mt-8">
-                <Image src="/images/25RN718SOK_BEP-original.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
+              <div className="aspect-square rounded-3xl overflow-hidden glass-card mt-8 bg-[var(--bg-subtle)]">
+                <Image src="/images/25RN718SOK_BEP-original.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-contain p-2" />
               </div>
-              <div className="aspect-square rounded-3xl overflow-hidden glass-card -mt-8">
-                <Image src="/images/ghost-manipulation-services.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
+              <div className="aspect-square rounded-3xl overflow-hidden glass-card -mt-8 bg-[var(--bg-subtle)]">
+                <Image src="/images/ghost-manipulation-services.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-contain p-2" />
               </div>
-              <div className="aspect-square rounded-3xl overflow-hidden glass-card">
-                <Image src="/images/before-after.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
+              <div className="aspect-square rounded-3xl overflow-hidden glass-card bg-[var(--bg-subtle)]">
+                <Image src="/images/before-after.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-contain p-2" />
               </div>
             </div>
             <div>
