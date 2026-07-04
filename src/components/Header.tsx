@@ -29,9 +29,9 @@ export default function Header() {
           <Image
             src="/images/logo.png"
             alt="PathPixHub"
-            width={160}
-            height={50}
-            className="h-9 lg:h-11 w-auto [filter:var(--logo-filter)]"
+            width={140}
+            height={140}
+            className="h-16 lg:h-20 w-auto [filter:var(--logo-filter)]"
             priority
           />
         </Link>

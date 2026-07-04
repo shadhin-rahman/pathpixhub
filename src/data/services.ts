@@ -20,7 +20,7 @@ export const services: Service[] = [
     details: "We utilize the precision of the pen tool to create flawless clipping paths that isolate your images with unmatched accuracy. Our expert designers meticulously outline each object, ensuring a clean and professional finish that enhances your visuals.",
     features: ["Hand-drawn precision paths", "Single & multi-path options", "Clean edge isolation", "Background replacement ready"],
     icon: "✂️",
-    image: "/images/before after.jpg",
+    image: "/images/clipping-path-1.jpg",
   },
   {
     id: "background-removal",
@@ -30,7 +30,7 @@ export const services: Service[] = [
     details: "Our background removal service uses a combination of advanced techniques including layer masks for non-destructive edits, ensuring perfect results that highlight your images.",
     features: ["White background ready", "Complex edge handling", "Bulk processing available", "Platform optimized"],
     icon: "🖼️",
-    image: "/images/Remove-background-before-after.gif",
+    image: "/images/Background Removal.jpg",
   },
   {
     id: "image-masking",
@@ -40,7 +40,7 @@ export const services: Service[] = [
     details: "Our skilled professionals specialize in isolating intricate elements like flowing hair, delicate fur, or transparent objects while maintaining the natural beauty of your subjects.",
     features: ["Hair & fur masking", "Transparent object handling", "Soft edge precision", "Seamless integration"],
     icon: "🎭",
-    image: "/images/Ghost manipulation services.jpg",
+    image: "/images/image-masking-1.jpg",
   },
   {
     id: "shadow-creation",
@@ -50,7 +50,7 @@ export const services: Service[] = [
     details: "We use drop shadows, natural shadows, and reflection shadows to create natural-looking results so your visuals pop and grab attention.",
     features: ["Natural shadows", "Drop shadows", "Reflection shadows", "Floating shadows"],
     icon: "🌓",
-    image: "/images/Shoe-path-&-shadow-before-after.gif",
+    image: "/images/Shadow Creation.gif",
   },
   {
     id: "ghost-mannequin",
@@ -60,7 +60,7 @@ export const services: Service[] = [
     details: "This innovative technique removes mannequins from your apparel photos, leaving behind a realistic 3D effect that highlights every detail of your garments.",
     features: ["3D realistic effect", "Neck & sleeve precision", "Bulk apparel editing", "E-commerce optimized"],
     icon: "👕",
-    image: "/images/1726518931426-before-after.gif",
+    image: "/images/Ghost Mannequin.jpeg",
   },
   {
     id: "color-change",
@@ -70,7 +70,7 @@ export const services: Service[] = [
     details: "Our expert team ensures flawless and natural-looking color edits. From subtle enhancements to complete color overhauls, we preserve texture, shadows, and lighting.",
     features: ["Multiple color variants", "Brand color matching", "Natural preservation", "Bulk color editing"],
     icon: "🎨",
-    image: "/images/25RN718SOK_BEP-original.jpg",
+    image: "/images/Color Change.jpg",
   },
   {
     id: "photo-retouching",
@@ -80,7 +80,7 @@ export const services: Service[] = [
     details: "Using Adobe Photoshop and Lightroom tools we refine skin tones, remove blemishes and adjust lighting. We offer beauty airbrushing, dust removal, wrinkle correction, and more.",
     features: ["Beauty airbrushing", "Dust & scratch removal", "Wrinkle correction", "Skin tone refinement"],
     icon: "✨",
-    image: "/images/before.jpg",
+    image: "/images/photo-retouching-1.jpg",
   },
   {
     id: "multi-clipping-path",
@@ -90,7 +90,7 @@ export const services: Service[] = [
     details: "This advanced technique isolates multiple parts of a single image for targeted adjustments, such as color correction, layer editing, or adding effects.",
     features: ["Per-part color adjustment", "Complex product handling", "Layer separation", "Precision editing"],
     icon: "🔀",
-    image: "/images/C6RX5H - before.jpg",
+    image: "/images/multi-clipping-path-1.jpg",
   },
   {
     id: "ecommerce-editing",
@@ -100,7 +100,7 @@ export const services: Service[] = [
     details: "From cleaning up backgrounds to refining every detail, we deliver polished, professional images optimized for Amazon, Shopify, eBay, and Etsy.",
     features: ["Platform optimization", "Background cleanup", "Color consistency", "Bulk catalog editing"],
     icon: "🛒",
-    image: "/images/25RN718SOK_BEP-original.jpg",
+    image: "/images/E-commerce Image Editing.jpg",
   },
   {
     id: "car-editing",
@@ -110,6 +110,6 @@ export const services: Service[] = [
     details: "We bring out the best in your automotive visuals. From background replacement to color correction and shadow adjustments, we ensure your car images are polished to perfection.",
     features: ["Background replacement", "Color enhancement", "Reflection & shadow", "Scratch removal"],
     icon: "🚗",
-    image: "/images/bicycle.jpg",
+    image: "/images/car-editing-1.jpg",
   },
 ];
