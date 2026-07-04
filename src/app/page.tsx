@@ -18,43 +18,38 @@ export default function Home() {
           >
             <source src="/videos/masking-before-after-demo.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-[var(--bg)]/70" />
-          <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/85 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-[40%] bg-gradient-to-t from-[var(--bg)]/60 to-transparent" />
         </div>
 
         <div className="absolute bottom-8 right-6 lg:right-10 hidden sm:block">
-          <span className="inline-flex items-center gap-2 text-xs font-semibold text-[rgb(var(--fg-rgb))] bg-[rgb(var(--accent-600)/85%)] px-4 py-2 rounded-full backdrop-blur">
-            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+          <span className="inline-flex items-center gap-2 text-xs font-semibold text-white bg-black/40 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10">
+            <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-400))] animate-pulse" />
             Real Masking Process — Before &amp; After
           </span>
         </div>
 
-        <div className="relative w-full max-w-7xl mx-auto px-6 pb-20 lg:pb-28 pt-40">
-          <div className="max-w-2xl">
-            <div className="hero-rise inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-[rgb(var(--accent-300))] text-sm font-medium mb-6">
-              <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))] animate-pulse" />
-              Professional Photo Editing Services
-            </div>
-            <h1 className="hero-rise [animation-delay:120ms] text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.95] text-[rgb(var(--fg-rgb))] [text-shadow:0_2px_24px_rgba(0,0,0,0.55)]">
+        <div className="relative w-full max-w-7xl mx-auto px-6 pb-16 lg:pb-20">
+          <div className="max-w-xl">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter leading-[1.05] text-white [text-shadow:0_2px_32px_rgba(0,0,0,0.7)]">
               Transform Your Photos
               <br />
               <span className="text-[rgb(var(--accent-400))]">with Precision</span>
             </h1>
-            <p className="hero-rise [animation-delay:240ms] mt-6 text-lg text-[rgb(var(--fg-rgb)/80%)] leading-relaxed max-w-lg [text-shadow:0_1px_16px_rgba(0,0,0,0.6)]">
+            <p className="hero-rise [animation-delay:240ms] mt-4 text-base text-white/80 leading-relaxed max-w-md [text-shadow:0_1px_16px_rgba(0,0,0,0.6)]">
               From flawless clipping paths to high-end retouching — pixel-perfect results
               with fast turnaround for e-commerce, fashion, and advertising.
             </p>
-            <div className="hero-rise [animation-delay:360ms] mt-10 flex flex-col sm:flex-row items-center gap-4">
+            <div className="hero-rise [animation-delay:360ms] mt-6 flex flex-wrap items-center gap-3">
               <Link
                 href="/contact"
-                className="group px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm inline-flex items-center gap-2"
+                className="group px-6 py-3 rounded-full bg-[rgb(var(--accent-500))] text-white font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm inline-flex items-center gap-2"
               >
                 Start Free Trial
                 <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </Link>
               <Link
                 href="/services"
-                className="px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-semibold hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm"
+                className="px-6 py-3 rounded-full bg-white/10 backdrop-blur-sm text-white font-semibold hover:bg-white/20 transition-all text-sm border border-white/10"
               >
                 View Services
               </Link>
@@ -115,12 +110,12 @@ export default function Home() {
                 href={`/services#${service.id}`}
                 className="group glass-card rounded-[2rem] overflow-hidden border border-[rgb(var(--fg-rgb)/5%)] hover:bg-[rgb(var(--fg-rgb)/5%)] transition-all duration-500 hover:-translate-y-1"
               >
-                <div className="relative h-48 overflow-hidden bg-[var(--bg-subtle)]">
+                <div className="relative h-56 overflow-hidden bg-[var(--bg-subtle)]">
                   <Image
                     src={service.image}
                     alt={service.title}
                     fill
-                    className="object-contain p-2 group-hover:scale-105 transition-transform duration-700 opacity-90"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 </div>
@@ -138,17 +133,17 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="grid grid-cols-2 gap-4">
-              <div className="aspect-square rounded-3xl overflow-hidden glass-card bg-[var(--bg-subtle)]">
-                <Image src="/images/before.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-contain p-2" />
+              <div className="aspect-square rounded-3xl overflow-hidden glass-card">
+                <Image src="/images/before.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
               </div>
-              <div className="aspect-square rounded-3xl overflow-hidden glass-card mt-8 bg-[var(--bg-subtle)]">
-                <Image src="/images/25RN718SOK_BEP-original.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-contain p-2" />
+              <div className="aspect-square rounded-3xl overflow-hidden glass-card mt-8">
+                <Image src="/images/25RN718SOK_BEP-original.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
               </div>
-              <div className="aspect-square rounded-3xl overflow-hidden glass-card -mt-8 bg-[var(--bg-subtle)]">
-                <Image src="/images/ghost-manipulation-services.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-contain p-2" />
+              <div className="aspect-square rounded-3xl overflow-hidden glass-card -mt-8">
+                <Image src="/images/ghost-manipulation-services.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
               </div>
-              <div className="aspect-square rounded-3xl overflow-hidden glass-card bg-[var(--bg-subtle)]">
-                <Image src="/images/before-after.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-contain p-2" />
+              <div className="aspect-square rounded-3xl overflow-hidden glass-card">
+                <Image src="/images/before-after.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
               </div>
             </div>
             <div>

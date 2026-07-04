@@ -35,7 +35,7 @@ export default function PortfolioPage() {
                     src={item.img}
                     alt={item.title}
                     fill
-                    className="object-contain p-2 group-hover:scale-105 transition-transform duration-700 opacity-100"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 </div>
