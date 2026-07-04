@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Cursor from "@/components/Cursor";
+import IntroAnimation from "@/components/IntroAnimation";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], display: "swap" });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
       </head>
       <body className={`${jakarta.className} bg-[var(--bg)] text-[rgb(var(--fg-rgb))] antialiased`} suppressHydrationWarning>
         <div className="grain" />
+        <IntroAnimation />
         <Cursor />
         <Header />
         <main className="min-h-screen">{children}</main>

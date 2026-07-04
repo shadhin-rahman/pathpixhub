@@ -136,6 +136,27 @@
     }
   }
 
+  @keyframes intro-pop {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes intro-rise {
+    0% { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-item[open] .faq-icon {
+    transform: rotate(45deg);
+  }
+
   .mesh-gradient {
     background:
       radial-gradient(at 0% 0%, rgb(var(--accent-500) / 8%) 0px, transparent 50%),

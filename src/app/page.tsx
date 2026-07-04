@@ -5,83 +5,112 @@ import { services } from "@/data/services";
 export default function Home() {
   return (
     <>
-      <section className="relative min-h-screen flex items-center overflow-hidden mesh-gradient">
-        <div className="premium-blur w-[600px] h-[600px] top-[-10%] right-[-10%]" />
-        <div className="premium-blur w-[400px] h-[400px] bottom-[-10%] left-[-10%]" />
-        <div className="relative w-full max-w-7xl mx-auto px-6 py-32 lg:py-40">
+      <section className="relative h-screen min-h-[640px] flex items-end overflow-hidden">
+        <div className="absolute inset-0">
+          <video
+            className="absolute inset-0 w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster="/images/image-masking-1.jpg"
+          >
+            <source src="/videos/masking-before-after-demo.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)/40%] to-black/10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent" />
+        </div>
+
+        <div className="premium-blur w-[500px] h-[500px] top-[-10%] right-[-10%]" />
+
+        <div className="absolute bottom-8 right-6 lg:right-10 hidden sm:block">
+          <span className="inline-flex items-center gap-2 text-xs font-semibold text-[rgb(var(--fg-rgb))] bg-[rgb(var(--accent-600)/85%)] px-4 py-2 rounded-full backdrop-blur">
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            Real Masking Process — Before &amp; After
+          </span>
+        </div>
+
+        <div className="relative w-full max-w-7xl mx-auto px-6 pb-20 lg:pb-28 pt-40">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-[rgb(var(--accent-300))] text-sm font-medium mb-6">
+              <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))] animate-pulse" />
+              Professional Photo Editing Services
+            </div>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.95] text-[rgb(var(--fg-rgb))]">
+              Transform Your Photos
+              <br />
+              <span className="text-[rgb(var(--accent-400))]">with Precision</span>
+            </h1>
+            <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/70%)] leading-relaxed max-w-lg">
+              From flawless clipping paths to high-end retouching — pixel-perfect results
+              with fast turnaround for e-commerce, fashion, and advertising.
+            </p>
+            <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
+              <Link
+                href="/contact"
+                className="group px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm inline-flex items-center gap-2"
+              >
+                Start Free Trial
+                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </Link>
+              <Link
+                href="/services"
+                className="px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-semibold hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm"
+              >
+                View Services
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-24 lg:py-32 mesh-gradient">
+        <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-[rgb(var(--accent-300))] text-sm font-medium mb-6">
-                <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))] animate-pulse" />
-                Professional Photo Editing Services
-              </div>
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.95]">
-                <span className="gradient-text">Transform Your</span>
-                <br />
-                <span className="text-[rgb(var(--accent-400))]">Photos</span>
-                <br />
-                <span className="gradient-text">with Precision</span>
-              </h1>
-              <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-lg">
-                From flawless clipping paths to high-end retouching — pixel-perfect results
-                with fast turnaround for e-commerce, fashion, and advertising.
+              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">From Our Studio</h2>
+              <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Every Product, Every Angle</h3>
+              <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-lg">
+                Bicycles, vehicles, apparel, or accessories — whatever you shoot, we edit it with the
+                same pixel-perfect care. A rotating look at a few recent categories we work with.
               </p>
-              <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
-                <Link
-                  href="/contact"
-                  className="group px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm inline-flex items-center gap-2"
-                >
-                  Start Free Trial
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                </Link>
-                <Link
-                  href="/services"
-                  className="px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-semibold hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm"
-                >
-                  View Services
-                </Link>
+              <div className="mt-8 flex flex-wrap gap-3">
+                {["Product Renders", "Automotive", "Color Accuracy", "Ghost Mannequin"].map((tag) => (
+                  <span key={tag} className="px-4 py-2 rounded-full glass-card text-xs font-semibold text-[rgb(var(--fg-rgb)/70%)]">
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
-            <div className="relative aspect-[4/3] lg:aspect-auto lg:h-[30rem] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)]">
-              <Image
-                src="/images/bicycle.jpg"
-                alt="Product photo editing showcase - bicycle"
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover hero-slide"
-                style={{ animationDelay: "0s" }}
-                priority
-              />
-              <Image
-                src="/images/car-editing-1.jpg"
-                alt="Product photo editing showcase - car"
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover hero-slide"
-                style={{ animationDelay: "-4s" }}
-              />
-              <Image
-                src="/images/25RN718SOK_BEP-original.jpg"
-                alt="Product photo editing showcase"
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover hero-slide"
-                style={{ animationDelay: "-8s" }}
-              />
-              <Image
-                src="/images/Ghost manipulation services.jpg"
-                alt="Product photo editing showcase"
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover hero-slide"
-                style={{ animationDelay: "-12s" }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
-              <div className="absolute bottom-5 left-5">
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[rgb(var(--fg-rgb))] bg-[rgb(var(--accent-600)/90%)] px-3 py-1.5 rounded-full backdrop-blur">
-                  Before & After
-                </span>
-              </div>
+            <div className="relative aspect-[4/3] lg:aspect-auto lg:h-[26rem] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)]">
+              {[
+                { src: "/images/bicycle.jpg", alt: "Product photo editing showcase - bicycle rendered in studio light", delay: "0s" },
+                { src: "/images/car-editing-1.jpg", alt: "Product photo editing showcase - car", delay: "-4s" },
+                { src: "/images/25RN718SOK_BEP-original.jpg", alt: "Product photo editing showcase", delay: "-8s" },
+                { src: "/images/Ghost manipulation services.jpg", alt: "Product photo editing showcase", delay: "-12s" },
+              ].map((slide) => (
+                <div key={slide.src} className="absolute inset-0 hero-slide" style={{ animationDelay: slide.delay }}>
+                  {/* Blurred fill so the frame is never empty around the image */}
+                  <Image
+                    src={slide.src}
+                    alt=""
+                    aria-hidden="true"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover scale-125 blur-3xl opacity-50"
+                  />
+                  {/* Full, uncropped image */}
+                  <Image
+                    src={slide.src}
+                    alt={slide.alt}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-contain"
+                  />
+                </div>
+              ))}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
             </div>
           </div>
         </div>
@@ -180,6 +209,56 @@ export default function Home() {
                 <h3 className="text-lg font-bold text-[rgb(var(--fg-rgb))]">{item.title}</h3>
                 <p className="mt-2 text-sm text-[rgb(var(--fg-rgb)/40%)]">{item.desc}</p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-24 lg:py-32 bg-[var(--bg)]">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Good to Know</h2>
+            <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">FAQs</h3>
+            <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)]">General requirements for our image editing services.</p>
+          </div>
+          <div className="space-y-4">
+            {[
+              {
+                q: "What types of images work best for clipping paths?",
+                a: "Clipping paths are ideal for images with clear, defined edges. They work well for product photos, e-commerce images, and any subjects that need isolation from the background.",
+              },
+              {
+                q: "How does background removal help my business?",
+                a: "Removing the background can make your product images look cleaner and more professional, helping customers focus directly on the product and improving visual appeal in online stores.",
+              },
+              {
+                q: "What is image masking, and when is it used?",
+                a: "Image masking is a technique for handling complex subjects with soft edges, like hair or fur. It's used when clipping paths alone aren't sufficient for high-detail areas.",
+              },
+              {
+                q: "Can I request specific shadow styles for my photos?",
+                a: "Yes! We offer custom shadow options, including natural, drop, and reflection shadows, to suit your aesthetic needs.",
+              },
+              {
+                q: "What does the ghost mannequin service involve?",
+                a: "Our ghost mannequin service provides a 3D effect for apparel images, giving a lifelike shape to clothes without using a model. It's ideal for fashion and e-commerce brands.",
+              },
+              {
+                q: "Do you offer bulk editing services for large image volumes?",
+                a: "Yes, we offer scalable solutions for businesses with large image volumes. Contact us for custom pricing and service options for high-volume edits.",
+              },
+              {
+                q: "What is the turnaround time for your services?",
+                a: "Turnaround times vary by service and project volume, but we aim to deliver most standard jobs within 24-48 hours. Contact us for specific timelines.",
+              },
+            ].map((item, i) => (
+              <details key={i} className="faq-item glass-card rounded-2xl px-6 py-5 border-[rgb(var(--fg-rgb)/5%)]">
+                <summary className="flex items-center justify-between gap-4">
+                  <span className="font-semibold text-[rgb(var(--fg-rgb))]">{item.q}</span>
+                  <span className="faq-icon shrink-0 text-2xl leading-none text-[rgb(var(--accent-400))] transition-transform duration-300">+</span>
+                </summary>
+                <p className="mt-4 text-sm text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">{item.a}</p>
+              </details>
             ))}
           </div>
         </div>
