@@ -25,25 +25,28 @@ export default function Header() {
   return (
     <nav className="fixed top-0 left-0 w-full z-50 px-6 py-6">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <Link href="/" className="z-[60]">
-          <Image
-            src="/images/logo.png"
-            alt="PathPixHub"
-            width={140}
-            height={140}
-            className="h-16 lg:h-20 w-auto [filter:var(--logo-filter)]"
-            priority
-          />
-        </Link>
+        <div className="flex items-center gap-3 z-[60]">
+          <Link href="/">
+            <Image
+              src="/images/logo.png"
+              alt="PathPixHub"
+              width={140}
+              height={140}
+              className="h-16 lg:h-20 w-auto [filter:var(--logo-filter)]"
+              priority
+            />
+          </Link>
+          <ThemeToggle className="hidden md:flex w-11 h-11 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))]" />
+          <ThemeToggle className="flex md:hidden w-11 h-11 rounded-2xl glass-card text-[rgb(var(--fg-rgb))]" />
+        </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <ThemeToggle className="w-11 h-11 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))]" />
           <button
             onClick={() => setIsOpen(!isOpen)}
             className={`group flex items-center gap-4 px-8 py-4 rounded-full transition-all duration-500 z-[60] border ${
               isOpen
                 ? "bg-white text-black border-white"
-                : "bg-black/20 backdrop-blur-md text-white border-white/10 hover:border-[rgb(var(--accent-500)/50%)] hover:bg-[rgb(var(--accent-500)/5%)]"
+                : "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] border-transparent hover:bg-[rgb(var(--accent-400))]"
             }`}
           >
             <span className="text-xs uppercase tracking-[0.4em] font-black">
@@ -63,10 +66,9 @@ export default function Header() {
         </div>
 
         <div className="md:hidden flex items-center gap-3">
-          <ThemeToggle className="w-12 h-12 rounded-2xl glass-card text-[rgb(var(--fg-rgb))]" />
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="z-[60] p-4 glass-card rounded-2xl text-[rgb(var(--fg-rgb))] border border-[rgb(var(--fg-rgb)/10%)]"
+            className="z-[60] p-4 rounded-2xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] border border-transparent"
           >
             {isOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
           </button>
@@ -88,7 +90,7 @@ export default function Header() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 200 }}
-              className="fixed top-0 right-0 h-screen w-full md:w-[500px] bg-[var(--bg-alt)] border-l border-[rgb(var(--fg-rgb)/5%)] z-[56] px-12 pb-12 pt-28 flex flex-col justify-center overflow-y-auto"
+              className="fixed top-0 right-0 h-screen w-full md:w-[500px] bg-[var(--bg-alt)] border-l border-[rgb(var(--fg-rgb)/5%)] z-[56] p-12 flex flex-col justify-center overflow-y-auto"
             >
               <div className="space-y-8">
                 <span className="text-[rgb(var(--accent-400))] text-xs uppercase tracking-[0.5em] font-bold block mb-6">Navigation</span>
@@ -176,6 +178,26 @@ export default function Header() {
                 <a href="mailto:info@pathpixhub.com" className="text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors block text-xl font-medium">
                   info@pathpixhub.com
                 </a>
+                <div className="flex items-center gap-3">
+                  <a
+                    href="https://www.facebook.com/profile.php?id=61572912172334"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="PathPixHub on Facebook"
+                    className="w-11 h-11 rounded-full glass-card flex items-center justify-center text-[rgb(var(--fg-rgb)/70%)] hover:text-[rgb(var(--accent-400))] transition-colors"
+                  >
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.16 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.51 1.49-3.9 3.78-3.9 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.9h-2.34V22c4.78-.78 8.44-4.94 8.44-9.94Z"/></svg>
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/company/pathpixhub/about/?viewAsMember=true"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="PathPixHub on LinkedIn"
+                    className="w-11 h-11 rounded-full glass-card flex items-center justify-center text-[rgb(var(--fg-rgb)/70%)] hover:text-[rgb(var(--accent-400))] transition-colors"
+                  >
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 5a2 2 0 1 1-4-.02 2 2 0 0 1 4 .02ZM7 8.48H3V21h4V8.48Zm6.32 0H9.34V21h3.94v-6.57c0-3.66 4.77-3.96 4.77 0V21H22v-7.93c0-6.17-7.06-5.94-8.68-2.91V8.48Z"/></svg>
+                  </a>
+                </div>
               </div>
             </motion.div>
           </>

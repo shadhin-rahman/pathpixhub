@@ -69,10 +69,43 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-24 mesh-gradient text-center">
+      <section className="py-24 bg-[var(--bg-alt)]">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6 text-center">Who We Are</h2>
+          <p className="text-[rgb(var(--fg-rgb)/60%)] leading-relaxed text-center max-w-3xl mx-auto">
+            PathPixHub was founded by a team of visionaries, each with years of specialized experience in different
+            areas of the photo editing industry, who came together with one common purpose: to provide exceptional
+            photo editing services accessible to businesses of all sizes. From humble beginnings, we&apos;ve grown into
+            a company that prides itself on creativity, dedication, and a relentless commitment to quality.
+          </p>
+          <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed text-center max-w-3xl mx-auto">
+            Our founders, each an expert in their field, bring together a diverse set of skills that make PathPixHub
+            more than just a photo editing company — we are a trusted partner in the digital world, ensuring that
+            every image we work on is perfected to the highest standard.
+          </p>
+        </div>
+      </section>
+
+      <section className="py-24 mesh-gradient">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6 text-center">Our Approach</h2>
+          <p className="text-[rgb(var(--fg-rgb)/60%)] leading-relaxed text-center max-w-3xl mx-auto">
+            We take a personalized approach to every project. Each business has its unique needs, and one-size-fits-all
+            solutions rarely work — that&apos;s why we take the time to communicate with our clients, understand their
+            objectives, and tailor our services to meet their specific needs. We are more than just a service
+            provider; we are a trusted partner in your visual content strategy.
+          </p>
+        </div>
+      </section>
+
+      <section className="py-24 bg-[var(--bg)] text-center">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Let's Work Together</h2>
-          <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)]">Ready to take your images to the next level?</p>
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Let&apos;s Work Together</h2>
+          <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Ready to Get in Touch?</h3>
+          <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] max-w-xl mx-auto">
+            Explore our services, request a quote, or contact us today to learn how we can help you achieve your
+            photo editing goals.
+          </p>
           <Link
             href="/contact"
             className="mt-8 inline-flex items-center px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm"

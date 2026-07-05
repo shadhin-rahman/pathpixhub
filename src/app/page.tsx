@@ -5,51 +5,50 @@ import { services } from "@/data/services";
 export default function Home() {
   return (
     <>
-      <section className="relative h-screen min-h-[640px] flex items-end overflow-hidden">
-        <div className="absolute inset-0">
-          <video
-            className="absolute inset-0 w-full h-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            poster="/images/image-masking-1.jpg"
-          >
-            <source src="/videos/masking-before-after-demo.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-x-0 bottom-0 h-[40%] bg-gradient-to-t from-[var(--bg)]/60 to-transparent" />
-        </div>
+      <section className="relative w-full aspect-video max-h-[85vh] overflow-hidden">
+        <video
+          className="hero-video absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster="/images/image-masking-1.jpg"
+        >
+          <source src="/videos/masking-before-after-demo.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-[rgb(var(--accent-500)/12%)] mix-blend-overlay pointer-events-none" />
+      </section>
 
-        <div className="absolute bottom-8 right-6 lg:right-10 hidden sm:block">
-          <span className="inline-flex items-center gap-2 text-xs font-semibold text-white bg-black/40 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10">
-            <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-400))] animate-pulse" />
-            Real Masking Process — Before &amp; After
-          </span>
-        </div>
-
-        <div className="relative w-full max-w-7xl mx-auto px-6 pb-16 lg:pb-20">
-          <div className="max-w-xl">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter leading-[1.05] text-white [text-shadow:0_2px_32px_rgba(0,0,0,0.7)]">
+      <section className="relative overflow-hidden mesh-gradient">
+        <div className="premium-blur w-[500px] h-[500px] top-[-20%] right-[-10%]" />
+        <div className="relative w-full max-w-7xl mx-auto px-6 py-16 sm:py-20">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-[rgb(var(--accent-300))] text-sm font-medium mb-6">
+              <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))] animate-pulse" />
+              Professional Photo Editing Services
+            </div>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.95] text-[rgb(var(--fg-rgb))]">
               Transform Your Photos
               <br />
               <span className="text-[rgb(var(--accent-400))]">with Precision</span>
             </h1>
-            <p className="hero-rise [animation-delay:240ms] mt-4 text-base text-white/80 leading-relaxed max-w-md [text-shadow:0_1px_16px_rgba(0,0,0,0.6)]">
+            <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/70%)] leading-relaxed max-w-lg">
               From flawless clipping paths to high-end retouching — pixel-perfect results
               with fast turnaround for e-commerce, fashion, and advertising.
             </p>
-            <div className="hero-rise [animation-delay:360ms] mt-6 flex flex-wrap items-center gap-3">
+            <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
               <Link
                 href="/contact"
-                className="group px-6 py-3 rounded-full bg-[rgb(var(--accent-500))] text-white font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm inline-flex items-center gap-2"
+                className="group px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm inline-flex items-center gap-2"
               >
                 Start Free Trial
                 <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </Link>
               <Link
                 href="/services"
-                className="px-6 py-3 rounded-full bg-white/10 backdrop-blur-sm text-white font-semibold hover:bg-white/20 transition-all text-sm border border-white/10"
+                className="px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-semibold hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm"
               >
                 View Services
               </Link>
@@ -58,7 +57,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-24 lg:py-32 mesh-gradient">
+      <section className="py-24 lg:py-32 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div>
@@ -69,35 +68,37 @@ export default function Home() {
                 same pixel-perfect care. A rotating look at a few recent categories we work with.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                {["Product Renders", "Automotive", "Color Accuracy", "Ghost Mannequin"].map((tag) => (
+                {["Clipping Path", "Background Remove", "Adding Shadow", "Retouching Photo", "Beauty Airbrushing", "Car Image Editing"].map((tag) => (
                   <span key={tag} className="px-4 py-2 rounded-full glass-card text-xs font-semibold text-[rgb(var(--fg-rgb)/70%)]">
                     {tag}
                   </span>
                 ))}
               </div>
             </div>
-            <div className="relative aspect-[4/3] lg:aspect-auto lg:h-[26rem] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)]">
+            <div className="relative aspect-[4/3] lg:aspect-auto lg:h-[26rem] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]">
               {[
                 { src: "/images/bicycle.jpg", alt: "Product photo editing showcase - bicycle rendered in studio light", delay: "0s" },
-                { src: "/images/car-editing-1.jpg", alt: "Product photo editing showcase - red sports car", delay: "-5s" },
+                { src: "/images/car-editing-1.jpg", alt: "Product photo editing showcase - classic red sports car", delay: "-8s" },
               ].map((slide) => (
-                <div key={slide.src} className="absolute inset-0 hero-slide" style={{ animationDelay: slide.delay }}>
+                <div key={slide.src} className="absolute inset-0 hero-slide" style={{ animationDelay: slide.delay, animationDuration: "16s" }}>
+                  {/* Soft theme-colored backdrop — no image cropping, no blur-edge artifacts */}
+                  <div className="absolute inset-0 mesh-gradient" />
+                  {/* Full, uncropped image */}
                   <Image
                     src={slide.src}
                     alt={slide.alt}
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover"
+                    className="object-contain p-6"
                   />
                 </div>
               ))}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-24 lg:py-32 bg-[var(--bg-alt)]">
+      <section className="py-24 lg:py-32 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
             <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">What We Offer</h2>
@@ -110,12 +111,12 @@ export default function Home() {
                 href={`/services#${service.id}`}
                 className="group glass-card rounded-[2rem] overflow-hidden border border-[rgb(var(--fg-rgb)/5%)] hover:bg-[rgb(var(--fg-rgb)/5%)] transition-all duration-500 hover:-translate-y-1"
               >
-                <div className="relative h-56 overflow-hidden bg-[var(--bg-subtle)]">
+                <div className="relative h-48 overflow-hidden bg-[var(--bg-subtle)]">
                   <Image
                     src={service.image}
                     alt={service.title}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
+                    className="object-contain p-4 group-hover:scale-105 transition-transform duration-700"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 </div>
@@ -129,7 +130,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-24 lg:py-32 mesh-gradient">
+      <section className="py-24 lg:py-32 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="grid grid-cols-2 gap-4">
@@ -140,10 +141,10 @@ export default function Home() {
                 <Image src="/images/25RN718SOK_BEP-original.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
               </div>
               <div className="aspect-square rounded-3xl overflow-hidden glass-card -mt-8">
-                <Image src="/images/ghost-manipulation-services.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
+                <Image src="/images/Ghost manipulation services.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
               </div>
               <div className="aspect-square rounded-3xl overflow-hidden glass-card">
-                <Image src="/images/before-after.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
+                <Image src="/images/before after.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
               </div>
             </div>
             <div>
@@ -172,23 +173,55 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="py-24 lg:py-32 mesh-gradient">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Our Approach</h2>
+            <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Strategy</h3>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl mx-auto">
+            {[
+              "Hand-drawn clipping paths for flawless results",
+              "Bringing focus to your image with expert cutouts",
+              "Transforming images with precision and care",
+              "Enhancing photos with professional background removal",
+              "Flawless cutouts for high-impact photos",
+              "Enhancing the visual appeal of every image",
+              "Facilitating complex image manipulations",
+              "Highlighting vehicle features and details",
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-3 glass-card rounded-2xl px-5 py-4">
+                <svg className="w-5 h-5 text-[rgb(var(--accent-400))] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                <span className="text-sm text-[rgb(var(--fg-rgb)/70%)]">{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="py-24 lg:py-32 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
             <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">How It Works</h2>
             <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Process</h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
-              { step: "01", title: "Submit", desc: "Upload your images with guidelines." },
-              { step: "02", title: "Analyze", desc: "We assess details and set timeline." },
-              { step: "03", title: "Edit", desc: "Our editors manually perfect each image." },
-              { step: "04", title: "Deliver", desc: "Receive polished images. Revisions included." },
+              { step: "01", title: "Client Consultation & Order Submission", desc: "We start by understanding your specific needs — background removal, shadow creation, or precise color adjustments — reviewing your instructions before any editing begins." },
+              { step: "02", title: "Image Analysis & Project Assessment", desc: "Every image is different, so we assess the detail needed — intricate edges or multiple objects — to set a realistic timeline for delivery." },
+              { step: "03", title: "Selecting the Right Tools", desc: "We rely on Adobe Photoshop's pen tool for precise clipping paths, plus the magic wand and masking techniques for complex backgrounds." },
+              { step: "04", title: "Clipping Path Creation", desc: "Our editors manually outline each object for clean edges and perfect isolation, creating separate paths for multiple items when needed." },
+              { step: "05", title: "Applying Additional Edits", desc: "Once clean paths are established, we apply shadow creation, color correction, or background changes as necessary." },
+              { step: "06", title: "Quality Assurance & Revisions", desc: "Every edited image goes through a thorough quality check for consistency and precision, with adjustments made promptly." },
+              { step: "07", title: "Delivery & Client Feedback", desc: "Finished images are delivered in your preferred format (PNG, JPEG, or PSD), and we welcome feedback for any final adjustments." },
+              { step: "08", title: "Ongoing Support", desc: "We build lasting relationships, staying available for ongoing support on all your future editing projects." },
             ].map((item, i) => (
-              <div key={i} className="glass-card rounded-[2rem] p-8 text-center">
-                <span className="text-5xl font-bold text-[rgb(var(--accent-500)/30%)] block mb-4">{item.step}</span>
-                <h3 className="text-lg font-bold text-[rgb(var(--fg-rgb))]">{item.title}</h3>
-                <p className="mt-2 text-sm text-[rgb(var(--fg-rgb)/40%)]">{item.desc}</p>
+              <div key={i} className="glass-card rounded-[2rem] p-8 flex gap-6">
+                <span className="text-4xl font-bold text-[rgb(var(--accent-500)/30%)] shrink-0">{item.step}</span>
+                <div>
+                  <h3 className="text-lg font-bold text-[rgb(var(--fg-rgb))]">{item.title}</h3>
+                  <p className="mt-2 text-sm text-[rgb(var(--fg-rgb)/40%)] leading-relaxed">{item.desc}</p>
+                </div>
               </div>
             ))}
           </div>

@@ -20,17 +20,19 @@ export default function ServicesPage() {
       <section className="pb-32 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6 space-y-24">
           {services.map((service, index) => (
-            <div
-              key={service.id}
-              id={service.id}
-              className="scroll-mt-32 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center"
-            >
+            <div key={service.id} id={service.id} className="scroll-mt-32">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
               <div className={index % 2 === 1 ? "lg:order-2" : ""}>
                 <span className="text-xs font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <h2 className="mt-4 text-3xl md:text-4xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">{service.title}</h2>
-                <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">{service.description}</p>
+                <p className="mt-3 text-base font-semibold text-[rgb(var(--accent-400))]">{service.headline}</p>
+                <div className="mt-4 space-y-4">
+                  {service.paragraphs.map((p, i) => (
+                    <p key={i} className="text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">{p}</p>
+                  ))}
+                </div>
                 <ul className="mt-6 space-y-3">
                   {service.features.map((f, i) => (
                     <li key={i} className="flex items-center gap-3 text-sm text-[rgb(var(--fg-rgb)/50%)]">
@@ -49,14 +51,24 @@ export default function ServicesPage() {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </Link>
               </div>
-              <div className={`relative aspect-[4/3] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/5%)] ${index % 2 === 1 ? "lg:order-1" : ""}`}>
+              <div className={`relative aspect-[4/3] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/5%)] bg-[var(--bg-subtle)] ${index % 2 === 1 ? "lg:order-1" : ""}`}>
                 <Image
                   src={service.image}
                   alt={service.title}
                   fill
-                  className="object-cover"
+                  className="object-contain p-6"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
+              </div>
+              </div>
+
+              <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {service.whyChoose.map((w, i) => (
+                  <div key={i} className="glass-card rounded-2xl p-5 border-[rgb(var(--fg-rgb)/5%)]">
+                    <h4 className="font-bold text-sm text-[rgb(var(--fg-rgb))]">{w.title}</h4>
+                    <p className="mt-1.5 text-sm text-[rgb(var(--fg-rgb)/50%)] leading-relaxed">{w.desc}</p>
+                  </div>
+                ))}
               </div>
             </div>
           ))}

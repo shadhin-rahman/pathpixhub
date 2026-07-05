@@ -1,3 +1,5 @@
+import { services } from "@/data/services";
+
 export default function ContactPage() {
   return (
     <>
@@ -36,12 +38,9 @@ export default function ContactPage() {
                 <select name="subject" id="subject"
                   className="w-full px-4 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-alt)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm">
                   <option value="" className="bg-[var(--bg-alt)]">Select a service</option>
-                  <option className="bg-[var(--bg-alt)]">Clipping Path</option>
-                  <option className="bg-[var(--bg-alt)]">Background Removal</option>
-                  <option className="bg-[var(--bg-alt)]">Image Masking</option>
-                  <option className="bg-[var(--bg-alt)]">Shadow Creation</option>
-                  <option className="bg-[var(--bg-alt)]">Ghost Mannequin</option>
-                  <option className="bg-[var(--bg-alt)]">Photo Retouching</option>
+                  {services.map((s) => (
+                    <option key={s.id} className="bg-[var(--bg-alt)]">{s.title}</option>
+                  ))}
                   <option className="bg-[var(--bg-alt)]">General Inquiry</option>
                 </select>
               </div>

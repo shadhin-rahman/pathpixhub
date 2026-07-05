@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import Cursor from "@/components/Cursor";
 import IntroAnimation from "@/components/IntroAnimation";
 
@@ -33,6 +34,7 @@ export default function RootLayout({
         <Cursor />
         <Header />
         <main className="min-h-screen">{children}</main>
+        <Footer />
       </body>
     </html>
   );
