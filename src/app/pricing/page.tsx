@@ -18,17 +18,30 @@ const priceMap: Record<string, string> = {
   "car-editing": "FROM $2.99 / IMAGE",
 };
 
-const colorOverlays = [
-  "from-red-500/40",
-  "from-purple-500/40",
-  "from-pink-500/40",
-  "from-yellow-500/40",
-  "from-blue-500/40",
-  "from-emerald-500/40",
-  "from-orange-500/40",
-  "from-teal-500/40",
-  "from-indigo-500/40",
-  "from-rose-500/40",
+const cardBgColors = [
+  "rgba(239, 68, 68, 0.18)",
+  "rgba(168, 85, 247, 0.18)",
+  "rgba(236, 72, 153, 0.18)",
+  "rgba(234, 179, 8, 0.18)",
+  "rgba(59, 130, 246, 0.18)",
+  "rgba(16, 185, 129, 0.18)",
+  "rgba(249, 115, 22, 0.18)",
+  "rgba(20, 184, 166, 0.18)",
+  "rgba(99, 102, 241, 0.18)",
+  "rgba(244, 63, 94, 0.18)",
+];
+
+const cardBorderColors = [
+  "rgba(239, 68, 68, 0.35)",
+  "rgba(168, 85, 247, 0.35)",
+  "rgba(236, 72, 153, 0.35)",
+  "rgba(234, 179, 8, 0.35)",
+  "rgba(59, 130, 246, 0.35)",
+  "rgba(16, 185, 129, 0.35)",
+  "rgba(249, 115, 22, 0.35)",
+  "rgba(20, 184, 166, 0.35)",
+  "rgba(99, 102, 241, 0.35)",
+  "rgba(244, 63, 94, 0.35)",
 ];
 
 const slideItems = [...services, ...services, ...services];
@@ -45,7 +58,36 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-[var(--bg-alt)]">
+      <section className="pt-16 pb-10 bg-[var(--bg-alt)]">
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">
+            Stress less with simple pricing<br />and pixel perfect photo edits
+          </h2>
+          <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
+            Curious about how much your edits will cost? Get an instant quote to see your total right away, or keep reading to learn more about how PathPixHub photo editing rates work.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm font-medium">
+            <span className="px-5 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))]">Upload images</span>
+            <svg className="w-5 h-5 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            <span className="px-5 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))]">Select services</span>
+            <svg className="w-5 h-5 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            <span className="px-5 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))]">Select turnaround</span>
+            <svg className="w-5 h-5 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            <span className="px-6 py-3 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold">$</span>
+          </div>
+          <div className="mt-10">
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm shadow-lg shadow-[rgb(var(--accent-500)/25%)]"
+            >
+              Get an instant quote
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="pb-20 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {services.map((s, i) => (
@@ -74,16 +116,6 @@ export default function PricingPage() {
               </motion.div>
             ))}
           </div>
-
-          <div className="flex justify-center mt-10">
-            <Link
-              href="/contact"
-              className="flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm shadow-lg shadow-[rgb(var(--accent-500)/25%)]"
-            >
-              Get a Custom Quote
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-            </Link>
-          </div>
         </div>
       </section>
 
@@ -93,32 +125,39 @@ export default function PricingPage() {
           transition={{ repeat: Infinity, duration: 50, ease: "linear", repeatType: "loop" }}
           className="flex gap-6 w-max"
         >
-          {slideItems.map((s, i) => (
-            <div
-              key={`${s.id}-${i}`}
-              className="flex-shrink-0 w-64 md:w-80 group"
-            >
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/5%)]">
-                <Image
-                  src={s.image}
-                  alt={s.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-700"
-                  sizes="(max-width: 768px) 256px, 320px"
-                />
-                <div className={`absolute inset-0 bg-gradient-to-t ${colorOverlays[i % colorOverlays.length]} mix-blend-overlay`} />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <Link
-                    href={`/services#${s.id}`}
-                    className="text-white font-bold text-sm drop-shadow-md hover:underline underline-offset-2"
-                  >
-                    {s.title}
-                  </Link>
+          {slideItems.map((s, i) => {
+            const ci = i % cardBgColors.length;
+            return (
+              <div
+                key={`${s.id}-${i}`}
+                className="flex-shrink-0"
+              >
+                <div
+                  className="rounded-2xl p-3"
+                  style={{ backgroundColor: cardBgColors[ci], border: `1px solid ${cardBorderColors[ci]}` }}
+                >
+                  <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
+                    <Image
+                      src={s.image}
+                      alt={s.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      sizes="(max-width: 768px) 256px, 320px"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                      <Link
+                        href={`/services#${s.id}`}
+                        className="text-white font-bold text-sm drop-shadow-md hover:underline underline-offset-2"
+                      >
+                        {s.title}
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </motion.div>
       </section>
 
