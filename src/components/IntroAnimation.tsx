@@ -11,7 +11,7 @@ export default function IntroAnimation() {
     const seen = sessionStorage.getItem("pph-intro-seen");
 
     if (reduce || seen) {
-      setPhase("done");
+      queueMicrotask(() => setPhase("done"));
       return;
     }
 
@@ -75,7 +75,7 @@ export default function IntroAnimation() {
             className="logo-text text-xs sm:text-sm tracking-[0.5em] uppercase text-[rgb(var(--fg-rgb)/60%)]"
             style={{ animation: "intro-rise 0.6s ease 0.25s both" }}
           >
-            Pathpixhub
+            PathPixHub
           </p>
         </div>
         <div className="w-40 h-[2px] rounded-full bg-[rgb(var(--fg-rgb)/10%)] overflow-hidden">
@@ -85,13 +85,6 @@ export default function IntroAnimation() {
           />
         </div>
       </div>
-
-      <style>{`
-        @keyframes intro-loader {
-          0% { width: 0%; }
-          100% { width: 100%; }
-        }
-      `}</style>
     </div>
   );
 }

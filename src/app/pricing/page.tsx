@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Pricing | PathPixHub",
+  description: "Simple, transparent pricing for professional photo editing services. Free trial available — send 3-5 images and we'll edit them at no cost.",
+};
 
 export default function PricingPage() {
   return (
@@ -26,7 +32,7 @@ export default function PricingPage() {
             </div>
             <div className="glass-card rounded-[2rem] p-8 border-[rgb(var(--accent-500)/30%)] bg-[rgb(var(--accent-500)/5%)] relative">
               <span className="absolute -top-3 left-6 px-3 py-1 bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] text-xs font-bold rounded-full">Popular</span>
-              <span className="text-xs font-mono tracking-[0.4em] text-amber-400 font-bold">Standard</span>
+              <span className="text-xs font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold">Standard</span>
               <h3 className="mt-3 text-2xl font-bold text-[rgb(var(--fg-rgb))]">Medium Editing</h3>
               <p className="mt-2 text-sm text-[rgb(var(--fg-rgb)/40%)]">Masking, ghost mannequin, multi-path, retouching</p>
               <Link href="/contact" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))]">
@@ -34,7 +40,7 @@ export default function PricingPage() {
               </Link>
             </div>
             <div className="glass-card rounded-[2rem] p-8 border-[rgb(var(--fg-rgb)/5%)]">
-              <span className="text-xs font-mono tracking-[0.4em] text-red-400 font-bold">Complex</span>
+              <span className="text-xs font-mono tracking-[0.4em] text-[rgb(var(--accent-600))] font-bold">Complex</span>
               <h3 className="mt-3 text-2xl font-bold text-[rgb(var(--fg-rgb))]">Advanced Editing</h3>
               <p className="mt-2 text-sm text-[rgb(var(--fg-rgb)/40%)]">Complex masking, intricate multi-path, high-end retouching</p>
               <Link href="/contact" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))]">

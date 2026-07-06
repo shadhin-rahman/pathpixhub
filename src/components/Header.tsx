@@ -2,25 +2,14 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { services } from "@/data/services";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    if (!isOpen) setServicesOpen(false);
-  }, [isOpen]);
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 px-6 py-6">
@@ -39,10 +28,10 @@ export default function Header() {
         <div className="hidden md:flex items-center gap-3">
           <ThemeToggle className="w-11 h-11 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))]" />
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => { setIsOpen(!isOpen); if (isOpen) setServicesOpen(false); }}
             className={`group flex items-center gap-4 px-8 py-4 rounded-full transition-all duration-500 z-[60] border ${
               isOpen
-                ? "bg-white text-black border-white"
+                ? "bg-[var(--bg)] text-[rgb(var(--fg-rgb))] border-[rgb(var(--fg-rgb)/20%)]"
                 : "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] border-transparent hover:bg-[rgb(var(--accent-400))]"
             }`}
           >
@@ -64,7 +53,8 @@ export default function Header() {
 
         <div className="md:hidden flex items-center gap-3">
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => { setIsOpen(!isOpen); if (isOpen) setServicesOpen(false); }}
+            aria-label={isOpen ? "Close menu" : "Open menu"}
             className="z-[60] p-4 rounded-2xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] border border-transparent"
           >
             {isOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
@@ -109,6 +99,7 @@ export default function Header() {
                   <button
                     onClick={() => setServicesOpen(!servicesOpen)}
                     aria-expanded={servicesOpen}
+                    aria-controls="services-submenu"
                     className="w-full flex items-center justify-between gap-4 font-bold text-4xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
                   >
                     Services
@@ -125,7 +116,7 @@ export default function Header() {
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                         className="overflow-hidden"
                       >
-                        <div className="pt-5 pl-6 border-l border-[rgb(var(--fg-rgb)/10%)] ml-2 space-y-4">
+                        <div id="services-submenu" role="menu" className="pt-5 pl-6 border-l border-[rgb(var(--fg-rgb)/10%)] ml-2 space-y-4">
                           {services.map((s) => (
                             <Link
                               key={s.id}

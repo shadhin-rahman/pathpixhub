@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className="bg-[var(--bg-alt)] border-t border-[rgb(var(--fg-rgb)/8%)]">
       <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
         <div>
-          <span className="logo-text text-xl font-bold text-[rgb(var(--fg-rgb))]">Pathpixhub</span>
+          <span className="logo-text text-xl font-bold text-[rgb(var(--fg-rgb))]">PathPixHub</span>
           <p className="mt-4 text-sm text-[rgb(var(--fg-rgb)/50%)] leading-relaxed max-w-xs">
             Professional photo editing for e-commerce, fashion, and advertising — pixel-perfect
             results, fast turnaround.
@@ -44,7 +44,7 @@ export default function Footer() {
         <div>
           <span className="text-xs uppercase tracking-[0.3em] font-bold text-[rgb(var(--fg-rgb)/40%)]">Services</span>
           <ul className="mt-5 space-y-3">
-            {services.slice(0, 5).map((s) => (
+            {services.map((s) => (
               <li key={s.id}>
                 <Link href={`/services#${s.id}`} className="text-sm text-[rgb(var(--fg-rgb)/60%)] hover:text-[rgb(var(--accent-400))] transition-colors">
                   {s.title}
@@ -86,7 +86,7 @@ export default function Footer() {
 
       <div className="border-t border-[rgb(var(--fg-rgb)/8%)]">
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-[rgb(var(--fg-rgb)/40%)]">© {new Date().getFullYear()} Pathpixhub. All rights reserved.</p>
+          <p className="text-xs text-[rgb(var(--fg-rgb)/40%)]">© {new Date().getFullYear()} PathPixHub. All rights reserved.</p>
           <div className="flex items-center gap-5">
             <Link href="/privacy-policy" className="text-xs text-[rgb(var(--fg-rgb)/40%)] hover:text-[rgb(var(--accent-400))] transition-colors">
               Privacy Policy

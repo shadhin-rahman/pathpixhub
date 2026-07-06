@@ -12,7 +12,7 @@ export default function Home() {
           muted
           loop
           playsInline
-          preload="auto"
+            preload="metadata"
           poster="/images/image-masking-1.jpg"
         >
           <source src="/videos/masking-before-after-demo.mp4" type="video/mp4" />
@@ -68,7 +68,7 @@ export default function Home() {
                 same pixel-perfect care. A rotating look at a few recent categories we work with.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                {["Clipping Path", "Background Remove", "Adding Shadow", "Retouching Photo", "Beauty Airbrushing", "Car Image Editing"].map((tag) => (
+                {["Clipping Path", "Background Removal", "Shadow Creation", "Photo Retouching", "Beauty Airbrushing", "Car Image Editing"].map((tag) => (
                   <span key={tag} className="px-4 py-2 rounded-full glass-card text-xs font-semibold text-[rgb(var(--fg-rgb)/70%)]">
                     {tag}
                   </span>
@@ -102,7 +102,7 @@ export default function Home() {
             <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Services</h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {services.map((service, i) => (
+            {services.map((service) => (
               <Link
                 key={service.id}
                 href={`/services#${service.id}`}
@@ -158,8 +158,8 @@ export default function Home() {
                   { num: "24hr", label: "Turnaround" },
                   { num: "100%", label: "Quality" },
                   { num: "50+", label: "Clients" },
-                ].map((s, i) => (
-                  <div key={i} className="glass-card rounded-xl p-5">
+                ].map((s) => (
+                  <div key={s.label} className="glass-card rounded-xl p-5">
                     <span className="text-2xl font-bold text-[rgb(var(--accent-400))]">{s.num}</span>
                     <p className="mt-1 text-sm text-[rgb(var(--fg-rgb)/40%)]">{s.label}</p>
                   </div>
@@ -186,8 +186,8 @@ export default function Home() {
               "Enhancing the visual appeal of every image",
               "Facilitating complex image manipulations",
               "Highlighting vehicle features and details",
-            ].map((item, i) => (
-              <div key={i} className="flex items-start gap-3 glass-card rounded-2xl px-5 py-4">
+            ].map((item) => (
+              <div key={item} className="flex items-start gap-3 glass-card rounded-2xl px-5 py-4">
                 <svg className="w-5 h-5 text-[rgb(var(--accent-400))] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                 <span className="text-sm text-[rgb(var(--fg-rgb)/70%)]">{item}</span>
               </div>
@@ -212,8 +212,8 @@ export default function Home() {
               { step: "06", title: "Quality Assurance & Revisions", desc: "Every edited image goes through a thorough quality check for consistency and precision, with adjustments made promptly." },
               { step: "07", title: "Delivery & Client Feedback", desc: "Finished images are delivered in your preferred format (PNG, JPEG, or PSD), and we welcome feedback for any final adjustments." },
               { step: "08", title: "Ongoing Support", desc: "We build lasting relationships, staying available for ongoing support on all your future editing projects." },
-            ].map((item, i) => (
-              <div key={i} className="glass-card rounded-[2rem] p-8 flex gap-6">
+            ].map((item) => (
+              <div key={item.step} className="glass-card rounded-[2rem] p-8 flex gap-6">
                 <span className="text-4xl font-bold text-[rgb(var(--accent-500)/30%)] shrink-0">{item.step}</span>
                 <div>
                   <h3 className="text-lg font-bold text-[rgb(var(--fg-rgb))]">{item.title}</h3>
@@ -262,8 +262,8 @@ export default function Home() {
                 q: "What is the turnaround time for your services?",
                 a: "Turnaround times vary by service and project volume, but we aim to deliver most standard jobs within 24-48 hours. Contact us for specific timelines.",
               },
-            ].map((item, i) => (
-              <details key={i} className="faq-item glass-card rounded-2xl px-6 py-5 border-[rgb(var(--fg-rgb)/5%)]">
+            ].map((item) => (
+              <details key={item.q} className="faq-item glass-card rounded-2xl px-6 py-5 border-[rgb(var(--fg-rgb)/5%)]">
                 <summary className="flex items-center justify-between gap-4">
                   <span className="font-semibold text-[rgb(var(--fg-rgb))]">{item.q}</span>
                   <span className="faq-icon shrink-0 text-2xl leading-none text-[rgb(var(--accent-400))] transition-transform duration-300">+</span>

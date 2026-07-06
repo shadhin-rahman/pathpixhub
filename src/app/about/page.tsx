@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "About | PathPixHub",
+  description: "Your virtual photo editing studio. Learn about our mission, vision, and core values — pixel-perfect precision with fast turnaround.",
+};
 
 export default function AboutPage() {
   return (
@@ -37,8 +43,8 @@ export default function AboutPage() {
                   { title: "Satisfaction", desc: "Our clients are at the heart of everything we do." },
                   { title: "Dedication", desc: "Every project is an opportunity to show our commitment." },
                   { title: "Excellence", desc: "We don't settle for good enough — always striving for more." },
-                ].map((v, i) => (
-                  <div key={i} className="glass-card rounded-xl p-5 border-[rgb(var(--fg-rgb)/5%)]">
+                ].map((v) => (
+                  <div key={v.title} className="glass-card rounded-xl p-5 border-[rgb(var(--fg-rgb)/5%)]">
                     <h3 className="font-bold text-[rgb(var(--fg-rgb))] text-sm">{v.title}</h3>
                     <p className="mt-1.5 text-sm text-[rgb(var(--fg-rgb)/40%)]">{v.desc}</p>
                   </div>
@@ -49,14 +55,14 @@ export default function AboutPage() {
               <h2 className="text-2xl font-bold text-[rgb(var(--fg-rgb))]">Why Choose Us</h2>
               <div className="mt-8 space-y-6">
                 {[
-                  { icon: "🎯", title: "Pixel-Perfect Precision", desc: "Latest tools and techniques for flawless images." },
-                  { icon: "✏️", title: "Hand-Drawn Paths", desc: "Manual precision, not automated processes." },
-                  { icon: "💰", title: "Affordable Pricing", desc: "High-quality editing for businesses of all sizes." },
-                  { icon: "⏱️", title: "On-Time Delivery", desc: "Every project delivered on time, every time." },
-                  { icon: "🆓", title: "Free Trial", desc: "Send 3-5 images. We'll edit them for free." },
-                ].map((item, i) => (
-                  <div key={i} className="flex gap-4">
-                    <span className="text-xl shrink-0 mt-0.5">{item.icon}</span>
+                  { icon: "Target", title: "Pixel-Perfect Precision", desc: "Latest tools and techniques for flawless images." },
+                  { icon: "Pen", title: "Hand-Drawn Paths", desc: "Manual precision, not automated processes." },
+                  { icon: "Wallet", title: "Affordable Pricing", desc: "High-quality editing for businesses of all sizes." },
+                  { icon: "Clock", title: "On-Time Delivery", desc: "Every project delivered on time, every time." },
+                  { icon: "Gift", title: "Free Trial", desc: "Send 3-5 images. We'll edit them for free." },
+                ].map((item) => (
+                  <div key={item.title} className="flex gap-4">
+                    <span className="text-xl shrink-0 mt-0.5 text-[rgb(var(--accent-400))]">{item.icon === "Target" ? <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> : item.icon === "Pen" ? <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg> : item.icon === "Wallet" ? <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg> : item.icon === "Clock" ? <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> : <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" /></svg>}</span>
                     <div>
                       <h3 className="font-bold text-[rgb(var(--fg-rgb))] text-sm">{item.title}</h3>
                       <p className="mt-0.5 text-sm text-[rgb(var(--fg-rgb)/40%)]">{item.desc}</p>

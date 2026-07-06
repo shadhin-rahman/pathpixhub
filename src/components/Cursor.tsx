@@ -8,6 +8,7 @@ export default function Cursor() {
   const cursorY = useSpring(0, { damping: 25, stiffness: 200 });
 
   useEffect(() => {
+    if (typeof window !== "undefined" && "ontouchstart" in window) return;
     const moveMouse = (e: MouseEvent) => {
       cursorX.set(e.clientX - 16);
       cursorY.set(e.clientY - 16);
@@ -16,13 +17,13 @@ export default function Cursor() {
       const target = e.target as HTMLElement;
       setIsHovering(!!target.closest("a, button, [role='button']"));
     };
-    window.addEventListener("mousemove", moveMouse);
-    window.addEventListener("mouseover", handleHover);
+    window.addEventListener("mousemove", moveMouse, { passive: true });
+    window.addEventListener("mouseover", handleHover, { passive: true });
     return () => {
       window.removeEventListener("mousemove", moveMouse);
       window.removeEventListener("mouseover", handleHover);
     };
-  }, []);
+  }, [cursorX, cursorY]);
 
   return (
     <motion.div

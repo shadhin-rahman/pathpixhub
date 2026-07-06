@@ -1,5 +1,3 @@
-export type Complexity = "easy" | "medium" | "complex";
-
 export interface WhyChooseItem {
   title: string;
   desc: string;

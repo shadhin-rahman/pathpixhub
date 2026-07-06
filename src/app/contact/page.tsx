@@ -1,5 +1,12 @@
 import { services } from "@/data/services";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact | PathPixHub",
+  description: "Get in touch with PathPixHub. Request a free trial or custom quote — we'll respond within 24 hours.",
+};
+
 export default function ContactPage() {
   return (
     <>
@@ -18,18 +25,18 @@ export default function ContactPage() {
       <section className="pb-32 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <form className="space-y-5">
+            <form action="https://formspree.io/f/xovjbydw" method="POST" className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-[rgb(var(--fg-rgb)/70%)] mb-1.5">Name <span className="text-red-400">*</span></label>
                   <input type="text" name="name" id="name" required
-                    className="w-full px-4 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-transparent text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm"
+                    className="w-full px-4 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm"
                     placeholder="Your name" />
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-[rgb(var(--fg-rgb)/70%)] mb-1.5">Email <span className="text-red-400">*</span></label>
                   <input type="email" name="email" id="email" required
-                    className="w-full px-4 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-transparent text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm"
+                    className="w-full px-4 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm"
                     placeholder="you@example.com" />
                 </div>
               </div>
@@ -39,15 +46,15 @@ export default function ContactPage() {
                   className="w-full px-4 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-alt)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm">
                   <option value="" className="bg-[var(--bg-alt)]">Select a service</option>
                   {services.map((s) => (
-                    <option key={s.id} className="bg-[var(--bg-alt)]">{s.title}</option>
+                    <option key={s.id} value={s.id} className="bg-[var(--bg-alt)]">{s.title}</option>
                   ))}
-                  <option className="bg-[var(--bg-alt)]">General Inquiry</option>
+                  <option value="general" className="bg-[var(--bg-alt)]">General Inquiry</option>
                 </select>
               </div>
               <div>
                 <label htmlFor="message" className="block text-sm font-medium text-[rgb(var(--fg-rgb)/70%)] mb-1.5">Message <span className="text-red-400">*</span></label>
                 <textarea name="message" id="message" rows={5} required
-                  className="w-full px-4 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-transparent text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm resize-none"
+                  className="w-full px-4 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm resize-none"
                   placeholder="Tell us about your project..." />
               </div>
               <button type="submit"
@@ -66,8 +73,8 @@ export default function ContactPage() {
                     { icon: "📞", label: "Phone", value: "+880 1234-567890" },
                     { icon: "📍", label: "Location", value: "Dhaka, Bangladesh" },
                     { icon: "⏰", label: "Response", value: "Within 24 hours" },
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3">
+                  ].map((item) => (
+                    <div key={item.label} className="flex items-center gap-3">
                       <span className="text-lg">{item.icon}</span>
                       <div>
                         <p className="text-xs text-[rgb(var(--fg-rgb)/40%)]">{item.label}</p>

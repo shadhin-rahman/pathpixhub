@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { services } from "@/data/services";
+
+export const metadata: Metadata = {
+  title: "Services | PathPixHub",
+  description: "Explore our 10 professional photo editing services — clipping path, background removal, image masking, ghost mannequin, retouching, and more.",
+};
 
 export default function ServicesPage() {
   return (
@@ -34,8 +40,8 @@ export default function ServicesPage() {
                   ))}
                 </div>
                 <ul className="mt-6 space-y-3">
-                  {service.features.map((f, i) => (
-                    <li key={i} className="flex items-center gap-3 text-sm text-[rgb(var(--fg-rgb)/50%)]">
+                  {service.features.map((f) => (
+                    <li key={f} className="flex items-center gap-3 text-sm text-[rgb(var(--fg-rgb)/50%)]">
                       <svg className="w-4 h-4 text-[rgb(var(--accent-400))] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>

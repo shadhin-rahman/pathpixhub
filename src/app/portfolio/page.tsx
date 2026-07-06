@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Portfolio | PathPixHub",
+  description: "Before & after examples of our professional photo editing work — clipping path, background removal, retouching, ghost mannequin, and more.",
+};
 
 const portfolioItems = [
   { title: "Clipping Path", img: "/images/before after.jpg", category: "Cutouts" },
@@ -28,8 +34,8 @@ export default function PortfolioPage() {
       <section className="pb-32 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {portfolioItems.map((item, i) => (
-              <div key={i} className="group glass-card rounded-[2rem] overflow-hidden border border-[rgb(var(--fg-rgb)/5%)] hover:bg-[rgb(var(--fg-rgb)/5%)] transition-all duration-500">
+            {portfolioItems.map((item) => (
+              <div key={item.title} className="group glass-card rounded-[2rem] overflow-hidden border border-[rgb(var(--fg-rgb)/5%)] hover:bg-[rgb(var(--fg-rgb)/5%)] transition-all duration-500">
                 <div className="relative aspect-[4/3] overflow-hidden bg-[var(--bg-subtle)]">
                   <Image
                     src={item.img}

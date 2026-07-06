@@ -12,6 +12,11 @@ export const metadata: Metadata = {
   title: "PathPixHub | Professional Photo Editing & Clipping Path Services",
   description:
     "Expert photo editing services including clipping path, background removal, image masking, ghost mannequin, retouching, and more. Fast turnaround, global delivery, pixel-perfect quality.",
+  icons: { icon: "/images/logo.png" },
+};
+
+export const viewport = {
+  themeColor: "#030303",
 };
 
 export default function RootLayout({
@@ -33,7 +38,10 @@ export default function RootLayout({
         <IntroAnimation />
         <Cursor />
         <Header />
-        <main className="min-h-screen">{children}</main>
+        <a href="#main-content" className="fixed -top-full left-4 z-[9999] px-4 py-2 bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] text-sm font-bold rounded-b-lg focus:top-0 transition-all duration-300 outline-none">
+          Skip to main content
+        </a>
+        <main id="main-content" className="min-h-screen">{children}</main>
         <Footer />
       </body>
     </html>
