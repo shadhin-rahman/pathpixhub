@@ -29,7 +29,7 @@ export default function Header() {
           <ThemeToggle className="w-11 h-11 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))]" />
           <Link
             href="/contact"
-            className="px-5 py-3 rounded-full border border-[rgb(var(--accent-500)/50%)] text-[rgb(var(--accent-400))] font-bold hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 text-xs uppercase tracking-[0.2em] whitespace-nowrap"
+            className="px-8 py-4 rounded-full border border-[rgb(var(--accent-500)/50%)] text-[rgb(var(--accent-400))] font-black hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 text-xs uppercase tracking-[0.4em] whitespace-nowrap"
           >
             Free Trial
           </Link>
@@ -60,7 +60,7 @@ export default function Header() {
         <div className="md:hidden flex items-center gap-3 pr-10">
           <Link
             href="/contact"
-            className="px-3.5 py-2.5 rounded-full border border-[rgb(var(--accent-500)/50%)] text-[rgb(var(--accent-400))] font-bold hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 text-[10px] uppercase tracking-[0.15em] whitespace-nowrap"
+            className="px-5 py-4 rounded-full border border-[rgb(var(--accent-500)/50%)] text-[rgb(var(--accent-400))] font-black hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 text-xs uppercase tracking-[0.3em] whitespace-nowrap"
           >
             Free Trial
           </Link>
