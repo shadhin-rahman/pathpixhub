@@ -47,14 +47,7 @@ export default function PricingPage() {
 
       <section className="pt-16 pb-10 bg-[var(--bg-alt)]">
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-4">Get a Quote</h2>
-          <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">
-            Stress less with simple pricing<br />and pixel perfect photo edits
-          </h3>
-          <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
-            Curious about how much your edits will cost? Get an instant quote to see your total right away, or keep reading to learn more about how PathPixHub photo editing rates work.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm font-medium">
+          <div className="flex flex-wrap items-center justify-center gap-3 text-sm font-medium">
             <span className="px-5 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))]">Upload images</span>
             <svg className="w-5 h-5 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
             <span className="px-5 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))]">Select services</span>
@@ -62,15 +55,6 @@ export default function PricingPage() {
             <span className="px-5 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))]">Select turnaround</span>
             <svg className="w-5 h-5 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
             <span className="px-6 py-3 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold">$</span>
-          </div>
-          <div className="mt-10">
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm shadow-lg shadow-[rgb(var(--accent-500)/25%)]"
-            >
-              Get an instant quote
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-            </Link>
           </div>
         </div>
       </section>
