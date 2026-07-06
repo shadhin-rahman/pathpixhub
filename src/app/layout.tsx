@@ -4,7 +4,6 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Cursor from "@/components/Cursor";
 import IntroAnimation from "@/components/IntroAnimation";
-import FloatingCTA from "@/components/FloatingCTA";
 import Footer from "@/components/Footer";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], display: "swap" });
@@ -43,7 +42,6 @@ export default function RootLayout({
           Skip to main content
         </a>
         <main id="main-content" className="min-h-screen">{children}</main>
-        <FloatingCTA />
         <Footer />
       </body>
     </html>

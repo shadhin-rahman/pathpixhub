@@ -107,30 +107,7 @@ export default function ContactPage() {
               <p className="text-xs text-[rgb(var(--fg-rgb)/30%)]">We will respond within 24 hours.</p>
             </form>
 
-            <div className="mt-20 glass-card rounded-[2rem] p-10 lg:p-12 text-center border border-[rgb(var(--accent-500)/20%)] bg-[rgb(var(--accent-500)/3%)] relative overflow-hidden">
-              <div className="absolute top-0 left-1/4 w-72 h-72 bg-[rgb(var(--accent-500)/8%)] rounded-full blur-3xl pointer-events-none" />
-              <div className="relative">
-                <div className="w-16 h-16 rounded-full bg-[rgb(var(--accent-500)/15%)] flex items-center justify-center mx-auto mb-6">
-                  <svg className="w-7 h-7 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                </div>
-                <h2 className="text-2xl lg:text-3xl font-bold tracking-tight gradient-text">Try Us For Free</h2>
-                <p className="mt-3 text-[rgb(var(--fg-rgb)/60%)] max-w-md mx-auto">
-                  Send us 3-5 images and we will edit them professionally — zero cost, no commitment.
-                </p>
-                <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-                  <a href="mailto:info@pathpixhub.com?subject=Free%20Trial%20Request"
-                    className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm shadow-lg shadow-[rgb(var(--accent-500)/30%)]">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                    Request Free Trial
-                  </a>
-                  <a href="mailto:info@pathpixhub.com"
-                    className="inline-flex items-center gap-2 px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-semibold hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm border border-[rgb(var(--fg-rgb)/10%)]">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-                    Chat With Us
-                  </a>
-                </div>
-              </div>
-            </div>
+
           </div>
         </div>
       </section>
