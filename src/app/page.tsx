@@ -75,21 +75,18 @@ export default function Home() {
                 ))}
               </div>
             </div>
-            <div className="relative aspect-[4/3] lg:aspect-auto lg:h-[26rem] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]">
+            <div className="relative aspect-[4/3] lg:aspect-auto lg:h-[32rem] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]">
               {[
                 { src: "/images/bicycle.jpg", alt: "Product photo editing showcase - bicycle rendered in studio light", delay: "0s" },
                 { src: "/images/car-editing-1.jpg", alt: "Product photo editing showcase - classic red sports car", delay: "-8s" },
               ].map((slide) => (
-                <div key={slide.src} className="absolute inset-0 hero-slide" style={{ animationDelay: slide.delay, animationDuration: "16s" }}>
-                  {/* Soft theme-colored backdrop — no image cropping, no blur-edge artifacts */}
-                  <div className="absolute inset-0 mesh-gradient" />
-                  {/* Full, uncropped image */}
+                <div key={slide.src} className="absolute inset-0" style={{ animation: "hero-fade 16s ease-in-out infinite", animationDelay: slide.delay }}>
                   <Image
                     src={slide.src}
                     alt={slide.alt}
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-contain p-6"
+                    className="object-cover"
                   />
                 </div>
               ))}

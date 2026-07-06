@@ -25,22 +25,19 @@ export default function Header() {
   return (
     <nav className="fixed top-0 left-0 w-full z-50 px-6 py-6">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <div className="flex items-center gap-3 z-[60]">
-          <Link href="/">
-            <Image
-              src="/images/logo.png"
-              alt="PathPixHub"
-              width={140}
-              height={140}
-              className="h-16 lg:h-20 w-auto [filter:var(--logo-filter)]"
-              priority
-            />
-          </Link>
-          <ThemeToggle className="hidden md:flex w-11 h-11 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))]" />
-          <ThemeToggle className="flex md:hidden w-11 h-11 rounded-2xl glass-card text-[rgb(var(--fg-rgb))]" />
-        </div>
+        <Link href="/" className="z-[60]">
+          <Image
+            src="/images/logo.png"
+            alt="PathPixHub"
+            width={140}
+            height={140}
+            className="h-16 lg:h-20 w-auto [filter:var(--logo-filter)]"
+            priority
+          />
+        </Link>
 
         <div className="hidden md:flex items-center gap-3">
+          <ThemeToggle className="w-11 h-11 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))]" />
           <button
             onClick={() => setIsOpen(!isOpen)}
             className={`group flex items-center gap-4 px-8 py-4 rounded-full transition-all duration-500 z-[60] border ${
@@ -93,7 +90,10 @@ export default function Header() {
               className="fixed top-0 right-0 h-screen w-full md:w-[500px] bg-[var(--bg-alt)] border-l border-[rgb(var(--fg-rgb)/5%)] z-[56] p-12 flex flex-col justify-center overflow-y-auto"
             >
               <div className="space-y-8">
-                <span className="text-[rgb(var(--accent-400))] text-xs uppercase tracking-[0.5em] font-bold block mb-6">Navigation</span>
+                <div className="flex items-center justify-between">
+                  <span className="text-[rgb(var(--accent-400))] text-xs uppercase tracking-[0.5em] font-bold">Navigation</span>
+                  <ThemeToggle className="flex md:hidden w-10 h-10 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-400))]" />
+                </div>
 
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0 }}>
                   <Link
