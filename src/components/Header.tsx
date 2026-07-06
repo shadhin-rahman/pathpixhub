@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { Menu, X, ChevronLeft } from "lucide-react";
 import { services } from "@/data/services";
 import ThemeToggle from "./ThemeToggle";
@@ -10,6 +11,7 @@ import ThemeToggle from "./ThemeToggle";
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [menuView, setMenuView] = useState<"main" | "services">("main");
+  const pathname = usePathname();
 
   const openMenu = () => { setIsOpen(true); setMenuView("main"); };
   const closeMenu = () => { setIsOpen(false); setMenuView("main"); };
@@ -17,7 +19,11 @@ export default function Header() {
   return (
     <nav className="fixed top-0 left-0 w-full z-50 py-4 md:py-6">
       <div className="flex justify-between items-center">
-        <Link href="/" className={isOpen ? "z-40" : "z-[60]"}>
+        <Link
+          href="/"
+          className={isOpen ? "z-40" : "z-[60]"}
+          onClick={(e) => { if (pathname === "/") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
+        >
           <Image
             src="/images/logo.png"
             alt="PathPixHub"

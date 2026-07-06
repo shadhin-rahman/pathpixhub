@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Cursor from "@/components/Cursor";
 import IntroAnimation from "@/components/IntroAnimation";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], display: "swap" });
 
@@ -43,6 +44,7 @@ export default function RootLayout({
         </a>
         <main id="main-content" className="min-h-screen">{children}</main>
         <Footer />
+        <ScrollToTop />
       </body>
     </html>
   );
