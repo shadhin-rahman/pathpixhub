@@ -18,30 +18,17 @@ const priceMap: Record<string, string> = {
   "car-editing": "FROM $2.99 / IMAGE",
 };
 
-const cardBgColors = [
-  "rgba(239, 68, 68, 0.18)",
-  "rgba(168, 85, 247, 0.18)",
-  "rgba(236, 72, 153, 0.18)",
-  "rgba(234, 179, 8, 0.18)",
-  "rgba(59, 130, 246, 0.18)",
-  "rgba(16, 185, 129, 0.18)",
-  "rgba(249, 115, 22, 0.18)",
-  "rgba(20, 184, 166, 0.18)",
-  "rgba(99, 102, 241, 0.18)",
-  "rgba(244, 63, 94, 0.18)",
-];
-
-const cardBorderColors = [
-  "rgba(239, 68, 68, 0.35)",
-  "rgba(168, 85, 247, 0.35)",
-  "rgba(236, 72, 153, 0.35)",
-  "rgba(234, 179, 8, 0.35)",
-  "rgba(59, 130, 246, 0.35)",
-  "rgba(16, 185, 129, 0.35)",
-  "rgba(249, 115, 22, 0.35)",
-  "rgba(20, 184, 166, 0.35)",
-  "rgba(99, 102, 241, 0.35)",
-  "rgba(244, 63, 94, 0.35)",
+const cardColors = [
+  "#ef4444",
+  "#a855f7",
+  "#ec4899",
+  "#eab308",
+  "#3b82f6",
+  "#10b981",
+  "#f97316",
+  "#14b8a6",
+  "#6366f1",
+  "#f43f5e",
 ];
 
 const slideItems = [...services, ...services, ...services];
@@ -60,9 +47,10 @@ export default function PricingPage() {
 
       <section className="pt-16 pb-10 bg-[var(--bg-alt)]">
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-4">Get a Quote</h2>
+          <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">
             Stress less with simple pricing<br />and pixel perfect photo edits
-          </h2>
+          </h3>
           <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
             Curious about how much your edits will cost? Get an instant quote to see your total right away, or keep reading to learn more about how PathPixHub photo editing rates work.
           </p>
@@ -126,33 +114,27 @@ export default function PricingPage() {
           className="flex gap-6 w-max"
         >
           {slideItems.map((s, i) => {
-            const ci = i % cardBgColors.length;
+            const ci = i % cardColors.length;
             return (
-              <div
-                key={`${s.id}-${i}`}
-                className="flex-shrink-0"
-              >
-                <div
-                  className="rounded-2xl p-3"
-                  style={{ backgroundColor: cardBgColors[ci], border: `1px solid ${cardBorderColors[ci]}` }}
-                >
-                  <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
-                    <Image
-                      src={s.image}
-                      alt={s.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
-                      sizes="(max-width: 768px) 256px, 320px"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-4">
-                      <Link
-                        href={`/services#${s.id}`}
-                        className="text-white font-bold text-sm drop-shadow-md hover:underline underline-offset-2"
-                      >
-                        {s.title}
-                      </Link>
-                    </div>
+              <div key={`${s.id}-${i}`} className="flex-shrink-0 w-64 md:w-80 group">
+                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
+                  <div className="absolute inset-0" style={{ backgroundColor: cardColors[ci], opacity: 0.2 }} />
+                  <Image
+                    src={s.image}
+                    alt={s.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    sizes="(max-width: 768px) 256px, 320px"
+                  />
+                  <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${cardColors[ci]}33, transparent 50%)` }} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <Link
+                      href={`/services#${s.id}`}
+                      className="text-white font-bold text-sm drop-shadow-md hover:underline underline-offset-2"
+                    >
+                      {s.title}
+                    </Link>
                   </div>
                 </div>
               </div>
