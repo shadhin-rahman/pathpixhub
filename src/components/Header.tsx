@@ -60,10 +60,11 @@ export default function Header() {
           </button>
         </div>
 
-        <div className="md:hidden flex items-center gap-2 pr-4">
+        <div className="md:hidden flex items-center gap-1.5 pr-4">
+          <ThemeToggle className="w-8 h-8 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-400))]" />
           <Link
             href="/contact"
-            className="px-4 py-3 rounded-full border border-[rgb(var(--accent-500)/50%)] text-[rgb(var(--accent-400))] font-black hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 text-[10px] uppercase tracking-[0.2em] whitespace-nowrap"
+            className="px-3 py-2.5 rounded-full border border-[rgb(var(--accent-500)/50%)] text-[rgb(var(--accent-400))] font-black hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 text-[10px] uppercase tracking-[0.2em] whitespace-nowrap"
           >
             Free Trial
           </Link>
@@ -72,7 +73,7 @@ export default function Header() {
             aria-label={isOpen ? "Close menu" : "Open menu"}
             className="z-[60] p-3 rounded-2xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] border border-transparent"
           >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
@@ -94,9 +95,8 @@ export default function Header() {
               transition={{ type: "spring", damping: 30, stiffness: 200 }}
               className="fixed top-0 right-0 h-screen w-full md:w-[500px] bg-[var(--bg-alt)] border-l border-[rgb(var(--fg-rgb)/5%)] z-[56] p-8 md:p-12 flex flex-col justify-center overflow-y-auto"
             >
-              <div className="flex items-center justify-between mb-10 md:mb-12">
+              <div className="mb-10 md:mb-12">
                 <span className="text-[rgb(var(--accent-400))] text-xs uppercase tracking-[0.5em] font-bold">Navigation</span>
-                <ThemeToggle className="md:hidden w-10 h-10 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-400))]" />
               </div>
 
               <AnimatePresence mode="wait">
