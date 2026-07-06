@@ -12,20 +12,20 @@ export default function Header() {
   const [servicesOpen, setServicesOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 px-6 py-6">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
+    <nav className="fixed top-0 left-0 w-full z-50 py-6">
+      <div className="flex justify-between items-center">
         <Link href="/" className="z-[60]">
           <Image
             src="/images/logo.png"
             alt="PathPixHub"
             width={140}
             height={140}
-            className="h-16 lg:h-20 w-auto [filter:var(--logo-filter)]"
+            className="h-16 lg:h-20 w-auto [filter:var(--logo-filter)] ml-6"
             priority
           />
         </Link>
 
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-3 pr-6">
           <ThemeToggle className="w-11 h-11 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))]" />
           <button
             onClick={() => { setIsOpen(!isOpen); if (isOpen) setServicesOpen(false); }}
@@ -51,7 +51,7 @@ export default function Header() {
           </button>
         </div>
 
-        <div className="md:hidden flex items-center gap-3">
+        <div className="md:hidden flex items-center gap-3 pr-6">
           <button
             onClick={() => { setIsOpen(!isOpen); if (isOpen) setServicesOpen(false); }}
             aria-label={isOpen ? "Close menu" : "Open menu"}
