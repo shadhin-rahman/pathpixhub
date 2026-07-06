@@ -3,8 +3,8 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRef } from "react";
+import { ChevronRight } from "lucide-react";
 import { services } from "@/data/services";
 
 const priceMap: Record<string, string> = {
@@ -36,33 +36,20 @@ const cardColors = [
 const slideItems = [...services, ...services, ...services];
 const trialRepeats = Array.from({ length: 10 }, (_, i) => i);
 
-function getStep() {
-  if (typeof window === "undefined") return 344;
-  return window.innerWidth < 768 ? 280 : 344;
-}
-
 export default function PricingPage() {
-  const [slideX, setSlideX] = useState(0);
-  const [autoPlay, setAutoPlay] = useState(true);
-  const autoTimer = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
-  const pauseTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const skipTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  useEffect(() => {
-    if (!autoPlay) return;
-    autoTimer.current = setInterval(() => {
-      setSlideX(prev => prev - 1);
-    }, 40);
-    return () => clearInterval(autoTimer.current);
-  }, [autoPlay]);
-
-  const pause = () => {
-    setAutoPlay(false);
-    clearTimeout(pauseTimer.current);
-    pauseTimer.current = setTimeout(() => setAutoPlay(true), 8000);
+  const skipAhead = () => {
+    if (!sliderRef.current) return;
+    clearTimeout(skipTimer.current);
+    sliderRef.current.style.animationDuration = "1.5s";
+    skipTimer.current = setTimeout(() => {
+      if (sliderRef.current) {
+        sliderRef.current.style.animationDuration = "50s";
+      }
+    }, 2000);
   };
-
-  const goNext = () => { pause(); setSlideX(prev => prev - getStep()); };
-  const goPrev = () => { pause(); setSlideX(prev => prev + getStep()); };
 
   return (
     <>
@@ -141,56 +128,43 @@ export default function PricingPage() {
       </section>
 
       <section className="py-20 overflow-hidden bg-[var(--bg)] relative">
-        <div className="relative">
-          <motion.div
-            animate={{ x: slideX }}
-            transition={{ type: "tween", duration: 0.8, ease: "easeInOut" }}
-            className="flex gap-6"
-          >
-            {slideItems.map((s, i) => {
-              const ci = i % cardColors.length;
-              return (
-                <div key={`${s.id}-${i}`} className="flex-shrink-0 w-64 md:w-80 group">
-                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
-                    <div className="absolute inset-0" style={{ backgroundColor: cardColors[ci], opacity: 0.2 }} />
-                    <Image
-                      src={s.image}
-                      alt={s.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
-                      sizes="(max-width: 768px) 256px, 320px"
-                    />
-                    <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${cardColors[ci]}33, transparent 50%)` }} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-4">
-                      <Link
-                        href={`/services#${s.id}`}
-                        className="text-white font-bold text-sm drop-shadow-md hover:underline underline-offset-2"
-                      >
-                        {s.title}
-                      </Link>
-                    </div>
+        <div className="flex gap-6 w-max marquee-slide" ref={sliderRef}>
+          {slideItems.map((s, i) => {
+            const ci = i % cardColors.length;
+            return (
+              <div key={`${s.id}-${i}`} className="flex-shrink-0 w-64 md:w-80 group">
+                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
+                  <div className="absolute inset-0" style={{ backgroundColor: cardColors[ci], opacity: 0.2 }} />
+                  <Image
+                    src={s.image}
+                    alt={s.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    sizes="(max-width: 768px) 256px, 320px"
+                  />
+                  <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${cardColors[ci]}33, transparent 50%)` }} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <Link
+                      href={`/services#${s.id}`}
+                      className="text-white font-bold text-sm drop-shadow-md hover:underline underline-offset-2"
+                    >
+                      {s.title}
+                    </Link>
                   </div>
                 </div>
-              );
-            })}
-          </motion.div>
-
-          <button
-            onClick={goPrev}
-            aria-label="Previous services"
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full glass-card bg-[var(--bg-alt)/80] backdrop-blur-md text-[rgb(var(--fg-rgb))] flex items-center justify-center hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 shadow-lg opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100 md:opacity-0 md:group-hover:opacity-100"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            onClick={goNext}
-            aria-label="Next services"
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full glass-card bg-[var(--bg-alt)/80] backdrop-blur-md text-[rgb(var(--fg-rgb))] flex items-center justify-center hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 shadow-lg opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100 md:opacity-0 md:group-hover:opacity-100"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
+              </div>
+            );
+          })}
         </div>
+
+        <button
+          onClick={skipAhead}
+          aria-label="Skip ahead"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full glass-card bg-[var(--bg-alt)/80] backdrop-blur-md text-[rgb(var(--accent-400))] flex items-center justify-center hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 shadow-lg border border-[rgb(var(--fg-rgb)/10%)]"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
       </section>
 
       <section className="py-20 bg-[var(--bg-alt)] overflow-hidden">
