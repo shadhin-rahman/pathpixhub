@@ -112,11 +112,7 @@ export default function PricingPage() {
       </section>
 
       <section className="py-20 overflow-hidden bg-[var(--bg)]">
-        <motion.div
-          animate={{ x: [0, -3440] }}
-          transition={{ repeat: Infinity, duration: 50, ease: "linear", repeatType: "loop" }}
-          className="flex gap-6 w-max"
-        >
+        <div className="flex gap-6 w-max marquee-slide">
           {slideItems.map((s, i) => {
             const ci = i % cardColors.length;
             return (
@@ -144,15 +140,11 @@ export default function PricingPage() {
               </div>
             );
           })}
-        </motion.div>
+        </div>
       </section>
 
       <section className="py-20 bg-[var(--bg-alt)] overflow-hidden">
-        <motion.div
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ repeat: Infinity, duration: 40, ease: "linear", repeatType: "loop" }}
-          className="flex gap-10 w-max items-center"
-        >
+        <div className="flex gap-10 w-max items-center marquee-trial">
           {trialRepeats.map((i) => (
             <div key={i} className="flex items-center gap-10">
               <span className="text-xl md:text-2xl font-bold tracking-tight text-[rgb(var(--fg-rgb))] whitespace-nowrap">
@@ -166,7 +158,7 @@ export default function PricingPage() {
               </Link>
             </div>
           ))}
-        </motion.div>
+        </div>
       </section>
     </>
   );
