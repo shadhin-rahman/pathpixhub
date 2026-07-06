@@ -39,23 +39,43 @@ export default function PricingPage() {
     <>
       <section className="pt-40 pb-20 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text leading-[1.1] text-center">
-            See the starting cost<br />for photo editing rates
-          </h1>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div className="max-w-xl">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[rgb(var(--fg-rgb))] leading-[1.1]">
+                Stress less with simple pricing<br />and pixel perfect photo edits
+              </h1>
+              <p className="mt-5 text-base md:text-lg text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
+                Curious about how much your edits will cost? Get an instant quote to see your total right away, or keep reading to learn more about how PathPixHub photo editing rates work.
+              </p>
+              <div className="mt-8">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm shadow-lg shadow-[rgb(var(--accent-500)/25%)]"
+                >
+                  Get a quote
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                </Link>
+              </div>
+            </div>
+            <div className="relative aspect-[4/3] lg:aspect-auto lg:h-[26rem] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)]">
+              <Image
+                src="/images/price-page.png"
+                alt="Price page"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                priority
+              />
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="pt-16 pb-10 bg-[var(--bg-alt)]">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <div className="flex flex-wrap items-center justify-center gap-3 text-sm font-medium">
-            <span className="px-5 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))]">Upload images</span>
-            <svg className="w-5 h-5 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-            <span className="px-5 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))]">Select services</span>
-            <svg className="w-5 h-5 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-            <span className="px-5 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))]">Select turnaround</span>
-            <svg className="w-5 h-5 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-            <span className="px-6 py-3 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold">$</span>
-          </div>
+      <section className="py-16 bg-[var(--bg-alt)]">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight gradient-text">
+            See the starting cost<br />for photo editing rates
+          </h2>
         </div>
       </section>
 
@@ -140,7 +160,7 @@ export default function PricingPage() {
               </span>
               <Link
                 href="/contact"
-                className="px-6 py-3 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm whitespace-nowrap hover:bg-[rgb(var(--accent-400))] hover:scale-105 transition-all shrink-0 shadow-lg shadow-[rgb(var(--accent-500)/25%)]"
+                className="px-6 py-3 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm whitespace-nowrap hover:bg-[rgb(var(--accent-500))] hover:scale-105 transition-all shrink-0 shadow-lg shadow-[rgb(var(--accent-500)/25%)]"
               >
                 Get 2 free edits
               </Link>
