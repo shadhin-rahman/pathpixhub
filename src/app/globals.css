@@ -24,10 +24,10 @@
   --glass-bg: rgba(0, 0, 0, 0.03);
   --glass-border: rgba(0, 0, 0, 0.08);
   --logo-filter: none;
-  --accent-300: 6 148 113;
-  --accent-400: 5 130 99;
-  --accent-500: 4 110 84;
-  --accent-600: 3 88 67;
+  --accent-300: 150 10 125;
+  --accent-400: 199 20 158;
+  --accent-500: 176 0 149;
+  --accent-600: 138 0 117;
   --accent-contrast: 255 255 255;
   color-scheme: light;
 }
