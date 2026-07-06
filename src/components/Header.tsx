@@ -3,13 +3,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronLeft } from "lucide-react";
 import { services } from "@/data/services";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
+  const [menuView, setMenuView] = useState<"main" | "services">("main");
+
+  const openMenu = () => { setIsOpen(true); setMenuView("main"); };
+  const closeMenu = () => { setIsOpen(false); setMenuView("main"); };
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 py-6">
@@ -34,7 +37,7 @@ export default function Header() {
             Free Trial
           </Link>
           <button
-            onClick={() => { setIsOpen(!isOpen); if (isOpen) setServicesOpen(false); }}
+            onClick={() => { if (isOpen) closeMenu(); else openMenu(); }}
             className={`group flex items-center gap-4 px-8 py-4 rounded-full transition-all duration-500 z-[60] border ${
               isOpen
                 ? "bg-[var(--bg)] text-[rgb(var(--fg-rgb))] border-[rgb(var(--fg-rgb)/20%)]"
@@ -65,7 +68,7 @@ export default function Header() {
             Free Trial
           </Link>
           <button
-            onClick={() => { setIsOpen(!isOpen); if (isOpen) setServicesOpen(false); }}
+            onClick={() => { if (isOpen) closeMenu(); else openMenu(); }}
             aria-label={isOpen ? "Close menu" : "Open menu"}
             className="z-[60] p-4 rounded-2xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] border border-transparent"
           >
@@ -82,7 +85,7 @@ export default function Header() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 bg-black/90 backdrop-blur-2xl z-[55]"
-              onClick={() => setIsOpen(false)}
+              onClick={closeMenu}
             />
             <motion.div
               initial={{ x: "100%" }}
@@ -91,92 +94,102 @@ export default function Header() {
               transition={{ type: "spring", damping: 30, stiffness: 200 }}
               className="fixed top-0 right-0 h-screen w-full md:w-[500px] bg-[var(--bg-alt)] border-l border-[rgb(var(--fg-rgb)/5%)] z-[56] p-12 flex flex-col justify-center overflow-y-auto"
             >
-              <div className="space-y-8">
-                <div className="flex items-center justify-between">
-                  <span className="text-[rgb(var(--accent-400))] text-xs uppercase tracking-[0.5em] font-bold">Navigation</span>
-                  <ThemeToggle className="flex md:hidden w-10 h-10 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-400))]" />
-                </div>
-
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0 }}>
-                  <Link
-                    href="/"
-                    onClick={() => setIsOpen(false)}
-                    className="block font-bold text-4xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
-                  >
-                    Home
-                  </Link>
-                </motion.div>
-
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
-                  <button
-                    onClick={() => setServicesOpen(!servicesOpen)}
-                    aria-expanded={servicesOpen}
-                    aria-controls="services-submenu"
-                    className="w-full flex items-center justify-between gap-4 font-bold text-4xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
-                  >
-                    Services
-                    <motion.span animate={{ rotate: servicesOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
-                      <ChevronDown className="w-7 h-7 md:w-8 md:h-8" />
-                    </motion.span>
-                  </button>
-                  <AnimatePresence initial={false}>
-                    {servicesOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="overflow-hidden"
-                      >
-                        <div id="services-submenu" role="menu" className="pt-5 pl-6 border-l border-[rgb(var(--fg-rgb)/10%)] ml-2 space-y-4">
-                          {services.map((s) => (
-                            <Link
-                              key={s.id}
-                              href={`/services#${s.id}`}
-                              onClick={() => setIsOpen(false)}
-                              className="block text-lg md:text-xl font-semibold text-[rgb(var(--fg-rgb)/60%)] hover:text-[rgb(var(--accent-400))] transition-colors"
-                            >
-                              {s.title}
-                            </Link>
-                          ))}
-                          <Link
-                            href="/services"
-                            onClick={() => setIsOpen(false)}
-                            className="inline-flex items-center gap-1.5 pt-2 text-sm font-bold text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors"
-                          >
-                            View all services
-                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                          </Link>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-
-                {[
-                  { name: "Portfolio", href: "/portfolio" },
-                  { name: "Pricing", href: "/pricing" },
-                  { name: "About", href: "/about" },
-                  { name: "Contact", href: "/contact" },
-                ].map((item, i) => (
+              <AnimatePresence mode="wait">
+                {menuView === "main" ? (
                   <motion.div
-                    key={item.name}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + 0.05 * i }}
+                    key="main"
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -30 }}
+                    transition={{ duration: 0.2 }}
+                    className="space-y-8"
                   >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[rgb(var(--accent-400))] text-xs uppercase tracking-[0.5em] font-bold">Navigation</span>
+                      <ThemeToggle className="flex md:hidden w-10 h-10 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-400))]" />
+                    </div>
+
                     <Link
-                      href={item.href}
-                      onClick={() => setIsOpen(false)}
+                      href="/"
+                      onClick={closeMenu}
                       className="block font-bold text-4xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
                     >
-                      {item.name}
+                      Home
                     </Link>
-                  </motion.div>
-                ))}
-              </div>
 
-              <div className="mt-20 pt-10 border-t border-[rgb(var(--fg-rgb)/10%)] space-y-8">
+                    <div>
+                      <button
+                        onClick={() => setMenuView("services")}
+                        className="w-full flex items-center justify-between gap-4 font-bold text-4xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
+                      >
+                        <span>Services</span>
+                        <ChevronLeft className="w-7 h-7 md:w-8 md:h-8 rotate-180 text-[rgb(var(--fg-rgb)/40%)]" />
+                      </button>
+                    </div>
+
+                    {[
+                      { name: "Portfolio", href: "/portfolio" },
+                      { name: "Pricing", href: "/pricing" },
+                      { name: "About", href: "/about" },
+                      { name: "Contact", href: "/contact" },
+                    ].map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={closeMenu}
+                        className="block font-bold text-4xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="services"
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -30 }}
+                    transition={{ duration: 0.2 }}
+                    className="space-y-8"
+                  >
+                    <button
+                      onClick={() => setMenuView("main")}
+                      className="flex items-center gap-2 text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors group"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                      <span className="text-xs uppercase tracking-[0.5em] font-bold">Back</span>
+                    </button>
+
+                    <h3 className="text-xl font-bold tracking-tight text-[rgb(var(--fg-rgb)/60%)]">
+                      <span className="text-[rgb(var(--accent-400))]">All Services</span>
+                      <span className="text-[rgb(var(--fg-rgb)/30%)] ml-2 text-base font-normal">({services.length})</span>
+                    </h3>
+
+                    <div className="space-y-2 max-h-[50vh] overflow-y-auto pr-2">
+                      {services.map((s) => (
+                        <Link
+                          key={s.id}
+                          href={`/services#${s.id}`}
+                          onClick={closeMenu}
+                          className="block text-lg md:text-xl font-semibold text-[rgb(var(--fg-rgb)/60%)] hover:text-[rgb(var(--accent-400))] transition-colors py-1.5"
+                        >
+                          {s.title}
+                        </Link>
+                      ))}
+                      <Link
+                        href="/services"
+                        onClick={closeMenu}
+                        className="inline-flex items-center gap-1.5 pt-2 text-sm font-bold text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors"
+                      >
+                        View all services
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                      </Link>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <div className="mt-12 pt-8 border-t border-[rgb(var(--fg-rgb)/10%)] space-y-6 shrink-0">
                 <span className="text-[rgb(var(--fg-rgb)/50%)] text-xs uppercase tracking-[0.5em] font-bold block">Get in touch</span>
                 <a href="mailto:info@pathpixhub.com" className="text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors block text-xl font-medium">
                   info@pathpixhub.com
