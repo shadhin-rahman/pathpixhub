@@ -43,12 +43,12 @@ export default function PricingPage() {
   const skipAhead = () => {
     if (!sliderRef.current) return;
     clearTimeout(skipTimer.current);
-    sliderRef.current.style.animationDuration = "1.5s";
+    sliderRef.current.style.animationDuration = "6s";
     skipTimer.current = setTimeout(() => {
       if (sliderRef.current) {
         sliderRef.current.style.animationDuration = "50s";
       }
-    }, 2000);
+    }, 4000);
   };
 
   return (
