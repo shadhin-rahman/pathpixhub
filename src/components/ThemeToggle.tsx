@@ -6,7 +6,7 @@ function getInitialTheme(): "dark" | "light" {
   if (typeof document !== "undefined") {
     return document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
   }
-  return "dark";
+  return "light";
 }
 
 export default function ThemeToggle({ className = "" }: { className?: string }) {

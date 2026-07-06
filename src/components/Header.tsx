@@ -15,20 +15,20 @@ export default function Header() {
   const closeMenu = () => { setIsOpen(false); setMenuView("main"); };
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 py-6">
+    <nav className="fixed top-0 left-0 w-full z-50 py-4 md:py-6">
       <div className="flex justify-between items-center">
-        <Link href="/" className="z-[60]">
+        <Link href="/" className={isOpen ? "z-40" : "z-[60]"}>
           <Image
             src="/images/logo.png"
             alt="PathPixHub"
             width={140}
             height={140}
-            className="h-16 lg:h-20 w-auto [filter:var(--logo-filter)] ml-10"
+            className="h-14 md:h-16 lg:h-20 w-auto [filter:var(--logo-filter)] ml-4 md:ml-10"
             priority
           />
         </Link>
 
-        <div className="hidden md:flex items-center gap-3 pr-10">
+        <div className="hidden md:flex items-center gap-3 pr-4 md:pr-10">
           <ThemeToggle className="w-11 h-11 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))]" />
           <Link
             href="/contact"
@@ -60,19 +60,19 @@ export default function Header() {
           </button>
         </div>
 
-        <div className="md:hidden flex items-center gap-3 pr-10">
+        <div className="md:hidden flex items-center gap-2 pr-4">
           <Link
             href="/contact"
-            className="px-5 py-4 rounded-full border border-[rgb(var(--accent-500)/50%)] text-[rgb(var(--accent-400))] font-black hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 text-xs uppercase tracking-[0.3em] whitespace-nowrap"
+            className="px-4 py-3 rounded-full border border-[rgb(var(--accent-500)/50%)] text-[rgb(var(--accent-400))] font-black hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 text-[10px] uppercase tracking-[0.2em] whitespace-nowrap"
           >
             Free Trial
           </Link>
           <button
             onClick={() => { if (isOpen) closeMenu(); else openMenu(); }}
             aria-label={isOpen ? "Close menu" : "Open menu"}
-            className="z-[60] p-4 rounded-2xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] border border-transparent"
+            className="z-[60] p-3 rounded-2xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] border border-transparent"
           >
-            {isOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
@@ -92,8 +92,13 @@ export default function Header() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 200 }}
-              className="fixed top-0 right-0 h-screen w-full md:w-[500px] bg-[var(--bg-alt)] border-l border-[rgb(var(--fg-rgb)/5%)] z-[56] p-12 flex flex-col justify-center overflow-y-auto"
+              className="fixed top-0 right-0 h-screen w-full md:w-[500px] bg-[var(--bg-alt)] border-l border-[rgb(var(--fg-rgb)/5%)] z-[56] p-8 md:p-12 flex flex-col justify-center overflow-y-auto"
             >
+              <div className="flex items-center justify-between mb-10 md:mb-12">
+                <span className="text-[rgb(var(--accent-400))] text-xs uppercase tracking-[0.5em] font-bold">Navigation</span>
+                <ThemeToggle className="md:hidden w-10 h-10 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-400))]" />
+              </div>
+
               <AnimatePresence mode="wait">
                 {menuView === "main" ? (
                   <motion.div
@@ -102,17 +107,12 @@ export default function Header() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -30 }}
                     transition={{ duration: 0.2 }}
-                    className="space-y-8"
+                    className="space-y-7 md:space-y-8"
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="text-[rgb(var(--accent-400))] text-xs uppercase tracking-[0.5em] font-bold">Navigation</span>
-                      <ThemeToggle className="flex md:hidden w-10 h-10 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-400))]" />
-                    </div>
-
                     <Link
                       href="/"
                       onClick={closeMenu}
-                      className="block font-bold text-4xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
+                      className="block font-bold text-3xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
                     >
                       Home
                     </Link>
@@ -120,10 +120,10 @@ export default function Header() {
                     <div>
                       <button
                         onClick={() => setMenuView("services")}
-                        className="w-full flex items-center justify-between gap-4 font-bold text-4xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
+                        className="w-full flex items-center justify-between gap-4 font-bold text-3xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
                       >
                         <span>Services</span>
-                        <ChevronLeft className="w-7 h-7 md:w-8 md:h-8 rotate-180 text-[rgb(var(--fg-rgb)/40%)]" />
+                        <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 rotate-180 text-[rgb(var(--fg-rgb)/40%)]" />
                       </button>
                     </div>
 
@@ -137,7 +137,7 @@ export default function Header() {
                         key={item.name}
                         href={item.href}
                         onClick={closeMenu}
-                        className="block font-bold text-4xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
+                        className="block font-bold text-3xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
                       >
                         {item.name}
                       </Link>
@@ -150,7 +150,7 @@ export default function Header() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -30 }}
                     transition={{ duration: 0.2 }}
-                    className="space-y-8"
+                    className="space-y-7 md:space-y-8"
                   >
                     <button
                       onClick={() => setMenuView("main")}
@@ -160,18 +160,18 @@ export default function Header() {
                       <span className="text-xs uppercase tracking-[0.5em] font-bold">Back</span>
                     </button>
 
-                    <h3 className="text-xl font-bold tracking-tight text-[rgb(var(--fg-rgb)/60%)]">
+                    <h3 className="text-lg md:text-xl font-bold tracking-tight text-[rgb(var(--fg-rgb)/60%)]">
                       <span className="text-[rgb(var(--accent-400))]">All Services</span>
                       <span className="text-[rgb(var(--fg-rgb)/30%)] ml-2 text-base font-normal">({services.length})</span>
                     </h3>
 
-                    <div className="space-y-2 max-h-[50vh] overflow-y-auto pr-2">
+                    <div className="space-y-1 max-h-[50vh] overflow-y-auto pr-2">
                       {services.map((s) => (
                         <Link
                           key={s.id}
                           href={`/services#${s.id}`}
                           onClick={closeMenu}
-                          className="block text-lg md:text-xl font-semibold text-[rgb(var(--fg-rgb)/60%)] hover:text-[rgb(var(--accent-400))] transition-colors py-1.5"
+                          className="block text-base md:text-xl font-semibold text-[rgb(var(--fg-rgb)/60%)] hover:text-[rgb(var(--accent-400))] transition-colors py-1.5"
                         >
                           {s.title}
                         </Link>
