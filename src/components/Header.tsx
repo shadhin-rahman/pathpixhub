@@ -20,12 +20,12 @@ export default function Header() {
             alt="PathPixHub"
             width={140}
             height={140}
-            className="h-16 lg:h-20 w-auto [filter:var(--logo-filter)] ml-6"
+            className="h-16 lg:h-20 w-auto [filter:var(--logo-filter)] ml-10"
             priority
           />
         </Link>
 
-        <div className="hidden md:flex items-center gap-3 pr-6">
+        <div className="hidden md:flex items-center gap-3 pr-10">
           <ThemeToggle className="w-11 h-11 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))]" />
           <button
             onClick={() => { setIsOpen(!isOpen); if (isOpen) setServicesOpen(false); }}
@@ -51,7 +51,7 @@ export default function Header() {
           </button>
         </div>
 
-        <div className="md:hidden flex items-center gap-3 pr-6">
+        <div className="md:hidden flex items-center gap-3 pr-10">
           <button
             onClick={() => { setIsOpen(!isOpen); if (isOpen) setServicesOpen(false); }}
             aria-label={isOpen ? "Close menu" : "Open menu"}
