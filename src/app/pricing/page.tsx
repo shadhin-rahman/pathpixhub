@@ -143,15 +143,14 @@ export default function PricingPage() {
                 <div className="rounded-2xl p-4 pb-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                   style={{ backgroundColor: cardColors[ci] }}
                 >
-                  <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
+                  <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-white/10">
                     <Image
-                      src={s.image}
+                      src={`/images/service-cards/${s.id}.png`}
                       alt={s.title}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      className="object-contain p-3 group-hover:scale-105 transition-transform duration-700"
                       sizes="(max-width: 768px) 256px, 320px"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                   </div>
                   <Link
                     href={`/services#${s.id}`}
