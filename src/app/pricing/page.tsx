@@ -105,10 +105,11 @@ export default function PricingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05, duration: 0.4 }}
-                className="glass-card rounded-2xl p-6 border-[rgb(var(--fg-rgb)/5%)] hover:border-[rgb(var(--accent-500)/30%)] hover:shadow-lg hover:shadow-[rgb(var(--accent-500)/10%)] transition-all duration-300 group"
+                className="rounded-2xl p-5 transition-all duration-300 group hover:-translate-y-1 hover:shadow-xl"
+                style={{ backgroundColor: cardColors[i % cardColors.length] }}
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-[rgb(var(--accent-500)/10%)] flex items-center justify-center overflow-hidden group-hover:bg-[rgb(var(--accent-500)/20%)] group-hover:scale-110 transition-all duration-300">
+                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-all duration-300">
                     <Image
                       src={`/images/service-icons/${s.id}.png`}
                       alt={s.title}
@@ -119,12 +120,12 @@ export default function PricingPage() {
                   </div>
                   <Link
                     href={`/services#${s.id}`}
-                    className="font-bold text-sm text-[rgb(var(--fg-rgb))] leading-tight hover:text-[rgb(var(--accent-400))] transition-colors"
+                    className="font-bold text-sm text-white/90 leading-tight hover:text-white transition-colors"
                   >
                     {s.title}
                   </Link>
                 </div>
-                <p className="text-xs font-mono tracking-[0.1em] text-[rgb(var(--accent-400))] font-bold">
+                <p className="text-xs font-mono tracking-[0.1em] text-white/80 font-bold">
                   {priceMap[s.id]}
                 </p>
               </motion.div>
