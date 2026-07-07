@@ -101,7 +101,7 @@ export default function Home() {
             <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">What We Offer</h2>
             <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Services</h3>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {services.map((service) => {
               const cardColors = ["#ef4444","#a855f7","#ec4899","#eab308","#3b82f6","#10b981","#f97316","#14b8a6","#6366f1","#f43f5e"];
               const ci = ["clipping-path","background-removal","shadow-creation","ghost-mannequin","image-masking","color-change","photo-retouching","multi-clipping-path","ecommerce-editing","car-editing"].indexOf(service.id) % cardColors.length;
@@ -109,20 +109,23 @@ export default function Home() {
               <Link
                 key={service.id}
                 href={`/services#${service.id}`}
-                className="group glass-card rounded-[2rem] overflow-hidden border border-[rgb(var(--fg-rgb)/5%)] hover:bg-[rgb(var(--fg-rgb)/5%)] transition-all duration-500 hover:-translate-y-1"
+                className="group rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
+                style={{ backgroundColor: cardColors[ci] }}
               >
-                <div className="relative h-48 overflow-hidden" style={{ backgroundColor: cardColors[ci] }}>
-                  <Image
-                    src={`/images/service-cards/${service.id}.png`}
-                    alt={service.title}
-                    fill
-                    className="object-contain p-4 group-hover:scale-105 transition-transform duration-700"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-bold text-[rgb(var(--fg-rgb))] group-hover:text-[rgb(var(--accent-400))] transition-colors">{service.title}</h3>
-                  <p className="mt-1.5 text-sm text-[rgb(var(--fg-rgb)/40%)]">{service.tagline}</p>
+                <div className="flex items-center gap-4 p-4 md:p-5">
+                  <div className="relative w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-xl overflow-hidden bg-white/10 flex items-center justify-center">
+                    <Image
+                      src={`/images/service-cards/${service.id}.png`}
+                      alt={service.title}
+                      fill
+                      className="object-contain p-1.5 group-hover:scale-105 transition-transform duration-700"
+                      sizes="80px"
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-sm md:text-base text-white leading-tight">{service.title}</h3>
+                    <p className="mt-0.5 text-xs text-white/70 line-clamp-2">{service.tagline}</p>
+                  </div>
                 </div>
               </Link>
             )})}
