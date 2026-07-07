@@ -102,15 +102,18 @@ export default function Home() {
             <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Services</h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {services.map((service) => (
+            {services.map((service) => {
+              const cardColors = ["#ef4444","#a855f7","#ec4899","#eab308","#3b82f6","#10b981","#f97316","#14b8a6","#6366f1","#f43f5e"];
+              const ci = ["clipping-path","background-removal","shadow-creation","ghost-mannequin","image-masking","color-change","photo-retouching","multi-clipping-path","ecommerce-editing","car-editing"].indexOf(service.id) % cardColors.length;
+              return (
               <Link
                 key={service.id}
                 href={`/services#${service.id}`}
                 className="group glass-card rounded-[2rem] overflow-hidden border border-[rgb(var(--fg-rgb)/5%)] hover:bg-[rgb(var(--fg-rgb)/5%)] transition-all duration-500 hover:-translate-y-1"
               >
-                <div className="relative h-48 overflow-hidden bg-[var(--bg-subtle)]">
+                <div className="relative h-48 overflow-hidden" style={{ backgroundColor: cardColors[ci] }}>
                   <Image
-                    src={service.image}
+                    src={`/images/service-cards/${service.id}.png`}
                     alt={service.title}
                     fill
                     className="object-contain p-4 group-hover:scale-105 transition-transform duration-700"
@@ -122,7 +125,7 @@ export default function Home() {
                   <p className="mt-1.5 text-sm text-[rgb(var(--fg-rgb)/40%)]">{service.tagline}</p>
                 </div>
               </Link>
-            ))}
+            )})}
           </div>
         </div>
       </section>
