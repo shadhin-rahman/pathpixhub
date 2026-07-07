@@ -182,9 +182,9 @@ export default function PricingPage() {
               </span>
               <Link
                 href="/contact"
-                className="px-7 py-3.5 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm whitespace-nowrap hover:bg-[rgb(var(--accent-500))] hover:scale-105 hover:shadow-xl hover:shadow-[rgb(var(--accent-500)/35%)] transition-all shrink-0 shadow-lg shadow-[rgb(var(--accent-500)/25%)]"
+                className="px-6 py-3 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm whitespace-nowrap hover:bg-[rgb(var(--accent-500))] hover:scale-105 transition-all shrink-0 shadow-lg shadow-[rgb(var(--accent-500)/25%)]"
               >
-                Let's Talk
+                Get 2 free edits
               </Link>
             </div>
           ))}
