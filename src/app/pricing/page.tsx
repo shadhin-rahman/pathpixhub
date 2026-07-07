@@ -145,7 +145,7 @@ export default function PricingPage() {
                 >
                   <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-white/10">
                     <Image
-                      src={`/images/service-cards/${s.id}.png`}
+                      src={`/images/service-showcase/${s.id}.png`}
                       alt={s.title}
                       fill
                       className="object-contain p-3 group-hover:scale-105 transition-transform duration-700"
