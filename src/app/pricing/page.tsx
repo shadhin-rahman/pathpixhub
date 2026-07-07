@@ -108,8 +108,14 @@ export default function PricingPage() {
                 className="glass-card rounded-2xl p-6 border-[rgb(var(--fg-rgb)/5%)] hover:border-[rgb(var(--accent-500)/30%)] hover:shadow-lg hover:shadow-[rgb(var(--accent-500)/10%)] transition-all duration-300 group"
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-[rgb(var(--accent-500)/10%)] flex items-center justify-center text-lg group-hover:bg-[rgb(var(--accent-500)/20%)] group-hover:scale-110 transition-all duration-300">
-                    {s.icon}
+                  <div className="w-10 h-10 rounded-xl bg-[rgb(var(--accent-500)/10%)] flex items-center justify-center overflow-hidden group-hover:bg-[rgb(var(--accent-500)/20%)] group-hover:scale-110 transition-all duration-300">
+                    <Image
+                      src={`/images/service-icons/${s.id}.png`}
+                      alt={s.title}
+                      width={40}
+                      height={40}
+                      className="object-contain"
+                    />
                   </div>
                   <Link
                     href={`/services#${s.id}`}
