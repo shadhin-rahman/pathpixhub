@@ -140,25 +140,25 @@ export default function PricingPage() {
             const ci = i % cardColors.length;
             return (
               <div key={`${s.id}-${i}`} className="flex-shrink-0 w-64 md:w-80 group">
-                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
-                  <div className="absolute inset-0" style={{ backgroundColor: cardColors[ci], opacity: 0.2 }} />
-                  <Image
-                    src={s.image}
-                    alt={s.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    sizes="(max-width: 768px) 256px, 320px"
-                  />
-                  <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${cardColors[ci]}33, transparent 50%)` }} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <Link
-                      href={`/services#${s.id}`}
-                      className="text-white font-bold text-sm drop-shadow-md hover:underline underline-offset-2"
-                    >
-                      {s.title}
-                    </Link>
+                <div className="rounded-2xl p-4 pb-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                  style={{ backgroundColor: cardColors[ci] }}
+                >
+                  <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
+                    <Image
+                      src={s.image}
+                      alt={s.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      sizes="(max-width: 768px) 256px, 320px"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                   </div>
+                  <Link
+                    href={`/services#${s.id}`}
+                    className="block mt-3 text-white/90 font-bold text-sm text-center leading-tight hover:text-white transition-colors"
+                  >
+                    {s.title}
+                  </Link>
                 </div>
               </div>
             );
