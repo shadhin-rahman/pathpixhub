@@ -40,7 +40,7 @@ export default function Header() {
             href="/contact"
             className="px-8 py-4 rounded-full bg-[#c7ea46] text-black font-black hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 text-xs uppercase tracking-[0.4em] whitespace-nowrap"
           >
-            Let's Talk
+            Let&apos;s Talk
           </Link>
           <button
             onClick={() => { if (isOpen) closeMenu(); else openMenu(); }}
@@ -72,7 +72,7 @@ export default function Header() {
             href="/contact"
             className="px-3 py-2.5 rounded-full bg-[#c7ea46] text-black font-black hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 text-[10px] uppercase tracking-[0.2em] whitespace-nowrap"
           >
-            Let's Talk
+            Let&apos;s Talk
           </Link>
           <button
             onClick={() => { if (isOpen) closeMenu(); else openMenu(); }}
