@@ -115,14 +115,14 @@
 
   .hero-slide {
     opacity: 0;
-    animation: hero-fade 16s ease-in-out infinite;
+    animation: hero-fade-3 24s ease-in-out infinite;
   }
 
-  @keyframes hero-fade {
-    0% { opacity: 0; transform: scale(1.06); }
-    2% { opacity: 1; transform: scale(1); }
-    15% { opacity: 1; transform: scale(1); }
-    17% { opacity: 0; transform: scale(1.06); }
+  @keyframes hero-fade-3 {
+    0% { opacity: 0; }
+    2% { opacity: 1; }
+    31% { opacity: 1; }
+    33% { opacity: 0; }
     100% { opacity: 0; }
   }
 

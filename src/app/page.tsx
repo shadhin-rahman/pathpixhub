@@ -57,17 +57,17 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-24 lg:py-32 bg-[var(--bg-alt)]">
+      <section className="py-16 lg:py-24 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div>
+          <div className="flex flex-col lg:flex-row items-start gap-6">
+            <div className="w-full lg:w-1/3 shrink-0">
               <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">From Our Studio</h2>
               <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Every Product, Every Angle</h3>
               <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-lg">
                 Bicycles, vehicles, apparel, or accessories — whatever you shoot, we edit it with the
                 same pixel-perfect care. A rotating look at a few recent categories we work with.
               </p>
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-6 flex flex-wrap gap-3">
                 {["Clipping Path", "Background Removal", "Shadow Creation", "Photo Retouching", "Beauty Airbrushing", "Car Image Editing"].map((tag) => (
                   <span key={tag} className="px-4 py-2 rounded-full glass-card text-xs font-semibold text-[rgb(var(--fg-rgb)/70%)]">
                     {tag}
@@ -75,26 +75,30 @@ export default function Home() {
                 ))}
               </div>
             </div>
-            <div className="relative rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]"
-  style={{ aspectRatio: "1600 / 700", maxHeight: "40rem", width: "100%" }}
->
-  {[
-    { src: "/images/hero-slider/bicycle.jpg", alt: "Product photo editing showcase - bicycle", delay: "0s" },
-    { src: "/images/hero-slider/car-editing-1.jpg", alt: "Product photo editing showcase - car", delay: "-8s" },
-    { src: "/images/hero-slider/ecommerce-product.jpg", alt: "Product photo editing showcase - ecommerce product", delay: "-16s" },
-  ].map((slide) => (
-    <div key={slide.src} className="absolute inset-0 flex items-center justify-center" style={{ animation: "hero-fade 24s ease-in-out infinite", animationDelay: slide.delay }}>
-      <Image
-        src={slide.src}
-        alt={slide.alt}
-        width={1600}
-        height={900}
-        className="w-full h-full object-contain"
-        sizes="(max-width: 1024px) 100vw, 50vw"
-      />
-    </div>
-  ))}
-            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="pb-24 lg:pb-32 bg-[var(--bg-alt)] -mt-6">
+        <div className="max-w-[96rem] mx-auto px-6">
+          <div className="relative w-full rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]"
+            style={{ aspectRatio: "21 / 9", maxHeight: "45rem" }}
+          >
+            {[
+              { src: "/images/hero-slider/bicycle.jpg", alt: "Product photo editing showcase - bicycle", delay: "0s" },
+              { src: "/images/hero-slider/car-editing-1.jpg", alt: "Product photo editing showcase - car", delay: "-8s" },
+              { src: "/images/hero-slider/ecommerce-product.jpg", alt: "Product photo editing showcase - ecommerce product", delay: "-16s" },
+            ].map((slide) => (
+              <div key={slide.src} className="absolute inset-0 flex items-center justify-center" style={{ animation: "hero-fade-3 24s ease-in-out infinite", animationDelay: slide.delay }}>
+                <Image
+                  src={slide.src}
+                  alt={slide.alt}
+                  fill
+                  className="object-contain"
+                  sizes="100vw"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
