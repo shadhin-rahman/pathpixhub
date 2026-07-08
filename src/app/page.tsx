@@ -99,42 +99,40 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-24 lg:py-32 mesh-gradient overflow-hidden">
+      <section className="py-24 lg:py-32 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
             <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">What We Offer</h2>
             <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Services</h3>
           </div>
-          <div className="flex flex-col gap-4 max-w-6xl mx-auto">
-            {services.map((service, idx) => {
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {services.map((service) => {
               const cardColors = ["#ef4444","#a855f7","#ec4899","#eab308","#3b82f6","#10b981","#f97316","#14b8a6","#6366f1","#f43f5e"];
-              const ci = idx % cardColors.length;
+              const ci = ["clipping-path","background-removal","shadow-creation","ghost-mannequin","image-masking","color-change","photo-retouching","multi-clipping-path","ecommerce-editing","car-editing"].indexOf(service.id) % cardColors.length;
               return (
-                <Link
-                  key={service.id}
-                  href={`/services#${service.id}`}
-                  className="group w-full rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-0.5 hover:shadow-xl flex items-center gap-5 px-6 py-5 md:px-8 md:py-6 border border-white/10"
-                  style={{ backgroundColor: cardColors[ci] }}
-                >
-                  <div className="relative w-16 h-16 md:w-24 md:h-24 shrink-0 rounded-2xl overflow-hidden bg-white/10 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+              <Link
+                key={service.id}
+                href={`/services#${service.id}`}
+                className="group rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
+                style={{ backgroundColor: cardColors[ci] }}
+              >
+                <div className="flex items-center gap-4 p-4 md:p-5">
+                  <div className="relative w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-xl overflow-hidden bg-white/10 flex items-center justify-center">
                     <Image
                       src={`/images/service-cards/${service.id}.png`}
                       alt={service.title}
-                      width={96}
-                      height={96}
-                      className="object-contain w-full h-full p-2"
+                      fill
+                      className="object-contain p-1.5 group-hover:scale-105 transition-transform duration-700"
+                      sizes="80px"
                     />
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-bold text-lg md:text-2xl text-white leading-tight">{service.title}</h3>
-                    <p className="mt-1 text-sm md:text-base text-white/80">{service.tagline}</p>
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-sm md:text-base text-white leading-tight">{service.title}</h3>
+                    <p className="mt-0.5 text-xs text-white/70 line-clamp-2">{service.tagline}</p>
                   </div>
-                  <div className="shrink-0 text-white/60 group-hover:text-white group-hover:translate-x-1 transition-all">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                  </div>
-                </Link>
-              );
-            })}
+                </div>
+              </Link>
+            )})}
           </div>
         </div>
       </section>
