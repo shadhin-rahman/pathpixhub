@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -11,13 +12,33 @@ export default function AboutPage() {
     <>
       <section className="pt-40 pb-20 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="max-w-3xl">
-            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">About Us</h2>
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Your Virtual Photo Editing Studio</h1>
-            <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
-              Our mission is to transform your images into works of art with precision, creativity, and
-              unparalleled quality.
-            </p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="max-w-3xl">
+              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">About Us</h2>
+              <h1 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Your Virtual Photo Editing Studio</h1>
+              <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
+                Our mission is to transform your images into works of art with precision, creativity, and
+                unparalleled quality.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { src: "/images/service-cards/clipping-path.png", alt: "clipping path" },
+                { src: "/images/service-cards/background-removal.png", alt: "background removal" },
+                { src: "/images/service-cards/photo-retouching.png", alt: "photo retouching" },
+                { src: "/images/service-cards/car-editing.png", alt: "car editing" },
+              ].map((img) => (
+                <div key={img.src} className="relative aspect-square rounded-2xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]">
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    className="object-contain p-3"
+                    sizes="(max-width: 1024px) 50vw, 20vw"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
