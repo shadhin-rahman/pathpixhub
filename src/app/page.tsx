@@ -75,22 +75,25 @@ export default function Home() {
                 ))}
               </div>
             </div>
-            <div className="lg:col-span-3 relative aspect-[4/3] lg:aspect-auto lg:h-[38rem] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]">
-              {[
-                { src: "/images/hero-slider/bicycle.jpg", alt: "Product photo editing showcase - bicycle", delay: "0s" },
-                { src: "/images/hero-slider/car-editing-1.jpg", alt: "Product photo editing showcase - car", delay: "-8s" },
-                { src: "/images/hero-slider/ecommerce-product.jpg", alt: "Product photo editing showcase - ecommerce product", delay: "-16s" },
-              ].map((slide) => (
-                <div key={slide.src} className="absolute inset-0" style={{ animation: "hero-fade 24s ease-in-out infinite", animationDelay: slide.delay }}>
-                  <Image
-                    src={slide.src}
-                    alt={slide.alt}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover"
-                  />
-                </div>
-              ))}
+            <div className="lg:col-span-3 relative rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]"
+  style={{ aspectRatio: "16 / 9", maxHeight: "36rem" }}
+>
+  {[
+    { src: "/images/hero-slider/bicycle.jpg", alt: "Product photo editing showcase - bicycle", delay: "0s" },
+    { src: "/images/hero-slider/car-editing-1.jpg", alt: "Product photo editing showcase - car", delay: "-8s" },
+    { src: "/images/hero-slider/ecommerce-product.jpg", alt: "Product photo editing showcase - ecommerce product", delay: "-16s" },
+  ].map((slide) => (
+    <div key={slide.src} className="absolute inset-0 flex items-center justify-center" style={{ animation: "hero-fade 24s ease-in-out infinite", animationDelay: slide.delay }}>
+      <Image
+        src={slide.src}
+        alt={slide.alt}
+        width={1600}
+        height={900}
+        className="w-full h-full object-contain"
+        sizes="(max-width: 1024px) 100vw, 50vw"
+      />
+    </div>
+  ))}
             </div>
           </div>
         </div>
