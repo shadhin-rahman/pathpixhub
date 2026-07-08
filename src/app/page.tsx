@@ -59,8 +59,8 @@ export default function Home() {
 
       <section className="py-24 lg:py-32 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div>
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-20 items-center">
+            <div className="lg:col-span-2">
               <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">From Our Studio</h2>
               <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Every Product, Every Angle</h3>
               <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-lg">
@@ -75,7 +75,7 @@ export default function Home() {
                 ))}
               </div>
             </div>
-            <div className="relative aspect-[4/3] lg:aspect-auto lg:h-[32rem] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]">
+            <div className="lg:col-span-3 relative aspect-[4/3] lg:aspect-auto lg:h-[38rem] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]">
               {[
                 { src: "/images/bicycle.jpg", alt: "Product photo editing showcase - bicycle rendered in studio light", delay: "0s" },
                 { src: "/images/car-editing-1.jpg", alt: "Product photo editing showcase - classic red sports car", delay: "-8s" },
