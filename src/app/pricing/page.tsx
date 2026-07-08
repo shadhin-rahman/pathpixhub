@@ -21,16 +21,16 @@ const priceMap: Record<string, string> = {
 };
 
 const cardColors = [
-  "#ef4444",
-  "#a855f7",
-  "#ec4899",
-  "#eab308",
-  "#3b82f6",
-  "#10b981",
-  "#f97316",
-  "#14b8a6",
-  "#6366f1",
-  "#f43f5e",
+  "#fca5a5",
+  "#d8b4fe",
+  "#f9a8d4",
+  "#fde68a",
+  "#93c5fd",
+  "#86efac",
+  "#fdba74",
+  "#5eead4",
+  "#a5b4fc",
+  "#fda4af",
 ];
 
 const slideItems = [...services, ...services, ...services];
@@ -120,12 +120,12 @@ export default function PricingPage() {
                   </div>
                   <Link
                     href={`/services#${s.id}`}
-                    className="font-bold text-sm text-white/90 leading-tight hover:text-white transition-colors"
+                    className="font-bold text-sm text-[rgb(var(--fg-rgb)/85%)] leading-tight hover:text-[rgb(var(--accent-500))] transition-colors"
                   >
                     {s.title}
                   </Link>
                 </div>
-                <p className="text-xs font-mono tracking-[0.1em] text-white/80 font-bold">
+                <p className="text-xs font-mono tracking-[0.1em] text-[rgb(var(--fg-rgb)/60%)] font-bold">
                   {priceMap[s.id]}
                 </p>
               </motion.div>
@@ -154,7 +154,7 @@ export default function PricingPage() {
                   </div>
                   <Link
                     href={`/services#${s.id}`}
-                    className="block mt-3 text-white/90 font-bold text-sm text-center leading-tight hover:text-white transition-colors"
+                    className="block mt-3 text-[rgb(var(--fg-rgb)/80%)] font-bold text-sm text-center leading-tight hover:text-[rgb(var(--accent-500))] transition-colors"
                   >
                     {s.title}
                   </Link>

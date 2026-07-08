@@ -119,7 +119,7 @@ export default function Home() {
                       src={slide.src}
                       alt={slide.alt}
                       fill
-                      className="object-contain"
+                      className="object-cover"
                       sizes="66vw"
                     />
                   </div>
@@ -138,17 +138,17 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {services.map((service) => {
-              const cardColors = ["#ef4444","#a855f7","#ec4899","#eab308","#3b82f6","#10b981","#f97316","#14b8a6","#6366f1","#f43f5e"];
-              const ci = ["clipping-path","background-removal","shadow-creation","ghost-mannequin","image-masking","color-change","photo-retouching","multi-clipping-path","ecommerce-editing","car-editing"].indexOf(service.id) % cardColors.length;
+              const softColors = ["#fca5a5","#d8b4fe","#f9a8d4","#fde68a","#93c5fd","#86efac","#fdba74","#5eead4","#a5b4fc","#fda4af"];
+              const ci = ["clipping-path","background-removal","shadow-creation","ghost-mannequin","image-masking","color-change","photo-retouching","multi-clipping-path","ecommerce-editing","car-editing"].indexOf(service.id) % softColors.length;
               return (
               <Link
                 key={service.id}
                 href={`/services#${service.id}`}
                 className="group rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
-                style={{ backgroundColor: cardColors[ci] }}
+                style={{ backgroundColor: softColors[ci] }}
               >
                 <div className="flex items-center gap-4 p-4 md:p-5">
-                  <div className="relative w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-xl overflow-hidden bg-white/10 flex items-center justify-center">
+                  <div className="relative w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-xl overflow-hidden bg-white/30 flex items-center justify-center">
                     <Image
                       src={`/images/service-cards/${service.id}.png`}
                       alt={service.title}
@@ -158,8 +158,8 @@ export default function Home() {
                     />
                   </div>
                   <div className="min-w-0">
-                    <h3 className="font-bold text-sm md:text-base text-white leading-tight">{service.title}</h3>
-                    <p className="mt-0.5 text-xs text-white/70 line-clamp-2">{service.tagline}</p>
+                    <h3 className="font-bold text-sm md:text-base text-[rgb(var(--fg-rgb)/85%)] leading-tight">{service.title}</h3>
+                    <p className="mt-0.5 text-xs text-[rgb(var(--fg-rgb)/55%)] line-clamp-2">{service.tagline}</p>
                   </div>
                 </div>
               </Link>
@@ -173,14 +173,14 @@ export default function Home() {
         <div className="relative">
           <div className="flex gap-6 w-max marquee-slide">
             {[...Array(3)].flatMap(() => services).map((s, i) => {
-              const cardColors = ["#ef4444","#a855f7","#ec4899","#eab308","#3b82f6","#10b981","#f97316","#14b8a6","#6366f1","#f43f5e"];
-              const ci = i % cardColors.length;
+              const softColors = ["#fca5a5","#d8b4fe","#f9a8d4","#fde68a","#93c5fd","#86efac","#fdba74","#5eead4","#a5b4fc","#fda4af"];
+              const ci = i % softColors.length;
               return (
                 <div key={`${s.id}-${i}`} className="flex-shrink-0 w-64 md:w-80 group">
                   <div className="rounded-2xl p-4 pb-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-                    style={{ backgroundColor: cardColors[ci] }}
+                    style={{ backgroundColor: softColors[ci] }}
                   >
-                    <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-white/10">
+                    <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-white/30">
                       <Image
                         src={`/images/service-showcase/${s.id}.png`}
                         alt={s.title}
@@ -191,7 +191,7 @@ export default function Home() {
                     </div>
                     <Link
                       href={`/services#${s.id}`}
-                      className="block mt-3 text-white/90 font-bold text-sm text-center leading-tight hover:text-white transition-colors"
+                      className="block mt-3 text-[rgb(var(--fg-rgb)/80%)] font-bold text-sm text-center leading-tight hover:text-[rgb(var(--accent-500))] transition-colors"
                     >
                       {s.title}
                     </Link>
