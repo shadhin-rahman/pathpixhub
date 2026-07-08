@@ -106,7 +106,7 @@ export default function Home() {
             </div>
             <div className="w-full lg:w-2/3 flex items-stretch">
               <div className="relative w-full rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]"
-                style={{ aspectRatio: "21 / 9", maxHeight: "45rem", minHeight: "20rem" }}
+                style={{ aspectRatio: "1600 / 700", maxHeight: "50rem", minHeight: "24rem" }}
               >
                 {[
                   { src: "/images/hero-slider/bicycle.jpg", alt: "Product photo editing showcase - bicycle", delay: "0s" },
