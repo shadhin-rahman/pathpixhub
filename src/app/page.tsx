@@ -15,7 +15,7 @@ export default function Home() {
             preload="metadata"
           poster="/images/image-masking-1.jpg"
         >
-          <source src="/videos/masking-before-after-demo.mp4" type="video/mp4" />
+          <source src="/videos/beauty.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-transparent" />
         <div className="absolute inset-0 bg-[rgb(var(--accent-500)/12%)] mix-blend-overlay pointer-events-none" />
@@ -76,7 +76,7 @@ export default function Home() {
               </div>
             </div>
             <div className="lg:col-span-3 relative rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]"
-  style={{ aspectRatio: "1600 / 700", maxHeight: "34rem" }}
+  style={{ aspectRatio: "1600 / 700", maxHeight: "40rem" }}
 >
   {[
     { src: "/images/hero-slider/bicycle.jpg", alt: "Product photo editing showcase - bicycle", delay: "0s" },
