@@ -76,7 +76,7 @@ export default function Home() {
               </div>
             </div>
             <div className="lg:col-span-3 relative rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]"
-  style={{ aspectRatio: "16 / 9", maxHeight: "36rem" }}
+  style={{ aspectRatio: "1600 / 700", maxHeight: "34rem" }}
 >
   {[
     { src: "/images/hero-slider/bicycle.jpg", alt: "Product photo editing showcase - bicycle", delay: "0s" },
