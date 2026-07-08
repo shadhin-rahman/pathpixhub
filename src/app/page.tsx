@@ -21,6 +21,35 @@ export default function Home() {
         <div className="absolute inset-0 bg-[rgb(var(--accent-500)/12%)] mix-blend-overlay pointer-events-none" />
       </section>
 
+      <section className="relative border-y border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg)] overflow-hidden py-4">
+        <div className="flex gap-12 w-max marquee-trial items-center">
+          {Array.from({ length: 8 }, (_, i) => (
+            <div key={i} className="flex items-center gap-12">
+              <span className="flex items-center gap-2 text-sm font-semibold text-[rgb(var(--fg-rgb)/60%)] whitespace-nowrap">
+                <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-400))]" />
+                24/7 Customer Support
+              </span>
+              <span className="flex items-center gap-2 text-sm font-semibold text-[rgb(var(--fg-rgb)/60%)] whitespace-nowrap">
+                <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-400))]" />
+                Premium Quality
+              </span>
+              <span className="flex items-center gap-2 text-sm font-semibold text-[rgb(var(--fg-rgb)/60%)] whitespace-nowrap">
+                <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-400))]" />
+                Fast Turnaround
+              </span>
+              <span className="flex items-center gap-2 text-sm font-semibold text-[rgb(var(--fg-rgb)/60%)] whitespace-nowrap">
+                <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-400))]" />
+                100% Satisfaction
+              </span>
+              <span className="flex items-center gap-2 text-sm font-semibold text-[rgb(var(--fg-rgb)/60%)] whitespace-nowrap">
+                <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-400))]" />
+                Pixel Perfect Edits
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="relative overflow-hidden mesh-gradient">
         <div className="premium-blur w-[500px] h-[500px] top-[-20%] right-[-10%]" />
         <div className="relative w-full max-w-7xl mx-auto px-6 py-16 sm:py-20">
@@ -59,8 +88,8 @@ export default function Home() {
 
       <section className="py-16 lg:py-24 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col lg:flex-row items-start gap-6">
-            <div className="w-full lg:w-1/3 shrink-0">
+          <div className="flex flex-col lg:flex-row items-stretch gap-6">
+            <div className="w-full lg:w-1/3 shrink-0 flex flex-col justify-center">
               <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">From Our Studio</h2>
               <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Every Product, Every Angle</h3>
               <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-lg">
@@ -75,30 +104,27 @@ export default function Home() {
                 ))}
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="pb-24 lg:pb-32 bg-[var(--bg-alt)] -mt-6">
-        <div className="max-w-[96rem] mx-auto px-6">
-          <div className="relative w-full rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]"
-            style={{ aspectRatio: "21 / 9", maxHeight: "45rem" }}
-          >
-            {[
-              { src: "/images/hero-slider/bicycle.jpg", alt: "Product photo editing showcase - bicycle", delay: "0s" },
-              { src: "/images/hero-slider/car-editing-1.jpg", alt: "Product photo editing showcase - car", delay: "-8s" },
-              { src: "/images/hero-slider/ecommerce-product.jpg", alt: "Product photo editing showcase - ecommerce product", delay: "-16s" },
-            ].map((slide) => (
-              <div key={slide.src} className="absolute inset-0 flex items-center justify-center" style={{ animation: "hero-fade-3 24s ease-in-out infinite", animationDelay: slide.delay }}>
-                <Image
-                  src={slide.src}
-                  alt={slide.alt}
-                  fill
-                  className="object-contain"
-                  sizes="100vw"
-                />
+            <div className="w-full lg:w-2/3 flex items-stretch">
+              <div className="relative w-full rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]"
+                style={{ aspectRatio: "21 / 9", maxHeight: "45rem", minHeight: "20rem" }}
+              >
+                {[
+                  { src: "/images/hero-slider/bicycle.jpg", alt: "Product photo editing showcase - bicycle", delay: "0s" },
+                  { src: "/images/hero-slider/car-editing-1.jpg", alt: "Product photo editing showcase - car", delay: "-8s" },
+                  { src: "/images/hero-slider/ecommerce-product.jpg", alt: "Product photo editing showcase - ecommerce product", delay: "-16s" },
+                ].map((slide) => (
+                  <div key={slide.src} className="absolute inset-0 flex items-center justify-center" style={{ animation: "hero-fade-3 24s ease-in-out infinite", animationDelay: slide.delay }}>
+                    <Image
+                      src={slide.src}
+                      alt={slide.alt}
+                      fill
+                      className="object-contain"
+                      sizes="66vw"
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
@@ -137,6 +163,41 @@ export default function Home() {
                 </div>
               </Link>
             )})}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 overflow-hidden bg-[var(--bg)] relative border-y border-[rgb(var(--fg-rgb)/8%)]">
+        <h2 className="text-center text-2xl md:text-3xl font-bold tracking-tight gradient-text mb-10 px-6">Explore Our Expertise</h2>
+        <div className="relative">
+          <div className="flex gap-6 w-max marquee-slide">
+            {[...Array(3)].flatMap(() => services).map((s, i) => {
+              const cardColors = ["#ef4444","#a855f7","#ec4899","#eab308","#3b82f6","#10b981","#f97316","#14b8a6","#6366f1","#f43f5e"];
+              const ci = i % cardColors.length;
+              return (
+                <div key={`${s.id}-${i}`} className="flex-shrink-0 w-64 md:w-80 group">
+                  <div className="rounded-2xl p-4 pb-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                    style={{ backgroundColor: cardColors[ci] }}
+                  >
+                    <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-white/10">
+                      <Image
+                        src={`/images/service-showcase/${s.id}.png`}
+                        alt={s.title}
+                        fill
+                        className="object-contain p-3 group-hover:scale-105 transition-transform duration-700"
+                        sizes="(max-width: 768px) 256px, 320px"
+                      />
+                    </div>
+                    <Link
+                      href={`/services#${s.id}`}
+                      className="block mt-3 text-white/90 font-bold text-sm text-center leading-tight hover:text-white transition-colors"
+                    >
+                      {s.title}
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
