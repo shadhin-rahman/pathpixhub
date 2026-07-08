@@ -109,11 +109,12 @@ export default function Home() {
                 style={{ aspectRatio: "1600 / 700", maxHeight: "50rem", minHeight: "24rem" }}
               >
                 {[
-                  { src: "/images/hero-slider/bicycle.jpg", alt: "Product photo editing showcase - bicycle", delay: "0s" },
-                  { src: "/images/hero-slider/car-editing-1.jpg", alt: "Product photo editing showcase - car", delay: "-8s" },
-                  { src: "/images/hero-slider/ecommerce-product.jpg", alt: "Product photo editing showcase - ecommerce product", delay: "-16s" },
+                  { src: "/images/hero-slider/bicycle.jpg", alt: "bicycle photo editing", delay: "0s" },
+                  { src: "/images/hero-slider/car-editing-1.jpg", alt: "car photo editing", delay: "-8s" },
+                  { src: "/images/hero-slider/ecommerce-product.jpg", alt: "ecommerce product photo editing", delay: "-16s" },
+                  { src: "/images/hero-slider/background-remove.jpg", alt: "background removal showcase", delay: "-24s" },
                 ].map((slide) => (
-                  <div key={slide.src} className="absolute inset-0 flex items-center justify-center" style={{ animation: "hero-fade-3 24s ease-in-out infinite", animationDelay: slide.delay }}>
+                  <div key={slide.src} className="absolute inset-0 flex items-center justify-center" style={{ animation: "hero-fade-4 32s ease-in-out infinite", animationDelay: slide.delay }}>
                     <Image
                       src={slide.src}
                       alt={slide.alt}
