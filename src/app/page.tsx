@@ -21,28 +21,28 @@ export default function Home() {
         <div className="absolute inset-0 bg-[rgb(var(--accent-500)/5%)] mix-blend-overlay pointer-events-none" />
       </section>
 
-      <section className="relative bg-[#0d1f15] overflow-hidden py-3 border-t border-b border-[#1a3a28]">
+      <section className="relative bg-[#1b2d41] overflow-hidden py-3 border-t border-b border-[#1b2d41]">
         <div className="flex gap-16 w-max marquee-trial items-center">
           {Array.from({ length: 8 }, (_, i) => (
             <div key={i} className="flex items-center gap-16">
-              <span className="flex items-center gap-2.5 text-xs md:text-sm font-bold text-[#a3d9b1] whitespace-nowrap tracking-wider uppercase">
-                <span className="w-1 h-1 rounded-full bg-[#4ade80]" />
+              <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
+                <span className="w-1 h-1 rounded-full bg-[#8e96a0]" />
                 24/7 Customer Support
               </span>
-              <span className="flex items-center gap-2.5 text-xs md:text-sm font-bold text-[#a0d9b0] whitespace-nowrap tracking-wider uppercase">
-                <span className="w-1 h-1 rounded-full bg-[#4ade80]" />
+              <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
+                <span className="w-1 h-1 rounded-full bg-[#8e96a0]" />
                 Premium Quality
               </span>
-              <span className="flex items-center gap-2.5 text-xs md:text-sm font-bold text-[#a0d9b0] whitespace-nowrap tracking-wider uppercase">
-                <span className="w-1 h-1 rounded-full bg-[#4ade80]" />
+              <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
+                <span className="w-1 h-1 rounded-full bg-[#8e96a0]" />
                 Fast Turnaround
               </span>
-              <span className="flex items-center gap-2.5 text-xs md:text-sm font-bold text-[#a0d9b0] whitespace-nowrap tracking-wider uppercase">
-                <span className="w-1 h-1 rounded-full bg-[#4ade80]" />
+              <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
+                <span className="w-1 h-1 rounded-full bg-[#8e96a0]" />
                 100% Satisfaction
               </span>
-              <span className="flex items-center gap-2.5 text-xs md:text-sm font-bold text-[#a0d9b0] whitespace-nowrap tracking-wider uppercase">
-                <span className="w-1 h-1 rounded-full bg-[#4ade80]" />
+              <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
+                <span className="w-1 h-1 rounded-full bg-[#8e96a0]" />
                 Pixel Perfect Edits
               </span>
             </div>
