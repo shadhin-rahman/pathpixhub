@@ -99,6 +99,7 @@
     color: transparent;
     background-image: linear-gradient(to bottom right, rgb(var(--fg-rgb)), rgb(var(--fg-rgb) / 40%));
     font-weight: 700;
+    padding-bottom: 0.15em;
   }
 
   .premium-blur {

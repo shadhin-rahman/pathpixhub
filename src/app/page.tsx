@@ -89,7 +89,7 @@ export default function Home() {
           <div className="flex flex-col lg:flex-row items-stretch gap-6">
             <div className="w-full lg:w-1/3 shrink-0 flex flex-col justify-center">
               <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">From Our Studio</h2>
-              <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Every Product, Every Angle</h3>
+              <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text pb-2">Every Product, Every Angle</h3>
               <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-lg">
                 Bicycles, vehicles, apparel, or accessories — whatever you shoot, we edit it with the
                 same pixel-perfect care. A rotating look at a few recent categories we work with.

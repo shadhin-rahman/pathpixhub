@@ -15,7 +15,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="max-w-3xl">
               <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">About Us</h2>
-              <h1 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Your Virtual Photo Editing Studio</h1>
+              <h1 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text pb-2">Your Virtual Photo Editing Studio</h1>
               <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
                 Our mission is to transform your images into works of art with precision, creativity, and
                 unparalleled quality.
