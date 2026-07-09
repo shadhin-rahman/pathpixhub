@@ -104,15 +104,18 @@ export default function Home() {
             </div>
             <div className="w-full lg:w-2/3 flex items-stretch">
               <div className="relative w-full rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]"
-                style={{ aspectRatio: "1600 / 700", maxHeight: "50rem", minHeight: "12rem" }}
+                style={{ aspectRatio: "1600 / 700", maxHeight: "50rem", minHeight: "10rem" }}
               >
                 {[
                   { src: "/images/hero-slider/bicycle.jpg", alt: "bicycle photo editing", delay: "0s" },
                   { src: "/images/hero-slider/car-editing-1.jpg", alt: "car photo editing", delay: "-8s" },
                   { src: "/images/hero-slider/ecommerce-product.jpg", alt: "ecommerce product photo editing", delay: "-16s" },
-                  { src: "/images/hero-slider/background-remove.jpg", alt: "background removal showcase", delay: "-24s" },
+                  { src: "/images/hero-slider/background.jpg", alt: "background removal", delay: "-24s" },
+                  { src: "/images/hero-slider/Beauty retouching.jpg", alt: "beauty retouching", delay: "-32s" },
+                  { src: "/images/hero-slider/Blank poster.jpg", alt: "blank poster", delay: "-40s" },
+                  { src: "/images/hero-slider/Skin Retouch.jpg", alt: "skin retouch", delay: "-48s" },
                 ].map((slide) => (
-                  <div key={slide.src} className="absolute inset-0 flex items-center justify-center" style={{ animation: "hero-fade-4 32s ease-in-out infinite", animationDelay: slide.delay }}>
+                  <div key={slide.src} className="absolute inset-0 flex items-center justify-center" style={{ animation: "hero-fade-7 56s ease-in-out infinite", animationDelay: slide.delay }}>
                     <Image
                       src={slide.src}
                       alt={slide.alt}
