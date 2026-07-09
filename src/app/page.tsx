@@ -207,17 +207,17 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="grid grid-cols-2 gap-4">
-              <div className="aspect-square rounded-3xl overflow-hidden glass-card">
-                <Image src="/images/before.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
+              <div className="aspect-square rounded-3xl overflow-hidden glass-card bg-white/20">
+                <Image src="/images/service-cards/clipping-path.png" alt="clipping path" width={400} height={400} className="w-full h-full object-contain p-4" />
               </div>
-              <div className="aspect-square rounded-3xl overflow-hidden glass-card mt-8">
-                <Image src="/images/25RN718SOK_BEP-original.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
+              <div className="aspect-square rounded-3xl overflow-hidden glass-card mt-8 bg-white/20">
+                <Image src="/images/service-cards/background-removal.png" alt="background removal" width={400} height={400} className="w-full h-full object-contain p-4" />
               </div>
-              <div className="aspect-square rounded-3xl overflow-hidden glass-card -mt-8">
-                <Image src="/images/Ghost manipulation services.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
+              <div className="aspect-square rounded-3xl overflow-hidden glass-card -mt-8 bg-white/20">
+                <Image src="/images/service-cards/color-change.png" alt="color change" width={400} height={400} className="w-full h-full object-contain p-4" />
               </div>
-              <div className="aspect-square rounded-3xl overflow-hidden glass-card">
-                <Image src="/images/before after.jpg" alt="Editing" width={400} height={400} className="w-full h-full object-cover" />
+              <div className="aspect-square rounded-3xl overflow-hidden glass-card bg-white/20">
+                <Image src="/images/service-cards/car-editing.png" alt="car editing" width={400} height={400} className="w-full h-full object-contain p-4" />
               </div>
             </div>
             <div>
