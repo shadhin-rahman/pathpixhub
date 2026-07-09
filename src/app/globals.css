@@ -24,11 +24,11 @@
   --glass-bg: rgba(0, 0, 0, 0.03);
   --glass-border: rgba(0, 0, 0, 0.08);
   --logo-filter: none;
-  --accent-300: 150 10 125;
-  --accent-400: 199 20 158;
-  --accent-500: 176 0 149;
-  --accent-600: 138 0 117;
-  --accent-contrast: 255 255 255;
+  --accent-300: 74 222 128;
+  --accent-400: 34 197 94;
+  --accent-500: 22 163 74;
+  --accent-600: 21 128 61;
+  --accent-contrast: 0 0 0;
   color-scheme: light;
 }
 
@@ -196,7 +196,7 @@
 }
 
 .marquee-trial {
-  animation: marquee-trial 40s linear infinite;
+  animation: marquee-trial 80s linear infinite;
 }
 
 .marquee-slide:hover,
