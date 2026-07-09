@@ -25,7 +25,7 @@ export default function AboutPage() {
               {[
                 { src: "/images/service-cards/clipping-path.png", alt: "clipping path" },
                 { src: "/images/service-cards/background-removal.png", alt: "background removal" },
-                { src: "/images/service-cards/photo-retouching.png", alt: "photo retouching" },
+                { src: "/images/service-cards/color-change.png", alt: "color change" },
                 { src: "/images/service-cards/car-editing.png", alt: "car editing" },
               ].map((img) => (
                 <div key={img.src} className="relative aspect-square rounded-2xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]">
