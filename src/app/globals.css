@@ -126,6 +126,13 @@
     100% { opacity: 0; }
   }
 
+  @media (max-width: 768px) {
+    .mobile-object-contain {
+      object-fit: contain !important;
+      padding: 0.5rem;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .premium-blur, .hero-slide {
       animation: none;

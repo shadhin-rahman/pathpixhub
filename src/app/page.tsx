@@ -104,7 +104,7 @@ export default function Home() {
             </div>
             <div className="w-full lg:w-2/3 flex items-stretch">
               <div className="relative w-full rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]"
-                style={{ aspectRatio: "1600 / 700", maxHeight: "50rem", minHeight: "24rem" }}
+                style={{ aspectRatio: "1600 / 700", maxHeight: "50rem", minHeight: "12rem" }}
               >
                 {[
                   { src: "/images/hero-slider/bicycle.jpg", alt: "bicycle photo editing", delay: "0s" },
@@ -117,7 +117,7 @@ export default function Home() {
                       src={slide.src}
                       alt={slide.alt}
                       fill
-                      className="object-cover"
+                      className="object-cover mobile-object-contain"
                       sizes="66vw"
                     />
                   </div>
