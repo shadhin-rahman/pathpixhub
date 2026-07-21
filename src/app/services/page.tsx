@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { services } from "@/data/services";
+import { services, priceMap } from "@/data/services";
 
 export const metadata: Metadata = {
   title: "Services | PathPixHub",
@@ -34,6 +34,9 @@ export default function ServicesPage() {
                 </span>
                 <h2 className="mt-4 text-3xl md:text-4xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">{service.title}</h2>
                 <p className="mt-3 text-base font-semibold text-[rgb(var(--accent-400))]">{service.headline}</p>
+                <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border-[rgb(var(--accent-500)/30%)] bg-[rgb(var(--accent-500)/8%)]">
+                  <span className="text-xs font-mono tracking-[0.15em] font-bold text-[rgb(var(--accent-400))]">{priceMap[service.id]}</span>
+                </div>
                 <div className="mt-4 space-y-4">
                   {service.paragraphs.map((p, i) => (
                     <p key={i} className="text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">{p}</p>

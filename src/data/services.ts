@@ -17,6 +17,19 @@ export interface Service {
   image: string;
 }
 
+export const priceMap: Record<string, string> = {
+  "clipping-path": "FROM $0.39 / IMAGE",
+  "background-removal": "FROM $0.39 / IMAGE",
+  "shadow-creation": "FROM $0.25 / IMAGE",
+  "ghost-mannequin": "FROM $0.89 / IMAGE",
+  "image-masking": "FROM $1.19 / IMAGE",
+  "color-change": "FROM $0.99 / IMAGE",
+  "photo-retouching": "FROM $0.69 / IMAGE",
+  "multi-clipping-path": "FROM $1.19 / IMAGE",
+  "ecommerce-editing": "FROM $2.99 / IMAGE",
+  "car-editing": "FROM $2.99 / IMAGE",
+};
+
 export const services: Service[] = [
   {
     id: "clipping-path",
