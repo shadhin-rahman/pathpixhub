@@ -60,12 +60,19 @@ export default function ServicesPage() {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </Link>
               </div>
-              <div className={`relative aspect-[4/3] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/5%)] bg-white/20 ${index % 2 === 1 ? "lg:order-1" : ""}`}>
+              <div className={`relative aspect-[4/3] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/5%)] bg-white/20 group ${index % 2 === 1 ? "lg:order-1" : ""}`}>
                 <Image
                   src={`/images/service-showcase/${service.id}.png`}
                   alt={service.title}
                   fill
-                  className="object-contain p-4"
+                  className="object-contain p-4 group-hover:opacity-0 transition-opacity duration-500"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+                <Image
+                  src={`/images/service-showcase/${service.id}-before.png`}
+                  alt={`${service.title} before`}
+                  fill
+                  className="object-contain p-4 absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
