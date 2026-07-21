@@ -181,19 +181,19 @@ export default function Home() {
                   <div className="rounded-2xl p-4 pb-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                     style={{ backgroundColor: softColors[ci] }}
                   >
-                    <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-white/30">
+                    <div className="relative w-full h-48 md:h-56 rounded-xl overflow-hidden bg-white/30">
                       <Image
                         src={`/images/service-showcase/${s.id}.png`}
                         alt={s.title}
                         fill
-                        className="object-contain p-1 group-hover:opacity-0 transition-opacity duration-500"
+                        className="object-contain p-3 group-hover:opacity-0 transition-opacity duration-500"
                         sizes="(max-width: 768px) 256px, 320px"
                       />
                       <Image
                         src={`/images/service-showcase/${s.id}-before.png`}
                         alt={`${s.title} before`}
                         fill
-                        className="object-contain p-1 absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        className="object-contain p-3 absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                         sizes="(max-width: 768px) 256px, 320px"
                       />
                     </div>
