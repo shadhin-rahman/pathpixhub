@@ -186,14 +186,14 @@ export default function Home() {
                         src={`/images/service-showcase/${s.id}.png`}
                         alt={s.title}
                         fill
-                        className="object-contain p-3 group-hover:opacity-0 transition-opacity duration-500"
+                        className="object-contain p-1 group-hover:opacity-0 transition-opacity duration-500"
                         sizes="(max-width: 768px) 256px, 320px"
                       />
                       <Image
                         src={`/images/service-showcase/${s.id}-before.png`}
                         alt={`${s.title} before`}
                         fill
-                        className="object-cover p-0 absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        className="object-contain p-1 absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                         sizes="(max-width: 768px) 256px, 320px"
                       />
                     </div>

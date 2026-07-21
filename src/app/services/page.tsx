@@ -65,14 +65,14 @@ export default function ServicesPage() {
                   src={`/images/service-showcase/${service.id}.png`}
                   alt={service.title}
                   fill
-                  className="object-contain p-4 group-hover:opacity-0 transition-opacity duration-500"
+                  className="object-contain p-1 group-hover:opacity-0 transition-opacity duration-500"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
                 <Image
                   src={`/images/service-showcase/${service.id}-before.png`}
                   alt={`${service.title} before`}
                   fill
-                  className="object-cover p-0 absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  className="object-contain p-1 absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
