@@ -142,8 +142,8 @@ export default function PricingPage() {
                       src={`/images/service-showcase/${s.id}-before.png`}
                       alt={`${s.title} before`}
                       fill
-                      className="object-contain p-3 absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                      sizes="(max-width: 768px) 256px, 320px"
+                        className="object-cover p-0 absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        sizes="(max-width: 768px) 256px, 320px"
                     />
                   </div>
                   <Link

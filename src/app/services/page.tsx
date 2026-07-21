@@ -72,7 +72,7 @@ export default function ServicesPage() {
                   src={`/images/service-showcase/${service.id}-before.png`}
                   alt={`${service.title} before`}
                   fill
-                  className="object-contain p-4 absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  className="object-cover p-0 absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
