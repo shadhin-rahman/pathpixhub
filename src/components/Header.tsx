@@ -182,12 +182,20 @@ export default function Header() {
                           <Link
                             href={`/services/${s.id}`}
                             onClick={closeMenu}
-                            className="group flex items-center gap-3 py-2 px-3 -mx-3 rounded-xl hover:bg-[rgb(var(--accent-500)/6%)] transition-colors"
+                            className="group flex items-center gap-3 py-2 px-3 -mx-3 rounded-xl hover:bg-[rgb(var(--accent-500)/8%)] transition-colors"
                           >
-                            <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-500)/40%)] group-hover:bg-[rgb(var(--accent-500))] group-hover:scale-150 transition-all duration-300 shrink-0" />
-                            <span className="text-base md:text-lg font-semibold text-[rgb(var(--fg-rgb)/60%)] group-hover:text-[rgb(var(--accent-400))] group-hover:translate-x-1 transition-all duration-300">
+                            <motion.span
+                              className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-500)/30%)] shrink-0"
+                              whileHover={{ scale: 2, backgroundColor: "rgb(var(--accent-500))" }}
+                              transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                            />
+                            <motion.span
+                              className="text-base md:text-lg font-semibold text-[rgb(var(--fg-rgb)/60%)]"
+                              whileHover={{ x: 6, color: "rgb(var(--accent-400))" }}
+                              transition={{ type: "spring", stiffness: 200, damping: 12 }}
+                            >
                               {s.title}
-                            </span>
+                            </motion.span>
                           </Link>
                         </motion.div>
                       ))}

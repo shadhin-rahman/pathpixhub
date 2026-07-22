@@ -6,6 +6,8 @@ import Testimonials from "@/components/Testimonials";
 import ScrollReveal from "@/components/ScrollReveal";
 import StaggerReveal, { StaggerItem } from "@/components/StaggerReveal";
 import ParallaxImage from "@/components/ParallaxImage";
+import ScrollIndicator from "@/components/ScrollIndicator";
+import CountUp from "@/components/CountUp";
 
 export default function Home() {
   return (
@@ -23,6 +25,7 @@ export default function Home() {
         >
           <source src="/videos/beauty.mp4" type="video/mp4" />
         </video>
+        <ScrollIndicator />
       </section>
       </ScrollReveal>
 
@@ -199,14 +202,14 @@ export default function Home() {
                         src={`/images/service-showcase/${s.id}.png`}
                         alt={s.title}
                         fill
-                        className="object-contain p-3 group-hover:opacity-0 transition-opacity duration-500"
+                        className="object-contain p-3 group-hover:opacity-0 group-hover:scale-110 transition-all duration-700"
                         sizes="(max-width: 768px) 256px, 320px"
                       />
                       <Image
                         src={`/images/service-showcase/${s.id}-before.png`}
                         alt={`${s.title} before`}
                         fill
-                        className="object-contain p-3 absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        className="object-contain p-3 absolute inset-0 opacity-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                         sizes="(max-width: 768px) 256px, 320px"
                       />
                     </div>
@@ -252,17 +255,10 @@ export default function Home() {
                 to multi-clipping paths, color correction, and photo retouching — we handle every detail with care.
               </p>
               <div className="mt-8 grid grid-cols-2 gap-4">
-                {[
-                  { num: "200+", label: "Projects" },
-                  { num: "24hr", label: "Turnaround" },
-                  { num: "100%", label: "Quality" },
-                  { num: "50+", label: "Clients" },
-                ].map((s) => (
-                  <div key={s.label} className="glass-card rounded-xl p-5">
-                    <span className="text-2xl font-bold text-[rgb(var(--accent-400))]">{s.num}</span>
-                    <p className="mt-1 text-sm text-[rgb(var(--fg-rgb)/40%)]">{s.label}</p>
-                  </div>
-                ))}
+                <CountUp end={200} suffix="+" label="Projects" />
+                <CountUp end={24} suffix="hr" label="Turnaround" />
+                <CountUp end={100} suffix="%" label="Quality" />
+                <CountUp end={50} suffix="+" label="Clients" />
               </div>
             </div>
           </div>
