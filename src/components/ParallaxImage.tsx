@@ -1,11 +1,12 @@
 "use client";
-import { useRef } from "react";
+import { useRef, ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 
 interface Props {
-  src: string;
-  alt: string;
+  src?: string;
+  alt?: string;
+  children?: ReactNode;
   className?: string;
   speed?: number;
   scale?: [number, number];
@@ -16,6 +17,7 @@ interface Props {
 export default function ParallaxImage({
   src,
   alt,
+  children,
   className = "",
   speed = 0.2,
   scale: scaleRange = [1, 1.1],
@@ -34,11 +36,13 @@ export default function ParallaxImage({
   return (
     <div ref={ref} className={`relative overflow-hidden ${className}`}>
       <motion.div style={{ y, scale: s }} className="w-full h-full">
-        {fill ? (
-          <Image src={src} alt={alt} fill className="object-cover" sizes={sizes || "100vw"} />
-        ) : (
-          <Image src={src} alt={alt} width={800} height={600} className="w-full h-auto object-contain" />
-        )}
+        {children || (src && alt ? (
+          fill ? (
+            <Image src={src} alt={alt} fill className="object-cover" sizes={sizes || "100vw"} />
+          ) : (
+            <Image src={src} alt={alt} width={800} height={600} className="w-full h-auto object-contain" />
+          )
+        ) : null)}
       </motion.div>
     </div>
   );

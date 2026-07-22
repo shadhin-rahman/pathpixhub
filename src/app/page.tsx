@@ -4,10 +4,13 @@ import Script from "next/script";
 import { services } from "@/data/services";
 import Testimonials from "@/components/Testimonials";
 import ScrollReveal from "@/components/ScrollReveal";
+import StaggerReveal, { StaggerItem } from "@/components/StaggerReveal";
+import ParallaxImage from "@/components/ParallaxImage";
 
 export default function Home() {
   return (
     <>
+      <ScrollReveal direction="none" scale={1.05} duration={1.2}>
       <section className="relative w-full aspect-video max-h-[85vh] overflow-hidden">
         <video
           className="hero-video absolute inset-0 w-full h-full object-cover"
@@ -21,6 +24,7 @@ export default function Home() {
           <source src="/videos/beauty.mp4" type="video/mp4" />
         </video>
       </section>
+      </ScrollReveal>
 
       <section className="relative bg-[#1b2d41] overflow-hidden py-3 border-t border-b border-[#1b2d41]">
         <div className="flex gap-16 w-max marquee-trial items-center">
@@ -143,15 +147,15 @@ export default function Home() {
             <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">What We Offer</h2>
             <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Services</h3>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {services.map((service) => {
               const softColors = ["#fca5a5","#d8b4fe","#f9a8d4","#fde68a","#93c5fd","#86efac","#fdba74","#5eead4","#a5b4fc","#fda4af"];
               const ci = ["clipping-path","background-removal","shadow-creation","ghost-mannequin","image-masking","color-change","photo-retouching","multi-clipping-path","ecommerce-editing","car-editing"].indexOf(service.id) % softColors.length;
               return (
+              <StaggerItem key={service.id}>
               <Link
-                key={service.id}
                 href={`/services/${service.id}`}
-                className="group rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
+                className="group block rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
                 style={{ backgroundColor: softColors[ci] }}
               >
                 <div className="flex items-center gap-4 p-4 md:p-5">
@@ -170,8 +174,9 @@ export default function Home() {
                   </div>
                 </div>
               </Link>
+              </StaggerItem>
             )})}
-          </div>
+          </StaggerReveal>
         </div>
       </section>
       </ScrollReveal>
@@ -206,7 +211,7 @@ export default function Home() {
                       />
                     </div>
                     <Link
-                      href={`/services#${s.id}`}
+                      href={`/services/${s.id}`}
                       className="block mt-3 text-[rgb(var(--fg-rgb)/80%)] font-bold text-sm text-center leading-tight hover:text-[rgb(var(--accent-500))] transition-colors"
                     >
                       {s.title}
@@ -225,18 +230,18 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="grid grid-cols-2 gap-4">
-              <div className="aspect-square rounded-3xl overflow-hidden glass-card bg-white/20">
+              <ParallaxImage src="/images/service-cards/clipping-path.png" alt="clipping path" speed={0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card bg-white/20">
                 <Image src="/images/service-cards/clipping-path.png" alt="clipping path" width={400} height={400} className="w-full h-full object-contain p-4" />
-              </div>
-              <div className="aspect-square rounded-3xl overflow-hidden glass-card mt-8 bg-white/20">
+              </ParallaxImage>
+              <ParallaxImage src="/images/service-cards/background-removal.png" alt="background removal" speed={-0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card mt-8 bg-white/20">
                 <Image src="/images/service-cards/background-removal.png" alt="background removal" width={400} height={400} className="w-full h-full object-contain p-4" />
-              </div>
-              <div className="aspect-square rounded-3xl overflow-hidden glass-card -mt-8 bg-white/20">
+              </ParallaxImage>
+              <ParallaxImage src="/images/service-cards/color-change.png" alt="color change" speed={0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card -mt-8 bg-white/20">
                 <Image src="/images/service-cards/color-change.png" alt="color change" width={400} height={400} className="w-full h-full object-contain p-4" />
-              </div>
-              <div className="aspect-square rounded-3xl overflow-hidden glass-card bg-white/20">
+              </ParallaxImage>
+              <ParallaxImage src="/images/service-cards/car-editing.png" alt="car editing" speed={-0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card bg-white/20">
                 <Image src="/images/service-cards/car-editing.png" alt="car editing" width={400} height={400} className="w-full h-full object-contain p-4" />
-              </div>
+              </ParallaxImage>
             </div>
             <div>
               <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">About Us</h2>
@@ -300,7 +305,7 @@ export default function Home() {
             <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">How It Works</h2>
             <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Process</h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 gap-6" staggerDelay={0.06}>
             {[
               { step: "01", title: "Client Consultation & Order Submission", desc: "We start by understanding your specific needs — background removal, shadow creation, or precise color adjustments — reviewing your instructions before any editing begins." },
               { step: "02", title: "Image Analysis & Project Assessment", desc: "Every image is different, so we assess the detail needed — intricate edges or multiple objects — to set a realistic timeline for delivery." },
@@ -311,15 +316,17 @@ export default function Home() {
               { step: "07", title: "Delivery & Client Feedback", desc: "Finished images are delivered in your preferred format (PNG, JPEG, or PSD), and we welcome feedback for any final adjustments." },
               { step: "08", title: "Ongoing Support", desc: "We build lasting relationships, staying available for ongoing support on all your future editing projects." },
             ].map((item) => (
-              <div key={item.step} className="glass-card rounded-[2rem] p-8 flex gap-6">
+              <StaggerItem key={item.step}>
+              <div className="glass-card rounded-[2rem] p-8 flex gap-6">
                 <span className="text-4xl font-bold text-[rgb(var(--accent-500)/30%)] shrink-0">{item.step}</span>
                 <div>
                   <h3 className="text-lg font-bold text-[rgb(var(--fg-rgb))]">{item.title}</h3>
                   <p className="mt-2 text-sm text-[rgb(var(--fg-rgb)/40%)] leading-relaxed">{item.desc}</p>
                 </div>
               </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerReveal>
         </div>
       </section>
 

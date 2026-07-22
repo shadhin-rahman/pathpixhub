@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { services, priceMap } from "@/data/services";
 import ScrollReveal from "@/components/ScrollReveal";
+import StaggerReveal, { StaggerItem } from "@/components/StaggerReveal";
 
 export const metadata: Metadata = {
   title: "Services | PathPixHub",
@@ -27,14 +28,14 @@ export default function ServicesPage() {
       <ScrollReveal>
       <section className="pb-32 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {services.map((service, i) => {
               const colors = ["#fca5a5","#d8b4fe","#f9a8d4","#fde68a","#93c5fd","#86efac","#fdba74","#5eead4","#a5b4fc","#fda4af"];
               return (
+                <StaggerItem key={service.id}>
                 <Link
-                  key={service.id}
                   href={`/services/${service.id}`}
-                  className="group rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
+                  className="group block rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
                   style={{ backgroundColor: colors[i % colors.length] }}
                 >
                   <div className="relative aspect-[4/3] overflow-hidden bg-white/20">
@@ -60,9 +61,10 @@ export default function ServicesPage() {
                     </span>
                   </div>
                 </Link>
+                </StaggerItem>
               );
             })}
-          </div>
+          </StaggerReveal>
         </div>
       </section>
       </ScrollReveal>

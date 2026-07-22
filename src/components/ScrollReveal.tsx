@@ -9,6 +9,7 @@ interface Props {
   distance?: number;
   scale?: number;
   duration?: number;
+  perspective?: boolean;
 }
 
 export default function ScrollReveal({
@@ -16,9 +17,10 @@ export default function ScrollReveal({
   className = "",
   delay = 0,
   direction = "up",
-  distance = 60,
-  scale = 1,
-  duration = 0.7,
+  distance = 50,
+  scale = 0.95,
+  duration = 0.8,
+  perspective = true,
 }: Props) {
   const getTransform = () => {
     const offset: Record<string, { x?: number; y?: number }> = {
@@ -28,15 +30,16 @@ export default function ScrollReveal({
       right: { x: -distance },
       none: {},
     };
-    return { ...offset[direction], scale };
+    return { ...offset[direction], scale, rotateX: direction === "up" ? 8 : 0 };
   };
 
   return (
     <motion.div
       initial={{ opacity: 0, ...getTransform() }}
-      whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: "-50px" }}
+      whileInView={{ opacity: 1, x: 0, y: 0, scale: 1, rotateX: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
       transition={{ duration, delay, ease: [0.25, 0.1, 0.25, 1] }}
+      style={perspective ? { perspective: "1200px" } : undefined}
       className={className}
     >
       {children}
