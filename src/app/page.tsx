@@ -363,7 +363,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Ready to Start?</h2>
           <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] text-lg max-w-xl mx-auto">
-            Send us 3-5 images and we will edit them for free — no obligation.
+            Send us 2 images and we'll edit them for free — no obligation.
           </p>
           <Link
             href="/contact"

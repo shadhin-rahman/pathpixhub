@@ -60,6 +60,13 @@ export default function PrivacyPolicyPage() {
           </div>
 
           <div>
+            <h2 className="text-xl font-bold text-[rgb(var(--fg-rgb))]">Third-Party Services</h2>
+            <p className="mt-3 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
+              Our contact form is powered by <strong className="text-[rgb(var(--fg-rgb))]">Formspree</strong>, a third-party service that processes and delivers your inquiries to us. Formspree has its own privacy policy and does not use your data for any purpose other than relaying messages.
+            </p>
+          </div>
+
+          <div>
             <h2 className="text-xl font-bold text-[rgb(var(--fg-rgb))]">External Links</h2>
             <p className="mt-3 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
               Our website may contain links to third-party sites. We are not responsible for the privacy practices of
