@@ -120,7 +120,13 @@ export default function Header() {
                       onClick={closeMenu}
                       className="block font-bold text-3xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
                     >
-                      Home
+                      <motion.span
+                        whileHover={{ x: [0, -4, 4, -3, 3, 0] }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="inline-block"
+                      >
+                        Home
+                      </motion.span>
                     </Link>
 
                     <div>
@@ -128,7 +134,13 @@ export default function Header() {
                         onClick={() => setMenuView("services")}
                         className="w-full flex items-center justify-between gap-4 font-bold text-3xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
                       >
-                        <span>Services</span>
+                        <motion.span
+                          whileHover={{ x: [0, -4, 4, -3, 3, 0] }}
+                          transition={{ duration: 0.4, ease: "easeInOut" }}
+                          className="inline-block"
+                        >
+                          Services
+                        </motion.span>
                         <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 rotate-180 text-[rgb(var(--fg-rgb)/40%)]" />
                       </button>
                     </div>
@@ -145,7 +157,13 @@ export default function Header() {
                         onClick={closeMenu}
                         className="block font-bold text-3xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
                       >
-                        {item.name}
+                        <motion.span
+                          whileHover={{ x: [0, -4, 4, -3, 3, 0] }}
+                          transition={{ duration: 0.4, ease: "easeInOut" }}
+                          className="inline-block"
+                        >
+                          {item.name}
+                        </motion.span>
                       </Link>
                     ))}
                   </motion.div>
