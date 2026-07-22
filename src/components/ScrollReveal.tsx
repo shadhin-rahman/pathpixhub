@@ -17,9 +17,9 @@ export default function ScrollReveal({
   className = "",
   delay = 0,
   direction = "up",
-  distance = 50,
-  scale = 0.95,
-  duration = 0.8,
+  distance = 70,
+  scale = 0.92,
+  duration = 0.9,
   perspective = true,
 }: Props) {
   const getTransform = () => {
@@ -30,16 +30,21 @@ export default function ScrollReveal({
       right: { x: -distance },
       none: {},
     };
-    return { ...offset[direction], scale, rotateX: direction === "up" ? 8 : 0 };
+    return {
+      ...offset[direction],
+      scale,
+      rotateX: direction === "up" ? 10 : direction === "down" ? -10 : 0,
+      rotateY: direction === "left" ? 5 : direction === "right" ? -5 : 0,
+    };
   };
 
   return (
     <motion.div
       initial={{ opacity: 0, ...getTransform() }}
-      whileInView={{ opacity: 1, x: 0, y: 0, scale: 1, rotateX: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration, delay, ease: [0.25, 0.1, 0.25, 1] }}
-      style={perspective ? { perspective: "1200px" } : undefined}
+      whileInView={{ opacity: 1, x: 0, y: 0, scale: 1, rotateX: 0, rotateY: 0 }}
+      viewport={{ once: true, margin: "-30px" }}
+      transition={{ duration, delay, ease: [0.22, 1, 0.36, 1] }}
+      style={perspective ? { perspective: "1000px" } : undefined}
       className={className}
     >
       {children}

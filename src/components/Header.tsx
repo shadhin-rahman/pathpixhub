@@ -172,15 +172,24 @@ export default function Header() {
                     </h3>
 
                     <div className="space-y-1 max-h-[50vh] overflow-y-auto pr-2">
-                      {services.map((s) => (
-                        <Link
+                      {services.map((s, i) => (
+                        <motion.div
                           key={s.id}
-                          href={`/services/${s.id}`}
-                          onClick={closeMenu}
-                          className="block text-base md:text-xl font-semibold text-[rgb(var(--fg-rgb)/60%)] hover:text-[rgb(var(--accent-400))] transition-colors py-1.5"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.03, duration: 0.3 }}
                         >
-                          {s.title}
-                        </Link>
+                          <Link
+                            href={`/services/${s.id}`}
+                            onClick={closeMenu}
+                            className="group flex items-center gap-3 py-2 px-3 -mx-3 rounded-xl hover:bg-[rgb(var(--accent-500)/6%)] transition-colors"
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-500)/40%)] group-hover:bg-[rgb(var(--accent-500))] group-hover:scale-150 transition-all duration-300 shrink-0" />
+                            <span className="text-base md:text-lg font-semibold text-[rgb(var(--fg-rgb)/60%)] group-hover:text-[rgb(var(--accent-400))] group-hover:translate-x-1 transition-all duration-300">
+                              {s.title}
+                            </span>
+                          </Link>
+                        </motion.div>
                       ))}
                       <Link
                         href="/services"

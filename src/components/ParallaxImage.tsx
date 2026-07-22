@@ -19,8 +19,8 @@ export default function ParallaxImage({
   alt,
   children,
   className = "",
-  speed = 0.2,
-  scale: scaleRange = [1, 1.1],
+  speed = 0.3,
+  scale: scaleRange = [1, 1.15],
   fill = true,
   sizes,
 }: Props) {
@@ -30,7 +30,7 @@ export default function ParallaxImage({
     offset: ["start end", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [speed * 100, speed * -100]);
+  const y = useTransform(scrollYProgress, [0, 1], [speed * 120, speed * -120]);
   const s = useTransform(scrollYProgress, [0, 1], scaleRange);
 
   return (
