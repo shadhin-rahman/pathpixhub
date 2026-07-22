@@ -396,6 +396,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
       <section className="py-24 lg:py-32 mesh-gradient text-center">
         <div className="max-w-7xl mx-auto px-6">
