@@ -105,6 +105,33 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
         </div>
       </section>
 
+      <section className="py-16 md:py-24 bg-[var(--bg-alt)]">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-10 text-center">Who Needs This Service</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl mx-auto">
+            {service.audience.map((a, i) => (
+              <div key={i} className="flex items-start gap-3 glass-card rounded-2xl px-5 py-4 border-[rgb(var(--fg-rgb)/5%)]">
+                <svg className="w-5 h-5 text-[rgb(var(--accent-400))] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                <span className="text-sm text-[rgb(var(--fg-rgb)/70%)]">{a}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 md:py-24 bg-[var(--bg)]">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-10 text-center">Industries We Serve</h2>
+          <div className="flex flex-wrap justify-center gap-3">
+            {service.industries.map((ind, i) => (
+              <span key={i} className="px-5 py-3 rounded-full glass-card text-sm font-semibold text-[rgb(var(--fg-rgb)/70%)] border-[rgb(var(--fg-rgb)/8%)]">
+                {ind}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="py-16 md:py-24 mesh-gradient text-center">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Ready to Get Started?</h2>

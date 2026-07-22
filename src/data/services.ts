@@ -13,6 +13,8 @@ export interface Service {
   paragraphs: string[];
   whyChoose: WhyChooseItem[];
   features: string[];
+  audience: string[];
+  industries: string[];
   icon: string;
   image: string;
 }
@@ -41,6 +43,7 @@ export const services: Service[] = [
     paragraphs: [
       "At PathPixHub, we specialize in delivering precise clipping path solutions tailored to meet your specific needs. Whether you're in e-commerce, advertising, or photography, our clipping path services ensure clean and accurate cutouts that make your images stand out. Using advanced photo-editing tools, we manually draw paths around your subjects to separate them from backgrounds with unparalleled precision.",
       "Our team understands the importance of fine details. From simple shapes to complex outlines, we handle everything from single paths to multi-layered clipping paths for advanced editing needs. This service is perfect for isolating products, replacing backgrounds, or creating high-quality, professional visuals that capture attention.",
+      "Whether you need to remove backgrounds from thousands of product images or precisely cut out intricate shapes, our experienced team delivers consistent results at scale. We work with tight deadlines and high-volume orders without sacrificing the quality that sets your brand apart.",
     ],
     whyChoose: [
       { title: "Precision", desc: "Every path is hand-drawn for maximum accuracy." },
@@ -48,7 +51,9 @@ export const services: Service[] = [
       { title: "Fast Turnaround", desc: "Get your images processed quickly without compromising on quality." },
       { title: "Versatility", desc: "Ideal for e-commerce photos, catalogs, advertisements, and more." },
     ],
-    features: ["Hand-drawn precision paths", "Single & multi-path options", "Clean edge isolation", "Background replacement ready"],
+    features: ["Hand-drawn precision paths", "Single & multi-path options", "Clean edge isolation", "Background replacement ready", "Bulk image processing", "Consistent output every time"],
+    audience: ["E-commerce businesses needing product isolation", "Photographers requiring clean cutouts", "Advertising agencies crafting marketing visuals", "Amazon sellers optimizing product listings"],
+    industries: ["E-commerce & retail", "Real estate photography", "Fashion & apparel", "Print & publishing"],
     icon: "✂️",
     image: "/images/clipping-path-1.jpg",
   },
@@ -62,6 +67,7 @@ export const services: Service[] = [
     paragraphs: [
       "We provide professional background removal services to make your images shine. Whether you're selling products online, creating marketing materials, or refining personal photos, removing distracting backgrounds can elevate the quality of your visuals. Our skilled editors use advanced tools to carefully isolate your subjects, ensuring clean, polished results that grab attention.",
       "Background removal is ideal for e-commerce businesses, photographers, and designers who need high-quality images without the hassle. From simple backgrounds to intricate details like hair and transparent objects, we handle every project with precision. With our services, your images will look professional, clear, and ready to impress.",
+      "Our team uses a combination of manual and automated techniques to ensure every image is handled with care. We understand that different platforms have different requirements — from pure white backgrounds for Amazon to transparent PNGs for website use — and we deliver accordingly.",
     ],
     whyChoose: [
       { title: "Enhanced Product Presentation", desc: "Showcase your products on plain, white, or custom backgrounds for e-commerce platforms like Amazon or Shopify." },
@@ -69,7 +75,9 @@ export const services: Service[] = [
       { title: "Time-Saving", desc: "Outsource the tedious work to us and focus on your core business activities." },
       { title: "Custom Solutions", desc: "Whether you need single images or bulk editing, we cater to projects of all sizes." },
     ],
-    features: ["White background ready", "Complex edge handling", "Bulk processing available", "Platform optimized"],
+    features: ["White background ready", "Complex edge handling", "Bulk processing available", "Platform optimized", "Transparent PNG output", "Fast delivery"],
+    audience: ["Online retailers and marketplace sellers", "Product photographers", "Marketing and advertising teams", "Real estate agents"],
+    industries: ["E-commerce & marketplace", "Real estate & property", "Fashion & apparel", "Food & beverage"],
     icon: "🖼️",
     image: "/images/service-showcase/background-removal.png",
   },
@@ -83,6 +91,7 @@ export const services: Service[] = [
     paragraphs: [
       "Some images demand more than just standard editing—especially when dealing with fine details like flowing hair, delicate fur, or transparent objects. That's where PathPixHub's Image Masking Services come in. Our skilled professionals specialize in isolating intricate elements while maintaining the natural beauty of your subjects.",
       "From fashion photography to product shots, we ensure that your images are ready for seamless integration into any background or design. Whether it's for e-commerce, print, or advertising, we guarantee precision and consistency in every edit.",
+      "Image masking goes beyond standard clipping paths by preserving fine details that automated tools cannot handle. Our editors meticulously work on each pixel to ensure natural-looking results, especially for challenging subjects that require a delicate touch.",
     ],
     whyChoose: [
       { title: "Effortless Edge Control", desc: "Handle complex details with precision, keeping hair strands, soft textures, and semi-transparent objects intact." },
@@ -90,7 +99,9 @@ export const services: Service[] = [
       { title: "Tailored Editing", desc: "We adapt to your specific requirements, offering solutions for both individual and bulk projects." },
       { title: "Save Time and Hassle", desc: "Focus on your creative projects while we manage the intricate editing for you." },
     ],
-    features: ["Hair & fur masking", "Transparent object handling", "Soft edge precision", "Seamless integration"],
+    features: ["Hair & fur masking", "Transparent object handling", "Soft edge precision", "Seamless integration", "Layer masking", "Complex shape extraction"],
+    audience: ["Fashion photographers shooting models with hair", "Pet product brands with fur details", "Jewelry photographers needing fine detail", "Advertising agencies creating composite images"],
+    industries: ["Fashion & beauty", "Pet & animal products", "Jewelry & accessories", "Advertising & marketing"],
     icon: "🎭",
     image: "/images/image-masking-1.jpg",
   },
@@ -111,7 +122,9 @@ export const services: Service[] = [
       { title: "Boost Product Appeal", desc: "Shadows add depth, making your products appear more professional and visually engaging." },
       { title: "Quick Turnaround", desc: "Get expertly edited images delivered on time, even for bulk projects." },
     ],
-    features: ["Natural shadow", "Drop shadow", "Reflection shadow", "Existing shadow", "Floating shadow"],
+    features: ["Natural shadow", "Drop shadow", "Reflection shadow", "Existing shadow", "Floating shadow", "Custom angle matching", "Soft & hard shadow options"],
+    audience: ["E-commerce product photographers", "Catalog and brochure designers", "Furniture and home decor brands", "Automotive listing platforms"],
+    industries: ["E-commerce & retail", "Furniture & home decor", "Electronics & gadgets", "Automotive"],
     icon: "🌓",
     image: "/images/service-showcase/shadow-creation.png",
   },
@@ -125,6 +138,7 @@ export const services: Service[] = [
     paragraphs: [
       "Give your clothing the spotlight it deserves with PathPixHub's Ghost Mannequin Services. This innovative technique removes mannequins from your apparel photos, leaving behind a realistic 3D effect that highlights every detail of your garments.",
       "Our expert team works meticulously to ensure each image reflects the natural structure of the clothing, from neckline to hem. By seamlessly blending and retouching fabric edges, we make sure your garments look polished and professional.",
+      "This technique is especially valuable for fashion e-commerce, where customers expect to see how clothes fit and drape without the distraction of a mannequin. We handle all types of apparel — from casual wear to formal attire, outerwear to lingerie — with the same attention to detail.",
     ],
     whyChoose: [
       { title: "Realistic 3D Effects", desc: "Showcase your apparel as if it's floating, creating a premium, sophisticated presentation." },
@@ -132,7 +146,9 @@ export const services: Service[] = [
       { title: "Brand-Ready Images", desc: "Tailored for online stores, product catalogs, and marketing campaigns." },
       { title: "Scalable for Bulk Projects", desc: "Quick turnaround times, even for large volumes." },
     ],
-    features: ["3D realistic effect", "Neck & sleeve precision", "Bulk apparel editing", "E-commerce optimized"],
+    features: ["3D realistic effect", "Neck & sleeve precision", "Bulk apparel editing", "E-commerce optimized", "Inner lining cleanup", "Shadow & depth enhancement"],
+    audience: ["Fashion brands and clothing lines", "E-commerce apparel sellers", "Catalog production teams", "Online boutique owners"],
+    industries: ["Fashion & apparel", "E-commerce & retail", "Sportswear & activewear", "Lingerie & swimwear"],
     icon: "👕",
     image: "/images/ghost-mannequin.jpeg",
   },
@@ -146,6 +162,7 @@ export const services: Service[] = [
     paragraphs: [
       "Bring new life to your images with PathPixHub's Color Change Services. Whether you're showcasing product variations, updating your brand's visuals, or creating striking color effects, our expert team ensures flawless and natural-looking edits.",
       "Our services are perfect for e-commerce businesses, photographers, and marketers who need consistent, high-quality visuals without the hassle of reshooting. By seamlessly altering hues, tones, or shades, we help you create a cohesive, professional image library.",
+      "Color accuracy is critical for brand consistency. Whether you need to match a specific Pantone code, show products in alternate colors, or correct color casts from poor lighting, our editors deliver precise, natural-looking results that maintain the integrity of the original image.",
     ],
     whyChoose: [
       { title: "Showcase Variety", desc: "Easily present multiple product colors from a single image." },
@@ -153,7 +170,9 @@ export const services: Service[] = [
       { title: "Tailored Edits", desc: "Custom solutions for both single images and bulk projects, designed to fit your needs." },
       { title: "Quick and Efficient", desc: "Save time and resources with fast, reliable service." },
     ],
-    features: ["Multiple color variants", "Brand color matching", "Natural preservation", "Bulk color editing"],
+    features: ["Multiple color variants", "Brand color matching", "Natural preservation", "Bulk color editing", "Pantone matching", "Selective color adjustment"],
+    audience: ["Product catalog managers", "Brand marketing teams", "E-commerce sellers with color variants", "Automotive color specialists"],
+    industries: ["Fashion & apparel", "Home decor & furniture", "Automotive", "Consumer electronics"],
     icon: "🎨",
     image: "/images/color-change.jpg",
   },
@@ -167,13 +186,16 @@ export const services: Service[] = [
     paragraphs: [
       "At PathPixHub, we believe every photo tells a story—and we're here to make that story unforgettable. Our Photo Retouching Services are crafted to breathe life into your images by refining details, enhancing quality, and ensuring every shot looks picture-perfect.",
       "Whether you're an e-commerce business looking for polished product photos, a photographer perfecting wedding or portrait shots, or a marketer creating visuals for a campaign, our retouching services cater to all your needs. We eliminate imperfections while preserving the natural beauty of your images.",
+      "Our retouching goes beyond simple blemish removal. We offer advanced services including frequency separation for skin retouching, dodging and burning for dimensional depth, and color grading for consistent mood and tone across your entire image set.",
     ],
     whyChoose: [
       { title: "Attention to Detail", desc: "Every pixel is carefully retouched to perfection." },
       { title: "Versatility", desc: "From portraits to commercial photos, we handle diverse projects with expertise." },
       { title: "Quick Turnaround", desc: "Get your professionally retouched images on time, every time." },
     ],
-    features: ["Beauty airbrushing", "Camera reflection removal", "Dust, spot and scratch removal", "Wrinkle on clothing category", "Symmetrical edit", "Color variants", "Additional copy"],
+    features: ["Beauty airbrushing", "Camera reflection removal", "Dust, spot and scratch removal", "Wrinkle on clothing category", "Symmetrical edit", "Color variants", "Skin tone smoothing", "Background cleanup"],
+    audience: ["Portrait and wedding photographers", "E-commerce product photographers", "Beauty and cosmetics brands", "Real estate photographers"],
+    industries: ["Beauty & cosmetics", "Wedding & portrait photography", "E-commerce & retail", "Real estate"],
     icon: "✨",
     image: "/images/photo-retouching-1.jpg",
   },
@@ -187,6 +209,7 @@ export const services: Service[] = [
     paragraphs: [
       "At PathPixHub, our Multiple Clipping Path Services offer precise control over complex image editing. This advanced technique allows us to isolate multiple parts of a single image for targeted adjustments, such as color correction, layer editing, or adding effects.",
       "This service is perfect for e-commerce businesses, photographers, and designers who handle multi-component products like jewelry, apparel, furniture, or mechanical parts. By applying separate paths to different elements, we ensure each section can be edited individually without affecting the rest of the image.",
+      "Each component of your product gets its own dedicated path, allowing for independent color correction, shadow adjustment, or texture enhancement. This level of control is essential for high-end product photography where every detail matters.",
     ],
     whyChoose: [
       { title: "Advanced Customization", desc: "Adjust colors, brightness, or textures for specific parts of your image with ease." },
@@ -194,7 +217,9 @@ export const services: Service[] = [
       { title: "Consistent Quality", desc: "We focus on precision, ensuring seamless edits and professional results every time." },
       { title: "Save Time and Effort", desc: "Simplify post-production workflows by outsourcing tedious and technical edits." },
     ],
-    features: ["Per-part color adjustment", "Complex product handling", "Layer separation", "Precision editing"],
+    features: ["Per-part color adjustment", "Complex product handling", "Layer separation", "Precision editing", "Individual shadow control", "Component isolation"],
+    audience: ["Jewelry and watch brands", "Electronics product photographers", "Automotive parts catalogs", "Furniture and home decor brands"],
+    industries: ["Jewelry & watches", "Consumer electronics", "Automotive parts", "Furniture & home decor"],
     icon: "🔀",
     image: "/images/multi-clipping-path-1.jpg",
   },
@@ -208,13 +233,16 @@ export const services: Service[] = [
     paragraphs: [
       "At PathPixHub, we understand that great product photos drive sales. Our E-commerce Image Editing Services are designed to help your products shine, attracting customers and building trust in your online store. From cleaning up backgrounds to refining every detail, we deliver polished, professional images.",
       "Your e-commerce success depends on visuals that grab attention and meet platform standards. We ensure every image is optimized for platforms like Amazon, Shopify, eBay, and Etsy, helping you stand out from the competition.",
+      "From main product shots with clean white backgrounds to lifestyle images that show products in use, we handle the full spectrum of e-commerce image editing. Our team understands the specific image requirements for each platform, ensuring your products meet marketplace standards every time.",
     ],
     whyChoose: [
       { title: "Sales-Driven Images", desc: "We create visuals that not only look great but also boost buyer confidence and conversions." },
       { title: "Custom Solutions", desc: "Tailored editing for individual products or bulk catalogs." },
       { title: "Quick Turnaround", desc: "Get your images ready to upload in record time." },
     ],
-    features: ["Platform optimization", "Background cleanup", "Color consistency", "Bulk catalog editing"],
+    features: ["Platform optimization", "Background cleanup", "Color consistency", "Bulk catalog editing", "Amazon-ready formatting", "Lifestyle image enhancement"],
+    audience: ["Amazon FBA sellers", "Shopify store owners", "eBay and Etsy sellers", "Catalog production teams"],
+    industries: ["E-commerce & marketplace", "Retail & wholesale", "Consumer packaged goods", "Home & lifestyle"],
     icon: "🛒",
     image: "/images/ecommerce-image-editing.jpg",
   },
@@ -228,6 +256,7 @@ export const services: Service[] = [
     paragraphs: [
       "At PathPixHub, we bring out the best in your automotive visuals with our professional Car Image Editing Services. Whether you're a car dealership, an online seller, or a photographer, our expert editors refine every detail of your car photos to make them look flawless and captivating.",
       "We specialize in enhancing car images to highlight their design, color, and features while eliminating distractions. From background replacement to color correction and shadow adjustments, we ensure your car images are polished to perfection, ready to impress buyers.",
+      "Automotive photography requires a unique skill set — reflections need to be controlled, paint colors must be accurate, and every curve of the vehicle should be visible. Our editors are experienced in handling the specific challenges of car photography, delivering images that make vehicles look their absolute best.",
     ],
     whyChoose: [
       { title: "Attention to Detail", desc: "We focus on every aspect of your car photo to ensure perfection." },
@@ -235,7 +264,9 @@ export const services: Service[] = [
       { title: "Consistency Across Images", desc: "Perfect for creating uniform and professional image galleries." },
       { title: "Fast Turnaround", desc: "Get your images edited quickly without compromising on quality." },
     ],
-    features: ["Background replacement", "Color enhancement", "Reflection & shadow", "Scratch removal"],
+    features: ["Background replacement", "Color enhancement", "Reflection & shadow", "Scratch removal", "License plate blur", "Window reflection cleanup"],
+    audience: ["Car dealerships and showrooms", "Automotive photographers", "Online car selling platforms", "Automotive magazines"],
+    industries: ["Automotive & dealership", "Online vehicle marketplaces", "Automotive advertising", "Automotive publishing"],
     icon: "🚗",
     image: "/images/car-editing-1.jpg",
   },
