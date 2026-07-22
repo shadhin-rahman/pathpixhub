@@ -27,20 +27,21 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
     <>
       <section className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden">
         <Image
-          src={`/images/service-showcase/${service.id}.png`}
+          src={`/images/service-showcase/${service.id}-cover.jpg`}
           alt={service.title}
           fill
           className="object-cover"
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)/60%] to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 to-black/10" />
+        <div className="absolute inset-0 bg-black/10" />
         <div className="absolute bottom-0 left-0 right-0 pb-10 md:pb-16 lg:pb-20">
           <div className="max-w-7xl mx-auto px-6">
             <span className="text-xs font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold">
               {service.title}
             </span>
-            <h1 className="mt-3 text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white">
+            <h1 className="mt-3 text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]">
               {service.headline}
             </h1>
           </div>

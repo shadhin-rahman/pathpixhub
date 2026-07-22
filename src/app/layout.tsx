@@ -35,12 +35,6 @@ export default function RootLayout({
         __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme','light');}catch(e){}})();`,
       }}
     />
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX" />
-    <script
-      dangerouslySetInnerHTML={{
-        __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');`,
-      }}
-    />
   </head>
       <body className={`${jakarta.className} bg-[var(--bg)] text-[rgb(var(--fg-rgb))] antialiased`} suppressHydrationWarning>
         <div className="grain" />
