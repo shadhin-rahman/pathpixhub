@@ -71,7 +71,7 @@ export const services: Service[] = [
     ],
     features: ["White background ready", "Complex edge handling", "Bulk processing available", "Platform optimized"],
     icon: "🖼️",
-    image: "/images/Background Removal.jpg",
+    image: "/images/service-showcase/background-removal.png",
   },
   {
     id: "image-masking",
@@ -113,7 +113,7 @@ export const services: Service[] = [
     ],
     features: ["Natural shadow", "Drop shadow", "Reflection shadow", "Existing shadow", "Floating shadow"],
     icon: "🌓",
-    image: "/images/Shadow Creation.gif",
+    image: "/images/service-showcase/shadow-creation.png",
   },
   {
     id: "ghost-mannequin",
@@ -134,7 +134,7 @@ export const services: Service[] = [
     ],
     features: ["3D realistic effect", "Neck & sleeve precision", "Bulk apparel editing", "E-commerce optimized"],
     icon: "👕",
-    image: "/images/Ghost Mannequin.jpeg",
+    image: "/images/ghost-mannequin.jpeg",
   },
   {
     id: "color-change",
@@ -155,7 +155,7 @@ export const services: Service[] = [
     ],
     features: ["Multiple color variants", "Brand color matching", "Natural preservation", "Bulk color editing"],
     icon: "🎨",
-    image: "/images/Color Change.jpg",
+    image: "/images/color-change.jpg",
   },
   {
     id: "photo-retouching",
@@ -216,7 +216,7 @@ export const services: Service[] = [
     ],
     features: ["Platform optimization", "Background cleanup", "Color consistency", "Bulk catalog editing"],
     icon: "🛒",
-    image: "/images/E-commerce Image Editing.jpg",
+    image: "/images/ecommerce-image-editing.jpg",
   },
   {
     id: "car-editing",
