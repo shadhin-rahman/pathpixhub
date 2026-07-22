@@ -175,7 +175,7 @@ export default function Header() {
                       {services.map((s) => (
                         <Link
                           key={s.id}
-                          href={`/services#${s.id}`}
+                          href={`/services/${s.id}`}
                           onClick={closeMenu}
                           className="block text-base md:text-xl font-semibold text-[rgb(var(--fg-rgb)/60%)] hover:text-[rgb(var(--accent-400))] transition-colors py-1.5"
                         >

@@ -7,6 +7,7 @@ import IntroAnimation from "@/components/IntroAnimation";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import CookieConsent from "@/components/CookieConsent";
+import WhatsAppChat from "@/components/WhatsAppChat";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], display: "swap" });
 
@@ -28,13 +29,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme','light');}catch(e){}})();`,
-          }}
-        />
-      </head>
+  <head>
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme','light');}catch(e){}})();`,
+      }}
+    />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX" />
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');`,
+      }}
+    />
+  </head>
       <body className={`${jakarta.className} bg-[var(--bg)] text-[rgb(var(--fg-rgb))] antialiased`} suppressHydrationWarning>
         <div className="grain" />
         <IntroAnimation />
@@ -46,6 +53,7 @@ export default function RootLayout({
         <main id="main-content" className="min-h-screen">{children}</main>
         <Footer />
         <ScrollToTop />
+        <WhatsAppChat />
         <CookieConsent />
       </body>
     </html>

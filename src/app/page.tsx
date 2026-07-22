@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 import { services } from "@/data/services";
+import Testimonials from "@/components/Testimonials";
 
 export default function Home() {
   return (
@@ -144,7 +146,7 @@ export default function Home() {
               return (
               <Link
                 key={service.id}
-                href={`/services#${service.id}`}
+                href={`/services/${service.id}`}
                 className="group rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
                 style={{ backgroundColor: softColors[ci] }}
               >
@@ -309,8 +311,25 @@ export default function Home() {
         </div>
       </section>
 
+      <Testimonials />
+
       <section className="py-24 lg:py-32 bg-[var(--bg)]">
         <div className="max-w-4xl mx-auto px-6">
+          <Script id="faq-schema" type="application/ld+json" strategy="beforeInteractive" dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: [
+                { "@type": "Question", name: "What types of images work best for clipping paths?", acceptedAnswer: { "@type": "Answer", text: "Clipping paths are ideal for images with clear, defined edges. They work well for product photos, e-commerce images, and any subjects that need isolation from the background." } },
+                { "@type": "Question", name: "How does background removal help my business?", acceptedAnswer: { "@type": "Answer", text: "Removing the background can make your product images look cleaner and more professional, helping customers focus directly on the product and improving visual appeal in online stores." } },
+                { "@type": "Question", name: "What is image masking, and when is it used?", acceptedAnswer: { "@type": "Answer", text: "Image masking is a technique for handling complex subjects with soft edges, like hair or fur. It's used when clipping paths alone aren't sufficient for high-detail areas." } },
+                { "@type": "Question", name: "Can I request specific shadow styles for my photos?", acceptedAnswer: { "@type": "Answer", text: "Yes! We offer custom shadow options, including natural, drop, and reflection shadows, to suit your aesthetic needs." } },
+                { "@type": "Question", name: "What does the ghost mannequin service involve?", acceptedAnswer: { "@type": "Answer", text: "Our ghost mannequin service provides a 3D effect for apparel images, giving a lifelike shape to clothes without using a model. It's ideal for fashion and e-commerce brands." } },
+                { "@type": "Question", name: "Do you offer bulk editing services for large image volumes?", acceptedAnswer: { "@type": "Answer", text: "Yes, we offer scalable solutions for businesses with large image volumes. Contact us for custom pricing and service options for high-volume edits." } },
+                { "@type": "Question", name: "What is the turnaround time for your services?", acceptedAnswer: { "@type": "Answer", text: "Turnaround times vary by service and project volume, but we aim to deliver most standard jobs within 24-48 hours. Contact us for specific timelines." } },
+              ],
+            }),
+          }} />
           <div className="text-center mb-16">
             <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Good to Know</h2>
             <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">FAQs</h3>

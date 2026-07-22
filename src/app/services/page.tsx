@@ -13,81 +13,52 @@ export default function ServicesPage() {
     <>
       <section className="pt-40 pb-20 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="max-w-2xl">
-            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">What We Do</h2>
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Services</h1>
-            <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
-              We deliver pixel-perfect image editing — powered by skilled artists delivering with obsessive precision.
-            </p>
-          </div>
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">What We Offer</h2>
+          <h1 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Services</h1>
+          <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-2xl">
+            We deliver pixel-perfect image editing — powered by skilled artists delivering with obsessive precision.
+          </p>
         </div>
       </section>
 
       <section className="pb-32 bg-[var(--bg-alt)]">
-        <div className="max-w-7xl mx-auto px-6 space-y-24">
-          {services.map((service, index) => (
-            <div key={service.id} id={service.id} className="scroll-mt-32">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-              <div className={index % 2 === 1 ? "lg:order-2" : ""}>
-                <span className="text-xs font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <h2 className="mt-4 text-3xl md:text-4xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">{service.title}</h2>
-                <p className="mt-3 text-base font-semibold text-[rgb(var(--accent-400))]">{service.headline}</p>
-                <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border-[rgb(var(--accent-500)/30%)] bg-[rgb(var(--accent-500)/8%)]">
-                  <span className="text-xs font-mono tracking-[0.15em] font-bold text-[rgb(var(--accent-400))]">{priceMap[service.id]}</span>
-                </div>
-                <div className="mt-4 space-y-4">
-                  {service.paragraphs.map((p, i) => (
-                    <p key={i} className="text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">{p}</p>
-                  ))}
-                </div>
-                <ul className="mt-6 space-y-3">
-                  {service.features.map((f) => (
-                    <li key={f} className="flex items-center gap-3 text-sm text-[rgb(var(--fg-rgb)/50%)]">
-                      <svg className="w-4 h-4 text-[rgb(var(--accent-400))] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {services.map((service, i) => {
+              const colors = ["#fca5a5","#d8b4fe","#f9a8d4","#fde68a","#93c5fd","#86efac","#fdba74","#5eead4","#a5b4fc","#fda4af"];
+              return (
                 <Link
-                  href="/contact"
-                  className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors"
+                  key={service.id}
+                  href={`/services/${service.id}`}
+                  className="group rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
+                  style={{ backgroundColor: colors[i % colors.length] }}
                 >
-                  Get a Quote
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                </Link>
-              </div>
-              <div className={`relative w-full h-64 md:h-80 lg:h-[28rem] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/5%)] bg-white/20 group ${index % 2 === 1 ? "lg:order-1" : ""}`}>
-                <Image
-                  src={`/images/service-showcase/${service.id}.png`}
-                  alt={service.title}
-                  fill
-                  className="object-contain p-4 group-hover:opacity-0 transition-opacity duration-500"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-                <Image
-                  src={`/images/service-showcase/${service.id}-before.png`}
-                  alt={`${service.title} before`}
-                  fill
-                  className="object-contain p-4 absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-              </div>
-              </div>
-
-              <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {service.whyChoose.map((w, i) => (
-                  <div key={i} className="glass-card rounded-2xl p-5 border-[rgb(var(--fg-rgb)/5%)]">
-                    <h4 className="font-bold text-sm text-[rgb(var(--fg-rgb))]">{w.title}</h4>
-                    <p className="mt-1.5 text-sm text-[rgb(var(--fg-rgb)/50%)] leading-relaxed">{w.desc}</p>
+                  <div className="relative aspect-[4/3] overflow-hidden bg-white/20">
+                    <Image
+                      src={`/images/service-showcase/${service.id}.png`}
+                      alt={service.title}
+                      fill
+                      className="object-contain p-6 group-hover:scale-105 transition-transform duration-700"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
                   </div>
-                ))}
-              </div>
-            </div>
-          ))}
+                  <div className="p-5">
+                    <div className="flex items-center justify-between gap-3">
+                      <h3 className="font-bold text-lg text-[rgb(var(--fg-rgb)/85%)]">{service.title}</h3>
+                      <span className="shrink-0 text-[10px] font-mono tracking-[0.1em] font-bold px-3 py-1.5 rounded-full bg-white/20 text-[rgb(var(--fg-rgb)/70%)]">
+                        {priceMap[service.id]}
+                      </span>
+                    </div>
+                    <p className="mt-1.5 text-sm text-[rgb(var(--fg-rgb)/55%)] line-clamp-2">{service.tagline}</p>
+                    <span className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-[rgb(var(--fg-rgb)/60%)] group-hover:text-[rgb(var(--accent-500))] transition-colors">
+                      Learn More
+                      <svg className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </section>
 

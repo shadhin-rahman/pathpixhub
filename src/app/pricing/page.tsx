@@ -106,7 +106,7 @@ export default function PricingPage() {
                     />
                   </div>
                   <Link
-                    href={`/services#${s.id}`}
+                    href={`/services/${s.id}`}
                     className="font-bold text-sm text-[rgb(var(--fg-rgb)/85%)] leading-tight hover:text-[rgb(var(--accent-500))] transition-colors"
                   >
                     {s.title}
@@ -147,7 +147,7 @@ export default function PricingPage() {
                     />
                   </div>
                   <Link
-                    href={`/services#${s.id}`}
+                    href={`/services/${s.id}`}
                     className="block mt-3 text-[rgb(var(--fg-rgb)/80%)] font-bold text-sm text-center leading-tight hover:text-[rgb(var(--accent-500))] transition-colors"
                   >
                     {s.title}
