@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { services, priceMap } from "@/data/services";
+import ScrollReveal from "@/components/ScrollReveal";
 
 export async function generateStaticParams() {
   return services.map((s) => ({ id: s.id }));
@@ -48,6 +49,7 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
         </div>
       </section>
 
+      <ScrollReveal>
       <section className="py-16 md:py-24 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
@@ -104,8 +106,10 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
-      <section className="py-16 md:py-24 bg-[var(--bg-alt)]">
+      <ScrollReveal>
+      <section className="py-16 md:py-24 bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-10 text-center">Who Needs This Service</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl mx-auto">
@@ -118,7 +122,9 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
+      <ScrollReveal>
       <section className="py-16 md:py-24 bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-10 text-center">Industries We Serve</h2>
@@ -131,8 +137,9 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
-      <section className="py-16 md:py-24 mesh-gradient text-center">
+      <section className="py-16 md:py-24 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Ready to Get Started?</h2>
           <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] max-w-xl mx-auto">
@@ -147,6 +154,7 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
           </Link>
         </div>
       </section>
+      </ScrollReveal>
     </>
   );
 }

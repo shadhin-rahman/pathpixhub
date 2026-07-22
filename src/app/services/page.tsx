@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { services, priceMap } from "@/data/services";
+import ScrollReveal from "@/components/ScrollReveal";
 
 export const metadata: Metadata = {
   title: "Services | PathPixHub",
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <>
+      <ScrollReveal>
       <section className="pt-40 pb-20 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">What We Offer</h2>
@@ -20,7 +22,9 @@ export default function ServicesPage() {
           </p>
         </div>
       </section>
+      </ScrollReveal>
 
+      <ScrollReveal>
       <section className="pb-32 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -61,7 +65,9 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
+      <ScrollReveal>
       <section className="py-24 mesh-gradient text-center">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Free Trial Available</h2>
@@ -74,6 +80,7 @@ export default function ServicesPage() {
           </Link>
         </div>
       </section>
+      </ScrollReveal>
     </>
   );
 }

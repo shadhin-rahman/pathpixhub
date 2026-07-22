@@ -3,6 +3,7 @@ import Link from "next/link";
 import Script from "next/script";
 import { services } from "@/data/services";
 import Testimonials from "@/components/Testimonials";
+import ScrollReveal from "@/components/ScrollReveal";
 
 export default function Home() {
   return (
@@ -50,6 +51,7 @@ export default function Home() {
         </div>
       </section>
 
+      <ScrollReveal>
       <section className="relative overflow-hidden mesh-gradient">
         <div className="premium-blur w-[500px] h-[500px] top-[-20%] right-[-10%]" />
         <div className="relative w-full max-w-7xl mx-auto px-6 py-16 sm:py-20">
@@ -85,7 +87,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
+      <ScrollReveal>
       <section className="py-16 lg:py-24 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col lg:flex-row items-stretch gap-6">
@@ -170,7 +174,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
+      <ScrollReveal>
       <section className="py-16 overflow-hidden bg-[var(--bg)] relative border-y border-[rgb(var(--fg-rgb)/8%)]">
         <h2 className="text-center text-2xl md:text-3xl font-bold tracking-tight gradient-text mb-10 px-6">Explore Our Expertise</h2>
         <div className="relative">
@@ -212,7 +218,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
+      <ScrollReveal>
       <section className="py-24 lg:py-32 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -255,7 +263,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
+      <ScrollReveal>
       <section className="py-24 lg:py-32 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
@@ -281,7 +291,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
+      <ScrollReveal>
       <section className="py-24 lg:py-32 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
