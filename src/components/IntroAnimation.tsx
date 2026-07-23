@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function IntroAnimation() {
   const [phase, setPhase] = useState<"enter" | "exit" | "done">("enter");
@@ -59,19 +60,21 @@ export default function IntroAnimation() {
         }`}
       >
         <div className="relative w-14 h-14 rounded-full glass-card flex items-center justify-center overflow-hidden">
-          <span
-            className="text-xl font-bold tracking-wide text-[rgb(var(--accent-400))]"
+          <Image
+            src="/images/logo-icon.png"
+            alt="PathPixHub"
+            width={32}
+            height={32}
+            className="w-7 h-7 md:w-8 md:h-8 object-contain"
             style={{ animation: "intro-pop 0.7s ease both" }}
-          >
-            P
-          </span>
+          />
         </div>
         <div className="overflow-hidden">
           <p
             className="text-sm md:text-base font-bold tracking-wider text-[rgb(var(--fg-rgb)/80%)]"
             style={{ animation: "intro-rise 0.6s ease 0.25s both" }}
           >
-            Path<span className="text-[rgb(var(--accent-400))]">Pix</span><span className="text-[rgb(var(--fg-rgb)/40%)]">·</span>Hub
+            PathPixHub
           </p>
         </div>
         <div className="w-40 h-[2px] rounded-full bg-[rgb(var(--fg-rgb)/10%)] overflow-hidden">
