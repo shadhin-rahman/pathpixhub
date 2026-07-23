@@ -7,7 +7,7 @@ import StaggerReveal, { StaggerItem } from "@/components/StaggerReveal";
 
 export const metadata: Metadata = {
   title: "Services | PathPixHub",
-  description: "Explore our 10 professional photo editing services — clipping path, background removal, image masking, ghost mannequin, retouching, and more.",
+  description: "Explore our professional photo editing services — clipping path, background removal, AI enhancement, image masking, ghost mannequin, retouching, and more.",
 };
 
 export default function ServicesPage() {
@@ -30,7 +30,7 @@ export default function ServicesPage() {
         <div className="max-w-7xl mx-auto px-6">
           <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {services.map((service, i) => {
-              const colors = ["#fca5a5","#d8b4fe","#f9a8d4","#fde68a","#93c5fd","#86efac","#fdba74","#5eead4","#a5b4fc","#fda4af"];
+              const colors = ["#fca5a5","#d8b4fe","#f9a8d4","#fde68a","#93c5fd","#86efac","#fdba74","#5eead4","#a5b4fc","#fda4af","#6ee7b7","#7dd3fc"];
               return (
                 <StaggerItem key={service.id}>
                 <Link
