@@ -334,62 +334,6 @@ export default function Home() {
 
       <Testimonials />
 
-      <ScrollReveal>
-      <section className="py-24 lg:py-32 bg-[var(--bg)]">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Get in Touch</h2>
-              <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Let&rsquo;s Start Your Project</h3>
-              <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
-                Send us your images and we&rsquo;ll provide a free quote within hours. Try our service
-                with 2 free edits — no commitment, no credit card required.
-              </p>
-              <div className="mt-8 space-y-4">
-                {[
-                  { label: "Email", value: "info@pathpixhub.com", href: "mailto:info@pathpixhub.com" },
-                  { label: "Turnaround", value: "From 12 hours" },
-                  { label: "Pricing", value: "From $0.39 / image" },
-                ].map((item) => (
-                  <div key={item.label} className="flex items-center gap-3">
-                    <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))]" />
-                    <span className="text-sm text-[rgb(var(--fg-rgb)/50%)]">{item.label}:</span>
-                    {item.href ? (
-                      <a href={item.href} className="text-sm font-semibold text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-400))] transition-colors">
-                        {item.value}
-                      </a>
-                    ) : (
-                      <span className="text-sm font-semibold text-[rgb(var(--fg-rgb))]">{item.value}</span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="glass-card rounded-3xl p-8 border-[rgb(var(--fg-rgb)/5%)]">
-              <form action="https://formspree.io/f/xanybqng" method="POST" className="space-y-4">
-                <div>
-                  <label htmlFor="name" className="text-xs uppercase tracking-[0.15em] font-bold text-[rgb(var(--fg-rgb)/40%)] block mb-2">Your Name</label>
-                  <input type="text" id="name" name="name" required className="w-full px-4 py-3 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/8%)] text-sm text-[rgb(var(--fg-rgb))] focus:outline-none focus:border-[rgb(var(--accent-500)/50%)] transition-colors placeholder:text-[rgb(var(--fg-rgb)/30%)]" placeholder="John Doe" />
-                </div>
-                <div>
-                  <label htmlFor="email" className="text-xs uppercase tracking-[0.15em] font-bold text-[rgb(var(--fg-rgb)/40%)] block mb-2">Email Address</label>
-                  <input type="email" id="email" name="email" required className="w-full px-4 py-3 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/8%)] text-sm text-[rgb(var(--fg-rgb))] focus:outline-none focus:border-[rgb(var(--accent-500)/50%)] transition-colors placeholder:text-[rgb(var(--fg-rgb)/30%)]" placeholder="john@example.com" />
-                </div>
-                <div>
-                  <label htmlFor="message" className="text-xs uppercase tracking-[0.15em] font-bold text-[rgb(var(--fg-rgb)/40%)] block mb-2">Message</label>
-                  <textarea id="message" name="message" rows={4} required className="w-full px-4 py-3 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/8%)] text-sm text-[rgb(var(--fg-rgb))] focus:outline-none focus:border-[rgb(var(--accent-500)/50%)] transition-colors placeholder:text-[rgb(var(--fg-rgb)/30%)] resize-none" placeholder="Tell us about your project..." />
-                </div>
-                <p className="text-[10px] text-[rgb(var(--fg-rgb)/30%)]">By submitting, you agree to our <Link href="/privacy-policy" className="underline hover:text-[rgb(var(--accent-400))]">Privacy Policy</Link>.</p>
-                <button type="submit" className="w-full px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm">
-                  Send Message
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
-      </ScrollReveal>
-
       <section className="py-24 lg:py-32 bg-[var(--bg-alt)]">
         <div className="max-w-4xl mx-auto px-6">
           <Script id="faq-schema" type="application/ld+json" strategy="beforeInteractive" dangerouslySetInnerHTML={{
