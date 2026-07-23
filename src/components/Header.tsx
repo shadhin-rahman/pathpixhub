@@ -1,6 +1,5 @@
 ﻿"use client";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
@@ -24,14 +23,9 @@ export default function Header() {
           className={isOpen ? "z-40" : "z-[60]"}
           onClick={(e) => { if (pathname === "/") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
         >
-          <Image
-            src="/images/name-logo.png"
-            alt="PathPixHub"
-            width={160}
-            height={50}
-            className="h-10 md:h-12 lg:h-14 w-auto ml-4 md:ml-10 object-contain [filter:var(--logo-filter)]"
-            priority
-          />
+          <span className="ml-4 md:ml-10 text-xl md:text-2xl lg:text-3xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">
+            Path<span className="text-[rgb(var(--accent-400))]">Pix</span>Hub
+          </span>
         </Link>
 
         <div className="hidden md:flex items-center gap-3 pr-4 md:pr-10">
