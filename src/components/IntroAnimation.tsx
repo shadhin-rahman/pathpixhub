@@ -63,9 +63,9 @@ export default function IntroAnimation() {
           <Image
             src="/images/logo-icon.png"
             alt="PathPixHub"
-            width={32}
-            height={32}
-            className="w-7 h-7 md:w-8 md:h-8 object-contain"
+            width={36}
+            height={36}
+            className="w-8 h-8 md:w-9 md:h-9 object-contain [filter:var(--logo-filter)]"
             style={{ animation: "intro-pop 0.7s ease both" }}
           />
         </div>
