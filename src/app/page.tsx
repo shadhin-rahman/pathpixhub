@@ -24,6 +24,14 @@ export default function Home() {
         >
           <source src="/videos/beauty.mp4" type="video/mp4" />
         </video>
+        <div className="absolute bottom-6 left-6 z-10 flex flex-wrap gap-3">
+          <span className="px-4 py-2 rounded-full glass-card text-xs font-bold text-[rgb(var(--accent-400))] tracking-wider uppercase border-[rgb(var(--accent-500)/30%)]">
+            From $0.39 / Image
+          </span>
+          <span className="px-4 py-2 rounded-full glass-card text-xs font-bold text-[rgb(var(--accent-400))] tracking-wider uppercase border-[rgb(var(--accent-500)/30%)]">
+            12hr Turnaround
+          </span>
+        </div>
         <ScrollIndicator />
       </section>
       </ScrollReveal>
@@ -38,11 +46,11 @@ export default function Home() {
               </span>
               <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
                 <span className="w-1 h-1 rounded-full bg-[#22c55e]" />
-                Premium Quality
+                12hr Fast Turnaround
               </span>
               <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
                 <span className="w-1 h-1 rounded-full bg-[#22c55e]" />
-                Fast Turnaround
+                From $0.39 / Image
               </span>
               <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
                 <span className="w-1 h-1 rounded-full bg-[#22c55e]" />
@@ -50,7 +58,7 @@ export default function Home() {
               </span>
               <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
                 <span className="w-1 h-1 rounded-full bg-[#22c55e]" />
-                Pixel Perfect Edits
+                Free Trial Available
               </span>
             </div>
           ))}
@@ -255,8 +263,8 @@ export default function Home() {
               </p>
               <div className="mt-8 grid grid-cols-2 gap-4">
                 <CountUp end={200} suffix="+" label="Projects" />
-                <CountUp end={24} suffix="hr" label="Turnaround" />
-                <CountUp end={100} suffix="%" label="Quality" />
+                <CountUp end={12} suffix="hr" label="Turnaround" />
+                <CountUp end={100} suffix="%" label="Satisfaction" />
                 <CountUp end={50} suffix="+" label="Clients" />
               </div>
             </div>
@@ -269,23 +277,22 @@ export default function Home() {
       <section className="py-24 lg:py-32 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Our Approach</h2>
-            <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Strategy</h3>
+            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Why Choose Us</h2>
+            <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Built for Speed & Quality</h3>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
             {[
-              "Hand-drawn clipping paths for flawless results",
-              "Bringing focus to your image with expert cutouts",
-              "Transforming images with precision and care",
-              "Enhancing photos with professional background removal",
-              "Flawless cutouts for high-impact photos",
-              "Enhancing the visual appeal of every image",
-              "Facilitating complex image manipulations",
-              "Highlighting vehicle features and details",
+              { icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z", title: "12hr Fast Turnaround", desc: "Most orders delivered within 12 hours. Urgent? Ask about our 6hr express service." },
+              { icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z", title: "From $0.39 / Image", desc: "Professional editing starting at just $0.39 per image. Volume discounts available." },
+              { icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z", title: "100% Satisfaction", desc: "Pixel-perfect quality guaranteed. Free revisions until you're completely satisfied." },
+              { icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z", title: "Dedicated Team", desc: "Skilled editors assigned to your project, ensuring consistency and quality every time." },
             ].map((item) => (
-              <div key={item} className="flex items-start gap-3 glass-card rounded-2xl px-5 py-4">
-                <svg className="w-5 h-5 text-[rgb(var(--accent-400))] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                <span className="text-sm text-[rgb(var(--fg-rgb)/70%)]">{item}</span>
+              <div key={item.title} className="glass-card rounded-2xl px-6 py-8 text-center border-[rgb(var(--fg-rgb)/5%)]">
+                <div className="w-12 h-12 rounded-full bg-[rgb(var(--accent-500)/12%)] flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-6 h-6 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} /></svg>
+                </div>
+                <h3 className="font-bold text-[rgb(var(--fg-rgb))]">{item.title}</h3>
+                <p className="mt-2 text-sm text-[rgb(var(--fg-rgb)/50%)] leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -327,7 +334,63 @@ export default function Home() {
 
       <Testimonials />
 
+      <ScrollReveal>
       <section className="py-24 lg:py-32 bg-[var(--bg)]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Get in Touch</h2>
+              <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Let&rsquo;s Start Your Project</h3>
+              <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
+                Send us your images and we&rsquo;ll provide a free quote within hours. Try our service
+                with 2 free edits — no commitment, no credit card required.
+              </p>
+              <div className="mt-8 space-y-4">
+                {[
+                  { label: "Email", value: "info@pathpixhub.com", href: "mailto:info@pathpixhub.com" },
+                  { label: "Turnaround", value: "From 12 hours" },
+                  { label: "Pricing", value: "From $0.39 / image" },
+                ].map((item) => (
+                  <div key={item.label} className="flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))]" />
+                    <span className="text-sm text-[rgb(var(--fg-rgb)/50%)]">{item.label}:</span>
+                    {item.href ? (
+                      <a href={item.href} className="text-sm font-semibold text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-400))] transition-colors">
+                        {item.value}
+                      </a>
+                    ) : (
+                      <span className="text-sm font-semibold text-[rgb(var(--fg-rgb))]">{item.value}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="glass-card rounded-3xl p-8 border-[rgb(var(--fg-rgb)/5%)]">
+              <form action="https://formspree.io/f/xanybqng" method="POST" className="space-y-4">
+                <div>
+                  <label htmlFor="name" className="text-xs uppercase tracking-[0.15em] font-bold text-[rgb(var(--fg-rgb)/40%)] block mb-2">Your Name</label>
+                  <input type="text" id="name" name="name" required className="w-full px-4 py-3 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/8%)] text-sm text-[rgb(var(--fg-rgb))] focus:outline-none focus:border-[rgb(var(--accent-500)/50%)] transition-colors placeholder:text-[rgb(var(--fg-rgb)/30%)]" placeholder="John Doe" />
+                </div>
+                <div>
+                  <label htmlFor="email" className="text-xs uppercase tracking-[0.15em] font-bold text-[rgb(var(--fg-rgb)/40%)] block mb-2">Email Address</label>
+                  <input type="email" id="email" name="email" required className="w-full px-4 py-3 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/8%)] text-sm text-[rgb(var(--fg-rgb))] focus:outline-none focus:border-[rgb(var(--accent-500)/50%)] transition-colors placeholder:text-[rgb(var(--fg-rgb)/30%)]" placeholder="john@example.com" />
+                </div>
+                <div>
+                  <label htmlFor="message" className="text-xs uppercase tracking-[0.15em] font-bold text-[rgb(var(--fg-rgb)/40%)] block mb-2">Message</label>
+                  <textarea id="message" name="message" rows={4} required className="w-full px-4 py-3 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/8%)] text-sm text-[rgb(var(--fg-rgb))] focus:outline-none focus:border-[rgb(var(--accent-500)/50%)] transition-colors placeholder:text-[rgb(var(--fg-rgb)/30%)] resize-none" placeholder="Tell us about your project..." />
+                </div>
+                <p className="text-[10px] text-[rgb(var(--fg-rgb)/30%)]">By submitting, you agree to our <Link href="/privacy-policy" className="underline hover:text-[rgb(var(--accent-400))]">Privacy Policy</Link>.</p>
+                <button type="submit" className="w-full px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm">
+                  Send Message
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+      </ScrollReveal>
+
+      <section className="py-24 lg:py-32 bg-[var(--bg-alt)]">
         <div className="max-w-4xl mx-auto px-6">
           <Script id="faq-schema" type="application/ld+json" strategy="beforeInteractive" dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -340,7 +403,7 @@ export default function Home() {
                 { "@type": "Question", name: "Can I request specific shadow styles for my photos?", acceptedAnswer: { "@type": "Answer", text: "Yes! We offer custom shadow options, including natural, drop, and reflection shadows, to suit your aesthetic needs." } },
                 { "@type": "Question", name: "What does the ghost mannequin service involve?", acceptedAnswer: { "@type": "Answer", text: "Our ghost mannequin service provides a 3D effect for apparel images, giving a lifelike shape to clothes without using a model. It's ideal for fashion and e-commerce brands." } },
                 { "@type": "Question", name: "Do you offer bulk editing services for large image volumes?", acceptedAnswer: { "@type": "Answer", text: "Yes, we offer scalable solutions for businesses with large image volumes. Contact us for custom pricing and service options for high-volume edits." } },
-                { "@type": "Question", name: "What is the turnaround time for your services?", acceptedAnswer: { "@type": "Answer", text: "Turnaround times vary by service and project volume, but we aim to deliver most standard jobs within 24-48 hours. Contact us for specific timelines." } },
+                { "@type": "Question", name: "What is the turnaround time for your services?", acceptedAnswer: { "@type": "Answer", text: "Our standard turnaround is 12 hours for most jobs. Need it faster? Ask about our 6-hour express service. Contact us for specific timelines." } },
               ],
             }),
           }} />
@@ -377,7 +440,7 @@ export default function Home() {
               },
               {
                 q: "What is the turnaround time for your services?",
-                a: "Turnaround times vary by service and project volume, but we aim to deliver most standard jobs within 24-48 hours. Contact us for specific timelines.",
+                a: "Our standard turnaround is 12 hours for most jobs. Need it faster? Ask about our 6-hour express service. Contact us for specific timelines.",
               },
             ].map((item) => (
               <details key={item.q} className="faq-item glass-card rounded-2xl px-6 py-5 border-[rgb(var(--fg-rgb)/5%)]">
