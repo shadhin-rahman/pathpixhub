@@ -20,8 +20,7 @@ export default function Home() {
           muted
           loop
           playsInline
-            preload="metadata"
-          poster="/images/image-masking-1.jpg"
+          preload="metadata"
         >
           <source src="/videos/beauty.mp4" type="video/mp4" />
         </video>
