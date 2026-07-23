@@ -58,9 +58,9 @@ export default function IntroAnimation() {
           exiting ? "opacity-0 scale-95" : "opacity-100 scale-100"
         }`}
       >
-        <div className="relative w-16 h-16 rounded-full glass-card flex items-center justify-center overflow-hidden">
+        <div className="relative w-14 h-14 rounded-full glass-card flex items-center justify-center overflow-hidden">
           <span
-            className="text-2xl font-black tracking-tight text-[rgb(var(--accent-400))]"
+            className="text-xl font-bold tracking-wide text-[rgb(var(--accent-400))]"
             style={{ animation: "intro-pop 0.7s ease both" }}
           >
             P
@@ -68,10 +68,10 @@ export default function IntroAnimation() {
         </div>
         <div className="overflow-hidden">
           <p
-            className="logo-text text-xs sm:text-sm tracking-[0.5em] uppercase text-[rgb(var(--fg-rgb)/60%)]"
+            className="text-sm md:text-base font-bold tracking-wider text-[rgb(var(--fg-rgb)/80%)]"
             style={{ animation: "intro-rise 0.6s ease 0.25s both" }}
           >
-            PathPixHub
+            Path<span className="text-[rgb(var(--accent-400))]">Pix</span><span className="text-[rgb(var(--fg-rgb)/40%)]">·</span>Hub
           </p>
         </div>
         <div className="w-40 h-[2px] rounded-full bg-[rgb(var(--fg-rgb)/10%)] overflow-hidden">

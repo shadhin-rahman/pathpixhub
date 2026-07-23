@@ -23,8 +23,8 @@ export default function Header() {
           className={isOpen ? "z-40" : "z-[60]"}
           onClick={(e) => { if (pathname === "/") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
         >
-          <span className="ml-4 md:ml-10 text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-[rgb(var(--fg-rgb))]">
-            Path<span className="text-[rgb(var(--accent-400))]">Pix</span>Hub
+          <span className="ml-4 md:ml-10 text-lg md:text-xl lg:text-2xl font-bold tracking-wide text-[rgb(var(--fg-rgb)/80%)]">
+            Path<span className="text-[rgb(var(--accent-400))]">Pix</span><span className="text-[rgb(var(--fg-rgb)/50%)]">·</span>Hub
           </span>
         </Link>
 
