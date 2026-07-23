@@ -7,7 +7,7 @@
   --fg-rgb: 248 248 248;
   --glass-bg: rgba(255, 255, 255, 0.02);
   --glass-border: rgba(255, 255, 255, 0.05);
-  --logo-filter: brightness(0) invert(1);
+  --logo-filter: none;
   --accent-300: 110 231 183;
   --accent-400: 52 211 153;
   --accent-500: 16 185 129;
