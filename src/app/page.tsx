@@ -28,7 +28,34 @@ export default function Home() {
       </section>
       </ScrollReveal>
 
-
+      <section className="relative bg-[#1b2d41] overflow-hidden py-3 border-t border-b border-[#1b2d41]">
+        <div className="flex gap-16 w-max marquee-trial items-center">
+          {Array.from({ length: 8 }, (_, i) => (
+            <div key={i} className="flex items-center gap-16">
+              <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
+                <span className="w-1 h-1 rounded-full bg-[#22c55e]" />
+                24/7 Customer Support
+              </span>
+              <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
+                <span className="w-1 h-1 rounded-full bg-[#22c55e]" />
+                Premium Quality
+              </span>
+              <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
+                <span className="w-1 h-1 rounded-full bg-[#22c55e]" />
+                Fast Turnaround
+              </span>
+              <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
+                <span className="w-1 h-1 rounded-full bg-[#22c55e]" />
+                100% Satisfaction
+              </span>
+              <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
+                <span className="w-1 h-1 rounded-full bg-[#22c55e]" />
+                Pixel Perfect Edits
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <ScrollReveal>
       <section className="relative overflow-hidden mesh-gradient">
@@ -124,8 +151,8 @@ export default function Home() {
           </div>
           <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {services.map((service) => {
-              const softColors = ["#fca5a5","#d8b4fe","#f9a8d4","#fde68a","#93c5fd","#86efac","#fdba74","#5eead4","#a5b4fc","#fda4af","#6ee7b7","#7dd3fc"];
-              const ci = services.indexOf(service) % softColors.length;
+              const softColors = ["#fca5a5","#d8b4fe","#f9a8d4","#fde68a","#93c5fd","#86efac","#fdba74","#5eead4","#a5b4fc","#fda4af"];
+              const ci = ["clipping-path","background-removal","shadow-creation","ghost-mannequin","image-masking","color-change","photo-retouching","multi-clipping-path","ecommerce-editing","car-editing"].indexOf(service.id) % softColors.length;
               return (
               <StaggerItem key={service.id}>
               <Link
@@ -162,7 +189,7 @@ export default function Home() {
         <div className="relative">
           <div className="flex gap-6 w-max marquee-slide">
             {[...Array(3)].flatMap(() => services).map((s, i) => {
-              const softColors = ["#fca5a5","#d8b4fe","#f9a8d4","#fde68a","#93c5fd","#86efac","#fdba74","#5eead4","#a5b4fc","#fda4af","#6ee7b7","#7dd3fc"];
+              const softColors = ["#fca5a5","#d8b4fe","#f9a8d4","#fde68a","#93c5fd","#86efac","#fdba74","#5eead4","#a5b4fc","#fda4af"];
               const ci = i % softColors.length;
               return (
                 <div key={`${s.id}-${i}`} className="flex-shrink-0 w-64 md:w-80 group">
@@ -238,7 +265,33 @@ export default function Home() {
       </section>
       </ScrollReveal>
 
-
+      <ScrollReveal>
+      <section className="py-24 lg:py-32 mesh-gradient">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Our Approach</h2>
+            <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Strategy</h3>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl mx-auto">
+            {[
+              "Hand-drawn clipping paths for flawless results",
+              "Bringing focus to your image with expert cutouts",
+              "Transforming images with precision and care",
+              "Enhancing photos with professional background removal",
+              "Flawless cutouts for high-impact photos",
+              "Enhancing the visual appeal of every image",
+              "Facilitating complex image manipulations",
+              "Highlighting vehicle features and details",
+            ].map((item) => (
+              <div key={item} className="flex items-start gap-3 glass-card rounded-2xl px-5 py-4">
+                <svg className="w-5 h-5 text-[rgb(var(--accent-400))] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                <span className="text-sm text-[rgb(var(--fg-rgb)/70%)]">{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      </ScrollReveal>
 
       <ScrollReveal>
       <section className="py-24 lg:py-32 bg-[var(--bg-alt)]">

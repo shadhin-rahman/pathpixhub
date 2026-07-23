@@ -30,8 +30,6 @@ export const priceMap: Record<string, string> = {
   "multi-clipping-path": "FROM $1.19 / IMAGE",
   "ecommerce-editing": "FROM $2.99 / IMAGE",
   "car-editing": "FROM $2.99 / IMAGE",
-  "ai-image-enhancement": "FROM $0.49 / IMAGE",
-  "ai-background-generation": "FROM $0.79 / IMAGE",
 };
 
 export const services: Service[] = [
@@ -271,53 +269,5 @@ export const services: Service[] = [
     industries: ["Automotive & dealership", "Online vehicle marketplaces", "Automotive advertising", "Automotive publishing"],
     icon: "🚗",
     image: "/images/car-editing-1.jpg",
-  },
-  {
-    id: "ai-image-enhancement",
-    title: "AI Image Enhancement",
-    tagline: "AI-powered photo enhancement",
-    description: "Enhance your images instantly with AI — upscale, denoise, sharpen, and restore old photos with cutting-edge artificial intelligence.",
-    details: "Our AI Image Enhancement service leverages advanced machine learning models to upscale resolution, remove noise, sharpen details, and restore old or damaged photos automatically.",
-    headline: "Transform Your Images with AI-Powered Enhancement",
-    paragraphs: [
-      "PathPixHub's AI Image Enhancement service uses cutting-edge artificial intelligence to breathe new life into your images. Whether you need to upscale low-resolution photos for print, remove noise from low-light shots, sharpen blurry details, or restore cherished old photographs, our AI models deliver remarkable results in minutes.",
-      "Unlike traditional manual editing, AI enhancement processes images at incredible speed while maintaining natural-looking results. Our models are trained on millions of professional images, ensuring intelligent detail reconstruction, accurate color reproduction, and artifact-free output across all image types.",
-      "Perfect for e-commerce catalogs needing consistent quality, photographers restoring vintage work, or businesses repurposing existing assets for high-resolution campaigns — AI enhancement is the future of image processing, available to you today.",
-    ],
-    whyChoose: [
-      { title: "Lightning Fast", desc: "AI processes images in seconds, not hours — ideal for bulk workflows." },
-      { title: "Intelligent Detail", desc: "Our models reconstruct missing details naturally without over-sharpening." },
-      { title: "Old Photo Restoration", desc: "Revive faded, scratched, or damaged photographs with AI-powered restoration." },
-      { title: "Batch Processing", desc: "Scale effortlessly — enhance hundreds or thousands of images with consistent quality." },
-    ],
-    features: ["AI upscaling to 4K/8K", "Noise reduction", "Sharpening & detail enhancement", "Old photo restoration", "Batch processing", "Colorization of B&W photos"],
-    audience: ["E-commerce brands repurposing assets", "Photographers restoring vintage work", "Marketing teams needing high-res campaign images", "Real estate photographers enhancing listings"],
-    industries: ["E-commerce & retail", "Photography & creative", "Real estate & property", "Archives & preservation"],
-    icon: "🤖",
-    image: "/images/service-showcase/clipping-path-cover.jpg",
-  },
-  {
-    id: "ai-background-generation",
-    title: "AI Background Generation",
-    tagline: "Create stunning backgrounds instantly",
-    description: "Generate custom, context-aware backgrounds for your products using AI. No photoshoot needed — just your product image.",
-    details: "Our AI Background Generation service creates custom backgrounds tailored to your product. Describe your vision and our AI generates photorealistic backgrounds that match your brand aesthetic.",
-    headline: "Generate Studio-Quality Backgrounds with AI",
-    paragraphs: [
-      "Say goodbye to costly photoshoots and studio rentals. PathPixHub's AI Background Generation service creates stunning, photorealistic backgrounds for your product images — from minimalist studio settings to elaborate lifestyle scenes — all generated from your existing product photos.",
-      "Simply provide your product image, describe the setting you envision (e.g., 'minimalist marble table with soft natural lighting' or 'lush outdoor garden with warm sunset glow'), and our AI generates a seamless, realistic background that makes your product shine. No props, no studio, no hassle.",
-      "This service is revolutionizing e-commerce photography. Brands can now showcase products in multiple settings without reshooting — a single product shot can be transformed into dozens of lifestyle images optimized for different seasons, campaigns, or market segments.",
-    ],
-    whyChoose: [
-      { title: "No Photoshoot Needed", desc: "Generate unlimited background variations from a single product photo." },
-      { title: "Brand-Consistent", desc: "AI learns your brand aesthetic and generates backgrounds that match your visual identity." },
-      { title: "Seasonal Campaigns", desc: "Create holiday, summer, or winter versions of your product images instantly." },
-      { title: "Cost Effective", desc: "Dramatically reduce photoshoot costs while expanding your visual content library." },
-    ],
-    features: ["AI-generated lifestyle backgrounds", "Studio & minimalist options", "Seasonal scene generation", "Brand style matching", "Bulk background variation", "Photorealistic output"],
-    audience: ["E-commerce brands creating seasonal campaigns", "Amazon sellers needing varied listing images", "Marketing teams producing A+ content", "Social media content creators"],
-    industries: ["E-commerce & marketplace", "Fashion & apparel", "Home decor & furniture", "Food & beverage"],
-    icon: "🧠",
-    image: "/images/service-showcase/clipping-path-cover.jpg",
   },
 ];

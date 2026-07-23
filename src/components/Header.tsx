@@ -28,58 +28,36 @@ export default function Header() {
           </span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-6 pr-4 md:pr-10">
-          <div className="flex items-center gap-1">
-            {[
-              { name: "Home", href: "/" },
-              { name: "Services", href: "/services", hasDropdown: true },
-              { name: "Portfolio", href: "/portfolio" },
-              { name: "Pricing", href: "/pricing" },
-              { name: "About", href: "/about" },
-              { name: "Contact", href: "/contact" },
-            ].map((item) => (
-              <div key={item.name} className="relative group">
-                <Link
-                  href={item.href}
-                  className="px-3 py-2 text-xs uppercase tracking-[0.2em] font-bold text-[rgb(var(--fg-rgb)/60%)] hover:text-[rgb(var(--accent-400))] transition-colors rounded-lg hover:bg-[rgb(var(--fg-rgb)/3%)]"
-                >
-                  {item.name}
-                </Link>
-                {item.hasDropdown && (
-                  <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 pointer-events-none group-hover:pointer-events-auto">
-                    <div className="bg-[var(--bg-alt)] border border-[rgb(var(--fg-rgb)/8%)] rounded-2xl p-3 min-w-[280px] max-h-[70vh] overflow-y-auto shadow-2xl backdrop-blur-2xl">
-                      <div className="text-[10px] uppercase tracking-[0.3em] font-bold text-[rgb(var(--fg-rgb)/30%)] px-2 pb-2 border-b border-[rgb(var(--fg-rgb)/5%)] mb-1">All Services</div>
-                      {services.map((s) => (
-                        <Link
-                          key={s.id}
-                          href={`/services/${s.id}`}
-                          className="flex items-center gap-3 px-2 py-2.5 rounded-xl text-sm text-[rgb(var(--fg-rgb)/60%)] hover:text-[rgb(var(--accent-400))] hover:bg-[rgb(var(--accent-500)/6%)] transition-colors"
-                        >
-                          <span className="w-1 h-1 rounded-full bg-[rgb(var(--accent-500)/40%)]" />
-                          {s.title}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-          <div className="flex items-center gap-2">
-            <ThemeToggle className="w-11 h-11 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))]" />
-            <Link
-              href="/contact"
-              className="px-5 py-4 rounded-full text-xs uppercase tracking-[0.2em] font-bold text-[rgb(var(--fg-rgb)/50%)] hover:text-[rgb(var(--accent-400))] transition-colors"
-            >
-              Log In
-            </Link>
-            <Link
-              href="/contact"
-              className="px-8 py-4 rounded-full bg-[#c7ea46] text-black font-black hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 text-xs uppercase tracking-[0.4em] whitespace-nowrap"
-            >
-              Let&apos;s Talk
-            </Link>
-          </div>
+        <div className="hidden md:flex items-center gap-3 pr-4 md:pr-10">
+          <ThemeToggle className="w-11 h-11 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))]" />
+          <Link
+            href="/contact"
+            className="px-8 py-4 rounded-full bg-[#c7ea46] text-black font-black hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 text-xs uppercase tracking-[0.4em] whitespace-nowrap"
+          >
+            Let&apos;s Talk
+          </Link>
+          <button
+            onClick={() => { if (isOpen) closeMenu(); else openMenu(); }}
+            className={`group flex items-center gap-4 px-8 py-4 rounded-full transition-all duration-500 z-[60] border ${
+              isOpen
+                ? "bg-[var(--bg)] text-[rgb(var(--fg-rgb))] border-[rgb(var(--fg-rgb)/20%)]"
+                : "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] border-transparent hover:bg-[rgb(var(--accent-400))]"
+            }`}
+          >
+            <span className="text-xs uppercase tracking-[0.4em] font-black">
+              {isOpen ? "Close" : "Menu"}
+            </span>
+            <div className="relative w-5 h-5">
+              <motion.span
+                animate={isOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -4 }}
+                className="absolute top-1/2 left-0 w-5 h-[2px] bg-current block"
+              />
+              <motion.span
+                animate={isOpen ? { rotate: -45, y: 0 } : { rotate: 0, y: 4 }}
+                className="absolute top-1/2 left-0 w-5 h-[2px] bg-current block"
+              />
+            </div>
+          </button>
         </div>
 
         <div className="md:hidden flex items-center gap-1.5 pr-4">
