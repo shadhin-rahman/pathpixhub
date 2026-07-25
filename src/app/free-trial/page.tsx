@@ -168,7 +168,7 @@ export default function FreeTrialPage() {
                   <button
                     type="button"
                     onClick={() => setUsageType("commercial")}
-                    className={`group relative rounded-3xl overflow-hidden border-3 text-left transition-all duration-500 ${usageType === "commercial" ? "border-[rgb(var(--accent-500))] shadow-2xl shadow-[rgb(var(--accent-500)/20%)] scale-[1.02]" : "border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/40%)] hover:shadow-lg"}`}
+                    className={`group relative rounded-3xl overflow-hidden border-[3px] text-left transition-all duration-500 ${usageType === "commercial" ? "border-[rgb(var(--accent-500))] shadow-2xl shadow-[rgb(var(--accent-500)/20%)] scale-[1.02]" : "border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/40%)] hover:shadow-lg"}`}
                   >
                     <div className="aspect-[4/3] relative overflow-hidden">
                       <Image
@@ -199,7 +199,7 @@ export default function FreeTrialPage() {
                   <button
                     type="button"
                     onClick={() => setUsageType("personal")}
-                    className={`group relative rounded-3xl overflow-hidden border-3 text-left transition-all duration-500 ${usageType === "personal" ? "border-[rgb(var(--accent-500))] shadow-2xl shadow-[rgb(var(--accent-500)/20%)] scale-[1.02]" : "border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/40%)] hover:shadow-lg"}`}
+                    className={`group relative rounded-3xl overflow-hidden border-[3px] text-left transition-all duration-500 ${usageType === "personal" ? "border-[rgb(var(--accent-500))] shadow-2xl shadow-[rgb(var(--accent-500)/20%)] scale-[1.02]" : "border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/40%)] hover:shadow-lg"}`}
                   >
                     <div className="aspect-[4/3] relative overflow-hidden">
                       <Image
