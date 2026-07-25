@@ -96,6 +96,31 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <section className="py-24 bg-[var(--bg)]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] order-2 lg:order-1">
+              <Image
+                src="/images/about/precision-craft.jpg"
+                alt="Careful, hands-on precision — the same attention we bring to every image we edit"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
+            <div className="order-1 lg:order-2">
+              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">How We Work</h2>
+              <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Craftsmanship in Every Detail</h3>
+              <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-lg">
+                Just like a skilled mechanic examines every bolt before calling a job done, our editors inspect
+                every pixel before an image leaves our hands. It&apos;s slow, deliberate, hands-on work — and that
+                patience is exactly what makes the difference between a good edit and a flawless one.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-24 bg-[var(--bg-alt)]">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6 text-center">Who We Are</h2>
@@ -110,18 +135,42 @@ export default function AboutPage() {
             more than just a photo editing company — we are a trusted partner in the digital world, ensuring that
             every image we work on is perfected to the highest standard.
           </p>
+          <div className="mt-12 grid grid-cols-3 gap-3 sm:gap-4 max-w-2xl mx-auto">
+            {[
+              { src: "/images/about/lifestyle-1.jpg", alt: "People we serve, out living their everyday lives" },
+              { src: "/images/about/lifestyle-2.jpg", alt: "A family enjoying an afternoon outdoors" },
+              { src: "/images/about/lifestyle-3.jpg", alt: "Two friends walking through the city" },
+            ].map((img) => (
+              <div key={img.src} className="relative aspect-square rounded-2xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)]">
+                <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="200px" />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       <section className="py-24 mesh-gradient">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6 text-center">Our Approach</h2>
-          <p className="text-[rgb(var(--fg-rgb)/60%)] leading-relaxed text-center max-w-3xl mx-auto">
-            We take a personalized approach to every project. Each business has its unique needs, and one-size-fits-all
-            solutions rarely work — that&apos;s why we take the time to communicate with our clients, understand their
-            objectives, and tailor our services to meet their specific needs. We are more than just a service
-            provider; we are a trusted partner in your visual content strategy.
-          </p>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
+            <div>
+              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Our Approach</h2>
+              <p className="text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-xl">
+                We take a personalized approach to every project. Each business has its unique needs, and one-size-fits-all
+                solutions rarely work — that&apos;s why we take the time to communicate with our clients, understand their
+                objectives, and tailor our services to meet their specific needs. We are more than just a service
+                provider; we are a trusted partner in your visual content strategy.
+              </p>
+            </div>
+            <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)]">
+              <Image
+                src="/images/about/client-consultation.jpg"
+                alt="A conversation with a client — understanding their goals before we begin editing"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 40vw"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
