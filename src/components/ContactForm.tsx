@@ -26,9 +26,16 @@ const QUICK_QTYS = [10, 50, 100, 250, 500, 1000];
 const VOLUME_DISCOUNT_THRESHOLD = 500;
 const VOLUME_DISCOUNT_RATE = 0.1;
 
+const TURNAROUND_OPTIONS = [
+  { id: "12", label: "12 Hours", desc: "Fast delivery" },
+  { id: "24", label: "24 Hours", desc: "Standard" },
+  { id: "48", label: "48 Hours", desc: "Budget-friendly" },
+];
+
 export default function ContactForm() {
   const [wantsQuote, setWantsQuote] = useState(true);
   const [selected, setSelected] = useState<Record<string, number>>({});
+  const [turnaround, setTurnaround] = useState("12");
 
   const toggleService = (id: string) => {
     setSelected((prev) => {
@@ -197,6 +204,27 @@ export default function ContactForm() {
             )}
 
             <input type="hidden" name="quote_details" value={quoteSummary} />
+          </div>
+        )}
+
+        {/* Turnaround Time */}
+        {wantsQuote && (
+          <div>
+            <label className="block text-sm font-bold text-[rgb(var(--fg-rgb)/80%)] mb-3">Preferred Turnaround</label>
+            <div className="grid grid-cols-3 gap-3">
+              {TURNAROUND_OPTIONS.map((opt) => (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => setTurnaround(opt.id)}
+                  className={`rounded-xl p-3 border-2 text-center transition-all duration-300 ${turnaround === opt.id ? "border-[rgb(var(--accent-500))] bg-[rgb(var(--accent-500)/8%)] shadow-md" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)]"}`}
+                >
+                  <p className="font-bold text-sm text-[rgb(var(--fg-rgb))]">{opt.label}</p>
+                  <p className="text-xs text-[rgb(var(--fg-rgb)/45%)] mt-0.5">{opt.desc}</p>
+                </button>
+              ))}
+            </div>
+            <input type="hidden" name="turnaround" value={`${turnaround} hours`} />
           </div>
         )}
 

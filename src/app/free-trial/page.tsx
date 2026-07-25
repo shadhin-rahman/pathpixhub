@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { services } from "@/data/services";
 import ScrollReveal from "@/components/ScrollReveal";
 
@@ -29,11 +30,26 @@ const SERVICE_COLORS = [
   "#86efac", "#fdba74", "#5eead4", "#a5b4fc", "#fda4af",
 ];
 
+const TURNAROUND_OPTIONS = [
+  { id: "12", label: "12 Hours", desc: "Fast delivery", icon: "⚡" },
+  { id: "24", label: "24 Hours", desc: "Standard", icon: "🕐" },
+  { id: "48", label: "48 Hours", desc: "Budget-friendly", icon: "📅" },
+];
+
+const slideVariants = {
+  enter: (direction: number) => ({ x: direction > 0 ? 300 : -300, opacity: 0 }),
+  center: { x: 0, opacity: 1 },
+  exit: (direction: number) => ({ x: direction > 0 ? -300 : 300, opacity: 0 }),
+};
+
 export default function FreeTrialPage() {
+  const [step, setStep] = useState(1);
+  const [direction, setDirection] = useState(1);
+  const [usageType, setUsageType] = useState<"commercial" | "personal" | "">("");
   const [files, setFiles] = useState<File[]>([]);
   const [dragOver, setDragOver] = useState(false);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
-  const [usageType, setUsageType] = useState<"commercial" | "personal" | "">("");
+  const [turnaround, setTurnaround] = useState("12");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFiles = (newFiles: FileList | null) => {
@@ -50,6 +66,17 @@ export default function FreeTrialPage() {
     setSelectedServices((prev) =>
       prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
     );
+  };
+
+  const goNext = () => {
+    if (!usageType) return;
+    setDirection(1);
+    setStep(2);
+  };
+
+  const goBack = () => {
+    setDirection(-1);
+    setStep(1);
   };
 
   return (
@@ -99,194 +126,324 @@ export default function FreeTrialPage() {
         </div>
       </section>
 
-      {/* Form */}
+      {/* Wizard */}
       <section className="py-20 bg-[var(--bg)]">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
-
-            {/* Left: Images */}
-            <div className="lg:col-span-2 space-y-6">
-              <div className="rounded-3xl overflow-hidden aspect-[4/5] relative">
-                <Image src="/images/about/precision-craft.jpg" alt="Photo editing" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 40vw" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <p className="text-white font-bold text-lg">Pixel-Perfect Edits</p>
-                  <p className="text-white/60 text-sm mt-1">Every image hand-edited by our expert team.</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="rounded-2xl overflow-hidden aspect-square relative">
-                  <Image src="/images/about/lifestyle-2.jpg" alt="Editing process" fill className="object-cover" sizes="20vw" />
-                </div>
-                <div className="rounded-2xl overflow-hidden aspect-square relative">
-                  <Image src="/images/about/client-consultation.jpg" alt="Client work" fill className="object-cover" sizes="20vw" />
-                </div>
-              </div>
+          {/* Step Indicator */}
+          <div className="flex items-center justify-center gap-3 mb-12">
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 ${step === 1 ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "bg-[rgb(var(--accent-500)/15%)] text-[rgb(var(--accent-400))]"}`}>
+              <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">1</span>
+              Choose Type
             </div>
-
-            {/* Right: Form */}
-            <div className="lg:col-span-3">
-              <div className="glass-card rounded-3xl p-8 md:p-10 border-[rgb(var(--fg-rgb)/5%)]">
-                <form action="https://formspree.io/f/xovjbydw" method="POST" encType="multipart/form-data" className="space-y-6">
-                  <input type="hidden" name="_subject" value="Free Trial Request" />
-                  <input type="hidden" name="selected_services" value={selectedServices.join(", ")} />
-
-                  {/* Usage Type - PROMINENT */}
-                  <div>
-                    <label className="block text-sm font-bold text-[rgb(var(--fg-rgb)/80%)] mb-3">Image Purpose <span className="text-red-400">*</span></label>
-                    <div className="grid grid-cols-2 gap-3">
-                      <button type="button" onClick={() => setUsageType("commercial")}
-                        className={`relative rounded-2xl p-5 border-2 text-left transition-all duration-300 ${usageType === "commercial" ? "border-[rgb(var(--accent-500))] bg-[rgb(var(--accent-500)/8%)] shadow-lg shadow-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)]"}`}>
-                        <div className="w-10 h-10 rounded-xl bg-[rgb(34_197_94_/_15%)] flex items-center justify-center mb-3">
-                          <svg className="w-5 h-5 text-[rgb(34_197_94)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
-                        </div>
-                        <p className="font-bold text-sm text-[rgb(var(--fg-rgb))]">Commercial Use</p>
-                        <p className="text-xs text-[rgb(var(--fg-rgb)/50%)] mt-1">Product, e-commerce, advertising — eligible for free trial</p>
-                        {usageType === "commercial" && (
-                          <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-[rgb(var(--accent-500))] flex items-center justify-center">
-                            <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                          </div>
-                        )}
-                      </button>
-                      <button type="button" onClick={() => setUsageType("personal")}
-                        className={`relative rounded-2xl p-5 border-2 text-left transition-all duration-300 ${usageType === "personal" ? "border-[rgb(var(--accent-500))] bg-[rgb(var(--accent-500)/8%)] shadow-lg shadow-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)]"}`}>
-                        <div className="w-10 h-10 rounded-xl bg-[rgb(239_68_68_/_15%)] flex items-center justify-center mb-3">
-                          <svg className="w-5 h-5 text-[rgb(239_68_68)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                        </div>
-                        <p className="font-bold text-sm text-[rgb(var(--fg-rgb))]">Personal Use</p>
-                        <p className="text-xs text-[rgb(var(--fg-rgb)/50%)] mt-1">Personal or non-commercial images</p>
-                        {usageType === "personal" && (
-                          <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-[rgb(var(--accent-500))] flex items-center justify-center">
-                            <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                          </div>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Contact Info */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="ft-name" className="block text-sm font-medium text-[rgb(var(--fg-rgb)/70%)] mb-1.5">Name <span className="text-red-400">*</span></label>
-                      <input type="text" name="name" id="ft-name" required
-                        className="w-full px-4 py-3.5 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm"
-                        placeholder="Your name" />
-                    </div>
-                    <div>
-                      <label htmlFor="ft-email" className="block text-sm font-medium text-[rgb(var(--fg-rgb)/70%)] mb-1.5">Email <span className="text-red-400">*</span></label>
-                      <input type="email" name="email" id="ft-email" required
-                        className="w-full px-4 py-3.5 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm"
-                        placeholder="you@example.com" />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="ft-country" className="block text-sm font-medium text-[rgb(var(--fg-rgb)/70%)] mb-1.5">Country <span className="text-red-400">*</span></label>
-                      <select name="country" id="ft-country" required
-                        className="w-full px-4 py-3.5 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-alt)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm appearance-none"
-                        defaultValue="">
-                        <option value="" disabled>Select your country</option>
-                        {COUNTRIES.map((c) => (
-                          <option key={c} value={c} className="bg-[var(--bg-alt)]">{c}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label htmlFor="ft-company" className="block text-sm font-medium text-[rgb(var(--fg-rgb)/70%)] mb-1.5">Company <span className="text-[rgb(var(--fg-rgb)/40%)] font-normal">(optional)</span></label>
-                      <input type="text" name="company" id="ft-company"
-                        className="w-full px-4 py-3.5 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm"
-                        placeholder="Company name" />
-                    </div>
-                  </div>
-
-                  {/* Multi-Select Services */}
-                  <div>
-                    <label className="block text-sm font-bold text-[rgb(var(--fg-rgb)/80%)] mb-3">Services Needed <span className="text-red-400">*</span> <span className="text-[rgb(var(--fg-rgb)/40%)] font-normal">(select all that apply)</span></label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                      {services.map((s, i) => {
-                        const isSelected = selectedServices.includes(s.id);
-                        const color = SERVICE_COLORS[i % SERVICE_COLORS.length];
-                        return (
-                          <button key={s.id} type="button" onClick={() => toggleService(s.id)}
-                            className={`flex items-center gap-3 rounded-xl p-3.5 border-2 text-left transition-all duration-300 ${isSelected ? "border-[rgb(var(--accent-500)/60%)] shadow-md" : "border-[rgb(var(--fg-rgb)/6%)] hover:border-[rgb(var(--fg-rgb)/15%)]"}`}
-                            style={{ backgroundColor: isSelected ? `${color}12` : "transparent" }}>
-                            <div className={`shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-200 ${isSelected ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]" : "border-[rgb(var(--fg-rgb)/20%)]"}`}>
-                              {isSelected && (
-                                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-2.5 min-w-0">
-                              <div className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${color}25` }}>
-                                <Image src={`/images/service-icons/${s.id}.png`} alt="" width={20} height={20} className="object-contain" />
-                              </div>
-                              <span className="text-sm font-semibold text-[rgb(var(--fg-rgb)/80%)] truncate">{s.title}</span>
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
-                    <input type="hidden" name="services" value={selectedServices.join(", ")} />
-                  </div>
-
-                  {/* Upload */}
-                  <div>
-                    <label className="block text-sm font-bold text-[rgb(var(--fg-rgb)/80%)] mb-3">Upload Images <span className="text-red-400">*</span> <span className="text-[rgb(var(--fg-rgb)/40%)] font-normal">(max 2)</span></label>
-                    <div
-                      onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-                      onDragLeave={() => setDragOver(false)}
-                      onDrop={(e) => { e.preventDefault(); setDragOver(false); handleFiles(e.dataTransfer.files); }}
-                      onClick={() => fileInputRef.current?.click()}
-                      className={`relative rounded-2xl border-2 border-dashed p-10 text-center cursor-pointer transition-all duration-300 ${dragOver ? "border-[rgb(var(--accent-500))] bg-[rgb(var(--accent-500)/5%)]" : "border-[rgb(var(--fg-rgb)/15%)] hover:border-[rgb(var(--accent-500)/40%)] hover:bg-[rgb(var(--accent-500)/3%)]"}`}
-                    >
-                      <input ref={fileInputRef} type="file" name="images" accept="image/*" multiple className="hidden"
-                        onChange={(e) => handleFiles(e.target.files)} />
-                      <svg className="w-12 h-12 mx-auto text-[rgb(var(--fg-rgb)/20%)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      <p className="mt-3 text-sm text-[rgb(var(--fg-rgb)/50%)]">
-                        {files.length === 0 ? "Drag & drop images here or click to browse" : `${files.length}/2 images selected`}
-                      </p>
-                      <p className="mt-1 text-xs text-[rgb(var(--fg-rgb)/30%)]">PNG, JPG, WEBP up to 10MB each</p>
-                    </div>
-
-                    {files.length > 0 && (
-                      <div className="mt-4 grid grid-cols-2 gap-3">
-                        {files.map((file, i) => (
-                          <div key={i} className="relative group rounded-xl overflow-hidden border border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)]">
-                            <div className="aspect-square relative">
-                              <Image src={URL.createObjectURL(file)} alt={`Upload ${i + 1}`} fill className="object-cover" />
-                            </div>
-                            <button type="button" onClick={() => removeFile(i)}
-                              className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-sm">
-                              ×
-                            </button>
-                            <div className="absolute bottom-0 left-0 right-0 bg-black/50 px-3 py-1.5">
-                              <p className="text-[10px] text-white/80 truncate">{file.name}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="ft-message" className="block text-sm font-medium text-[rgb(var(--fg-rgb)/70%)] mb-1.5">Additional Notes <span className="text-[rgb(var(--fg-rgb)/40%)] font-normal">(optional)</span></label>
-                    <textarea name="message" id="ft-message" rows={3}
-                      className="w-full px-4 py-3.5 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm resize-none"
-                      placeholder="Any special instructions for your edits..." />
-                  </div>
-
-                  <button type="submit"
-                    className="w-full px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm">
-                    Submit Free Trial
-                  </button>
-                  <p className="text-xs text-[rgb(var(--fg-rgb)/30%)] text-center">We&apos;ll edit your images and respond within 12 hours.</p>
-                </form>
-              </div>
+            <div className={`w-12 h-0.5 rounded-full transition-all duration-300 ${step === 2 ? "bg-[rgb(var(--accent-500))]" : "bg-[rgb(var(--fg-rgb)/10%)]"}`} />
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 ${step === 2 ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "bg-[rgb(var(--fg-rgb)/5%)] text-[rgb(var(--fg-rgb)/30%)]"}`}>
+              <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">2</span>
+              Details & Upload
             </div>
-
           </div>
+
+          <AnimatePresence mode="wait" custom={direction}>
+            {/* STEP 1: Usage Type Selection */}
+            {step === 1 && (
+              <motion.div
+                key="step1"
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              >
+                <div className="max-w-2xl mx-auto text-center mb-10">
+                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">
+                    Do you need the edits for personal or business use?
+                  </h2>
+                  <p className="mt-4 text-[rgb(var(--fg-rgb)/50%)] text-lg">
+                    Select one to continue — both are eligible for free trial.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                  {/* Commercial */}
+                  <button
+                    type="button"
+                    onClick={() => setUsageType("commercial")}
+                    className={`group relative rounded-3xl overflow-hidden border-3 text-left transition-all duration-500 ${usageType === "commercial" ? "border-[rgb(var(--accent-500))] shadow-2xl shadow-[rgb(var(--accent-500)/20%)] scale-[1.02]" : "border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/40%)] hover:shadow-lg"}`}
+                  >
+                    <div className="aspect-[4/3] relative overflow-hidden">
+                      <Image
+                        src="/images/usage-commercial.png"
+                        alt="Commercial use"
+                        fill
+                        className={`object-cover transition-transform duration-700 ${usageType === "commercial" ? "scale-110" : "group-hover:scale-105"}`}
+                        sizes="(max-width: 640px) 100vw, 50vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                      {usageType === "commercial" && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[rgb(var(--accent-500))] flex items-center justify-center shadow-lg"
+                        >
+                          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                        </motion.div>
+                      )}
+                      <div className="absolute bottom-0 left-0 right-0 p-6">
+                        <p className="text-white font-bold text-xl">Commercial Use</p>
+                        <p className="text-white/60 text-sm mt-1">Product, e-commerce, advertising</p>
+                      </div>
+                    </div>
+                  </button>
+
+                  {/* Personal */}
+                  <button
+                    type="button"
+                    onClick={() => setUsageType("personal")}
+                    className={`group relative rounded-3xl overflow-hidden border-3 text-left transition-all duration-500 ${usageType === "personal" ? "border-[rgb(var(--accent-500))] shadow-2xl shadow-[rgb(var(--accent-500)/20%)] scale-[1.02]" : "border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/40%)] hover:shadow-lg"}`}
+                  >
+                    <div className="aspect-[4/3] relative overflow-hidden">
+                      <Image
+                        src="/images/usage-personal.png"
+                        alt="Personal use"
+                        fill
+                        className={`object-cover transition-transform duration-700 ${usageType === "personal" ? "scale-110" : "group-hover:scale-105"}`}
+                        sizes="(max-width: 640px) 100vw, 50vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                      {usageType === "personal" && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[rgb(var(--accent-500))] flex items-center justify-center shadow-lg"
+                        >
+                          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                        </motion.div>
+                      )}
+                      <div className="absolute bottom-0 left-0 right-0 p-6">
+                        <p className="text-white font-bold text-xl">Personal Use</p>
+                        <p className="text-white/60 text-sm mt-1">Personal or non-commercial images</p>
+                      </div>
+                    </div>
+                  </button>
+                </div>
+
+                {/* Next Button */}
+                <div className="text-center mt-10">
+                  <button
+                    type="button"
+                    onClick={goNext}
+                    disabled={!usageType}
+                    className={`inline-flex items-center gap-3 px-10 py-4 rounded-full font-bold text-sm transition-all duration-300 ${usageType ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] shadow-lg shadow-[rgb(var(--accent-500)/20%)]" : "bg-[rgb(var(--fg-rgb)/8%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"}`}
+                  >
+                    Next Step
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                  </button>
+                </div>
+              </motion.div>
+            )}
+
+            {/* STEP 2: Services, Turnaround, Contact, Upload */}
+            {step === 2 && (
+              <motion.div
+                key="step2"
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              >
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
+                  {/* Left: Images */}
+                  <div className="lg:col-span-2 space-y-6">
+                    <div className="rounded-3xl overflow-hidden aspect-[4/5] relative">
+                      <Image src="/images/about/precision-craft.jpg" alt="Photo editing" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 40vw" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-6">
+                        <p className="text-white font-bold text-lg">Pixel-Perfect Edits</p>
+                        <p className="text-white/60 text-sm mt-1">Every image hand-edited by our expert team.</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="rounded-2xl overflow-hidden aspect-square relative">
+                        <Image src="/images/about/lifestyle-2.jpg" alt="Editing process" fill className="object-cover" sizes="20vw" />
+                      </div>
+                      <div className="rounded-2xl overflow-hidden aspect-square relative">
+                        <Image src="/images/about/client-consultation.jpg" alt="Client work" fill className="object-cover" sizes="20vw" />
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={goBack}
+                      className="inline-flex items-center gap-2 text-sm text-[rgb(var(--fg-rgb)/50%)] hover:text-[rgb(var(--accent-400))] transition-colors font-medium"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" /></svg>
+                      Back to type selection
+                    </button>
+                  </div>
+
+                  {/* Right: Form */}
+                  <div className="lg:col-span-3">
+                    <div className="glass-card rounded-3xl p-8 md:p-10 border-[rgb(var(--fg-rgb)/5%)]">
+                      <form action="https://formspree.io/f/xovjbydw" method="POST" encType="multipart/form-data" className="space-y-6">
+                        <input type="hidden" name="_subject" value="Free Trial Request" />
+                        <input type="hidden" name="selected_services" value={selectedServices.join(", ")} />
+                        <input type="hidden" name="image_purpose" value={usageType} />
+                        <input type="hidden" name="turnaround" value={`${turnaround} hours`} />
+
+                        {/* Turnaround Time */}
+                        <div>
+                          <label className="block text-sm font-bold text-[rgb(var(--fg-rgb)/80%)] mb-3">Turnaround Time <span className="text-red-400">*</span></label>
+                          <div className="grid grid-cols-3 gap-3">
+                            {TURNAROUND_OPTIONS.map((opt) => (
+                              <button
+                                key={opt.id}
+                                type="button"
+                                onClick={() => setTurnaround(opt.id)}
+                                className={`relative rounded-2xl p-4 border-2 text-center transition-all duration-300 ${turnaround === opt.id ? "border-[rgb(var(--accent-500))] bg-[rgb(var(--accent-500)/8%)] shadow-lg shadow-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)]"}`}
+                              >
+                                <span className="text-2xl">{opt.icon}</span>
+                                <p className="mt-2 font-bold text-sm text-[rgb(var(--fg-rgb))]">{opt.label}</p>
+                                <p className="text-xs text-[rgb(var(--fg-rgb)/45%)] mt-0.5">{opt.desc}</p>
+                                {turnaround === opt.id && (
+                                  <motion.div
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[rgb(var(--accent-500))] flex items-center justify-center"
+                                  >
+                                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                                  </motion.div>
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Contact Info */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label htmlFor="ft-name" className="block text-sm font-medium text-[rgb(var(--fg-rgb)/70%)] mb-1.5">Name <span className="text-red-400">*</span></label>
+                            <input type="text" name="name" id="ft-name" required
+                              className="w-full px-4 py-3.5 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm"
+                              placeholder="Your name" />
+                          </div>
+                          <div>
+                            <label htmlFor="ft-email" className="block text-sm font-medium text-[rgb(var(--fg-rgb)/70%)] mb-1.5">Email <span className="text-red-400">*</span></label>
+                            <input type="email" name="email" id="ft-email" required
+                              className="w-full px-4 py-3.5 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm"
+                              placeholder="you@example.com" />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label htmlFor="ft-country" className="block text-sm font-medium text-[rgb(var(--fg-rgb)/70%)] mb-1.5">Country <span className="text-red-400">*</span></label>
+                            <select name="country" id="ft-country" required
+                              className="w-full px-4 py-3.5 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-alt)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm appearance-none"
+                              defaultValue="">
+                              <option value="" disabled>Select your country</option>
+                              {COUNTRIES.map((c) => (
+                                <option key={c} value={c} className="bg-[var(--bg-alt)]">{c}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div>
+                            <label htmlFor="ft-company" className="block text-sm font-medium text-[rgb(var(--fg-rgb)/70%)] mb-1.5">Company <span className="text-[rgb(var(--fg-rgb)/40%)] font-normal">(optional)</span></label>
+                            <input type="text" name="company" id="ft-company"
+                              className="w-full px-4 py-3.5 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm"
+                              placeholder="Company name" />
+                          </div>
+                        </div>
+
+                        {/* Multi-Select Services */}
+                        <div>
+                          <label className="block text-sm font-bold text-[rgb(var(--fg-rgb)/80%)] mb-3">Services Needed <span className="text-red-400">*</span> <span className="text-[rgb(var(--fg-rgb)/40%)] font-normal">(select all that apply)</span></label>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            {services.map((s, i) => {
+                              const isSelected = selectedServices.includes(s.id);
+                              const color = SERVICE_COLORS[i % SERVICE_COLORS.length];
+                              return (
+                                <button key={s.id} type="button" onClick={() => toggleService(s.id)}
+                                  className={`flex items-center gap-3 rounded-xl p-3.5 border-2 text-left transition-all duration-300 ${isSelected ? "border-[rgb(var(--accent-500)/60%)] shadow-md" : "border-[rgb(var(--fg-rgb)/6%)] hover:border-[rgb(var(--fg-rgb)/15%)]"}`}
+                                  style={{ backgroundColor: isSelected ? `${color}12` : "transparent" }}>
+                                  <div className={`shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-200 ${isSelected ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]" : "border-[rgb(var(--fg-rgb)/20%)]"}`}>
+                                    {isSelected && (
+                                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                                    )}
+                                  </div>
+                                  <div className="flex items-center gap-2.5 min-w-0">
+                                    <div className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${color}25` }}>
+                                      <Image src={`/images/service-icons/${s.id}.png`} alt="" width={20} height={20} className="object-contain" />
+                                    </div>
+                                    <span className="text-sm font-semibold text-[rgb(var(--fg-rgb)/80%)] truncate">{s.title}</span>
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
+                          <input type="hidden" name="services" value={selectedServices.join(", ")} />
+                        </div>
+
+                        {/* Upload */}
+                        <div>
+                          <label className="block text-sm font-bold text-[rgb(var(--fg-rgb)/80%)] mb-3">Upload Images <span className="text-red-400">*</span> <span className="text-[rgb(var(--fg-rgb)/40%)] font-normal">(max 2)</span></label>
+                          <div
+                            onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                            onDragLeave={() => setDragOver(false)}
+                            onDrop={(e) => { e.preventDefault(); setDragOver(false); handleFiles(e.dataTransfer.files); }}
+                            onClick={() => fileInputRef.current?.click()}
+                            className={`relative rounded-2xl border-2 border-dashed p-10 text-center cursor-pointer transition-all duration-300 ${dragOver ? "border-[rgb(var(--accent-500))] bg-[rgb(var(--accent-500)/5%)]" : "border-[rgb(var(--fg-rgb)/15%)] hover:border-[rgb(var(--accent-500)/40%)] hover:bg-[rgb(var(--accent-500)/3%)]"}`}
+                          >
+                            <input ref={fileInputRef} type="file" name="images" accept="image/*" multiple className="hidden"
+                              onChange={(e) => handleFiles(e.target.files)} />
+                            <svg className="w-12 h-12 mx-auto text-[rgb(var(--fg-rgb)/20%)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <p className="mt-3 text-sm text-[rgb(var(--fg-rgb)/50%)]">
+                              {files.length === 0 ? "Drag & drop images here or click to browse" : `${files.length}/2 images selected`}
+                            </p>
+                            <p className="mt-1 text-xs text-[rgb(var(--fg-rgb)/30%)]">PNG, JPG, WEBP up to 10MB each</p>
+                          </div>
+
+                          {files.length > 0 && (
+                            <div className="mt-4 grid grid-cols-2 gap-3">
+                              {files.map((file, i) => (
+                                <div key={i} className="relative group rounded-xl overflow-hidden border border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)]">
+                                  <div className="aspect-square relative">
+                                    <Image src={URL.createObjectURL(file)} alt={`Upload ${i + 1}`} fill className="object-cover" />
+                                  </div>
+                                  <button type="button" onClick={() => removeFile(i)}
+                                    className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-sm">
+                                    ×
+                                  </button>
+                                  <div className="absolute bottom-0 left-0 right-0 bg-black/50 px-3 py-1.5">
+                                    <p className="text-[10px] text-white/80 truncate">{file.name}</p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
+                        <div>
+                          <label htmlFor="ft-message" className="block text-sm font-medium text-[rgb(var(--fg-rgb)/70%)] mb-1.5">Additional Notes <span className="text-[rgb(var(--fg-rgb)/40%)] font-normal">(optional)</span></label>
+                          <textarea name="message" id="ft-message" rows={3}
+                            className="w-full px-4 py-3.5 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm resize-none"
+                            placeholder="Any special instructions for your edits..." />
+                        </div>
+
+                        <button type="submit"
+                          className="w-full px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm">
+                          Submit Free Trial
+                        </button>
+                        <p className="text-xs text-[rgb(var(--fg-rgb)/30%)] text-center">We&apos;ll edit your images and respond within your selected turnaround time.</p>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </section>
 
