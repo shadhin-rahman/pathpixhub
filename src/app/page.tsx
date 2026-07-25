@@ -86,7 +86,7 @@ export default function Home() {
             </p>
             <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
               <Link
-                href="/contact"
+                href="/free-trial"
                 className="group px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm inline-flex items-center gap-2"
               >
                 Start Free Trial
@@ -371,7 +371,7 @@ export default function Home() {
             Send us 2 images and we&apos;ll edit them for free — no obligation.
           </p>
           <Link
-            href="/contact"
+            href="/free-trial"
             className="mt-8 inline-flex items-center px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm"
           >
             Request Free Trial

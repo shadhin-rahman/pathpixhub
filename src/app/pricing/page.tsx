@@ -181,7 +181,7 @@ export default function PricingPage() {
                 Get your first two images edited, on us.
               </span>
               <Link
-                href="/contact"
+                href="/free-trial"
                 className="px-6 py-3 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm whitespace-nowrap hover:bg-[rgb(var(--accent-500))] hover:scale-105 transition-all shrink-0 shadow-lg shadow-[rgb(var(--accent-500)/25%)]"
               >
                 Get 2 free edits
