@@ -75,7 +75,7 @@ export default function ServicesPage() {
           <h2 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Free Trial Available</h2>
           <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)]">Send us 2 images. We&apos;ll edit them for free. Zero commitment.</p>
           <Link
-            href="/contact"
+            href="/free-trial"
             className="mt-8 inline-flex items-center px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm"
           >
             Start Free Trial

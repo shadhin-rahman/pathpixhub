@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { services } from "@/data/services";
 
 const unitPrice: Record<string, number> = {
@@ -27,9 +28,10 @@ const VOLUME_DISCOUNT_THRESHOLD = 500;
 const VOLUME_DISCOUNT_RATE = 0.1;
 
 const TURNAROUND_OPTIONS = [
-  { id: "12", label: "12 Hours", desc: "Fast delivery" },
-  { id: "24", label: "24 Hours", desc: "Standard" },
-  { id: "48", label: "48 Hours", desc: "Budget-friendly" },
+  { id: "12", label: "12 Hours", desc: "Fast delivery", icon: "⚡" },
+  { id: "24", label: "24 Hours", desc: "Standard", icon: "🕐" },
+  { id: "48", label: "48 Hours", desc: "Relaxed", icon: "📅" },
+  { id: "96", label: "96 Hours+", desc: "Flexible / Custom", icon: "📋" },
 ];
 
 export default function ContactForm() {
@@ -211,20 +213,30 @@ export default function ContactForm() {
         {wantsQuote && (
           <div>
             <label className="block text-sm font-bold text-[rgb(var(--fg-rgb)/80%)] mb-3">Preferred Turnaround</label>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {TURNAROUND_OPTIONS.map((opt) => (
                 <button
                   key={opt.id}
                   type="button"
                   onClick={() => setTurnaround(opt.id)}
-                  className={`rounded-xl p-3 border-2 text-center transition-all duration-300 ${turnaround === opt.id ? "border-[rgb(var(--accent-500))] bg-[rgb(var(--accent-500)/8%)] shadow-md" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)]"}`}
+                  className={`relative rounded-2xl p-4 border-2 text-center transition-all duration-300 ${turnaround === opt.id ? "border-[rgb(var(--accent-500))] bg-[rgb(var(--accent-500)/8%)] shadow-lg shadow-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)] hover:shadow-md"}`}
                 >
-                  <p className="font-bold text-sm text-[rgb(var(--fg-rgb))]">{opt.label}</p>
+                  <span className="text-xl">{opt.icon}</span>
+                  <p className="mt-1.5 font-bold text-sm text-[rgb(var(--fg-rgb))]">{opt.label}</p>
                   <p className="text-xs text-[rgb(var(--fg-rgb)/45%)] mt-0.5">{opt.desc}</p>
+                  {turnaround === opt.id && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[rgb(var(--accent-500))] flex items-center justify-center"
+                    >
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                    </motion.div>
+                  )}
                 </button>
               ))}
             </div>
-            <input type="hidden" name="turnaround" value={`${turnaround} hours`} />
+            <input type="hidden" name="turnaround" value={turnaround === "96" ? "96+ hours (custom)" : `${turnaround} hours`} />
           </div>
         )}
 

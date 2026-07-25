@@ -63,7 +63,7 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
               ))}
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <Link
-                  href="/contact"
+            href="/free-trial"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm"
                 >
                   Get a Quote

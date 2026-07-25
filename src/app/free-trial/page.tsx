@@ -30,12 +30,6 @@ const SERVICE_COLORS = [
   "#86efac", "#fdba74", "#5eead4", "#a5b4fc", "#fda4af",
 ];
 
-const TURNAROUND_OPTIONS = [
-  { id: "12", label: "12 Hours", desc: "Fast delivery", icon: "⚡" },
-  { id: "24", label: "24 Hours", desc: "Standard", icon: "🕐" },
-  { id: "48", label: "48 Hours", desc: "Budget-friendly", icon: "📅" },
-];
-
 const slideVariants = {
   enter: (direction: number) => ({ x: direction > 0 ? 300 : -300, opacity: 0 }),
   center: { x: 0, opacity: 1 },
@@ -49,7 +43,6 @@ export default function FreeTrialPage() {
   const [files, setFiles] = useState<File[]>([]);
   const [dragOver, setDragOver] = useState(false);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
-  const [turnaround, setTurnaround] = useState("12");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFiles = (newFiles: FileList | null) => {
@@ -170,12 +163,12 @@ export default function FreeTrialPage() {
                     onClick={() => setUsageType("commercial")}
                     className={`group relative rounded-3xl overflow-hidden border-[3px] text-left transition-all duration-500 ${usageType === "commercial" ? "border-[rgb(var(--accent-500))] shadow-2xl shadow-[rgb(var(--accent-500)/20%)] scale-[1.02]" : "border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/40%)] hover:shadow-lg"}`}
                   >
-                    <div className="aspect-[4/3] relative overflow-hidden">
+                    <div className="aspect-[4/3] relative overflow-hidden bg-[rgb(var(--fg-rgb)/3%)]">
                       <Image
                         src="/images/usage-commercial.png"
                         alt="Commercial use"
                         fill
-                        className={`object-cover transition-transform duration-700 ${usageType === "commercial" ? "scale-110" : "group-hover:scale-105"}`}
+                        className={`object-contain p-2 transition-transform duration-700 ${usageType === "commercial" ? "scale-110" : "group-hover:scale-105"}`}
                         sizes="(max-width: 640px) 100vw, 50vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
@@ -201,12 +194,12 @@ export default function FreeTrialPage() {
                     onClick={() => setUsageType("personal")}
                     className={`group relative rounded-3xl overflow-hidden border-[3px] text-left transition-all duration-500 ${usageType === "personal" ? "border-[rgb(var(--accent-500))] shadow-2xl shadow-[rgb(var(--accent-500)/20%)] scale-[1.02]" : "border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/40%)] hover:shadow-lg"}`}
                   >
-                    <div className="aspect-[4/3] relative overflow-hidden">
+                    <div className="aspect-[4/3] relative overflow-hidden bg-[rgb(var(--fg-rgb)/3%)]">
                       <Image
                         src="/images/usage-personal.png"
                         alt="Personal use"
                         fill
-                        className={`object-cover transition-transform duration-700 ${usageType === "personal" ? "scale-110" : "group-hover:scale-105"}`}
+                        className={`object-contain p-2 transition-transform duration-700 ${usageType === "personal" ? "scale-110" : "group-hover:scale-105"}`}
                         sizes="(max-width: 640px) 100vw, 50vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
@@ -289,33 +282,18 @@ export default function FreeTrialPage() {
                         <input type="hidden" name="_subject" value="Free Trial Request" />
                         <input type="hidden" name="selected_services" value={selectedServices.join(", ")} />
                         <input type="hidden" name="image_purpose" value={usageType} />
-                        <input type="hidden" name="turnaround" value={`${turnaround} hours`} />
+                        <input type="hidden" name="turnaround" value="24 hours" />
 
-                        {/* Turnaround Time */}
-                        <div>
-                          <label className="block text-sm font-bold text-[rgb(var(--fg-rgb)/80%)] mb-3">Turnaround Time <span className="text-red-400">*</span></label>
-                          <div className="grid grid-cols-3 gap-3">
-                            {TURNAROUND_OPTIONS.map((opt) => (
-                              <button
-                                key={opt.id}
-                                type="button"
-                                onClick={() => setTurnaround(opt.id)}
-                                className={`relative rounded-2xl p-4 border-2 text-center transition-all duration-300 ${turnaround === opt.id ? "border-[rgb(var(--accent-500))] bg-[rgb(var(--accent-500)/8%)] shadow-lg shadow-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)]"}`}
-                              >
-                                <span className="text-2xl">{opt.icon}</span>
-                                <p className="mt-2 font-bold text-sm text-[rgb(var(--fg-rgb))]">{opt.label}</p>
-                                <p className="text-xs text-[rgb(var(--fg-rgb)/45%)] mt-0.5">{opt.desc}</p>
-                                {turnaround === opt.id && (
-                                  <motion.div
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[rgb(var(--accent-500))] flex items-center justify-center"
-                                  >
-                                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                                  </motion.div>
-                                )}
-                              </button>
-                            ))}
+                        {/* Turnaround Notice */}
+                        <div className="rounded-2xl border-2 border-[rgb(34_197_94_/_30%)] bg-[rgb(34_197_94_/_6%)] p-5">
+                          <div className="flex items-start gap-3">
+                            <div className="shrink-0 w-10 h-10 rounded-xl bg-[rgb(34_197_94_/_15%)] flex items-center justify-center mt-0.5">
+                              <svg className="w-5 h-5 text-[rgb(34_197_94)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </div>
+                            <div>
+                              <p className="font-bold text-sm text-[rgb(var(--fg-rgb))]">24-Hour Turnaround</p>
+                              <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] mt-1">We&apos;ll respond within <span className="font-bold text-[rgb(34_197_94)]">2 hours</span> and deliver your edited images within 24 hours.</p>
+                            </div>
                           </div>
                         </div>
 
