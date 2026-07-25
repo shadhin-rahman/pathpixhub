@@ -8,6 +8,7 @@ import StaggerReveal, { StaggerItem } from "@/components/StaggerReveal";
 import ParallaxImage from "@/components/ParallaxImage";
 import ScrollIndicator from "@/components/ScrollIndicator";
 import CountUp from "@/components/CountUp";
+import ServiceCarousel from "@/components/ServiceCarousel";
 
 export default function Home() {
   return (
@@ -194,44 +195,7 @@ export default function Home() {
       <ScrollReveal>
       <section className="py-16 overflow-hidden bg-[var(--bg)] relative border-y border-[rgb(var(--fg-rgb)/8%)]">
         <h2 className="text-center text-2xl md:text-3xl font-bold tracking-tight gradient-text mb-10 px-6">Explore Our Expertise</h2>
-        <div className="relative">
-          <div className="flex gap-6 w-max marquee-slide">
-            {[...Array(3)].flatMap(() => services).map((s, i) => {
-              const softColors = ["#fca5a5","#d8b4fe","#f9a8d4","#fde68a","#93c5fd","#86efac","#fdba74","#5eead4","#a5b4fc","#fda4af"];
-              const ci = i % softColors.length;
-              return (
-                <div key={`${s.id}-${i}`} className="flex-shrink-0 w-64 md:w-80 group">
-                  <div className="rounded-2xl p-4 pb-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-                    style={{ backgroundColor: softColors[ci] }}
-                  >
-                    <div className="relative w-full h-48 md:h-56 rounded-xl overflow-hidden bg-white/30">
-                      <Image
-                        src={`/images/service-showcase/${s.id}.png`}
-                        alt={s.title}
-                        fill
-                        className="object-contain p-3 group-hover:opacity-0 group-hover:scale-110 transition-all duration-700"
-                        sizes="(max-width: 768px) 256px, 320px"
-                      />
-                      <Image
-                        src={`/images/service-showcase/${s.id}-before.png`}
-                        alt={`${s.title} before`}
-                        fill
-                        className="object-contain p-3 absolute inset-0 opacity-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
-                        sizes="(max-width: 768px) 256px, 320px"
-                      />
-                    </div>
-                    <Link
-                      href={`/services/${s.id}`}
-                      className="block mt-3 text-[rgb(var(--fg-rgb)/80%)] font-bold text-sm text-center leading-tight hover:text-[rgb(var(--accent-500))] transition-colors"
-                    >
-                      {s.title}
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <ServiceCarousel services={services} />
       </section>
       </ScrollReveal>
 

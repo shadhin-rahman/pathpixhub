@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useRef } from "react";
 import { ChevronRight } from "lucide-react";
 import { services, priceMap } from "@/data/services";
-import PricingCalculator from "@/components/PricingCalculator";
 
 const cardColors = [
   "#fca5a5",
@@ -52,13 +51,13 @@ export default function PricingPage() {
                 Curious about how much your edits will cost? Get an instant quote to see your total right away, or keep reading to learn more about how PathPixHub photo editing rates work.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-4">
-                <a
-                  href="#calculator"
+                <Link
+                  href="/contact#calculator"
                   className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm shadow-lg shadow-[rgb(var(--accent-500)/25%)]"
                 >
                   Get an instant estimate
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                </a>
+                </Link>
                 <Link
                   href="/contact"
                   className="text-sm font-semibold text-[rgb(var(--fg-rgb)/70%)] hover:text-[rgb(var(--accent-400))] transition-colors"
@@ -127,8 +126,6 @@ export default function PricingPage() {
           </div>
         </div>
       </section>
-
-      <PricingCalculator />
 
       <section className="py-20 overflow-hidden bg-[var(--bg)] relative">
         <div className="flex gap-6 w-max marquee-slide" ref={sliderRef}>

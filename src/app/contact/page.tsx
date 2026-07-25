@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { services } from "@/data/services";
+import PricingCalculator from "@/components/PricingCalculator";
 
 export default function ContactPage() {
   const [mode, setMode] = useState<"service" | "general">("service");
@@ -111,6 +112,8 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      <PricingCalculator />
     </>
   );
 }

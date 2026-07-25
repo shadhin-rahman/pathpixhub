@@ -196,25 +196,24 @@
   }
 }
 
-@keyframes marquee-slide {
-  from { transform: translateX(0); }
-  to { transform: translateX(-3440px); }
-}
-
 @keyframes marquee-trial {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
-}
-
-.marquee-slide {
-  animation: marquee-slide 50s linear infinite;
 }
 
 .marquee-trial {
   animation: marquee-trial 80s linear infinite;
 }
 
-.marquee-slide:hover,
 .marquee-trial:hover {
   animation-play-state: paused;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
