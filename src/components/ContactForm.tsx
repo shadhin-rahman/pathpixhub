@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import { services } from "@/data/services";
 
-// Numeric starting price per image, matched to the "FROM $x.xx / IMAGE" values in priceMap.
 const unitPrice: Record<string, number> = {
   "clipping-path": 0.39,
   "background-removal": 0.39,
@@ -18,21 +17,23 @@ const unitPrice: Record<string, number> = {
   "car-editing": 2.99,
 };
 
+const SERVICE_COLORS = [
+  "#fca5a5", "#d8b4fe", "#f9a8d4", "#fde68a", "#93c5fd",
+  "#86efac", "#fdba74", "#5eead4", "#a5b4fc", "#fda4af",
+];
+
+const QUICK_QTYS = [10, 50, 100, 250, 500, 1000];
 const VOLUME_DISCOUNT_THRESHOLD = 500;
 const VOLUME_DISCOUNT_RATE = 0.1;
 
 export default function ContactForm() {
-  const [wantsQuote, setWantsQuote] = useState(false);
+  const [wantsQuote, setWantsQuote] = useState(true);
   const [selected, setSelected] = useState<Record<string, number>>({});
 
   const toggleService = (id: string) => {
     setSelected((prev) => {
       const next = { ...prev };
-      if (id in next) {
-        delete next[id];
-      } else {
-        next[id] = 50;
-      }
+      if (id in next) { delete next[id]; } else { next[id] = 50; }
       return next;
     });
   };
@@ -41,7 +42,7 @@ export default function ContactForm() {
     setSelected((prev) => ({ ...prev, [id]: Math.max(1, Math.min(20000, qty)) }));
   };
 
-  const { totalImages, subtotal, discountApplies, total, selectedIds } = useMemo(() => {
+  const { totalImages, subtotal, discountApplies, discountAmount, total, selectedIds } = useMemo(() => {
     let images = 0;
     let sub = 0;
     for (const [id, qty] of Object.entries(selected) as [string, number][]) {
@@ -49,12 +50,10 @@ export default function ContactForm() {
       sub += (unitPrice[id] ?? 0) * qty;
     }
     const applies = images >= VOLUME_DISCOUNT_THRESHOLD;
-    const finalTotal = applies ? sub * (1 - VOLUME_DISCOUNT_RATE) : sub;
-    return { totalImages: images, subtotal: sub, discountApplies: applies, total: finalTotal, selectedIds: Object.keys(selected) };
+    const discount = applies ? sub * VOLUME_DISCOUNT_RATE : 0;
+    return { totalImages: images, subtotal: sub, discountApplies: applies, discountAmount: discount, total: sub - discount, selectedIds: Object.keys(selected) };
   }, [selected]);
 
-  // Human-readable summary sent along with the form, so the team sees the requested
-  // quote in the same email as everything else — no second form, no second step.
   const quoteSummary = useMemo(() => {
     if (!wantsQuote || selectedIds.length === 0) return "";
     const lines = selectedIds.map((id) => {
@@ -65,24 +64,18 @@ export default function ContactForm() {
     });
     lines.push(`Total images: ${totalImages}`);
     if (discountApplies) {
-      lines.push(`Volume discount (${VOLUME_DISCOUNT_THRESHOLD}+ images, ${VOLUME_DISCOUNT_RATE * 100}%): -$${(subtotal * VOLUME_DISCOUNT_RATE).toFixed(2)}`);
+      lines.push(`Volume discount (${VOLUME_DISCOUNT_THRESHOLD}+ images, ${VOLUME_DISCOUNT_RATE * 100}%): -$${discountAmount.toFixed(2)}`);
     }
     lines.push(`Estimated total: $${total.toFixed(2)}`);
     return lines.join("\n");
-  }, [wantsQuote, selectedIds, selected, totalImages, discountApplies, subtotal, total]);
+  }, [wantsQuote, selectedIds, selected, totalImages, discountApplies, discountAmount, total]);
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-3xl mx-auto">
       <div className="text-center mb-10">
-        <div className="w-14 h-14 mx-auto rounded-2xl bg-[rgb(var(--accent-500)/12%)] flex items-center justify-center">
-          <svg className="w-6 h-6 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
-        </div>
-        <h3 className="mt-5 text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">One form, however you&apos;d like to reach us</h3>
+        <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">Get in Touch</h3>
         <p className="mt-3 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
-          Know exactly which services and how many images you need? Build a quick estimate below. Not sure yet?
-          Skip that and just tell us what&apos;s on your mind — either way, it comes straight to our team in one message.
+          Select your services and quantity below for an instant estimate — or skip and just send us a message.
         </p>
       </div>
 
@@ -91,87 +84,83 @@ export default function ContactForm() {
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-[rgb(var(--fg-rgb)/70%)] mb-1.5">Name <span className="text-red-400">*</span></label>
             <input type="text" name="name" id="name" required
-              className="w-full px-4 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm"
+              className="w-full px-4 py-3.5 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm"
               placeholder="Your name" />
           </div>
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-[rgb(var(--fg-rgb)/70%)] mb-1.5">Email <span className="text-red-400">*</span></label>
             <input type="email" name="email" id="email" required
-              className="w-full px-4 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm"
+              className="w-full px-4 py-3.5 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm"
               placeholder="you@example.com" />
           </div>
         </div>
 
-        {/* Optional inline toggle — stays in the same form, no navigation */}
         <div className="flex items-center gap-1 p-1 rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/5%)] w-fit">
-          <button
-            type="button"
-            onClick={() => setWantsQuote(false)}
-            className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 ${
-              !wantsQuote
-                ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg"
-                : "text-[rgb(var(--fg-rgb)/50%)] hover:text-[rgb(var(--fg-rgb))]"
-            }`}
-          >
-            Just have a question
+          <button type="button" onClick={() => setWantsQuote(true)}
+            className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${wantsQuote ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg" : "text-[rgb(var(--fg-rgb)/50%)] hover:text-[rgb(var(--fg-rgb))]"}`}>
+            Build a Quote
           </button>
-          <button
-            type="button"
-            onClick={() => setWantsQuote(true)}
-            className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 ${
-              wantsQuote
-                ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg"
-                : "text-[rgb(var(--fg-rgb)/50%)] hover:text-[rgb(var(--fg-rgb))]"
-            }`}
-          >
-            I know what I need — build a quote
+          <button type="button" onClick={() => setWantsQuote(false)}
+            className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${!wantsQuote ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg" : "text-[rgb(var(--fg-rgb)/50%)] hover:text-[rgb(var(--fg-rgb))]"}`}>
+            Just have a question
           </button>
         </div>
 
         {wantsQuote && (
-          <div className="rounded-2xl glass-card border-[rgb(var(--fg-rgb)/8%)] p-5">
-            <p className="text-xs text-[rgb(var(--fg-rgb)/50%)] mb-4">
-              Select the services you need and roughly how many images. This gets included with your message below.
-            </p>
+          <div className="rounded-2xl glass-card border-[rgb(var(--fg-rgb)/8%)] p-6">
+            <div className="flex items-center justify-between mb-5">
+              <p className="text-sm font-semibold text-[rgb(var(--fg-rgb)/80%)]">Select services & quantity</p>
+              <span className="text-[10px] font-mono tracking-wider text-[rgb(var(--accent-400))] uppercase">Step 1 of 2</span>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {services.map((s) => {
+              {services.map((s, i) => {
                 const isActive = s.id in selected;
+                const color = SERVICE_COLORS[i % SERVICE_COLORS.length];
                 return (
-                  <div
-                    key={s.id}
-                    onClick={() => toggleService(s.id)}
-                    className={`rounded-xl p-3.5 border transition-all duration-300 cursor-pointer ${
-                      isActive
-                        ? "border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/8%)]"
-                        : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)]"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <div className="shrink-0 w-8 h-8 rounded-lg bg-[var(--bg-subtle)] flex items-center justify-center overflow-hidden">
-                        <Image src={`/images/service-icons/${s.id}.png`} alt="" width={20} height={20} className="object-contain" />
+                  <div key={s.id} onClick={() => toggleService(s.id)}
+                    className={`rounded-2xl p-4 border-2 transition-all duration-300 cursor-pointer ${isActive ? "border-[rgb(var(--accent-500)/70%)] shadow-lg shadow-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/6%)] hover:border-[rgb(var(--fg-rgb)/15%)] hover:shadow-md"}`}
+                    style={{ backgroundColor: isActive ? `${color}15` : `${color}08` }}>
+                    <div className="flex items-center gap-3">
+                      <div className="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-110"
+                        style={{ backgroundColor: `${color}25` }}>
+                        <Image src={`/images/service-icons/${s.id}.png`} alt="" width={28} height={28} className="object-contain" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2">
-                          <p className="font-bold text-xs text-[rgb(var(--fg-rgb))] leading-tight truncate">{s.title}</p>
-                          <div className={`shrink-0 w-4 h-4 rounded border flex items-center justify-center ${isActive ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]" : "border-[rgb(var(--fg-rgb)/25%)]"}`}>
+                          <p className="font-bold text-sm text-[rgb(var(--fg-rgb))] leading-tight truncate">{s.title}</p>
+                          <div className={`shrink-0 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all duration-200 ${isActive ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))] scale-110" : "border-[rgb(var(--fg-rgb)/20%)]"}`}>
                             {isActive && (
-                              <svg className="w-3 h-3 text-[rgb(var(--accent-contrast))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                              <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                             )}
                           </div>
                         </div>
-                        <p className="text-[10px] text-[rgb(var(--fg-rgb)/45%)]">from ${unitPrice[s.id]?.toFixed(2)}/image</p>
+                        <p className="text-xs text-[rgb(var(--fg-rgb)/45%)] mt-0.5">from ${unitPrice[s.id]?.toFixed(2)}/image</p>
                       </div>
                     </div>
+
                     {isActive && (
-                      <div className="mt-2.5" onClick={(e) => e.stopPropagation()}>
-                        <input
-                          type="number"
-                          min={1}
-                          max={20000}
-                          value={selected[s.id]}
-                          onChange={(e) => setQty(s.id, parseInt(e.target.value, 10) || 1)}
-                          className="w-full px-2.5 py-1.5 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-xs text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/60%)]"
-                        />
+                      <div className="mt-3 pt-3 border-t border-[rgb(var(--fg-rgb)/8%)]" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-xs text-[rgb(var(--fg-rgb)/50%)]">Quantity:</span>
+                          <div className="flex items-center gap-1.5">
+                            {QUICK_QTYS.map((q) => (
+                              <button key={q} type="button" onClick={() => setQty(s.id, q)}
+                                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all duration-200 ${selected[s.id] === q ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "bg-[rgb(var(--fg-rgb)/5%)] text-[rgb(var(--fg-rgb)/50%)] hover:bg-[rgb(var(--fg-rgb)/10%)] hover:text-[rgb(var(--fg-rgb)/70%)]"}`}>
+                                {q}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button type="button" onClick={() => setQty(s.id, (selected[s.id] || 50) - 10)}
+                            className="w-8 h-8 rounded-lg bg-[rgb(var(--fg-rgb)/5%)] text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/10%)] flex items-center justify-center font-bold text-sm transition-colors">−</button>
+                          <input type="number" min={1} max={20000} value={selected[s.id]}
+                            onChange={(e) => setQty(s.id, parseInt(e.target.value, 10) || 1)}
+                            className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-center text-[rgb(var(--fg-rgb))] font-bold outline-none focus:border-[rgb(var(--accent-500)/60%)]" />
+                          <button type="button" onClick={() => setQty(s.id, (selected[s.id] || 50) + 10)}
+                            className="w-8 h-8 rounded-lg bg-[rgb(var(--fg-rgb)/5%)] text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/10%)] flex items-center justify-center font-bold text-sm transition-colors">+</button>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -180,13 +169,33 @@ export default function ContactForm() {
             </div>
 
             {selectedIds.length > 0 && (
-              <div className="mt-4 pt-4 border-t border-[rgb(var(--fg-rgb)/10%)] flex items-center justify-between">
-                <span className="text-xs text-[rgb(var(--fg-rgb)/50%)]">{totalImages} images selected</span>
-                <span className="text-lg font-bold gradient-text">${total.toFixed(2)}</span>
+              <div className="mt-5 pt-5 border-t border-[rgb(var(--fg-rgb)/10%)] space-y-3">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-[rgb(var(--fg-rgb)/60%)]">{totalImages} images selected</span>
+                  <span className="font-bold text-[rgb(var(--fg-rgb))]">${subtotal.toFixed(2)}</span>
+                </div>
+                {discountApplies && (
+                  <div className="flex items-center justify-between text-sm bg-[rgb(34_197_94_/_8%)] rounded-xl px-4 py-2.5 border border-[rgb(34_197_94_/_20%)]">
+                    <span className="flex items-center gap-2 text-[rgb(34_197_94)]">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z" /></svg>
+                      10% volume discount (500+ images)
+                    </span>
+                    <span className="font-bold text-[rgb(34_197_94)]">−${discountAmount.toFixed(2)}</span>
+                  </div>
+                )}
+                {!discountApplies && totalImages > 0 && totalImages < VOLUME_DISCOUNT_THRESHOLD && (
+                  <div className="flex items-center gap-2 text-xs text-[rgb(var(--fg-rgb)/40%)] bg-[rgb(var(--fg-rgb)/3%)] rounded-xl px-4 py-2.5">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    Add {VOLUME_DISCOUNT_THRESHOLD - totalImages} more images for 10% volume discount
+                  </div>
+                )}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-bold text-[rgb(var(--fg-rgb)/80%)]">Estimated Total</span>
+                  <span className="text-2xl font-bold gradient-text">${total.toFixed(2)}</span>
+                </div>
               </div>
             )}
 
-            {/* Included automatically in the same message the team receives */}
             <input type="hidden" name="quote_details" value={quoteSummary} />
           </div>
         )}
@@ -197,15 +206,15 @@ export default function ContactForm() {
             {wantsQuote && <span className="text-[rgb(var(--fg-rgb)/40%)] font-normal"> (optional)</span>}
           </label>
           <textarea name="message" id="message" rows={5} required={!wantsQuote}
-            className="w-full px-4 py-3 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm resize-none"
-            placeholder={wantsQuote ? "Anything else we should know? (optional)" : "Tell us a bit about your images or project — we'll take it from there."} />
+            className="w-full px-4 py-3.5 rounded-xl glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[rgb(var(--fg-rgb)/3%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/50%)] outline-none transition-all text-sm resize-none"
+            placeholder={wantsQuote ? "Anything else we should know?" : "Tell us about your images or project..."} />
         </div>
 
         <button type="submit"
           className="w-full sm:w-auto px-10 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm">
           Send Message
         </button>
-        <p className="text-xs text-[rgb(var(--fg-rgb)/30%)]">We will respond within 24 hours.</p>
+        <p className="text-xs text-[rgb(var(--fg-rgb)/30%)]">We respond within 12 hours.</p>
       </form>
     </div>
   );
