@@ -61,7 +61,7 @@ export default function IntroAnimation() {
       >
         <div className="relative w-20 h-20 rounded-full overflow-hidden">
           <Image
-            src="/images/new%20logo.png"
+            src="/images/logo-new.png"
             alt="PathPixHub"
             width={80}
             height={80}

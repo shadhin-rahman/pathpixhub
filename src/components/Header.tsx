@@ -26,11 +26,11 @@ export default function Header() {
         >
           <span className="ml-4 md:ml-10 flex items-center">
             <Image
-              src="/images/new%20logo.png"
+              src="/images/logo-new.png"
               alt="PathPixHub"
-              width={40}
-              height={40}
-              className="h-9 w-9 md:h-10 md:w-10 object-contain"
+              width={50}
+              height={50}
+              className="h-12 w-12 md:h-14 md:w-14 object-contain"
               priority
             />
           </span>
