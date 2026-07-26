@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Mail, Clock, DollarSign } from "lucide-react";
 import { services } from "@/data/services";
@@ -8,7 +9,13 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
           <div className="lg:col-span-1">
-            <span className="logo-text text-xl font-bold text-[rgb(var(--fg-rgb))]">PathPixHub</span>
+            <Image
+              src="/images/new%20logo.png"
+              alt="PathPixHub"
+              width={48}
+              height={48}
+              className="h-12 w-12 object-contain"
+            />
             <p className="mt-4 text-sm text-[rgb(var(--fg-rgb)/50%)] leading-relaxed max-w-xs">
               Professional photo editing for e-commerce, fashion, and advertising — pixel-perfect
               results with 12hr turnaround.
