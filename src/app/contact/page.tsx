@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import ContactForm from "@/components/ContactForm";
+import PricingCalculator from "@/components/PricingCalculator";
 
 export default function ContactPage() {
   return (
@@ -34,6 +35,8 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      <PricingCalculator />
 
       <section id="contact-form" className="pb-32 bg-[var(--bg-alt)] scroll-mt-24">
         <div className="max-w-7xl mx-auto px-6">

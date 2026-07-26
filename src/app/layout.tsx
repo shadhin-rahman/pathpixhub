@@ -15,7 +15,6 @@ export const metadata: Metadata = {
   title: "PathPixHub | Professional Photo Editing & Clipping Path Services",
   description:
     "Expert photo editing services including clipping path, background removal, image masking, ghost mannequin, retouching, and more. Fast turnaround, global delivery, pixel-perfect quality.",
-  icons: { icon: "/images/logo-new.png", apple: "/images/logo-new.png" },
 };
 
 export const viewport = {
