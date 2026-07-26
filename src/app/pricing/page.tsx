@@ -109,7 +109,7 @@ export default function PricingPage() {
 
       <section className="pb-20 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {services.map((s, i) => (
               <motion.div
                 key={s.id}
@@ -120,8 +120,8 @@ export default function PricingPage() {
                 className="rounded-2xl p-5 transition-all duration-300 group hover:-translate-y-1 hover:shadow-xl"
                 style={{ backgroundColor: cardColors[i % cardColors.length] }}
               >
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-all duration-300">
+                <div className="flex flex-col items-center text-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-all duration-300">
                     <Image
                       src={`/images/service-icons/${s.id}.png`}
                       alt={s.title}
@@ -137,7 +137,7 @@ export default function PricingPage() {
                     {s.title}
                   </Link>
                 </div>
-                <p className="text-xs font-mono tracking-[0.1em] text-[rgb(var(--fg-rgb)/60%)] font-bold">
+                <p className="text-xs font-mono tracking-[0.1em] text-[rgb(var(--fg-rgb)/60%)] font-bold text-center">
                   {priceMap[s.id]}
                 </p>
               </motion.div>
