@@ -28,9 +28,9 @@ export default function Header() {
             <Image
               src="/images/logo-new.png"
               alt="PathPixHub"
-              width={50}
-              height={50}
-              className="h-12 w-12 md:h-14 md:w-14 object-contain"
+              width={64}
+              height={64}
+              className="h-14 w-14 md:h-16 md:w-16 object-contain"
               priority
             />
           </span>

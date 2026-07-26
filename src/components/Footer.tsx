@@ -12,9 +12,9 @@ export default function Footer() {
             <Image
               src="/images/logo-new.png"
               alt="PathPixHub"
-              width={56}
-              height={56}
-              className="h-14 w-14 object-contain"
+              width={72}
+              height={72}
+              className="h-16 w-16 md:h-18 md:w-18 object-contain"
             />
             <p className="mt-4 text-sm text-[rgb(var(--fg-rgb)/50%)] leading-relaxed max-w-xs">
               Professional photo editing for e-commerce, fashion, and advertising — pixel-perfect
