@@ -171,8 +171,9 @@ export default function FreeTrialPage() {
       {/* Hero */}
       <section className="relative pt-32 pb-0 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <Image src="/images/about/lifestyle-1.jpg" alt="" fill className="object-cover" sizes="100vw" priority />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-[var(--bg)]" />
+          <Image src="/images/about/lifestyle-1.jpg" alt="" fill className="object-cover object-center saturate-[1.1] brightness-105" sizes="100vw" priority />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-[var(--bg)]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 pt-16 pb-20">
           <div className="max-w-2xl">
