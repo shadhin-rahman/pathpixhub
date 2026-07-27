@@ -21,6 +21,12 @@ const unitPrice: Record<string, number> = {
 const VOLUME_DISCOUNT_THRESHOLD = 500;
 const VOLUME_DISCOUNT_RATE = 0.1;
 
+const COMPLEXITY_OPTIONS = [
+  { id: "easy", label: "Easy", desc: "Simple, clean background", multiplier: 0.7, color: "rgb(34 197 94)" },
+  { id: "medium", label: "Medium", desc: "Some detail work", multiplier: 1.0, color: "rgb(234 179 8)" },
+  { id: "complex", label: "Complex", desc: "Fine detail, hair, glass", multiplier: 1.5, color: "rgb(239 68 68)" },
+];
+
 const TURNAROUND_OPTIONS = [
   { id: "12", label: "12 Hours", desc: "Fast delivery", icon: "⚡" },
   { id: "24", label: "24 Hours", desc: "Standard", icon: "🕐" },
@@ -30,27 +36,40 @@ const TURNAROUND_OPTIONS = [
 
 export default function ContactForm() {
   const [wantsQuote, setWantsQuote] = useState(true);
-  const [selected, setSelected] = useState<Record<string, number>>({});
+  const [selected, setSelected] = useState<Record<string, { qty: number; complexity: string }>>({});
   const [turnaround, setTurnaround] = useState("12");
 
   const toggleService = (id: string) => {
     setSelected((prev) => {
       const next = { ...prev };
-      if (id in next) { delete next[id]; } else { next[id] = 50; }
+      if (id in next) { delete next[id]; } else { next[id] = { qty: 50, complexity: "medium" }; }
       return next;
     });
   };
 
   const setQty = (id: string, qty: number) => {
-    setSelected((prev) => ({ ...prev, [id]: Math.max(1, Math.min(20000, qty)) }));
+    setSelected((prev) => ({
+      ...prev,
+      [id]: { ...prev[id], qty: Math.max(1, Math.min(20000, qty)) },
+    }));
+  };
+
+  const setComplexity = (id: string, complexity: string) => {
+    setSelected((prev) => ({
+      ...prev,
+      [id]: { ...prev[id], complexity },
+    }));
   };
 
   const { totalImages, subtotal, discountApplies, discountAmount, total, selectedIds } = useMemo(() => {
     let images = 0;
     let sub = 0;
-    for (const [id, qty] of Object.entries(selected) as [string, number][]) {
+    for (const [id, entry] of Object.entries(selected)) {
+      const qty = entry.qty;
+      const complexity = COMPLEXITY_OPTIONS.find((c) => c.id === entry.complexity);
+      const multiplier = complexity?.multiplier ?? 1.0;
       images += qty;
-      sub += (unitPrice[id] ?? 0) * qty;
+      sub += (unitPrice[id] ?? 0) * multiplier * qty;
     }
     const applies = images >= VOLUME_DISCOUNT_THRESHOLD;
     const discount = applies ? sub * VOLUME_DISCOUNT_RATE : 0;
@@ -61,9 +80,12 @@ export default function ContactForm() {
     if (!wantsQuote || selectedIds.length === 0) return "";
     const lines = selectedIds.map((id) => {
       const s = services.find((x) => x.id === id);
-      const qty = selected[id];
-      const lineTotal = qty * (unitPrice[id] ?? 0);
-      return `- ${s?.title}: ${qty} images ($${lineTotal.toFixed(2)})`;
+      const entry = selected[id];
+      const qty = entry.qty;
+      const complexity = COMPLEXITY_OPTIONS.find((c) => c.id === entry.complexity);
+      const multiplier = complexity?.multiplier ?? 1.0;
+      const lineTotal = qty * (unitPrice[id] ?? 0) * multiplier;
+      return `- ${s?.title} [${complexity?.label}]: ${qty} images ($${lineTotal.toFixed(2)})`;
     });
     lines.push(`Total images: ${totalImages}`);
     if (discountApplies) {
@@ -107,6 +129,10 @@ export default function ContactForm() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {services.map((s, i) => {
                   const isActive = s.id in selected;
+                  const entry = selected[s.id];
+                  const complexity = COMPLEXITY_OPTIONS.find((c) => c.id === (entry?.complexity ?? "medium"));
+                  const multiplier = complexity?.multiplier ?? 1.0;
+                  const pricePerImage = (unitPrice[s.id] ?? 0) * multiplier;
                   return (
                     <motion.div
                       key={s.id}
@@ -114,12 +140,12 @@ export default function ContactForm() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.04, duration: 0.35 }}
-                      className={`rounded-2xl p-5 border transition-all duration-300 cursor-pointer ${
+                      className={`rounded-2xl p-5 border transition-all duration-300 ${
                         isActive
                           ? "glass-card border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/8%)] shadow-lg shadow-[rgb(var(--accent-500)/10%)]"
-                          : "glass-card border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)] hover:-translate-y-0.5"
+                          : "glass-card border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)] hover:-translate-y-0.5 cursor-pointer"
                       }`}
-                      onClick={() => toggleService(s.id)}
+                      onClick={() => !isActive && toggleService(s.id)}
                     >
                       <div className="flex items-start gap-3">
                         <div className="shrink-0 w-10 h-10 rounded-xl bg-[var(--bg-subtle)] flex items-center justify-center overflow-hidden">
@@ -128,20 +154,18 @@ export default function ContactForm() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2">
                             <p className="font-bold text-sm text-[rgb(var(--fg-rgb))] leading-tight">{s.title}</p>
-                            <div className={`shrink-0 w-5 h-5 rounded-md border flex items-center justify-center transition-colors ${isActive ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]" : "border-[rgb(var(--fg-rgb)/25%)]"}`}>
-                              {isActive && (
-                                <svg className="w-3.5 h-3.5 text-[rgb(var(--accent-contrast))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                </svg>
-                              )}
-                            </div>
+                            {!isActive && (
+                              <div className="shrink-0 w-5 h-5 rounded-md border border-[rgb(var(--fg-rgb)/25%)] flex items-center justify-center">
+                                <svg className="w-3 h-3 text-[rgb(var(--fg-rgb)/30%)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
+                              </div>
+                            )}
                           </div>
                           <p className="mt-1 text-xs text-[rgb(var(--fg-rgb)/50%)]">from ${unitPrice[s.id]?.toFixed(2)} / image</p>
                         </div>
                       </div>
 
                       <AnimatePresence>
-                        {isActive && (
+                        {isActive && entry && (
                           <motion.div
                             initial={{ height: 0, opacity: 0, marginTop: 0 }}
                             animate={{ height: "auto", opacity: 1, marginTop: 14 }}
@@ -149,14 +173,42 @@ export default function ContactForm() {
                             className="overflow-hidden"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            <label className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold">Number of images</label>
+                            {/* Complexity selector */}
+                            <label className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold">Image Complexity</label>
+                            <div className="grid grid-cols-3 gap-1.5 mt-2">
+                              {COMPLEXITY_OPTIONS.map((c) => (
+                                <button
+                                  key={c.id}
+                                  type="button"
+                                  onClick={() => setComplexity(s.id, c.id)}
+                                  className={`rounded-lg px-2 py-2 text-center border transition-all duration-200 ${
+                                    entry.complexity === c.id
+                                      ? "border-current shadow-sm"
+                                      : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)]"
+                                  }`}
+                                  style={entry.complexity === c.id ? { color: c.color, backgroundColor: `${c.color}12`, borderColor: `${c.color}60` } : {}}
+                                >
+                                  <span className="text-[11px] font-bold block" style={entry.complexity === c.id ? { color: c.color } : { color: "rgb(var(--fg-rgb))" }}>{c.label}</span>
+                                  <span className="text-[10px] block mt-0.5" style={entry.complexity === c.id ? { color: c.color } : { color: "rgb(var(--fg-rgb)/40%)" }}>{c.desc}</span>
+                                </button>
+                              ))}
+                            </div>
+
+                            {/* Price per image indicator */}
+                            <div className="mt-3 flex items-center justify-between text-xs">
+                              <span className="text-[rgb(var(--fg-rgb)/40%)]">Price per image</span>
+                              <span className="font-bold" style={{ color: complexity?.color }}>${pricePerImage.toFixed(2)}</span>
+                            </div>
+
+                            {/* Quantity */}
+                            <label className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mt-3 block">Number of images</label>
                             <div className="flex items-center gap-2 mt-2">
-                              <button type="button" onClick={() => setQty(s.id, (selected[s.id] || 50) - 10)}
+                              <button type="button" onClick={() => setQty(s.id, (entry.qty) - 10)}
                                 className="w-8 h-8 rounded-lg bg-[rgb(var(--fg-rgb)/5%)] text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/10%)] flex items-center justify-center font-bold text-sm transition-colors">−</button>
-                              <input type="number" min={1} max={20000} value={selected[s.id]}
+                              <input type="number" min={1} max={20000} value={entry.qty}
                                 onChange={(e) => setQty(s.id, parseInt(e.target.value, 10) || 1)}
                                 className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-center text-[rgb(var(--fg-rgb))] font-bold outline-none focus:border-[rgb(var(--accent-500)/60%)]" />
-                              <button type="button" onClick={() => setQty(s.id, (selected[s.id] || 50) + 10)}
+                              <button type="button" onClick={() => setQty(s.id, (entry.qty) + 10)}
                                 className="w-8 h-8 rounded-lg bg-[rgb(var(--fg-rgb)/5%)] text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/10%)] flex items-center justify-center font-bold text-sm transition-colors">+</button>
                             </div>
                           </motion.div>
@@ -214,18 +266,27 @@ export default function ContactForm() {
                     <AnimatePresence>
                       {selectedIds.map((id) => {
                         const s = services.find((x) => x.id === id)!;
-                        const qty = selected[id];
-                        const lineTotal = qty * (unitPrice[id] ?? 0);
+                        const entry = selected[id];
+                        const qty = entry.qty;
+                        const complexity = COMPLEXITY_OPTIONS.find((c) => c.id === entry.complexity);
+                        const multiplier = complexity?.multiplier ?? 1.0;
+                        const lineTotal = qty * (unitPrice[id] ?? 0) * multiplier;
                         return (
                           <motion.div
                             key={id}
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="flex items-center justify-between text-sm overflow-hidden"
+                            className="overflow-hidden"
                           >
-                            <span className="text-[rgb(var(--fg-rgb)/70%)]">{s.title} × {qty}</span>
-                            <span className="font-semibold text-[rgb(var(--fg-rgb))]">${lineTotal.toFixed(2)}</span>
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-[rgb(var(--fg-rgb)/70%)]">{s.title} × {qty}</span>
+                              <span className="font-semibold text-[rgb(var(--fg-rgb))]">${lineTotal.toFixed(2)}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 mt-1">
+                              <span className="text-[10px] px-1.5 py-0.5 rounded font-bold" style={{ color: complexity?.color, backgroundColor: `${complexity?.color}15` }}>{complexity?.label}</span>
+                              <span className="text-[10px] text-[rgb(var(--fg-rgb)/35%)]">${(unitPrice[id] ?? 0) * multiplier}/img</span>
+                            </div>
                           </motion.div>
                         );
                       })}
@@ -263,6 +324,12 @@ export default function ContactForm() {
                 )}
 
                 <input type="hidden" name="quote_details" value={quoteSummary} />
+                <input type="hidden" name="complexity_levels" value={selectedIds.map((id) => {
+                  const s = services.find((x) => x.id === id);
+                  const entry = selected[id];
+                  const c = COMPLEXITY_OPTIONS.find((x) => x.id === entry?.complexity);
+                  return `${s?.title}: ${c?.label}`;
+                }).join(", ")} />
                 <input type="hidden" name="turnaround" value={turnaround === "96" ? "96+ hours (custom)" : `${turnaround} hours`} />
               </div>
             ) : (
