@@ -362,8 +362,6 @@ export default function ContactForm() {
       );
     }
 
-    if (!sel) return null;
-
     if (info.effectiveType === "complexity") {
       const mults = COMPLEXITY_MULTIPLIERS[info.effectiveComplexityLevels] ?? COMPLEXITY_MULTIPLIERS[6];
       return (
@@ -375,7 +373,7 @@ export default function ContactForm() {
             {mults.map((mult, i) => {
               const level = i + 1;
               const price = info.effectiveBasePrice * mult;
-              const isActive = sel.complexity === level;
+              const isActive = sel?.complexity === level;
               return (
                 <button key={level} type="button" onClick={() => selectComplexity(selKey, level)}
                   className={`rounded-xl py-2.5 px-1 text-center border transition-all ${
@@ -398,11 +396,11 @@ export default function ContactForm() {
     if (info.effectiveType === "tier") {
       return (
         <div>
-          <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)] mb-3">Select the type of retouching.</p>
+          <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)] mb-3">Select the type.</p>
           <div className="flex gap-2">
             {info.effectiveTiers.map(t => {
               const price = info.effectiveBasePrice * t.multiplier;
-              const isActive = sel.tier === t.id;
+              const isActive = sel?.tier === t.id;
               return (
                 <button key={t.id} type="button" onClick={() => selectTier(selKey, t.id)}
                   className={`flex-1 rounded-xl py-2.5 px-3 text-center border transition-all ${
