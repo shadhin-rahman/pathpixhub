@@ -40,28 +40,6 @@ export default function ContactForm() {
   const [expandedService, setExpandedService] = useState<string | null>(null);
   const [turnaround, setTurnaround] = useState("24");
 
-  const toggleService = (id: string) => {
-    const isCurrentlySelected = id in selected;
-    const isCurrentlyExpanded = expandedService === id;
-
-    if (isCurrentlySelected && isCurrentlyExpanded) {
-      // Selected + expanded → deselect + collapse
-      setSelected((prev) => {
-        const next = { ...prev };
-        delete next[id];
-        return next;
-      });
-      setExpandedService(null);
-    } else if (isCurrentlySelected && !isCurrentlyExpanded) {
-      // Selected but collapsed → just expand (don't deselect)
-      setExpandedService(id);
-    } else {
-      // Not selected → select + expand
-      setSelected((prev) => ({ ...prev, [id]: { qty: 50, complexity: "medium" } }));
-      setExpandedService(id);
-    }
-  };
-
   const setQty = (id: string, qty: number) => {
     setSelected((prev) => ({
       ...prev,
@@ -152,8 +130,8 @@ export default function ContactForm() {
             {wantsQuote ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {services.map((s, i) => {
-                  const isActive = s.id in selected;
-                  const isExpanded = expandedService === s.id && isActive;
+                  const isSelected = s.id in selected;
+                  const isExpanded = expandedService === s.id;
                   const entry = selected[s.id];
                   const complexity = COMPLEXITY_OPTIONS.find((c) => c.id === (entry?.complexity ?? "medium"));
                   const multiplier = complexity?.multiplier ?? 1.0;
@@ -165,84 +143,134 @@ export default function ContactForm() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.04, duration: 0.35 }}
-                      className={`rounded-2xl p-5 border transition-all duration-300 cursor-pointer ${
-                        isActive
-                          ? "glass-card border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/8%)] shadow-lg shadow-[rgb(var(--accent-500)/10%)]"
-                          : "glass-card border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)] hover:-translate-y-0.5"
-                      }`}
-                      onClick={() => toggleService(s.id)}
+                      className={`rounded-2xl border transition-all duration-300 ${
+                        isSelected
+                          ? "glass-card border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/5%)]"
+                          : "glass-card border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)]"
+                      } ${isExpanded ? "shadow-lg shadow-[rgb(var(--accent-500)/8%)]" : ""}`}
                     >
-                      <div className="flex items-start gap-3">
+                      {/* Card Header — click = accordion */}
+                      <div
+                        className="flex items-start gap-3 p-5 cursor-pointer select-none"
+                        onClick={() => setExpandedService(isExpanded ? null : s.id)}
+                      >
                         <div className="shrink-0 w-10 h-10 rounded-xl bg-[var(--bg-subtle)] flex items-center justify-center overflow-hidden">
                           <Image src={`/images/service-icons/${s.id}.png`} alt="" width={24} height={24} className="object-contain" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2">
                             <p className="font-bold text-sm text-[rgb(var(--fg-rgb))] leading-tight">{s.title}</p>
-                            <div className={`shrink-0 w-5 h-5 rounded-md border flex items-center justify-center transition-all duration-200 ${
-                              isActive
-                                ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]"
-                                : "border-[rgb(var(--fg-rgb)/25%)]"
-                            }`}>
-                              {isActive ? (
-                                <svg className="w-3 h-3 text-[rgb(var(--accent-contrast))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                </svg>
-                              ) : (
-                                <svg className="w-3 h-3 text-[rgb(var(--fg-rgb)/30%)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
+                            <div className="flex items-center gap-2">
+                              {isSelected && (
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-[rgb(var(--accent-500))] flex items-center justify-center">
+                                  <svg className="w-3 h-3 text-[rgb(var(--accent-contrast))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                  </svg>
+                                </span>
                               )}
+                              <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                              </svg>
                             </div>
                           </div>
                           <p className="mt-1 text-xs text-[rgb(var(--fg-rgb)/50%)]">from ${unitPrice[s.id]?.toFixed(2)} / image</p>
+                          {isSelected && !isExpanded && entry && (
+                            <div className="flex items-center gap-2 mt-1.5">
+                              <span className="text-[10px] px-1.5 py-0.5 rounded font-bold" style={{ color: complexity?.color, backgroundColor: `${complexity?.color}15` }}>{complexity?.label}</span>
+                              <span className="text-[10px] text-[rgb(var(--fg-rgb)/35%)]">{entry.qty} imgs · ${(pricePerImage * entry.qty).toFixed(2)}</span>
+                            </div>
+                          )}
                         </div>
                       </div>
 
+                      {/* Expanded Content */}
                       <AnimatePresence>
-                        {isExpanded && entry && (
+                        {isExpanded && (
                           <motion.div
-                            initial={{ height: 0, opacity: 0, marginTop: 0 }}
-                            animate={{ height: "auto", opacity: 1, marginTop: 14 }}
-                            exit={{ height: 0, opacity: 0, marginTop: 0 }}
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
                             className="overflow-hidden"
-                            onClick={(e) => e.stopPropagation()}
                           >
-                            {/* Complexity selector */}
-                            <label className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold">Image Complexity</label>
-                            <div className="grid grid-cols-3 gap-1.5 mt-2">
-                              {COMPLEXITY_OPTIONS.map((c) => (
+                            <div className="px-5 pb-5 pt-0 space-y-4" onClick={(e) => e.stopPropagation()}>
+                              {/* Complexity selector */}
+                              <div>
+                                <label className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold">Image Complexity</label>
+                                <div className="grid grid-cols-3 gap-1.5 mt-2">
+                                  {COMPLEXITY_OPTIONS.map((c) => {
+                                    const currentComplexity = entry?.complexity ?? "medium";
+                                    return (
+                                      <button
+                                        key={c.id}
+                                        type="button"
+                                        onClick={() => {
+                                          if (isSelected) {
+                                            setComplexity(s.id, c.id);
+                                          } else {
+                                            // Auto-select with this complexity
+                                            setSelected((prev) => ({ ...prev, [s.id]: { qty: 50, complexity: c.id } }));
+                                          }
+                                        }}
+                                        className={`rounded-lg px-2 py-2 text-center border transition-all duration-200 ${
+                                          currentComplexity === c.id
+                                            ? "border-current shadow-sm"
+                                            : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)]"
+                                        }`}
+                                        style={currentComplexity === c.id ? { color: c.color, backgroundColor: `${c.color}12`, borderColor: `${c.color}60` } : {}}
+                                      >
+                                        <span className="text-[11px] font-bold block" style={currentComplexity === c.id ? { color: c.color } : { color: "rgb(var(--fg-rgb))" }}>{c.label}</span>
+                                        <span className="text-[10px] block mt-0.5" style={currentComplexity === c.id ? { color: c.color } : { color: "rgb(var(--fg-rgb)/40%)" }}>{c.desc}</span>
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+
+                              {/* Price per image */}
+                              <div className="flex items-center justify-between text-xs">
+                                <span className="text-[rgb(var(--fg-rgb)/40%)]">Price per image</span>
+                                <span className="font-bold" style={{ color: complexity?.color }}>${pricePerImage.toFixed(2)}</span>
+                              </div>
+
+                              {/* Quantity */}
+                              {isSelected && entry && (
+                                <div>
+                                  <label className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold">Number of images</label>
+                                  <div className="flex items-center gap-2 mt-2">
+                                    <button type="button" onClick={() => setQty(s.id, entry.qty - 10)}
+                                      className="w-8 h-8 rounded-lg bg-[rgb(var(--fg-rgb)/5%)] text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/10%)] flex items-center justify-center font-bold text-sm transition-colors">−</button>
+                                    <input type="number" min={1} max={20000} value={entry.qty}
+                                      onChange={(e) => setQty(s.id, parseInt(e.target.value, 10) || 1)}
+                                      className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-center text-[rgb(var(--fg-rgb))] font-bold outline-none focus:border-[rgb(var(--accent-500)/60%)]" />
+                                    <button type="button" onClick={() => setQty(s.id, entry.qty + 10)}
+                                      className="w-8 h-8 rounded-lg bg-[rgb(var(--fg-rgb)/5%)] text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/10%)] flex items-center justify-center font-bold text-sm transition-colors">+</button>
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Select / Remove button */}
+                              {isSelected ? (
                                 <button
-                                  key={c.id}
                                   type="button"
-                                  onClick={() => setComplexity(s.id, c.id)}
-                                  className={`rounded-lg px-2 py-2 text-center border transition-all duration-200 ${
-                                    entry.complexity === c.id
-                                      ? "border-current shadow-sm"
-                                      : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)]"
-                                  }`}
-                                  style={entry.complexity === c.id ? { color: c.color, backgroundColor: `${c.color}12`, borderColor: `${c.color}60` } : {}}
+                                  onClick={() => {
+                                    setSelected((prev) => { const n = { ...prev }; delete n[s.id]; return n; });
+                                  }}
+                                  className="w-full py-2.5 rounded-xl border border-red-400/30 text-red-400 text-xs font-bold hover:bg-red-400/10 transition-all"
                                 >
-                                  <span className="text-[11px] font-bold block" style={entry.complexity === c.id ? { color: c.color } : { color: "rgb(var(--fg-rgb))" }}>{c.label}</span>
-                                  <span className="text-[10px] block mt-0.5" style={entry.complexity === c.id ? { color: c.color } : { color: "rgb(var(--fg-rgb)/40%)" }}>{c.desc}</span>
+                                  Remove from Quote
                                 </button>
-                              ))}
-                            </div>
-
-                            {/* Price per image indicator */}
-                            <div className="mt-3 flex items-center justify-between text-xs">
-                              <span className="text-[rgb(var(--fg-rgb)/40%)]">Price per image</span>
-                              <span className="font-bold" style={{ color: complexity?.color }}>${pricePerImage.toFixed(2)}</span>
-                            </div>
-
-                            {/* Quantity */}
-                            <label className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mt-3 block">Number of images</label>
-                            <div className="flex items-center gap-2 mt-2">
-                              <button type="button" onClick={() => setQty(s.id, (entry.qty) - 10)}
-                                className="w-8 h-8 rounded-lg bg-[rgb(var(--fg-rgb)/5%)] text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/10%)] flex items-center justify-center font-bold text-sm transition-colors">−</button>
-                              <input type="number" min={1} max={20000} value={entry.qty}
-                                onChange={(e) => setQty(s.id, parseInt(e.target.value, 10) || 1)}
-                                className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-center text-[rgb(var(--fg-rgb))] font-bold outline-none focus:border-[rgb(var(--accent-500)/60%)]" />
-                              <button type="button" onClick={() => setQty(s.id, (entry.qty) + 10)}
-                                className="w-8 h-8 rounded-lg bg-[rgb(var(--fg-rgb)/5%)] text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/10%)] flex items-center justify-center font-bold text-sm transition-colors">+</button>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const currentComplexity = entry?.complexity ?? "medium";
+                                    setSelected((prev) => ({ ...prev, [s.id]: { qty: 50, complexity: currentComplexity } }));
+                                  }}
+                                  className="w-full py-2.5 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] text-xs font-bold hover:bg-[rgb(var(--accent-400))] transition-all"
+                                >
+                                  Add to Quote
+                                </button>
+                              )}
                             </div>
                           </motion.div>
                         )}
