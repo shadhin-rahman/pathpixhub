@@ -236,12 +236,17 @@ export default function ContactForm() {
   };
 
   const setColorCodes = (selKey: string, codes: string[]) => {
-    setSelections(prev => ({ ...prev, [selKey]: { ...prev[selKey], colorCodes: codes } }));
+    setSelections(prev => {
+      const existing = prev[selKey];
+      if (!existing) return { ...prev, [selKey]: { quantity: 50, colorCodes: codes } };
+      return { ...prev, [selKey]: { ...existing, colorCodes: codes } };
+    });
   };
 
   const addColorVariant = (selKey: string) => {
     setSelections(prev => {
       const existing = prev[selKey];
+      if (!existing) return { ...prev, [selKey]: { quantity: 50, colorCodes: [""] } };
       return { ...prev, [selKey]: { ...existing, colorCodes: [...(existing.colorCodes ?? []), ""] } };
     });
   };
@@ -249,7 +254,9 @@ export default function ContactForm() {
   const removeColorVariant = (selKey: string, idx: number) => {
     setSelections(prev => {
       const existing = prev[selKey];
+      if (!existing) return prev;
       const codes = existing.colorCodes?.filter((_, i) => i !== idx) ?? [];
+      if (codes.length === 0) { const n = { ...prev }; delete n[selKey]; return n; }
       return { ...prev, [selKey]: { ...existing, colorCodes: codes } };
     });
   };
@@ -320,6 +327,41 @@ export default function ContactForm() {
 
   const renderOptions = (selKey: string, info: ServiceInfo) => {
     const sel = selections[selKey];
+
+    if (info.effectiveType === "color-variant") {
+      const codes = sel?.colorCodes ?? [""];
+      return (
+        <div className="space-y-2">
+          <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)]">
+            For each color variant, provide a color code or approximate name. If you have swatch files or color reference images, simply note them here and upload under &apos;Supporting files&apos; in the &apos;Preferences&apos; step later.
+          </p>
+          {codes.map((code, idx) => (
+            <div key={idx} className="flex items-center gap-2">
+              <span className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/40%)] shrink-0 w-24">Color Variant {idx + 1}</span>
+              <input type="text" value={code}
+                onChange={e => {
+                  const next = [...codes];
+                  next[idx] = e.target.value;
+                  setColorCodes(selKey, next);
+                }}
+                placeholder="Color code or name (e.g. #FF5733, Royal Blue)"
+                className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-xs text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
+              {codes.length > 1 && (
+                <button type="button" onClick={() => removeColorVariant(selKey, idx)}
+                  className="w-6 h-6 rounded flex items-center justify-center text-[rgb(var(--fg-rgb)/30%)] hover:text-red-400 transition-colors">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              )}
+            </div>
+          ))}
+          <button type="button" onClick={() => addColorVariant(selKey)}
+            className="text-[11px] font-bold text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors">
+            + Add another variant
+          </button>
+        </div>
+      );
+    }
+
     if (!sel) return null;
 
     if (info.effectiveType === "complexity") {
@@ -329,7 +371,7 @@ export default function ContactForm() {
           <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)] mb-3">
             How complex are your images? If your images have different levels of complexity, choose the average for this order.
           </p>
-          <div className={`grid grid-cols-${Math.min(mults.length, 6)} gap-1.5`} style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(mults.length, 6)}, minmax(0, 1fr))` }}>
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(mults.length, 6)}, minmax(0, 1fr))` }} className="gap-1.5">
             {mults.map((mult, i) => {
               const level = i + 1;
               const price = info.effectiveBasePrice * mult;
@@ -374,40 +416,6 @@ export default function ContactForm() {
               );
             })}
           </div>
-        </div>
-      );
-    }
-
-    if (info.effectiveType === "color-variant") {
-      const codes = sel.colorCodes ?? [""];
-      return (
-        <div className="space-y-2">
-          <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)]">
-            For each color variant, provide a color code or approximate name. If you have swatch files or color reference images, simply note them here and upload under &apos;Supporting files&apos; in the &apos;Preferences&apos; step later.
-          </p>
-          {codes.map((code, idx) => (
-            <div key={idx} className="flex items-center gap-2">
-              <span className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/40%)] shrink-0 w-24">Color Variant {idx + 1}</span>
-              <input type="text" value={code}
-                onChange={e => {
-                  const next = [...codes];
-                  next[idx] = e.target.value;
-                  setColorCodes(selKey, next);
-                }}
-                placeholder="Color code or name (e.g. #FF5733, Royal Blue)"
-                className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-xs text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
-              {codes.length > 1 && (
-                <button type="button" onClick={() => removeColorVariant(selKey, idx)}
-                  className="w-6 h-6 rounded flex items-center justify-center text-[rgb(var(--fg-rgb)/30%)] hover:text-red-400 transition-colors">
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-              )}
-            </div>
-          ))}
-          <button type="button" onClick={() => addColorVariant(selKey)}
-            className="text-[11px] font-bold text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors">
-            + Add another variant
-          </button>
         </div>
       );
     }
@@ -547,7 +555,7 @@ export default function ContactForm() {
                           {/* Card Header */}
                           <div className="flex items-center gap-3 px-5 py-4 cursor-pointer select-none"
                             onClick={() => {
-                              if (!svc.subTypes && (svc.type === "none" || svc.type === "color-variant")) {
+                              if (!svc.subTypes && svc.type === "none") {
                                 handleSelect(svc.id);
                               } else {
                                 toggleExpand(svc.id);
@@ -559,7 +567,7 @@ export default function ContactForm() {
                                 <p className="text-[10px] text-[rgb(var(--accent-400))] mt-0.5 font-medium">{summaryLine}</p>
                               )}
                             </div>
-                            {(!svc.subTypes && (svc.type === "none" || svc.type === "color-variant")) ? (
+                            {(!svc.subTypes && svc.type === "none") ? (
                               <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
                                 hasAnySelection
                                   ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]"
