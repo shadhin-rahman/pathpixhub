@@ -6,48 +6,59 @@ import { motion, AnimatePresence } from "framer-motion";
 const VOLUME_DISCOUNT_THRESHOLD = 500;
 const VOLUME_DISCOUNT_RATE = 0.1;
 
-const COMPLEXITY_LEVELS = [
-  { level: 1, multiplier: 0.5 },
-  { level: 2, multiplier: 0.7 },
-  { level: 3, multiplier: 1.0 },
-  { level: 4, multiplier: 1.5 },
-  { level: 5, multiplier: 2.0 },
-  { level: 6, multiplier: 3.0 },
-];
-
-type SubTypeDef = { id: string; label: string; basePrice: number };
-type ServiceDef = {
-  id: string; label: string;
-  basePrice?: number;
-  subTypes?: SubTypeDef[];
+const COMPLEXITY_MULTIPLIERS: Record<number, number[]> = {
+  2: [0.7, 1.0],
+  3: [0.7, 1.0, 1.5],
+  4: [0.5, 0.7, 1.0, 1.5],
+  5: [0.5, 0.7, 1.0, 1.5, 2.0],
+  6: [0.5, 0.7, 1.0, 1.5, 2.0, 3.0],
 };
 
+type TierDef = { id: string; label: string; multiplier: number };
+type SubTypeDef = { id: string; label: string; basePrice: number; type: "complexity" | "tier" | "none"; complexityLevels?: number; tiers?: TierDef[] };
+type ServiceDef = { id: string; label: string; basePrice?: number; type?: "complexity" | "tier" | "none" | "color-variant"; complexityLevels?: number; tiers?: TierDef[]; subTypes?: SubTypeDef[] };
+
 const ALL_SERVICES: ServiceDef[] = [
-  { id: "clipping-path", label: "Clipping path", basePrice: 0.39 },
-  { id: "multi-clipping-path", label: "Multi-clipping path", basePrice: 1.19 },
-  { id: "image-masking", label: "Image masking", basePrice: 1.19 },
-  { id: "background-removal", label: "Background removal", basePrice: 0.39 },
-  { id: "shadow", label: "Shadow", subTypes: [
-    { id: "natural", label: "Natural shadow", basePrice: 0.25 },
-    { id: "reflection", label: "Reflection shadow", basePrice: 0.30 },
-    { id: "existing", label: "Existing shadow", basePrice: 0.25 },
-    { id: "drop", label: "Drop shadow", basePrice: 0.25 },
-    { id: "floating", label: "Floating shadow", basePrice: 0.28 },
+  { id: "clipping-path", label: "Clipping path", basePrice: 0.39, type: "complexity", complexityLevels: 6 },
+  { id: "multi-clipping-path", label: "Multi-clipping path", basePrice: 1.19, type: "complexity", complexityLevels: 4 },
+  { id: "image-masking", label: "Image masking", basePrice: 1.19, type: "complexity", complexityLevels: 5 },
+  { id: "background-removal", label: "Background removal", basePrice: 0.39, type: "none" },
+  {
+    id: "shadow", label: "Shadow", subTypes: [
+      { id: "drop", label: "Drop shadow", basePrice: 0.25, type: "none" },
+      { id: "existing", label: "Existing shadow", basePrice: 0.25, type: "none" },
+      { id: "floating", label: "Floating shadow", basePrice: 0.28, type: "none" },
+      { id: "natural", label: "Natural shadow", basePrice: 0.25, type: "complexity", complexityLevels: 3 },
+      { id: "reflection", label: "Reflection shadow", basePrice: 0.30, type: "complexity", complexityLevels: 3 },
+    ],
+  },
+  {
+    id: "photo-retouching", label: "Photo retouching", subTypes: [
+      { id: "dust-spot-scratch", label: "Dust, spot and scratch removal", basePrice: 0.69, type: "tier", tiers: [
+        { id: "basic", label: "Basic retouching", multiplier: 0.8 },
+        { id: "advance", label: "Advance retouching", multiplier: 1.2 },
+      ]},
+      { id: "wrinkle-clothing", label: "Wrinkle on clothing", basePrice: 0.79, type: "tier", tiers: [
+        { id: "basic", label: "Basic retouching", multiplier: 1.0 },
+        { id: "advance", label: "Advance retouching", multiplier: 1.4 },
+      ]},
+      { id: "beauty-airbrushing", label: "Beauty airbrushing", basePrice: 0.89, type: "tier", tiers: [
+        { id: "basic", label: "Basic retouching", multiplier: 1.0 },
+        { id: "advance", label: "Advance retouching", multiplier: 1.5 },
+      ]},
+      { id: "camera-reflection", label: "Camera reflection removal", basePrice: 0.99, type: "tier", tiers: [
+        { id: "basic", label: "Basic retouching", multiplier: 1.0 },
+        { id: "advance", label: "Advance retouching", multiplier: 1.4 },
+      ]},
+    ],
+  },
+  { id: "symmetrical-edit", label: "Symmetrical edit", basePrice: 0.79, type: "none" },
+  { id: "ghost-mannequin", label: "Ghost mannequin", basePrice: 0.89, type: "complexity", complexityLevels: 2 },
+  { id: "color-change", label: "Color change", basePrice: 0.99, type: "color-variant" },
+  { id: "car-editing", label: "Car editing", basePrice: 2.99, type: "tier", tiers: [
+    { id: "basic", label: "Basic", multiplier: 1.0 },
+    { id: "advance", label: "Advance", multiplier: 1.5 },
   ]},
-  { id: "photo-retouching", label: "Photo retouching", subTypes: [
-    { id: "dust-spot-scratch", label: "Dust, spot and scratch removal", basePrice: 0.69 },
-    { id: "beauty-airbrushing", label: "Beauty airbrushing", basePrice: 0.89 },
-    { id: "camera-reflection", label: "Camera reflection removal", basePrice: 0.99 },
-    { id: "wrinkle-clothing", label: "Wrinkle on clothing", basePrice: 0.79 },
-  ]},
-  { id: "symmetrical-edit", label: "Symmetrical edit", basePrice: 0.79 },
-  { id: "ghost-mannequin", label: "Ghost mannequin", basePrice: 0.89 },
-  { id: "color-change", label: "Color change", basePrice: 0.99 },
-  { id: "vector-conversion", label: "Vector conversion", subTypes: [
-    { id: "logo", label: "Logo", basePrice: 1.50 },
-    { id: "artwork", label: "Artwork", basePrice: 2.50 },
-  ]},
-  { id: "car-editing", label: "Car editing", basePrice: 2.99 },
 ];
 
 const TURNAROUND_OPTIONS = [
@@ -82,9 +93,19 @@ const FILE_OPTIONS = [
 
 type ServiceSelection = {
   subTypeId?: string;
-  complexity: number;
+  complexity?: number;
+  tier?: string;
   quantity: number;
-  colorCode?: string;
+  colorCodes?: string[];
+};
+
+type ServiceInfo = {
+  def: ServiceDef;
+  subType?: SubTypeDef;
+  effectiveType: "complexity" | "tier" | "none" | "color-variant";
+  effectiveBasePrice: number;
+  effectiveComplexityLevels: number;
+  effectiveTiers: TierDef[];
 };
 
 export default function ContactForm() {
@@ -105,29 +126,53 @@ export default function ContactForm() {
 
   const getSelKey = (svcId: string, subTypeId?: string) => subTypeId ? `${svcId}:${subTypeId}` : svcId;
 
-  const getService = (selKey: string): { def: ServiceDef; subType?: SubTypeDef } | undefined => {
+  const getService = (selKey: string): ServiceInfo | undefined => {
     for (const svc of ALL_SERVICES) {
-      if (!svc.subTypes && svc.id === selKey) return { def: svc };
+      if (!svc.subTypes && svc.id === selKey) {
+        const t = svc.type ?? "none";
+        return {
+          def: svc, effectiveType: t, effectiveBasePrice: svc.basePrice ?? 0,
+          effectiveComplexityLevels: svc.complexityLevels ?? 6, effectiveTiers: svc.tiers ?? [],
+        };
+      }
       if (svc.subTypes) {
         for (const st of svc.subTypes) {
-          if (`${svc.id}:${st.id}` === selKey) return { def: svc, subType: st };
+          if (`${svc.id}:${st.id}` === selKey) {
+            return {
+              def: svc, subType: st, effectiveType: st.type,
+              effectiveBasePrice: st.basePrice, effectiveComplexityLevels: st.complexityLevels ?? 6,
+              effectiveTiers: st.tiers ?? [],
+            };
+          }
         }
       }
     }
   };
 
-  const getBasePrice = (selKey: string): number => {
-    const info = getService(selKey);
-    if (!info) return 0;
-    return info.subType?.basePrice ?? info.def.basePrice ?? 0;
+  const getMultiplier = (info: ServiceInfo, sel: ServiceSelection): number => {
+    if (info.effectiveType === "complexity") {
+      const mults = COMPLEXITY_MULTIPLIERS[info.effectiveComplexityLevels] ?? COMPLEXITY_MULTIPLIERS[6];
+      return mults[(sel.complexity ?? 1) - 1] ?? 1.0;
+    }
+    if (info.effectiveType === "tier") {
+      const t = info.effectiveTiers.find(t => t.id === (sel.tier ?? "basic"));
+      return t?.multiplier ?? 1.0;
+    }
+    return 1.0;
   };
 
-  const getMultiplier = (complexity: number): number => {
-    return COMPLEXITY_LEVELS.find(c => c.level === complexity)?.multiplier ?? 1.0;
+  const getPricePerImage = (info: ServiceInfo, sel: ServiceSelection): number => {
+    return info.effectiveBasePrice * getMultiplier(info, sel);
   };
 
-  const getPricePerImage = (selKey: string, complexity: number): number => {
-    return getBasePrice(selKey) * getMultiplier(complexity);
+  const getDisplayLabel = (info: ServiceInfo, sel: ServiceSelection): string => {
+    const base = info.subType?.label ?? info.def.label;
+    if (info.effectiveType === "complexity") return `${base} (C${sel.complexity})`;
+    if (info.effectiveType === "tier") {
+      const t = info.effectiveTiers.find(t => t.id === sel.tier);
+      return `${base} — ${t?.label ?? ""}`;
+    }
+    return base;
   };
 
   const hasSelection = (selKey: string): boolean => selKey in selections;
@@ -137,46 +182,80 @@ export default function ContactForm() {
     setExpandedSubType(null);
   };
 
-  const handleSubTypeClick = (svcId: string, subTypeKey: string) => {
-    const selKey = getSelKey(svcId, subTypeKey);
+  const getDefaultSelection = (info: ServiceInfo): Partial<ServiceSelection> => {
+    if (info.effectiveType === "complexity") return { complexity: 1 };
+    if (info.effectiveType === "tier") return { tier: "basic" };
+    if (info.effectiveType === "color-variant") return { colorCodes: [""] };
+    return {};
+  };
+
+  const handleSelect = (selKey: string) => {
     if (hasSelection(selKey)) {
-      const prev = { ...selections };
-      delete prev[selKey];
-      setSelections(prev);
-    } else {
-      setSelections(prev => ({ ...prev, [selKey]: { complexity: 3, quantity: 50 } }));
+      removeSelection(selKey);
+      return;
     }
+    const info = getService(selKey);
+    if (!info) return;
+    setSelections(prev => ({ ...prev, [selKey]: { quantity: 50, ...getDefaultSelection(info) } as ServiceSelection }));
+  };
+
+  const handleSubTypeClick = (svcId: string, subTypeId: string) => {
+    const selKey = getSelKey(svcId, subTypeId);
+    if (hasSelection(selKey)) {
+      removeSelection(selKey);
+      return;
+    }
+    const info = getService(selKey);
+    if (!info) return;
+    setSelections(prev => ({ ...prev, [selKey]: { quantity: 50, ...getDefaultSelection(info) } as ServiceSelection }));
+    setExpandedSubType(subTypeId);
   };
 
   const selectComplexity = (selKey: string, level: number) => {
     setSelections(prev => {
       const existing = prev[selKey];
-      if (existing && existing.complexity === level && existing.subTypeId === undefined) {
+      const info = getService(selKey);
+      if (!info) return prev;
+      if (info.effectiveType === "complexity" && existing?.complexity === level) {
         const n = { ...prev };
         delete n[selKey];
         return n;
       }
-      return { ...prev, [selKey]: { ...existing ?? { quantity: 50 }, complexity: level } };
+      return { ...prev, [selKey]: { ...existing ?? { quantity: 50 }, complexity: level } as ServiceSelection };
     });
+  };
+
+  const selectTier = (selKey: string, tierId: string) => {
+    setSelections(prev => ({ ...prev, [selKey]: { ...prev[selKey], tier: tierId } }));
   };
 
   const setQty = (selKey: string, qty: number) => {
     setSelections(prev => ({
-      ...prev,
-      [selKey]: { ...prev[selKey], quantity: Math.max(1, Math.min(20000, qty || 1)) },
+      ...prev, [selKey]: { ...prev[selKey], quantity: Math.max(1, Math.min(20000, qty || 1)) },
     }));
   };
 
-  const setColorCode = (selKey: string, code: string) => {
-    setSelections(prev => ({ ...prev, [selKey]: { ...prev[selKey], colorCode: code } }));
+  const setColorCodes = (selKey: string, codes: string[]) => {
+    setSelections(prev => ({ ...prev, [selKey]: { ...prev[selKey], colorCodes: codes } }));
+  };
+
+  const addColorVariant = (selKey: string) => {
+    setSelections(prev => {
+      const existing = prev[selKey];
+      return { ...prev, [selKey]: { ...existing, colorCodes: [...(existing.colorCodes ?? []), ""] } };
+    });
+  };
+
+  const removeColorVariant = (selKey: string, idx: number) => {
+    setSelections(prev => {
+      const existing = prev[selKey];
+      const codes = existing.colorCodes?.filter((_, i) => i !== idx) ?? [];
+      return { ...prev, [selKey]: { ...existing, colorCodes: codes } };
+    });
   };
 
   const removeSelection = (selKey: string) => {
-    setSelections(prev => {
-      const n = { ...prev };
-      delete n[selKey];
-      return n;
-    });
+    setSelections(prev => { const n = { ...prev }; delete n[selKey]; return n; });
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -195,7 +274,9 @@ export default function ContactForm() {
   const { totalImages, subtotal, discountApplies, discountAmount, turnaroundFee, total, orderedKeys } = useMemo(() => {
     let images = 0; let sub = 0;
     for (const [key, sel] of Object.entries(selections)) {
-      const ppi = getPricePerImage(key, sel.complexity);
+      const info = getService(key);
+      if (!info) continue;
+      const ppi = getPricePerImage(info, sel);
       images += sel.quantity;
       sub += ppi * sel.quantity;
     }
@@ -203,11 +284,10 @@ export default function ContactForm() {
     const discount = applies ? sub * VOLUME_DISCOUNT_RATE : 0;
     const base = sub - discount;
     const fee = base * turnaroundSurcharge;
-    const keys = Object.keys(selections);
     return {
       totalImages: images, subtotal: sub, discountApplies: applies,
       discountAmount: discount, turnaroundFee: fee, total: base + fee,
-      orderedKeys: keys,
+      orderedKeys: Object.keys(selections),
     };
   }, [selections, turnaroundSurcharge]);
 
@@ -216,10 +296,10 @@ export default function ContactForm() {
     const lines = orderedKeys.map((key) => {
       const info = getService(key);
       const sel = selections[key];
-      const ppi = getPricePerImage(key, sel.complexity);
+      if (!info || !sel) return "";
+      const ppi = getPricePerImage(info, sel);
       const lineTotal = ppi * sel.quantity;
-      const label = info?.subType?.label ?? info?.def.label ?? key;
-      return `- ${label} [Complexity ${sel.complexity}]: ${sel.quantity} images ($${lineTotal.toFixed(2)})`;
+      return `- ${getDisplayLabel(info, sel)}: ${sel.quantity} images ($${lineTotal.toFixed(2)})`;
     });
     lines.push(`Total images: ${totalImages}`);
     if (discountApplies) lines.push(`Volume discount: -$${discountAmount.toFixed(2)}`);
@@ -238,40 +318,109 @@ export default function ContactForm() {
     { id: 4, label: "Contact information" },
   ];
 
-  const complexityGrid = (selKey: string, basePx: number) => (
-    <div>
-      <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)] mb-3">
-        How complex are your images? If your images have different levels of complexity, choose the average for this order.
-      </p>
-      <div className="grid grid-cols-6 gap-1.5">
-        {COMPLEXITY_LEVELS.map(cl => {
-          const price = basePx * cl.multiplier;
-          const sel = selections[selKey];
-          const isActive = sel?.complexity === cl.level;
-          return (
-            <button key={cl.level} type="button" onClick={() => selectComplexity(selKey, cl.level)}
-              className={`rounded-xl py-2.5 px-1 text-center border transition-all ${
-                isActive
-                  ? "border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/10%)]"
-                  : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--fg-rgb)/15%)]"
-              }`}>
-              <p className={`text-[10px] font-bold leading-tight ${isActive ? "text-[rgb(var(--accent-400))]" : "text-[rgb(var(--fg-rgb))]"}`}>
-                Complexity {cl.level}
-              </p>
-              <p className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/40%)] mt-0.5">
-                ${price.toFixed(2)}
-              </p>
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
+  const renderOptions = (selKey: string, info: ServiceInfo) => {
+    const sel = selections[selKey];
+    if (!sel) return null;
+
+    if (info.effectiveType === "complexity") {
+      const mults = COMPLEXITY_MULTIPLIERS[info.effectiveComplexityLevels] ?? COMPLEXITY_MULTIPLIERS[6];
+      return (
+        <div>
+          <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)] mb-3">
+            How complex are your images? If your images have different levels of complexity, choose the average for this order.
+          </p>
+          <div className={`grid grid-cols-${Math.min(mults.length, 6)} gap-1.5`} style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(mults.length, 6)}, minmax(0, 1fr))` }}>
+            {mults.map((mult, i) => {
+              const level = i + 1;
+              const price = info.effectiveBasePrice * mult;
+              const isActive = sel.complexity === level;
+              return (
+                <button key={level} type="button" onClick={() => selectComplexity(selKey, level)}
+                  className={`rounded-xl py-2.5 px-1 text-center border transition-all ${
+                    isActive
+                      ? "border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/10%)]"
+                      : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--fg-rgb)/15%)]"
+                  }`}>
+                  <p className={`text-[10px] font-bold leading-tight ${isActive ? "text-[rgb(var(--accent-400))]" : "text-[rgb(var(--fg-rgb))]"}`}>
+                    Complexity {level}
+                  </p>
+                  <p className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/40%)] mt-0.5">${price.toFixed(2)}</p>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
+    if (info.effectiveType === "tier") {
+      return (
+        <div>
+          <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)] mb-3">Select the type of retouching.</p>
+          <div className="flex gap-2">
+            {info.effectiveTiers.map(t => {
+              const price = info.effectiveBasePrice * t.multiplier;
+              const isActive = sel.tier === t.id;
+              return (
+                <button key={t.id} type="button" onClick={() => selectTier(selKey, t.id)}
+                  className={`flex-1 rounded-xl py-2.5 px-3 text-center border transition-all ${
+                    isActive
+                      ? "border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/10%)]"
+                      : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--fg-rgb)/15%)]"
+                  }`}>
+                  <p className={`text-[11px] font-bold ${isActive ? "text-[rgb(var(--accent-400))]" : "text-[rgb(var(--fg-rgb))]"}`}>{t.label}</p>
+                  <p className="text-[10px] font-bold text-[rgb(var(--fg-rgb)/40%)] mt-0.5">${price.toFixed(2)}/img</p>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
+    if (info.effectiveType === "color-variant") {
+      const codes = sel.colorCodes ?? [""];
+      return (
+        <div className="space-y-2">
+          <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)]">
+            For each color variant, provide a color code or approximate name. If you have swatch files or color reference images, simply note them here and upload under &apos;Supporting files&apos; in the &apos;Preferences&apos; step later.
+          </p>
+          {codes.map((code, idx) => (
+            <div key={idx} className="flex items-center gap-2">
+              <span className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/40%)] shrink-0 w-24">Color Variant {idx + 1}</span>
+              <input type="text" value={code}
+                onChange={e => {
+                  const next = [...codes];
+                  next[idx] = e.target.value;
+                  setColorCodes(selKey, next);
+                }}
+                placeholder="Color code or name (e.g. #FF5733, Royal Blue)"
+                className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-xs text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
+              {codes.length > 1 && (
+                <button type="button" onClick={() => removeColorVariant(selKey, idx)}
+                  className="w-6 h-6 rounded flex items-center justify-center text-[rgb(var(--fg-rgb)/30%)] hover:text-red-400 transition-colors">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              )}
+            </div>
+          ))}
+          <button type="button" onClick={() => addColorVariant(selKey)}
+            className="text-[11px] font-bold text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors">
+            + Add another variant
+          </button>
+        </div>
+      );
+    }
+
+    return null;
+  };
 
   const quantityRow = (selKey: string) => {
     const sel = selections[selKey];
     if (!sel) return null;
-    const ppi = getPricePerImage(selKey, sel.complexity);
+    const info = getService(selKey);
+    if (!info) return null;
+    const ppi = getPricePerImage(info, sel);
     return (
       <div className="flex items-center gap-3 pt-2">
         <div className="flex items-center gap-1">
@@ -287,6 +436,22 @@ export default function ContactForm() {
         <span className="text-xs font-bold text-[rgb(var(--fg-rgb))] ml-auto">${(ppi * sel.quantity).toFixed(2)}</span>
       </div>
     );
+  };
+
+  const getSummaryText = (selKey: string): string => {
+    const info = getService(selKey);
+    const sel = selections[selKey];
+    if (!info || !sel) return "";
+    if (info.effectiveType === "complexity") return `C${sel.complexity}, ×${sel.quantity}`;
+    if (info.effectiveType === "tier") {
+      const t = info.effectiveTiers.find(t => t.id === sel.tier);
+      return `${t?.label ?? ""}, ×${sel.quantity}`;
+    }
+    if (info.effectiveType === "color-variant") {
+      const count = sel.colorCodes?.filter(c => c.trim()).length ?? 0;
+      return `${count} variant(s), ×${sel.quantity}`;
+    }
+    return `×${sel.quantity}`;
   };
 
   return (
@@ -307,7 +472,6 @@ export default function ContactForm() {
         <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8">
           {/* Left */}
           <div>
-            {/* Quote / Question toggle */}
             <div className="flex items-center gap-1 p-1 rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/5%)] w-fit mb-6">
               <button type="button" onClick={() => { setWantsQuote(true); setStep(1); }}
                 className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${wantsQuote ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg" : "text-[rgb(var(--fg-rgb)/50%)] hover:text-[rgb(var(--fg-rgb))]"}`}>
@@ -355,29 +519,21 @@ export default function ContactForm() {
 
                     {ALL_SERVICES.map(svc => {
                       const isExpanded = expandedSvc === svc.id;
-                      // For simple services, check if svc.id is a key
-                      // For complex services, check if any subType key exists
                       const hasAnySelection = svc.subTypes
                         ? svc.subTypes.some(st => hasSelection(getSelKey(svc.id, st.id)))
                         : hasSelection(svc.id);
 
-                      // If expanded, figure out which sub-types are selected
-                      const activeSubType = svc.subTypes ? expandedSubType : null;
-
-                      // Determine summary line if selected & collapsed
                       let summaryLine = "";
                       if (hasAnySelection && !isExpanded) {
                         if (svc.subTypes) {
                           const parts: string[] = [];
                           for (const st of svc.subTypes) {
                             const key = getSelKey(svc.id, st.id);
-                            const sel = selections[key];
-                            if (sel) parts.push(`${st.label} (C${sel.complexity}, ×${sel.quantity})`);
+                            if (hasSelection(key)) parts.push(getSummaryText(key));
                           }
-                          summaryLine = parts.join(", ");
+                          summaryLine = parts.length > 0 ? parts.join(", ") : "";
                         } else {
-                          const sel = selections[svc.id];
-                          if (sel) summaryLine = `Complexity ${sel.complexity}, ×${sel.quantity}`;
+                          summaryLine = getSummaryText(svc.id);
                         }
                       }
 
@@ -390,23 +546,43 @@ export default function ContactForm() {
                           }`}>
                           {/* Card Header */}
                           <div className="flex items-center gap-3 px-5 py-4 cursor-pointer select-none"
-                            onClick={() => toggleExpand(svc.id)}>
+                            onClick={() => {
+                              if (!svc.subTypes && (svc.type === "none" || svc.type === "color-variant")) {
+                                handleSelect(svc.id);
+                              } else {
+                                toggleExpand(svc.id);
+                              }
+                            }}>
                             <div className="flex-1">
                               <p className="font-semibold text-sm text-[rgb(var(--fg-rgb))]">{svc.label}</p>
                               {summaryLine && (
                                 <p className="text-[10px] text-[rgb(var(--accent-400))] mt-0.5 font-medium">{summaryLine}</p>
                               )}
                             </div>
-                            <div className={`w-7 h-7 rounded-lg border flex items-center justify-center transition-all ${
-                              isExpanded
-                                ? "border-[rgb(var(--accent-500)/40%)] bg-[rgb(var(--accent-500)/8%)]"
-                                : "border-[rgb(var(--fg-rgb)/15%)]"
-                            }`}>
-                              <svg className={`w-3.5 h-3.5 text-[rgb(var(--fg-rgb)/40%)] transition-transform ${isExpanded ? "rotate-45" : ""}`}
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
-                              </svg>
-                            </div>
+                            {(!svc.subTypes && (svc.type === "none" || svc.type === "color-variant")) ? (
+                              <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
+                                hasAnySelection
+                                  ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]"
+                                  : "border-[rgb(var(--fg-rgb)/20%)]"
+                              }`}>
+                                {hasAnySelection && (
+                                  <svg className="w-3 h-3 text-[rgb(var(--accent-contrast))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                  </svg>
+                                )}
+                              </div>
+                            ) : (
+                              <div className={`w-7 h-7 rounded-lg border flex items-center justify-center transition-all ${
+                                isExpanded
+                                  ? "border-[rgb(var(--accent-500)/40%)] bg-[rgb(var(--accent-500)/8%)]"
+                                  : "border-[rgb(var(--fg-rgb)/15%)]"
+                              }`}>
+                                <svg className={`w-3.5 h-3.5 text-[rgb(var(--fg-rgb)/40%)] transition-transform ${isExpanded ? "rotate-45" : ""}`}
+                                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                                </svg>
+                              </div>
+                            )}
                           </div>
 
                           <AnimatePresence>
@@ -416,27 +592,14 @@ export default function ContactForm() {
                                 exit={{ height: 0, opacity: 0 }}
                                 className="overflow-hidden">
                                 <div className="px-5 pb-5 pt-0 space-y-4 border-t border-[rgb(var(--fg-rgb)/5%)]">
-
                                   {!svc.subTypes ? (
-                                    /* Simple service: complexity + quantity */
-                                    <>
-                                      {complexityGrid(svc.id, svc.basePrice ?? 0)}
-                                      {selections[svc.id] && quantityRow(svc.id)}
-                                      {svc.id === "color-change" && selections[svc.id] && (
-                                        <input type="text"
-                                          placeholder="Color code or name (e.g. #FF5733, Royal Blue)"
-                                          value={selections[svc.id].colorCode ?? ""}
-                                          onChange={e => setColorCode(svc.id, e.target.value)}
-                                          className="w-full px-3 py-2 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-xs text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
-                                      )}
-                                    </>
+                                    <>{renderOptions(svc.id, getService(svc.id)!)}
+                                    {selections[svc.id] && quantityRow(svc.id)}</>
                                   ) : (
-                                    /* Complex service: sub-type list */
                                     <>
                                       <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)]">
                                         {svc.id === "shadow" ? "Select the type of shadow you want." :
                                          svc.id === "photo-retouching" ? "Select one or more types of photo retouching." :
-                                         svc.id === "vector-conversion" ? "Select the type of image you need vector conversion for." :
                                          "Select a service type."}
                                       </p>
                                       <div className="space-y-2">
@@ -445,6 +608,8 @@ export default function ContactForm() {
                                           const isSelected = hasSelection(key);
                                           const sel = selections[key];
                                           const isSubExpanded = expandedSubType === st.id;
+                                          const info = getService(key) as ServiceInfo;
+                                          const isAutoSelect = st.type === "none";
                                           return (
                                             <div key={st.id}
                                               className={`rounded-xl border transition-all ${
@@ -454,32 +619,60 @@ export default function ContactForm() {
                                               }`}>
                                               <div className="flex items-center gap-3 px-4 py-3 cursor-pointer select-none"
                                                 onClick={() => {
-                                                  handleSubTypeClick(svc.id, st.id);
-                                                  setExpandedSubType(isSelected && isSubExpanded ? null : st.id);
+                                                  if (isAutoSelect) {
+                                                    handleSubTypeClick(svc.id, st.id);
+                                                  } else {
+                                                    setExpandedSubType(isSubExpanded ? null : st.id);
+                                                    if (isSelected && isSubExpanded) {
+                                                      removeSelection(key);
+                                                    } else if (!isSelected) {
+                                                      handleSubTypeClick(svc.id, st.id);
+                                                    }
+                                                  }
                                                 }}>
                                                 <div className="flex-1">
                                                   <p className="text-[13px] font-semibold text-[rgb(var(--fg-rgb))]">{st.label}</p>
-                                                </div>
-                                                <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
-                                                  isSelected
-                                                    ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]"
-                                                    : "border-[rgb(var(--fg-rgb)/20%)]"
-                                                }`}>
-                                                  {isSelected && (
-                                                    <svg className="w-3 h-3 text-[rgb(var(--accent-contrast))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                                    </svg>
+                                                  {isSelected && sel && (
+                                                    <p className="text-[10px] text-[rgb(var(--accent-400))] mt-0.5">{getSummaryText(key)}</p>
                                                   )}
                                                 </div>
+                                                {isAutoSelect ? (
+                                                  <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
+                                                    isSelected
+                                                      ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]"
+                                                      : "border-[rgb(var(--fg-rgb)/20%)]"
+                                                  }`}>
+                                                    {isSelected && (
+                                                      <svg className="w-3 h-3 text-[rgb(var(--accent-contrast))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                                      </svg>
+                                                    )}
+                                                  </div>
+                                                ) : (
+                                                  <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform ${isSubExpanded ? "rotate-180" : ""}`}
+                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                  </svg>
+                                                )}
                                               </div>
                                               <AnimatePresence>
-                                                {isSelected && isSubExpanded && (
+                                                {isSelected && isSubExpanded && !isAutoSelect && (
                                                   <motion.div initial={{ height: 0, opacity: 0 }}
                                                     animate={{ height: "auto", opacity: 1 }}
                                                     exit={{ height: 0, opacity: 0 }}
                                                     className="overflow-hidden">
                                                     <div className="px-4 pb-4 pt-0 space-y-3 border-t border-[rgb(var(--fg-rgb)/5%)]">
-                                                      {complexityGrid(key, st.basePrice)}
+                                                      {renderOptions(key, info)}
+                                                      {quantityRow(key)}
+                                                    </div>
+                                                  </motion.div>
+                                                )}
+                                                {isSelected && isAutoSelect && (
+                                                  <motion.div initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: "auto", opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    className="overflow-hidden">
+                                                    <div className="px-4 pb-4 pt-0 border-t border-[rgb(var(--fg-rgb)/5%)]">
                                                       {quantityRow(key)}
                                                     </div>
                                                   </motion.div>
@@ -518,51 +711,29 @@ export default function ContactForm() {
                         className="w-full px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)] resize-none" />
                     </div>
 
-                    {/* File Format */}
                     <div>
                       <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Preferred file format</label>
                       <div className="relative">
                         <select value={fileOption} onChange={e => setFileOption(e.target.value)}
                           className="w-full px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)] appearance-none cursor-pointer">
-                          <optgroup label="PSD">
-                            {FILE_OPTIONS.filter(f => f.id.startsWith("psd-")).map(f => (
-                              <option key={f.id} value={f.id}>{f.label}</option>
-                            ))}
-                          </optgroup>
-                          <optgroup label="TIF">
-                            {FILE_OPTIONS.filter(f => f.id.startsWith("tif-")).map(f => (
-                              <option key={f.id} value={f.id}>{f.label}</option>
-                            ))}
-                          </optgroup>
-                          <optgroup label="JPG">
-                            {FILE_OPTIONS.filter(f => f.id.startsWith("jpg-")).map(f => (
-                              <option key={f.id} value={f.id}>{f.label}</option>
-                            ))}
-                          </optgroup>
-                          <optgroup label="PNG">
-                            {FILE_OPTIONS.filter(f => f.id.startsWith("png-")).map(f => (
-                              <option key={f.id} value={f.id}>{f.label}</option>
-                            ))}
-                          </optgroup>
+                          <optgroup label="PSD">{FILE_OPTIONS.filter(f => f.id.startsWith("psd-")).map(f => (<option key={f.id} value={f.id}>{f.label}</option>))}</optgroup>
+                          <optgroup label="TIF">{FILE_OPTIONS.filter(f => f.id.startsWith("tif-")).map(f => (<option key={f.id} value={f.id}>{f.label}</option>))}</optgroup>
+                          <optgroup label="JPG">{FILE_OPTIONS.filter(f => f.id.startsWith("jpg-")).map(f => (<option key={f.id} value={f.id}>{f.label}</option>))}</optgroup>
+                          <optgroup label="PNG">{FILE_OPTIONS.filter(f => f.id.startsWith("png-")).map(f => (<option key={f.id} value={f.id}>{f.label}</option>))}</optgroup>
                         </select>
                         <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[rgb(var(--fg-rgb)/30%)]">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                         </div>
                       </div>
                     </div>
 
-                    {/* Turnaround */}
                     <div>
                       <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Turnaround time</label>
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                         {TURNAROUND_OPTIONS.map(opt => (
                           <button key={opt.id} type="button" onClick={() => setTurnaround(opt.id)}
                             className={`rounded-xl p-3 border text-center transition-all ${
-                              turnaround === opt.id
-                                ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/8%)]"
-                                : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/15%)]"
+                              turnaround === opt.id ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/8%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/15%)]"
                             }`}>
                             <p className="text-xs font-bold text-[rgb(var(--fg-rgb))]">{opt.label}</p>
                             <p className="text-[10px] text-[rgb(var(--fg-rgb)/40%)]">{opt.desc}</p>
@@ -578,9 +749,7 @@ export default function ContactForm() {
                       <button type="button" onClick={() => setStep(1)}
                         className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
                       <button type="button" onClick={() => setStep(3)}
-                        className="flex-1 py-3 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] transition-all">
-                        CONTINUE →
-                      </button>
+                        className="flex-1 py-3 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] transition-all">CONTINUE →</button>
                     </div>
                   </div>
                 )}
@@ -619,9 +788,7 @@ export default function ContactForm() {
                             </div>
                             <button type="button" onClick={() => removeFile(idx)}
                               className="shrink-0 w-6 h-6 rounded flex items-center justify-center text-[rgb(var(--fg-rgb)/30%)] hover:text-red-400 hover:bg-red-400/10 transition-all">
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                              </svg>
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                           </div>
                         ))}
@@ -632,17 +799,14 @@ export default function ContactForm() {
                       <button type="button" onClick={() => setStep(2)}
                         className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
                       <button type="button" onClick={() => setStep(4)}
-                        className="flex-1 py-3 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] transition-all">
-                        CONTINUE →
-                      </button>
+                        className="flex-1 py-3 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] transition-all">CONTINUE →</button>
                     </div>
                   </div>
                 )}
 
-                {/* ===== STEP 4: CONTACT INFO + REVIEW ===== */}
+                {/* ===== STEP 4: CONTACT INFO ===== */}
                 {step === 4 && (
                   <div className="space-y-5">
-                    {/* Contact fields */}
                     <div className="space-y-3">
                       <input type="text" name="name" placeholder="Your name" required value={name} onChange={e => setName(e.target.value)}
                         className="w-full px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
@@ -652,7 +816,6 @@ export default function ContactForm() {
                         className="w-full px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)] resize-none" />
                     </div>
 
-                    {/* Hidden fields for Formspree */}
                     <input type="hidden" name="quote_details" value={quoteSummary} />
                     <input type="hidden" name="turnaround" value={turnaroundOption?.label} />
                     <input type="hidden" name="file_format" value={selectedFileOpt?.label} />
@@ -661,16 +824,13 @@ export default function ContactForm() {
                       <button type="button" onClick={() => setStep(3)}
                         className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
                       <button type="submit"
-                        className="flex-1 py-3.5 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] hover:scale-[1.01] transition-all">
-                        Submit Quote Request
-                      </button>
+                        className="flex-1 py-3.5 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] hover:scale-[1.01] transition-all">Submit Quote Request</button>
                     </div>
                     <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] text-center">We respond within 45 minutes.</p>
                   </div>
                 )}
               </>
             ) : (
-              /* Just a question mode */
               <div className="space-y-5">
                 <p className="text-sm font-bold text-[rgb(var(--fg-rgb))] mb-4">Send us a message</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -691,9 +851,7 @@ export default function ContactForm() {
                     className="w-full px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/60%)] outline-none transition-all text-sm resize-none" placeholder="Tell us about your images or project..." />
                 </div>
                 <button type="submit"
-                  className="w-full sm:w-auto px-10 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm">
-                  Send Message
-                </button>
+                  className="w-full sm:w-auto px-10 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm">Send Message</button>
                 <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)]">We respond within 45 minutes.</p>
               </div>
             )}
@@ -713,7 +871,7 @@ export default function ContactForm() {
                         const info = getService(key);
                         const sel = selections[key];
                         if (!info || !sel) return null;
-                        const ppi = getPricePerImage(key, sel.complexity);
+                        const ppi = getPricePerImage(info, sel);
                         const lineTotal = ppi * sel.quantity;
                         const label = info.subType?.label ?? info.def.label;
                         return (
@@ -724,15 +882,13 @@ export default function ContactForm() {
                             <div className="flex items-start justify-between gap-2">
                               <div className="min-w-0">
                                 <p className="text-sm text-[rgb(var(--fg-rgb)/70%)] truncate">{label}</p>
-                                <p className="text-[10px] text-[rgb(var(--fg-rgb)/35%)]">C{sel.complexity}, ×{sel.quantity}</p>
+                                <p className="text-[10px] text-[rgb(var(--fg-rgb)/35%)]">{getSummaryText(key)}</p>
                               </div>
                               <div className="flex items-center gap-1.5 shrink-0">
                                 <span className="font-semibold text-sm text-[rgb(var(--fg-rgb))]">${lineTotal.toFixed(2)}</span>
                                 <button type="button" onClick={() => removeSelection(key)}
                                   className="w-4 h-4 rounded flex items-center justify-center text-[rgb(var(--fg-rgb)/20%)] hover:text-red-400 transition-colors">
-                                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                  </svg>
+                                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                               </div>
                             </div>
@@ -742,34 +898,18 @@ export default function ContactForm() {
                     </AnimatePresence>
 
                     <div className="pt-4 mt-4 border-t border-[rgb(var(--fg-rgb)/10%)] space-y-2">
-                      <div className="flex justify-between text-sm text-[rgb(var(--fg-rgb)/50%)]">
-                        <span>Total images</span>
-                        <span>{totalImages}</span>
-                      </div>
-                      <div className="flex justify-between text-sm text-[rgb(var(--fg-rgb)/50%)]">
-                        <span>Subtotal</span>
-                        <span>${subtotal.toFixed(2)}</span>
-                      </div>
-                      {discountApplies && (
-                        <div className="flex justify-between text-sm text-[rgb(34_197_94)]">
-                          <span>Volume discount</span>
-                          <span>−${discountAmount.toFixed(2)}</span>
-                        </div>
-                      )}
+                      <div className="flex justify-between text-sm text-[rgb(var(--fg-rgb)/50%)]"><span>Total images</span><span>{totalImages}</span></div>
+                      <div className="flex justify-between text-sm text-[rgb(var(--fg-rgb)/50%)]"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
+                      {discountApplies && <div className="flex justify-between text-sm text-[rgb(34_197_94)]"><span>Volume discount</span><span>−${discountAmount.toFixed(2)}</span></div>}
                       {turnaroundSurcharge !== 0 && (
                         <div className={`flex justify-between text-sm ${turnaroundSurcharge > 0 ? "text-amber-400" : "text-emerald-400"}`}>
-                          <span>{turnaroundOption?.label}</span>
-                          <span>{turnaroundFee >= 0 ? "+" : ""}${turnaroundFee.toFixed(2)}</span>
+                          <span>{turnaroundOption?.label}</span><span>{turnaroundFee >= 0 ? "+" : ""}${turnaroundFee.toFixed(2)}</span>
                         </div>
                       )}
                       <div className="flex items-center justify-between pt-2 border-t border-[rgb(var(--fg-rgb)/10%)]">
                         <span className="font-bold text-[rgb(var(--fg-rgb))]">Estimated Total</span>
-                        <motion.span key={total.toFixed(2)}
-                          initial={{ opacity: 0.4, y: -4 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="text-2xl font-bold gradient-text">
-                          ${total.toFixed(2)}
-                        </motion.span>
+                        <motion.span key={total.toFixed(2)} initial={{ opacity: 0.4, y: -4 }} animate={{ opacity: 1, y: 0 }}
+                          className="text-2xl font-bold gradient-text">${total.toFixed(2)}</motion.span>
                       </div>
                     </div>
                   </div>
