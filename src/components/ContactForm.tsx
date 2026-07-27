@@ -41,17 +41,25 @@ export default function ContactForm() {
   const [turnaround, setTurnaround] = useState("24");
 
   const toggleService = (id: string) => {
-    setSelected((prev) => {
-      const next = { ...prev };
-      if (id in next) {
+    const isCurrentlySelected = id in selected;
+    const isCurrentlyExpanded = expandedService === id;
+
+    if (isCurrentlySelected && isCurrentlyExpanded) {
+      // Selected + expanded → deselect + collapse
+      setSelected((prev) => {
+        const next = { ...prev };
         delete next[id];
-        setExpandedService((prev) => (prev === id ? null : prev));
-      } else {
-        next[id] = { qty: 50, complexity: "medium" };
-        setExpandedService(id);
-      }
-      return next;
-    });
+        return next;
+      });
+      setExpandedService(null);
+    } else if (isCurrentlySelected && !isCurrentlyExpanded) {
+      // Selected but collapsed → just expand (don't deselect)
+      setExpandedService(id);
+    } else {
+      // Not selected → select + expand
+      setSelected((prev) => ({ ...prev, [id]: { qty: 50, complexity: "medium" } }));
+      setExpandedService(id);
+    }
   };
 
   const setQty = (id: string, qty: number) => {
