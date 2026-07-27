@@ -29,7 +29,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
   <head>
-    <link rel="icon" href="/images/logo-new.png" type="image/png" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/images/logo-new.png" type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href="/images/logo-new.png" />
     <script
       dangerouslySetInnerHTML={{
