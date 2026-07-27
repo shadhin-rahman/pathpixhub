@@ -3,69 +3,111 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { services } from "@/data/services";
-
-const unitPrice: Record<string, number> = {
-  "clipping-path": 0.39,
-  "background-removal": 0.39,
-  "shadow-creation": 0.25,
-  "ghost-mannequin": 0.89,
-  "image-masking": 1.19,
-  "color-change": 0.99,
-  "photo-retouching": 0.69,
-  "multi-clipping-path": 1.19,
-  "ecommerce-editing": 2.99,
-  "car-editing": 2.99,
-};
 
 const VOLUME_DISCOUNT_THRESHOLD = 500;
 const VOLUME_DISCOUNT_RATE = 0.1;
 
-type OptionGroup = { id: string; label: string; multiplier: number };
-
-const SERVICE_OPTIONS: Record<string, OptionGroup[]> = {
-  "clipping-path": [
-    { id: "easy", label: "Easy", multiplier: 0.7 },
-    { id: "medium", label: "Medium", multiplier: 1.0 },
-    { id: "complex", label: "Complex", multiplier: 1.5 },
-  ],
-  "multi-clipping-path": [
-    { id: "easy", label: "Easy", multiplier: 0.7 },
-    { id: "medium", label: "Medium", multiplier: 1.0 },
-    { id: "complex", label: "Complex", multiplier: 1.5 },
-  ],
-  "image-masking": [
-    { id: "easy", label: "Easy", multiplier: 0.7 },
-    { id: "medium", label: "Medium", multiplier: 1.0 },
-    { id: "complex", label: "Complex", multiplier: 1.5 },
-  ],
-  "background-removal": [],
-  "shadow-creation": [
-    { id: "drop", label: "Drop Shadow", multiplier: 1.0 },
-    { id: "existing", label: "Existing Shadow", multiplier: 1.0 },
-    { id: "floating", label: "Floating Shadow", multiplier: 1.1 },
-    { id: "natural", label: "Natural Shadow", multiplier: 1.0 },
-    { id: "reflection", label: "Reflection Shadow", multiplier: 1.2 },
-  ],
-  "photo-retouching": [
-    { id: "dust", label: "Dust, Spot & Scratch", multiplier: 0.8 },
-    { id: "basic", label: "Basic Retouching", multiplier: 1.0 },
-    { id: "advance", label: "Advance Retouching", multiplier: 1.5 },
-  ],
-  "ghost-mannequin": [
-    { id: "basic", label: "Basic Retouching", multiplier: 1.0 },
-    { id: "advance", label: "Advance Retouching", multiplier: 1.4 },
-  ],
-  "color-change": [],
-  "ecommerce-editing": [
-    { id: "basic", label: "Basic Retouching", multiplier: 1.0 },
-    { id: "advance", label: "Advance Retouching", multiplier: 1.5 },
-  ],
-  "car-editing": [
-    { id: "basic", label: "Basic", multiplier: 1.0 },
-    { id: "advance", label: "Advance", multiplier: 1.5 },
-  ],
+type SubOption = { id: string; label: string; multiplier: number };
+type SubService = { id: string; label: string; price: number; options?: SubOption[] };
+type ServiceCategory = {
+  id: string;
+  label: string;
+  subs: SubService[];
 };
+
+const SERVICE_TREE: ServiceCategory[] = [
+  {
+    id: "path-creation",
+    label: "Path Creation",
+    subs: [
+      { id: "clipping-path", label: "Clipping Path", price: 0.39, options: [
+        { id: "easy", label: "Easy", multiplier: 0.7 },
+        { id: "medium", label: "Medium", multiplier: 1.0 },
+        { id: "complex", label: "Complex", multiplier: 1.5 },
+      ]},
+      { id: "multi-clipping-path", label: "Multi-clipping Path", price: 1.19, options: [
+        { id: "easy", label: "Easy", multiplier: 0.7 },
+        { id: "medium", label: "Medium", multiplier: 1.0 },
+        { id: "complex", label: "Complex", multiplier: 1.5 },
+      ]},
+    ],
+  },
+  {
+    id: "image-masking-group",
+    label: "Image Masking",
+    subs: [
+      { id: "image-masking", label: "Image Masking", price: 1.19, options: [
+        { id: "easy", label: "Easy", multiplier: 0.7 },
+        { id: "medium", label: "Medium", multiplier: 1.0 },
+        { id: "complex", label: "Complex", multiplier: 1.5 },
+      ]},
+    ],
+  },
+  {
+    id: "bg-removal-group",
+    label: "Background Removal",
+    subs: [
+      { id: "background-removal", label: "Background Removal", price: 0.39 },
+    ],
+  },
+  {
+    id: "shadow-group",
+    label: "Shadow",
+    subs: [
+      { id: "shadow-drop", label: "Drop Shadow", price: 0.25 },
+      { id: "shadow-existing", label: "Existing Shadow", price: 0.25 },
+      { id: "shadow-floating", label: "Floating Shadow", price: 0.28 },
+      { id: "shadow-natural", label: "Natural Shadow", price: 0.25 },
+      { id: "shadow-reflection", label: "Reflection Shadow", price: 0.30 },
+    ],
+  },
+  {
+    id: "retouching-group",
+    label: "Photo Retouching",
+    subs: [
+      { id: "retouch-dust", label: "Dust, Spot & Scratch Removal", price: 0.69, options: [
+        { id: "basic", label: "Basic", multiplier: 0.8 },
+        { id: "advance", label: "Advance", multiplier: 1.2 },
+      ]},
+      { id: "retouch-basic", label: "Basic Retouching", price: 0.69 },
+      { id: "retouch-advance", label: "Advance Retouching", price: 1.09 },
+      { id: "retouch-wrinkle", label: "Wrinkle on Clothing", price: 0.79, options: [
+        { id: "basic", label: "Basic", multiplier: 1.0 },
+        { id: "advance", label: "Advance", multiplier: 1.4 },
+      ]},
+      { id: "retouch-beauty", label: "Beauty Airbrushing", price: 0.89, options: [
+        { id: "basic", label: "Basic", multiplier: 1.0 },
+        { id: "advance", label: "Advance", multiplier: 1.5 },
+      ]},
+      { id: "retouch-camera", label: "Camera Reflection Removal", price: 0.99, options: [
+        { id: "basic", label: "Basic", multiplier: 1.0 },
+        { id: "advance", label: "Advance", multiplier: 1.4 },
+      ]},
+      { id: "retouch-symmetrical", label: "Symmetrical Edit", price: 0.79 },
+      { id: "ghost-mannequin", label: "Ghost Mannequin", price: 0.89, options: [
+        { id: "basic", label: "Basic", multiplier: 1.0 },
+        { id: "advance", label: "Advance", multiplier: 1.4 },
+      ]},
+    ],
+  },
+  {
+    id: "color-group",
+    label: "Color Change",
+    subs: [
+      { id: "color-change", label: "Color Change", price: 0.99 },
+    ],
+  },
+  {
+    id: "car-group",
+    label: "Car Editing",
+    subs: [
+      { id: "car-editing", label: "Car Editing", price: 2.99, options: [
+        { id: "basic", label: "Basic", multiplier: 1.0 },
+        { id: "advance", label: "Advance", multiplier: 1.5 },
+      ]},
+    ],
+  },
+];
 
 const TURNAROUND_OPTIONS = [
   { id: "12", label: "12 Hours", desc: "Fast delivery", icon: "⚡", surcharge: 0.02 },
@@ -74,49 +116,65 @@ const TURNAROUND_OPTIONS = [
   { id: "96", label: "96 Hours+", desc: "Flexible / Custom", icon: "📋", surcharge: -0.02 },
 ];
 
+type SelectedEntry = { qty: number; option: string; colorCode?: string };
+
 export default function ContactForm() {
   const [wantsQuote, setWantsQuote] = useState(true);
-  const [selected, setSelected] = useState<Record<string, { qty: number; option: string; colorCode?: string }>>({});
+  const [selected, setSelected] = useState<Record<string, SelectedEntry>>({});
   const [turnaround, setTurnaround] = useState("24");
+  const [expandedCat, setExpandedCat] = useState<string | null>(null);
 
-  const toggleService = (id: string) => {
+  const toggleSub = (subId: string) => {
     setSelected((prev) => {
-      if (id in prev) {
+      if (subId in prev) {
         const next = { ...prev };
-        delete next[id];
+        delete next[subId];
         return next;
       }
-      const defaultOption = SERVICE_OPTIONS[id]?.[0]?.id ?? "";
-      return { ...prev, [id]: { qty: 50, option: defaultOption } };
+      // Find default option
+      const cat = SERVICE_TREE.find(c => c.subs.some(s => s.id === subId));
+      const sub = cat?.subs.find(s => s.id === subId);
+      const defaultOpt = sub?.options?.[0]?.id ?? "";
+      return { ...prev, [subId]: { qty: 50, option: defaultOpt } };
     });
   };
 
-  const setOption = (id: string, option: string) => {
-    setSelected((prev) => ({ ...prev, [id]: { ...prev[id], option } }));
+  const setOption = (subId: string, option: string) => {
+    setSelected((prev) => ({ ...prev, [subId]: { ...prev[subId], option } }));
   };
 
-  const setQty = (id: string, qty: number) => {
-    setSelected((prev) => ({ ...prev, [id]: { ...prev[id], qty: Math.max(1, Math.min(20000, qty)) } }));
+  const setQty = (subId: string, qty: number) => {
+    setSelected((prev) => ({ ...prev, [subId]: { ...prev[subId], qty: Math.max(1, Math.min(20000, qty)) } }));
   };
 
-  const setColorCode = (id: string, colorCode: string) => {
-    setSelected((prev) => ({ ...prev, [id]: { ...prev[id], colorCode } }));
+  const setColorCode = (subId: string, colorCode: string) => {
+    setSelected((prev) => ({ ...prev, [subId]: { ...prev[subId], colorCode } }));
   };
 
-  const turnaroundOption = TURNAROUND_OPTIONS.find((t) => t.id === turnaround);
+  const findSub = (subId: string): SubService | undefined => {
+    for (const cat of SERVICE_TREE) {
+      const sub = cat.subs.find(s => s.id === subId);
+      if (sub) return sub;
+    }
+    return undefined;
+  };
+
+  const getMultiplier = (subId: string, optionId: string): number => {
+    const sub = findSub(subId);
+    return sub?.options?.find(o => o.id === optionId)?.multiplier ?? 1.0;
+  };
+
+  const turnaroundOption = TURNAROUND_OPTIONS.find(t => t.id === turnaround);
   const turnaroundSurcharge = turnaroundOption?.surcharge ?? 0;
-
-  const getMultiplier = (serviceId: string, optionId: string) => {
-    return SERVICE_OPTIONS[serviceId]?.find((o) => o.id === optionId)?.multiplier ?? 1.0;
-  };
 
   const { totalImages, subtotal, discountApplies, discountAmount, turnaroundFee, total, selectedIds } = useMemo(() => {
     let images = 0;
     let sub = 0;
     for (const [id, entry] of Object.entries(selected)) {
+      const s = findSub(id);
       const mult = getMultiplier(id, entry.option);
       images += entry.qty;
-      sub += (unitPrice[id] ?? 0) * mult * entry.qty;
+      sub += (s?.price ?? 0) * mult * entry.qty;
     }
     const applies = images >= VOLUME_DISCOUNT_THRESHOLD;
     const discount = applies ? sub * VOLUME_DISCOUNT_RATE : 0;
@@ -128,12 +186,12 @@ export default function ContactForm() {
   const quoteSummary = useMemo(() => {
     if (!wantsQuote || selectedIds.length === 0) return "";
     const lines = selectedIds.map((id) => {
-      const s = services.find((x) => x.id === id);
+      const s = findSub(id);
       const entry = selected[id];
       const mult = getMultiplier(id, entry.option);
-      const lineTotal = entry.qty * (unitPrice[id] ?? 0) * mult;
-      const optLabel = SERVICE_OPTIONS[id]?.find((o) => o.id === entry.option)?.label ?? "";
-      return `- ${s?.title} [${optLabel}]: ${entry.qty} images ($${lineTotal.toFixed(2)})`;
+      const lineTotal = entry.qty * (s?.price ?? 0) * mult;
+      const optLabel = s?.options?.find(o => o.id === entry.option)?.label ?? "";
+      return `- ${s?.label ?? id}${optLabel ? ` [${optLabel}]` : ""}: ${entry.qty} images ($${lineTotal.toFixed(2)})`;
     });
     lines.push(`Total images: ${totalImages}`);
     if (discountApplies) lines.push(`Volume discount (${VOLUME_DISCOUNT_THRESHOLD}+ images, ${VOLUME_DISCOUNT_RATE * 100}%): -$${discountAmount.toFixed(2)}`);
@@ -144,6 +202,30 @@ export default function ContactForm() {
     lines.push(`Estimated total: $${total.toFixed(2)}`);
     return lines.join("\n");
   }, [wantsQuote, selectedIds, selected, totalImages, discountApplies, discountAmount, turnaroundFee, turnaroundSurcharge, turnaroundOption, total]);
+
+  const isCatSelected = (cat: ServiceCategory) => cat.subs.some(s => s.id in selected);
+  const isCatFullySelected = (cat: ServiceCategory) => cat.subs.every(s => s.id in selected);
+  const toggleCat = (cat: ServiceCategory) => {
+    if (isCatFullySelected(cat)) {
+      // Deselect all in category
+      setSelected(prev => {
+        const next = { ...prev };
+        cat.subs.forEach(s => delete next[s.id]);
+        return next;
+      });
+    } else {
+      // Select all in category
+      setSelected(prev => {
+        const next = { ...prev };
+        cat.subs.forEach(s => {
+          if (!(s.id in next)) {
+            next[s.id] = { qty: 50, option: s.options?.[0]?.id ?? "" };
+          }
+        });
+        return next;
+      });
+    }
+  };
 
   return (
     <div className="relative">
@@ -161,7 +243,7 @@ export default function ContactForm() {
 
         <form action="https://formspree.io/f/xovjbydw" method="POST" encType="multipart/form-data">
         <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8">
-          {/* Left: Services or Message */}
+          {/* Left */}
           <div>
             {/* Toggle */}
             <div className="flex items-center gap-1 p-1 rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/5%)] w-fit mb-6">
@@ -176,120 +258,162 @@ export default function ContactForm() {
             </div>
 
             {wantsQuote ? (
-              <div className="space-y-3">
-                {services.map((s, i) => {
-                  const isSelected = s.id in selected;
-                  const entry = selected[s.id];
-                  const options = SERVICE_OPTIONS[s.id] ?? [];
-                  const mult = getMultiplier(s.id, entry?.option ?? "");
-                  const pricePerImage = (unitPrice[s.id] ?? 0) * mult;
-                  const isColorService = s.id === "color-change";
+              <div className="space-y-2">
+                {SERVICE_TREE.map((cat) => {
+                  const catSelected = isCatSelected(cat);
+                  const isExpanded = expandedCat === cat.id;
+                  const singleSub = cat.subs.length === 1 ? cat.subs[0] : null;
 
                   return (
-                    <motion.div
-                      key={s.id}
-                      initial={{ opacity: 0, y: 8 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.03, duration: 0.3 }}
-                      className={`rounded-xl border transition-all duration-200 ${
-                        isSelected
-                          ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/5%)]"
-                          : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--fg-rgb)/15%)]"
-                      }`}
-                    >
-                      {/* Header */}
+                    <div key={cat.id} className={`rounded-xl border transition-all duration-200 ${
+                      catSelected
+                        ? "border-[rgb(var(--accent-500)/40%)] bg-[rgb(var(--accent-500)/3%)]"
+                        : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)]"
+                    }`}>
+                      {/* Category Header */}
                       <div
                         className="flex items-center gap-3 p-4 cursor-pointer select-none"
-                        onClick={() => toggleService(s.id)}
+                        onClick={() => setExpandedCat(isExpanded ? null : cat.id)}
                       >
-                        <div className={`shrink-0 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all duration-200 ${
-                          isSelected
-                            ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]"
-                            : "border-[rgb(var(--fg-rgb)/20%)]"
-                        }`}>
-                          {isSelected && (
+                        {/* Category Checkbox */}
+                        <div
+                          className={`shrink-0 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all duration-200 ${
+                            catSelected
+                              ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]"
+                              : "border-[rgb(var(--fg-rgb)/20%)]"
+                          }`}
+                          onClick={(e) => { e.stopPropagation(); if (cat.subs.length > 1) toggleCat(cat); }}
+                        >
+                          {catSelected && (
                             <svg className="w-3 h-3 text-[rgb(var(--accent-contrast))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                             </svg>
                           )}
                         </div>
-                        <div className="shrink-0 w-8 h-8 rounded-lg bg-[rgb(var(--fg-rgb)/5%)] flex items-center justify-center overflow-hidden">
-                          <Image src={`/images/service-icons/${s.id}.png`} alt="" width={20} height={20} className="object-contain" />
-                        </div>
+
                         <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-sm text-[rgb(var(--fg-rgb))]">{s.title}</p>
-                          <p className="text-xs text-[rgb(var(--fg-rgb)/40%)]">from ${unitPrice[s.id]?.toFixed(2)}/img</p>
+                          <p className="font-semibold text-sm text-[rgb(var(--fg-rgb))]">{cat.label}</p>
                         </div>
-                        {isSelected && entry && (
-                          <span className="text-xs font-bold text-[rgb(var(--accent-400))]">${(pricePerImage * entry.qty).toFixed(2)}</span>
-                        )}
+
+                        {/* Chevron */}
+                        <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
                       </div>
 
-                      {/* Options */}
+                      {/* Sub-services */}
                       <AnimatePresence>
-                        {isSelected && entry && (
+                        {isExpanded && (
                           <motion.div
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
                             className="overflow-hidden"
                           >
-                            <div className="px-4 pb-4 pt-0 space-y-3 border-t border-[rgb(var(--fg-rgb)/5%)]" onClick={(e) => e.stopPropagation()}>
-                              {/* Sub-options */}
-                              {options.length > 0 && (
-                                <div className={`grid gap-1.5 mt-3 ${options.length <= 3 ? `grid-cols-${options.length}` : "grid-cols-2"}`}>
-                                  {options.map((opt) => (
-                                    <button
-                                      key={opt.id}
-                                      type="button"
-                                      onClick={() => setOption(s.id, opt.id)}
-                                      className={`rounded-lg px-2 py-2 text-center border transition-all duration-150 text-[11px] font-bold ${
-                                        entry.option === opt.id
-                                          ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-400))]"
-                                          : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/15%)] text-[rgb(var(--fg-rgb)/50%)]"
-                                      }`}
+                            <div className="px-4 pb-4 pt-0 space-y-2 border-t border-[rgb(var(--fg-rgb)/5%)]">
+                              {cat.subs.map((sub) => {
+                                const isSubSelected = sub.id in selected;
+                                const entry = selected[sub.id];
+                                const mult = getMultiplier(sub.id, entry?.option ?? "");
+                                const pricePerImage = sub.price * mult;
+
+                                return (
+                                  <div key={sub.id} className={`rounded-lg border transition-all duration-150 ${
+                                    isSubSelected
+                                      ? "border-[rgb(var(--accent-500)/40%)] bg-[rgb(var(--accent-500)/5%)]"
+                                      : "border-[rgb(var(--fg-rgb)/6%)] hover:border-[rgb(var(--fg-rgb)/12%)]"
+                                  }`}>
+                                    {/* Sub-service Header */}
+                                    <div
+                                      className="flex items-center gap-3 p-3 cursor-pointer select-none"
+                                      onClick={() => toggleSub(sub.id)}
                                     >
-                                      {opt.label}
-                                    </button>
-                                  ))}
-                                </div>
-                              )}
+                                      <div className={`shrink-0 w-4 h-4 rounded border-2 flex items-center justify-center transition-all duration-150 ${
+                                        isSubSelected
+                                          ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]"
+                                          : "border-[rgb(var(--fg-rgb)/20%)]"
+                                      }`}>
+                                        {isSubSelected && (
+                                          <svg className="w-2.5 h-2.5 text-[rgb(var(--accent-contrast))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                          </svg>
+                                        )}
+                                      </div>
+                                      <div className="flex-1 min-w-0">
+                                        <p className="text-sm text-[rgb(var(--fg-rgb))]">{sub.label}</p>
+                                      </div>
+                                      <span className="text-xs text-[rgb(var(--fg-rgb)/40%)]">${sub.price.toFixed(2)}/img</span>
+                                      {isSubSelected && entry && (
+                                        <span className="text-xs font-bold text-[rgb(var(--accent-400))]">${(pricePerImage * entry.qty).toFixed(2)}</span>
+                                      )}
+                                    </div>
 
-                              {/* Color Code input for color-change */}
-                              {isColorService && (
-                                <div className="mt-3">
-                                  <label className="text-[10px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold">Color Code / Name</label>
-                                  <input
-                                    type="text"
-                                    placeholder="e.g. #FF5733 or Royal Blue"
-                                    value={entry.colorCode ?? ""}
-                                    onChange={(e) => setColorCode(s.id, e.target.value)}
-                                    className="w-full mt-1.5 px-3 py-2 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-xs text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)]"
-                                  />
-                                </div>
-                              )}
+                                    {/* Sub-service Options */}
+                                    <AnimatePresence>
+                                      {isSubSelected && entry && (
+                                        <motion.div
+                                          initial={{ height: 0, opacity: 0 }}
+                                          animate={{ height: "auto", opacity: 1 }}
+                                          exit={{ height: 0, opacity: 0 }}
+                                          className="overflow-hidden"
+                                        >
+                                          <div className="px-3 pb-3 pt-0 space-y-2.5" onClick={(e) => e.stopPropagation()}>
+                                            {/* Options chips */}
+                                            {sub.options && sub.options.length > 0 && (
+                                              <div className="flex gap-1.5 flex-wrap">
+                                                {sub.options.map((opt) => (
+                                                  <button
+                                                    key={opt.id}
+                                                    type="button"
+                                                    onClick={() => setOption(sub.id, opt.id)}
+                                                    className={`px-3 py-1.5 rounded-full text-[11px] font-bold border transition-all duration-150 ${
+                                                      entry.option === opt.id
+                                                        ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-400))]"
+                                                        : "border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb)/50%)] hover:border-[rgb(var(--fg-rgb)/20%)]"
+                                                    }`}
+                                                  >
+                                                    {opt.label}
+                                                  </button>
+                                                ))}
+                                              </div>
+                                            )}
 
-                              {/* Quantity + Price */}
-                              <div className="flex items-center gap-3">
-                                <div className="flex items-center gap-1.5">
-                                  <button type="button" onClick={() => setQty(s.id, entry.qty - 10)}
-                                    className="w-7 h-7 rounded-md bg-[rgb(var(--fg-rgb)/5%)] hover:bg-[rgb(var(--fg-rgb)/10%)] flex items-center justify-center text-xs font-bold transition-colors">−</button>
-                                  <input type="number" min={1} max={20000} value={entry.qty}
-                                    onChange={(e) => setQty(s.id, parseInt(e.target.value, 10) || 1)}
-                                    className="w-16 px-2 py-1.5 rounded-md bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-xs text-center text-[rgb(var(--fg-rgb))] font-bold outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
-                                  <button type="button" onClick={() => setQty(s.id, entry.qty + 10)}
-                                    className="w-7 h-7 rounded-md bg-[rgb(var(--fg-rgb)/5%)] hover:bg-[rgb(var(--fg-rgb)/10%)] flex items-center justify-center text-xs font-bold transition-colors">+</button>
-                                </div>
-                                <div className="flex-1 text-right">
-                                  <span className="text-xs text-[rgb(var(--fg-rgb)/40%)]">${pricePerImage.toFixed(2)}/img</span>
-                                </div>
-                              </div>
+                                            {/* Color Code for color-change */}
+                                            {sub.id === "color-change" && (
+                                              <input
+                                                type="text"
+                                                placeholder="Color code or name (e.g. #FF5733, Royal Blue)"
+                                                value={entry.colorCode ?? ""}
+                                                onChange={(e) => setColorCode(sub.id, e.target.value)}
+                                                className="w-full px-3 py-2 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-xs text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)]"
+                                              />
+                                            )}
+
+                                            {/* Quantity + Price */}
+                                            <div className="flex items-center gap-2">
+                                              <div className="flex items-center gap-1">
+                                                <button type="button" onClick={() => setQty(sub.id, entry.qty - 10)}
+                                                  className="w-6 h-6 rounded bg-[rgb(var(--fg-rgb)/5%)] hover:bg-[rgb(var(--fg-rgb)/10%)] flex items-center justify-center text-[10px] font-bold transition-colors">−</button>
+                                                <input type="number" min={1} max={20000} value={entry.qty}
+                                                  onChange={(e) => setQty(sub.id, parseInt(e.target.value, 10) || 1)}
+                                                  className="w-14 px-1.5 py-1 rounded bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-[11px] text-center text-[rgb(var(--fg-rgb))] font-bold outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
+                                                <button type="button" onClick={() => setQty(sub.id, entry.qty + 10)}
+                                                  className="w-6 h-6 rounded bg-[rgb(var(--fg-rgb)/5%)] hover:bg-[rgb(var(--fg-rgb)/10%)] flex items-center justify-center text-[10px] font-bold transition-colors">+</button>
+                                              </div>
+                                              <span className="text-[10px] text-[rgb(var(--fg-rgb)/35%)] ml-auto">${pricePerImage.toFixed(2)}/img</span>
+                                            </div>
+                                          </div>
+                                        </motion.div>
+                                      )}
+                                    </AnimatePresence>
+                                  </div>
+                                );
+                              })}
                             </div>
                           </motion.div>
                         )}
                       </AnimatePresence>
-                    </motion.div>
+                    </div>
                   );
                 })}
               </div>
@@ -319,7 +443,7 @@ export default function ContactForm() {
             )}
           </div>
 
-          {/* Right: Summary / Contact */}
+          {/* Right: Summary */}
           <div className="lg:sticky lg:top-28 h-fit">
             {wantsQuote ? (
               <div className="glass-card rounded-[2rem] p-8 border-[rgb(var(--fg-rgb)/10%)]">
@@ -334,17 +458,17 @@ export default function ContactForm() {
 
                 {selectedIds.length === 0 ? (
                   <p className="mt-6 text-sm text-[rgb(var(--fg-rgb)/40%)]">
-                    Select one or more services on the left to see your estimate here.
+                    Select services on the left to see your estimate.
                   </p>
                 ) : (
                   <div className="mt-6 space-y-3">
                     <AnimatePresence>
                       {selectedIds.map((id) => {
-                        const s = services.find((x) => x.id === id)!;
+                        const s = findSub(id);
                         const entry = selected[id];
                         const mult = getMultiplier(id, entry.option);
-                        const lineTotal = entry.qty * (unitPrice[id] ?? 0) * mult;
-                        const optLabel = SERVICE_OPTIONS[id]?.find((o) => o.id === entry.option)?.label ?? "";
+                        const lineTotal = entry.qty * (s?.price ?? 0) * mult;
+                        const optLabel = s?.options?.find(o => o.id === entry.option)?.label ?? "";
                         return (
                           <motion.div
                             key={id}
@@ -354,7 +478,7 @@ export default function ContactForm() {
                             className="overflow-hidden"
                           >
                             <div className="flex items-center justify-between text-sm">
-                              <span className="text-[rgb(var(--fg-rgb)/70%)]">{s.title} × {entry.qty}</span>
+                              <span className="text-[rgb(var(--fg-rgb)/70%)]">{s?.label} × {entry.qty}</span>
                               <span className="font-semibold text-[rgb(var(--fg-rgb))]">${lineTotal.toFixed(2)}</span>
                             </div>
                             {optLabel && (
@@ -378,12 +502,12 @@ export default function ContactForm() {
                       )}
                       {!discountApplies && totalImages > 0 && totalImages < VOLUME_DISCOUNT_THRESHOLD && (
                         <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)]">
-                          Tip: orders of {VOLUME_DISCOUNT_THRESHOLD}+ images get {VOLUME_DISCOUNT_RATE * 100}% off automatically.
+                          Tip: {VOLUME_DISCOUNT_THRESHOLD}+ images get {VOLUME_DISCOUNT_RATE * 100}% off.
                         </p>
                       )}
                       {turnaroundSurcharge !== 0 && (
                         <div className={`flex items-center justify-between text-sm ${turnaroundSurcharge > 0 ? "text-amber-400" : "text-emerald-400"}`}>
-                          <span>{turnaroundOption?.label} turnaround ({turnaroundSurcharge > 0 ? "+" : ""}{turnaroundSurcharge * 100}%)</span>
+                          <span>{turnaroundOption?.label} ({turnaroundSurcharge > 0 ? "+" : ""}{turnaroundSurcharge * 100}%)</span>
                           <span>{turnaroundFee >= 0 ? "+" : ""}${turnaroundFee.toFixed(2)}</span>
                         </div>
                       )}
@@ -416,7 +540,7 @@ export default function ContactForm() {
                   <h4 className="text-lg font-bold text-[rgb(var(--fg-rgb))]">Send a Message</h4>
                 </div>
                 <p className="mt-4 text-sm text-[rgb(var(--fg-rgb)/50%)]">
-                  Fill in your details on the left and send us a message — we&apos;ll get back to you within 2 hours.
+                  Fill in your details and send us a message — we&apos;ll get back to you within 2 hours.
                 </p>
                 <div className="mt-6 space-y-3">
                   <a href="https://wa.me/8801723735896" target="_blank" rel="noopener noreferrer"
@@ -460,11 +584,8 @@ export default function ContactForm() {
                     {opt.surcharge > 0 ? `+${opt.surcharge * 100}%` : opt.surcharge < 0 ? `${opt.surcharge * 100}%` : "Base price"}
                   </p>
                   {turnaround === opt.id && (
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[rgb(var(--accent-500))] flex items-center justify-center"
-                    >
+                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}
+                      className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[rgb(var(--accent-500))] flex items-center justify-center">
                       <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                     </motion.div>
                   )}
@@ -477,7 +598,6 @@ export default function ContactForm() {
         {/* Submit */}
         <div className="mt-8">
           <input type="hidden" name="_subject" value={wantsQuote ? "Quote Request" : "Question"} />
-          <input type="hidden" name="turnaround" value={wantsQuote ? (turnaround === "96" ? "96+ hours (custom)" : `${turnaround} hours`) : ""} />
           <button type="submit"
             className="w-full sm:w-auto px-10 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm">
             {wantsQuote ? "Send Quote Request" : "Send Message"}
