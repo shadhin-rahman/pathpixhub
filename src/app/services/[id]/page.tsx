@@ -70,10 +70,10 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </Link>
                 <Link
-                  href="/portfolio"
+                  href="/free-trial"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-semibold hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm"
                 >
-                  View Portfolio
+                  Start Free Trial
                 </Link>
               </div>
             </div>
@@ -160,12 +160,6 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
             >
               Get a Quote
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-            </Link>
-            <Link
-              href="/free-trial"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-semibold border border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))] transition-all text-sm"
-            >
-              Start Free Trial
             </Link>
           </div>
         </div>
