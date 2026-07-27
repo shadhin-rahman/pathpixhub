@@ -20,16 +20,16 @@ export default function ContactPage() {
                 We turn bold ideas into unforgettable visuals. Start the conversation.
               </p>
             </div>
-            <div className="relative aspect-[4/3] lg:aspect-auto lg:h-[28rem] rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)]">
+            <div className="relative aspect-[4/3] lg:aspect-auto lg:h-[32rem] rounded-3xl overflow-hidden">
               <Image
-                src="/images/image-masking-1.jpg"
-                alt="Photo editing showcase"
+                src="/images/about/client-consultation.jpg"
+                alt="Client consultation"
                 fill
-                className="object-cover"
+                className="object-cover object-center"
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 priority
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
             </div>
           </div>
         </div>
