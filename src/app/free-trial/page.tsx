@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -30,20 +30,51 @@ const SERVICE_COLORS = [
   "#86efac", "#fdba74", "#5eead4", "#a5b4fc", "#fda4af",
 ];
 
+const STORAGE_KEY = "pathpixhub_free_trial_used";
+const STORAGE_EXPIRY_KEY = "pathpixhub_free_trial_expiry";
+
 const slideVariants = {
   enter: (direction: number) => ({ x: direction > 0 ? 300 : -300, opacity: 0 }),
   center: { x: 0, opacity: 1 },
   exit: (direction: number) => ({ x: direction > 0 ? -300 : 300, opacity: 0 }),
 };
 
+function hasUsedFreeTrial(): boolean {
+  if (typeof window === "undefined") return false;
+  const used = localStorage.getItem(STORAGE_KEY);
+  const expiry = localStorage.getItem(STORAGE_EXPIRY_KEY);
+  if (!used || !expiry) return false;
+  if (Date.now() > parseInt(expiry, 10)) {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_EXPIRY_KEY);
+    return false;
+  }
+  return true;
+}
+
+function markFreeTrialUsed(email: string) {
+  localStorage.setItem(STORAGE_KEY, email.toLowerCase().trim());
+  localStorage.setItem(STORAGE_EXPIRY_KEY, (Date.now() + 30 * 24 * 60 * 60 * 1000).toString());
+}
+
 export default function FreeTrialPage() {
+  const [alreadyUsed, setAlreadyUsed] = useState(false);
+  const [usedEmail, setUsedEmail] = useState("");
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
   const [usageType, setUsageType] = useState<"commercial" | "personal" | "">("");
   const [files, setFiles] = useState<File[]>([]);
   const [dragOver, setDragOver] = useState(false);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [submitted, setSubmitted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (hasUsedFreeTrial()) {
+      setAlreadyUsed(true);
+      setUsedEmail(localStorage.getItem(STORAGE_KEY) || "");
+    }
+  }, []);
 
   const handleFiles = (newFiles: FileList | null) => {
     if (!newFiles) return;
@@ -72,13 +103,76 @@ export default function FreeTrialPage() {
     setStep(1);
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const emailInput = (e.currentTarget.elements.namedItem("email") as HTMLInputElement)?.value;
+    if (emailInput) {
+      markFreeTrialUsed(emailInput);
+    }
+    setSubmitted(true);
+  };
+
+  // Already used screen
+  if (alreadyUsed) {
+    return (
+      <section className="pt-40 pb-32 bg-[var(--bg)]">
+        <div className="max-w-xl mx-auto px-6 text-center">
+          <div className="glass-card rounded-3xl p-10 border-[rgb(var(--fg-rgb)/5%)]">
+            <div className="w-16 h-16 rounded-full bg-[rgb(239_68_68_/_10%)] flex items-center justify-center mx-auto mb-6">
+              <svg className="w-8 h-8 text-[rgb(239_68_68)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
+            </div>
+            <h1 className="text-3xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">Free Trial Already Used</h1>
+            <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">
+              You&apos;ve already claimed your free trial with <span className="font-bold text-[rgb(var(--fg-rgb))]">{usedEmail}</span>.
+              Each customer is eligible for one free trial only.
+            </p>
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link href="/pricing"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm">
+                View Pricing
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </Link>
+              <Link href="/contact"
+                className="px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-semibold border border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm">
+                Contact Us
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Submitted screen
+  if (submitted) {
+    return (
+      <section className="pt-40 pb-32 bg-[var(--bg)]">
+        <div className="max-w-xl mx-auto px-6 text-center">
+          <div className="glass-card rounded-3xl p-10 border-[rgb(var(--fg-rgb)/5%)]">
+            <div className="w-16 h-16 rounded-full bg-[rgb(34_197_94_/_10%)] flex items-center justify-center mx-auto mb-6">
+              <svg className="w-8 h-8 text-[rgb(34_197_94)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+            </div>
+            <h1 className="text-3xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">Free Trial Submitted!</h1>
+            <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">
+              Thank you! We&apos;ll review your images and get back to you within <span className="font-bold text-[rgb(34_197_94)]">2 hours</span>.
+              Your edited images will be delivered within 24 hours.
+            </p>
+            <Link href="/"
+              className="mt-8 inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm">
+              Back to Home
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <>
       {/* Hero */}
       <section className="relative pt-32 pb-0 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image src="/images/about/lifestyle-1.jpg" alt="" fill className="object-cover" sizes="100vw" priority />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-[var(--bg)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-[var(--bg)]" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 pt-16 pb-20">
           <div className="max-w-2xl">
@@ -89,7 +183,7 @@ export default function FreeTrialPage() {
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[0.95]">
               Get 2 Free Edits
             </h1>
-            <p className="mt-6 text-lg text-white/70 leading-relaxed max-w-lg">
+            <p className="mt-6 text-lg text-white/80 leading-relaxed max-w-lg">
               Upload up to 2 images and we&apos;ll edit them for free — no obligation, no credit card required.
               See our quality before you commit.
             </p>
@@ -104,7 +198,7 @@ export default function FreeTrialPage() {
             {[
               { step: "01", title: "Upload Images", desc: "Select up to 2 product images for your free trial edit.", icon: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" },
               { step: "02", title: "We Edit", desc: "Our expert editors manually retouch your images with precision.", icon: "M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" },
-              { step: "03", title: "Get Results", desc: "Receive your professionally edited images within 12 hours.", icon: "M5 13l4 4L19 7" },
+              { step: "03", title: "Get Results", desc: "Receive your professionally edited images within 24 hours.", icon: "M5 13l4 4L19 7" },
             ].map((item) => (
               <div key={item.step} className="glass-card rounded-2xl p-6 border-[rgb(var(--fg-rgb)/5%)] text-center">
                 <div className="w-12 h-12 rounded-full bg-[rgb(var(--accent-500)/12%)] flex items-center justify-center mx-auto mb-4">
@@ -168,10 +262,10 @@ export default function FreeTrialPage() {
                         src="/images/usage-commercial.png"
                         alt="Commercial use"
                         fill
-                        className={`object-contain p-2 transition-transform duration-700 ${usageType === "commercial" ? "scale-110" : "group-hover:scale-105"}`}
+                        className={`object-contain p-3 transition-transform duration-700 ${usageType === "commercial" ? "scale-110" : "group-hover:scale-105"}`}
                         sizes="(max-width: 640px) 100vw, 50vw"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                       {usageType === "commercial" && (
                         <motion.div
                           initial={{ scale: 0 }}
@@ -181,9 +275,9 @@ export default function FreeTrialPage() {
                           <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                         </motion.div>
                       )}
-                      <div className="absolute bottom-0 left-0 right-0 p-6">
+                      <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/60 to-transparent">
                         <p className="text-white font-bold text-xl">Commercial Use</p>
-                        <p className="text-white/60 text-sm mt-1">Product, e-commerce, advertising</p>
+                        <p className="text-white/70 text-sm mt-1">Product, e-commerce, advertising</p>
                       </div>
                     </div>
                   </button>
@@ -199,10 +293,10 @@ export default function FreeTrialPage() {
                         src="/images/usage-personal.png"
                         alt="Personal use"
                         fill
-                        className={`object-contain p-2 transition-transform duration-700 ${usageType === "personal" ? "scale-110" : "group-hover:scale-105"}`}
+                        className={`object-contain p-3 transition-transform duration-700 ${usageType === "personal" ? "scale-110" : "group-hover:scale-105"}`}
                         sizes="(max-width: 640px) 100vw, 50vw"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                       {usageType === "personal" && (
                         <motion.div
                           initial={{ scale: 0 }}
@@ -212,9 +306,9 @@ export default function FreeTrialPage() {
                           <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                         </motion.div>
                       )}
-                      <div className="absolute bottom-0 left-0 right-0 p-6">
+                      <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/60 to-transparent">
                         <p className="text-white font-bold text-xl">Personal Use</p>
-                        <p className="text-white/60 text-sm mt-1">Personal or non-commercial images</p>
+                        <p className="text-white/70 text-sm mt-1">Personal or non-commercial images</p>
                       </div>
                     </div>
                   </button>
@@ -247,14 +341,13 @@ export default function FreeTrialPage() {
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
-                  {/* Left: Images */}
+                  {/* Left: Images - reduced shadows */}
                   <div className="lg:col-span-2 space-y-6">
                     <div className="rounded-3xl overflow-hidden aspect-[4/5] relative">
                       <Image src="/images/about/precision-craft.jpg" alt="Photo editing" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 40vw" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                      <div className="absolute bottom-0 left-0 right-0 p-6">
+                      <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/50 to-transparent">
                         <p className="text-white font-bold text-lg">Pixel-Perfect Edits</p>
-                        <p className="text-white/60 text-sm mt-1">Every image hand-edited by our expert team.</p>
+                        <p className="text-white/70 text-sm mt-1">Every image hand-edited by our expert team.</p>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -278,7 +371,7 @@ export default function FreeTrialPage() {
                   {/* Right: Form */}
                   <div className="lg:col-span-3">
                     <div className="glass-card rounded-3xl p-8 md:p-10 border-[rgb(var(--fg-rgb)/5%)]">
-                      <form action="https://formspree.io/f/xovjbydw" method="POST" encType="multipart/form-data" className="space-y-6">
+                      <form action="https://formspree.io/f/xovjbydw" method="POST" encType="multipart/form-data" onSubmit={handleSubmit} className="space-y-6">
                         <input type="hidden" name="_subject" value="Free Trial Request" />
                         <input type="hidden" name="selected_services" value={selectedServices.join(", ")} />
                         <input type="hidden" name="image_purpose" value={usageType} />
@@ -414,7 +507,7 @@ export default function FreeTrialPage() {
                           className="w-full px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm">
                           Submit Free Trial
                         </button>
-                        <p className="text-xs text-[rgb(var(--fg-rgb)/30%)] text-center">We&apos;ll edit your images and respond within your selected turnaround time.</p>
+                        <p className="text-xs text-[rgb(var(--fg-rgb)/30%)] text-center">We&apos;ll edit your images and respond within 2 hours.</p>
                       </form>
                     </div>
                   </div>
