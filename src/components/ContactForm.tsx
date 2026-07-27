@@ -21,11 +21,51 @@ const unitPrice: Record<string, number> = {
 const VOLUME_DISCOUNT_THRESHOLD = 500;
 const VOLUME_DISCOUNT_RATE = 0.1;
 
-const COMPLEXITY_OPTIONS = [
-  { id: "easy", label: "Easy", desc: "Simple, clean background", multiplier: 0.7, color: "rgb(34 197 94)" },
-  { id: "medium", label: "Medium", desc: "Some detail work", multiplier: 1.0, color: "rgb(234 179 8)" },
-  { id: "complex", label: "Complex", desc: "Fine detail, hair, glass", multiplier: 1.5, color: "rgb(239 68 68)" },
-];
+type OptionGroup = { id: string; label: string; multiplier: number };
+
+const SERVICE_OPTIONS: Record<string, OptionGroup[]> = {
+  "clipping-path": [
+    { id: "easy", label: "Easy", multiplier: 0.7 },
+    { id: "medium", label: "Medium", multiplier: 1.0 },
+    { id: "complex", label: "Complex", multiplier: 1.5 },
+  ],
+  "multi-clipping-path": [
+    { id: "easy", label: "Easy", multiplier: 0.7 },
+    { id: "medium", label: "Medium", multiplier: 1.0 },
+    { id: "complex", label: "Complex", multiplier: 1.5 },
+  ],
+  "image-masking": [
+    { id: "easy", label: "Easy", multiplier: 0.7 },
+    { id: "medium", label: "Medium", multiplier: 1.0 },
+    { id: "complex", label: "Complex", multiplier: 1.5 },
+  ],
+  "background-removal": [],
+  "shadow-creation": [
+    { id: "drop", label: "Drop Shadow", multiplier: 1.0 },
+    { id: "existing", label: "Existing Shadow", multiplier: 1.0 },
+    { id: "floating", label: "Floating Shadow", multiplier: 1.1 },
+    { id: "natural", label: "Natural Shadow", multiplier: 1.0 },
+    { id: "reflection", label: "Reflection Shadow", multiplier: 1.2 },
+  ],
+  "photo-retouching": [
+    { id: "dust", label: "Dust, Spot & Scratch", multiplier: 0.8 },
+    { id: "basic", label: "Basic Retouching", multiplier: 1.0 },
+    { id: "advance", label: "Advance Retouching", multiplier: 1.5 },
+  ],
+  "ghost-mannequin": [
+    { id: "basic", label: "Basic Retouching", multiplier: 1.0 },
+    { id: "advance", label: "Advance Retouching", multiplier: 1.4 },
+  ],
+  "color-change": [],
+  "ecommerce-editing": [
+    { id: "basic", label: "Basic Retouching", multiplier: 1.0 },
+    { id: "advance", label: "Advance Retouching", multiplier: 1.5 },
+  ],
+  "car-editing": [
+    { id: "basic", label: "Basic", multiplier: 1.0 },
+    { id: "advance", label: "Advance", multiplier: 1.5 },
+  ],
+};
 
 const TURNAROUND_OPTIONS = [
   { id: "12", label: "12 Hours", desc: "Fast delivery", icon: "⚡", surcharge: 0.02 },
@@ -36,7 +76,7 @@ const TURNAROUND_OPTIONS = [
 
 export default function ContactForm() {
   const [wantsQuote, setWantsQuote] = useState(true);
-  const [selected, setSelected] = useState<Record<string, { qty: number; complexity: string }>>({});
+  const [selected, setSelected] = useState<Record<string, { qty: number; option: string; colorCode?: string }>>({});
   const [turnaround, setTurnaround] = useState("24");
 
   const toggleService = (id: string) => {
@@ -46,42 +86,43 @@ export default function ContactForm() {
         delete next[id];
         return next;
       }
-      return { ...prev, [id]: { qty: 50, complexity: "medium" } };
+      const defaultOption = SERVICE_OPTIONS[id]?.[0]?.id ?? "";
+      return { ...prev, [id]: { qty: 50, option: defaultOption } };
     });
   };
 
-  const setQty = (id: string, qty: number) => {
-    setSelected((prev) => ({
-      ...prev,
-      [id]: { ...prev[id], qty: Math.max(1, Math.min(20000, qty)) },
-    }));
+  const setOption = (id: string, option: string) => {
+    setSelected((prev) => ({ ...prev, [id]: { ...prev[id], option } }));
   };
 
-  const setComplexity = (id: string, complexity: string) => {
-    setSelected((prev) => ({
-      ...prev,
-      [id]: { ...prev[id], complexity },
-    }));
+  const setQty = (id: string, qty: number) => {
+    setSelected((prev) => ({ ...prev, [id]: { ...prev[id], qty: Math.max(1, Math.min(20000, qty)) } }));
+  };
+
+  const setColorCode = (id: string, colorCode: string) => {
+    setSelected((prev) => ({ ...prev, [id]: { ...prev[id], colorCode } }));
   };
 
   const turnaroundOption = TURNAROUND_OPTIONS.find((t) => t.id === turnaround);
   const turnaroundSurcharge = turnaroundOption?.surcharge ?? 0;
 
+  const getMultiplier = (serviceId: string, optionId: string) => {
+    return SERVICE_OPTIONS[serviceId]?.find((o) => o.id === optionId)?.multiplier ?? 1.0;
+  };
+
   const { totalImages, subtotal, discountApplies, discountAmount, turnaroundFee, total, selectedIds } = useMemo(() => {
     let images = 0;
     let sub = 0;
     for (const [id, entry] of Object.entries(selected)) {
-      const qty = entry.qty;
-      const complexity = COMPLEXITY_OPTIONS.find((c) => c.id === entry.complexity);
-      const multiplier = complexity?.multiplier ?? 1.0;
-      images += qty;
-      sub += (unitPrice[id] ?? 0) * multiplier * qty;
+      const mult = getMultiplier(id, entry.option);
+      images += entry.qty;
+      sub += (unitPrice[id] ?? 0) * mult * entry.qty;
     }
     const applies = images >= VOLUME_DISCOUNT_THRESHOLD;
     const discount = applies ? sub * VOLUME_DISCOUNT_RATE : 0;
-    const baseAfterDiscount = sub - discount;
-    const fee = baseAfterDiscount * turnaroundSurcharge;
-    return { totalImages: images, subtotal: sub, discountApplies: applies, discountAmount: discount, turnaroundFee: fee, total: baseAfterDiscount + fee, selectedIds: Object.keys(selected) };
+    const base = sub - discount;
+    const fee = base * turnaroundSurcharge;
+    return { totalImages: images, subtotal: sub, discountApplies: applies, discountAmount: discount, turnaroundFee: fee, total: base + fee, selectedIds: Object.keys(selected) };
   }, [selected, turnaroundSurcharge]);
 
   const quoteSummary = useMemo(() => {
@@ -89,16 +130,13 @@ export default function ContactForm() {
     const lines = selectedIds.map((id) => {
       const s = services.find((x) => x.id === id);
       const entry = selected[id];
-      const qty = entry.qty;
-      const complexity = COMPLEXITY_OPTIONS.find((c) => c.id === entry.complexity);
-      const multiplier = complexity?.multiplier ?? 1.0;
-      const lineTotal = qty * (unitPrice[id] ?? 0) * multiplier;
-      return `- ${s?.title} [${complexity?.label}]: ${qty} images ($${lineTotal.toFixed(2)})`;
+      const mult = getMultiplier(id, entry.option);
+      const lineTotal = entry.qty * (unitPrice[id] ?? 0) * mult;
+      const optLabel = SERVICE_OPTIONS[id]?.find((o) => o.id === entry.option)?.label ?? "";
+      return `- ${s?.title} [${optLabel}]: ${entry.qty} images ($${lineTotal.toFixed(2)})`;
     });
     lines.push(`Total images: ${totalImages}`);
-    if (discountApplies) {
-      lines.push(`Volume discount (${VOLUME_DISCOUNT_THRESHOLD}+ images, ${VOLUME_DISCOUNT_RATE * 100}%): -$${discountAmount.toFixed(2)}`);
-    }
+    if (discountApplies) lines.push(`Volume discount (${VOLUME_DISCOUNT_THRESHOLD}+ images, ${VOLUME_DISCOUNT_RATE * 100}%): -$${discountAmount.toFixed(2)}`);
     if (turnaroundSurcharge !== 0) {
       const pct = turnaroundSurcharge > 0 ? `+${turnaroundSurcharge * 100}%` : `${turnaroundSurcharge * 100}%`;
       lines.push(`Turnaround (${turnaroundOption?.label}): ${pct} ($${turnaroundFee >= 0 ? "+" : ""}$${turnaroundFee.toFixed(2)})`);
@@ -142,9 +180,11 @@ export default function ContactForm() {
                 {services.map((s, i) => {
                   const isSelected = s.id in selected;
                   const entry = selected[s.id];
-                  const complexity = COMPLEXITY_OPTIONS.find((c) => c.id === (entry?.complexity ?? "medium"));
-                  const multiplier = complexity?.multiplier ?? 1.0;
-                  const pricePerImage = (unitPrice[s.id] ?? 0) * multiplier;
+                  const options = SERVICE_OPTIONS[s.id] ?? [];
+                  const mult = getMultiplier(s.id, entry?.option ?? "");
+                  const pricePerImage = (unitPrice[s.id] ?? 0) * mult;
+                  const isColorService = s.id === "color-change";
+
                   return (
                     <motion.div
                       key={s.id}
@@ -158,7 +198,7 @@ export default function ContactForm() {
                           : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--fg-rgb)/15%)]"
                       }`}
                     >
-                      {/* Header — click to toggle */}
+                      {/* Header */}
                       <div
                         className="flex items-center gap-3 p-4 cursor-pointer select-none"
                         onClick={() => toggleService(s.id)}
@@ -186,7 +226,7 @@ export default function ContactForm() {
                         )}
                       </div>
 
-                      {/* Expanded options — only when selected */}
+                      {/* Options */}
                       <AnimatePresence>
                         {isSelected && entry && (
                           <motion.div
@@ -196,24 +236,39 @@ export default function ContactForm() {
                             className="overflow-hidden"
                           >
                             <div className="px-4 pb-4 pt-0 space-y-3 border-t border-[rgb(var(--fg-rgb)/5%)]" onClick={(e) => e.stopPropagation()}>
-                              {/* Complexity */}
-                              <div className="grid grid-cols-3 gap-1.5 mt-3">
-                                {COMPLEXITY_OPTIONS.map((c) => (
-                                  <button
-                                    key={c.id}
-                                    type="button"
-                                    onClick={() => setComplexity(s.id, c.id)}
-                                    className={`rounded-lg px-2 py-2 text-center border transition-all duration-150 text-[11px] font-bold ${
-                                      entry.complexity === c.id
-                                        ? "shadow-sm"
-                                        : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/15%)] text-[rgb(var(--fg-rgb)/50%)]"
-                                    }`}
-                                    style={entry.complexity === c.id ? { color: c.color, backgroundColor: `${c.color}10`, borderColor: `${c.color}50` } : {}}
-                                  >
-                                    {c.label}
-                                  </button>
-                                ))}
-                              </div>
+                              {/* Sub-options */}
+                              {options.length > 0 && (
+                                <div className={`grid gap-1.5 mt-3 ${options.length <= 3 ? `grid-cols-${options.length}` : "grid-cols-2"}`}>
+                                  {options.map((opt) => (
+                                    <button
+                                      key={opt.id}
+                                      type="button"
+                                      onClick={() => setOption(s.id, opt.id)}
+                                      className={`rounded-lg px-2 py-2 text-center border transition-all duration-150 text-[11px] font-bold ${
+                                        entry.option === opt.id
+                                          ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-400))]"
+                                          : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/15%)] text-[rgb(var(--fg-rgb)/50%)]"
+                                      }`}
+                                    >
+                                      {opt.label}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+
+                              {/* Color Code input for color-change */}
+                              {isColorService && (
+                                <div className="mt-3">
+                                  <label className="text-[10px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold">Color Code / Name</label>
+                                  <input
+                                    type="text"
+                                    placeholder="e.g. #FF5733 or Royal Blue"
+                                    value={entry.colorCode ?? ""}
+                                    onChange={(e) => setColorCode(s.id, e.target.value)}
+                                    className="w-full mt-1.5 px-3 py-2 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-xs text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)]"
+                                  />
+                                </div>
+                              )}
 
                               {/* Quantity + Price */}
                               <div className="flex items-center gap-3">
@@ -287,10 +342,9 @@ export default function ContactForm() {
                       {selectedIds.map((id) => {
                         const s = services.find((x) => x.id === id)!;
                         const entry = selected[id];
-                        const qty = entry.qty;
-                        const complexity = COMPLEXITY_OPTIONS.find((c) => c.id === entry.complexity);
-                        const multiplier = complexity?.multiplier ?? 1.0;
-                        const lineTotal = qty * (unitPrice[id] ?? 0) * multiplier;
+                        const mult = getMultiplier(id, entry.option);
+                        const lineTotal = entry.qty * (unitPrice[id] ?? 0) * mult;
+                        const optLabel = SERVICE_OPTIONS[id]?.find((o) => o.id === entry.option)?.label ?? "";
                         return (
                           <motion.div
                             key={id}
@@ -300,13 +354,12 @@ export default function ContactForm() {
                             className="overflow-hidden"
                           >
                             <div className="flex items-center justify-between text-sm">
-                              <span className="text-[rgb(var(--fg-rgb)/70%)]">{s.title} × {qty}</span>
+                              <span className="text-[rgb(var(--fg-rgb)/70%)]">{s.title} × {entry.qty}</span>
                               <span className="font-semibold text-[rgb(var(--fg-rgb))]">${lineTotal.toFixed(2)}</span>
                             </div>
-                            <div className="flex items-center gap-1.5 mt-1">
-                              <span className="text-[10px] px-1.5 py-0.5 rounded font-bold" style={{ color: complexity?.color, backgroundColor: `${complexity?.color}15` }}>{complexity?.label}</span>
-                              <span className="text-[10px] text-[rgb(var(--fg-rgb)/35%)]">${(unitPrice[id] ?? 0) * multiplier}/img</span>
-                            </div>
+                            {optLabel && (
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-400))] font-bold">{optLabel}</span>
+                            )}
                           </motion.div>
                         );
                       })}
@@ -350,12 +403,6 @@ export default function ContactForm() {
                 )}
 
                 <input type="hidden" name="quote_details" value={quoteSummary} />
-                <input type="hidden" name="complexity_levels" value={selectedIds.map((id) => {
-                  const s = services.find((x) => x.id === id);
-                  const entry = selected[id];
-                  const c = COMPLEXITY_OPTIONS.find((x) => x.id === entry?.complexity);
-                  return `${s?.title}: ${c?.label}`;
-                }).join(", ")} />
                 <input type="hidden" name="turnaround" value={turnaround === "96" ? "96+ hours (custom)" : `${turnaround} hours`} />
               </div>
             ) : (
@@ -388,7 +435,7 @@ export default function ContactForm() {
           </div>
         </div>
 
-        {/* Turnaround - only for Build a Quote */}
+        {/* Turnaround */}
         {wantsQuote && (
           <div className="mt-8">
             <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3">Preferred Turnaround</label>
