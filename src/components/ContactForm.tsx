@@ -28,21 +28,28 @@ const COMPLEXITY_OPTIONS = [
 ];
 
 const TURNAROUND_OPTIONS = [
-  { id: "12", label: "12 Hours", desc: "Fast delivery", icon: "⚡" },
-  { id: "24", label: "24 Hours", desc: "Standard", icon: "🕐" },
-  { id: "48", label: "48 Hours", desc: "Relaxed", icon: "📅" },
-  { id: "96", label: "96 Hours+", desc: "Flexible / Custom", icon: "📋" },
+  { id: "12", label: "12 Hours", desc: "Fast delivery", icon: "⚡", surcharge: 0.02 },
+  { id: "24", label: "24 Hours", desc: "Standard", icon: "🕐", surcharge: 0 },
+  { id: "48", label: "48 Hours", desc: "Relaxed", icon: "📅", surcharge: -0.01 },
+  { id: "96", label: "96 Hours+", desc: "Flexible / Custom", icon: "📋", surcharge: -0.02 },
 ];
 
 export default function ContactForm() {
   const [wantsQuote, setWantsQuote] = useState(true);
   const [selected, setSelected] = useState<Record<string, { qty: number; complexity: string }>>({});
-  const [turnaround, setTurnaround] = useState("12");
+  const [expandedService, setExpandedService] = useState<string | null>(null);
+  const [turnaround, setTurnaround] = useState("24");
 
   const toggleService = (id: string) => {
     setSelected((prev) => {
       const next = { ...prev };
-      if (id in next) { delete next[id]; } else { next[id] = { qty: 50, complexity: "medium" }; }
+      if (id in next) {
+        delete next[id];
+        setExpandedService((prev) => (prev === id ? null : prev));
+      } else {
+        next[id] = { qty: 50, complexity: "medium" };
+        setExpandedService(id);
+      }
       return next;
     });
   };
@@ -61,7 +68,10 @@ export default function ContactForm() {
     }));
   };
 
-  const { totalImages, subtotal, discountApplies, discountAmount, total, selectedIds } = useMemo(() => {
+  const turnaroundOption = TURNAROUND_OPTIONS.find((t) => t.id === turnaround);
+  const turnaroundSurcharge = turnaroundOption?.surcharge ?? 0;
+
+  const { totalImages, subtotal, discountApplies, discountAmount, turnaroundFee, total, selectedIds } = useMemo(() => {
     let images = 0;
     let sub = 0;
     for (const [id, entry] of Object.entries(selected)) {
@@ -73,8 +83,10 @@ export default function ContactForm() {
     }
     const applies = images >= VOLUME_DISCOUNT_THRESHOLD;
     const discount = applies ? sub * VOLUME_DISCOUNT_RATE : 0;
-    return { totalImages: images, subtotal: sub, discountApplies: applies, discountAmount: discount, total: sub - discount, selectedIds: Object.keys(selected) };
-  }, [selected]);
+    const baseAfterDiscount = sub - discount;
+    const fee = baseAfterDiscount * turnaroundSurcharge;
+    return { totalImages: images, subtotal: sub, discountApplies: applies, discountAmount: discount, turnaroundFee: fee, total: baseAfterDiscount + fee, selectedIds: Object.keys(selected) };
+  }, [selected, turnaroundSurcharge]);
 
   const quoteSummary = useMemo(() => {
     if (!wantsQuote || selectedIds.length === 0) return "";
@@ -91,9 +103,13 @@ export default function ContactForm() {
     if (discountApplies) {
       lines.push(`Volume discount (${VOLUME_DISCOUNT_THRESHOLD}+ images, ${VOLUME_DISCOUNT_RATE * 100}%): -$${discountAmount.toFixed(2)}`);
     }
+    if (turnaroundSurcharge !== 0) {
+      const pct = turnaroundSurcharge > 0 ? `+${turnaroundSurcharge * 100}%` : `${turnaroundSurcharge * 100}%`;
+      lines.push(`Turnaround (${turnaroundOption?.label}): ${pct} ($${turnaroundFee >= 0 ? "+" : ""}$${turnaroundFee.toFixed(2)})`);
+    }
     lines.push(`Estimated total: $${total.toFixed(2)}`);
     return lines.join("\n");
-  }, [wantsQuote, selectedIds, selected, totalImages, discountApplies, discountAmount, total]);
+  }, [wantsQuote, selectedIds, selected, totalImages, discountApplies, discountAmount, turnaroundFee, turnaroundSurcharge, turnaroundOption, total]);
 
   return (
     <div className="relative">
@@ -129,6 +145,7 @@ export default function ContactForm() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {services.map((s, i) => {
                   const isActive = s.id in selected;
+                  const isExpanded = expandedService === s.id && isActive;
                   const entry = selected[s.id];
                   const complexity = COMPLEXITY_OPTIONS.find((c) => c.id === (entry?.complexity ?? "medium"));
                   const multiplier = complexity?.multiplier ?? 1.0;
@@ -140,12 +157,12 @@ export default function ContactForm() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.04, duration: 0.35 }}
-                      className={`rounded-2xl p-5 border transition-all duration-300 ${
+                      className={`rounded-2xl p-5 border transition-all duration-300 cursor-pointer ${
                         isActive
                           ? "glass-card border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/8%)] shadow-lg shadow-[rgb(var(--accent-500)/10%)]"
-                          : "glass-card border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)] hover:-translate-y-0.5 cursor-pointer"
+                          : "glass-card border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/20%)] hover:-translate-y-0.5"
                       }`}
-                      onClick={() => !isActive && toggleService(s.id)}
+                      onClick={() => toggleService(s.id)}
                     >
                       <div className="flex items-start gap-3">
                         <div className="shrink-0 w-10 h-10 rounded-xl bg-[var(--bg-subtle)] flex items-center justify-center overflow-hidden">
@@ -154,18 +171,26 @@ export default function ContactForm() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2">
                             <p className="font-bold text-sm text-[rgb(var(--fg-rgb))] leading-tight">{s.title}</p>
-                            {!isActive && (
-                              <div className="shrink-0 w-5 h-5 rounded-md border border-[rgb(var(--fg-rgb)/25%)] flex items-center justify-center">
+                            <div className={`shrink-0 w-5 h-5 rounded-md border flex items-center justify-center transition-all duration-200 ${
+                              isActive
+                                ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]"
+                                : "border-[rgb(var(--fg-rgb)/25%)]"
+                            }`}>
+                              {isActive ? (
+                                <svg className="w-3 h-3 text-[rgb(var(--accent-contrast))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                </svg>
+                              ) : (
                                 <svg className="w-3 h-3 text-[rgb(var(--fg-rgb)/30%)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
-                              </div>
-                            )}
+                              )}
+                            </div>
                           </div>
                           <p className="mt-1 text-xs text-[rgb(var(--fg-rgb)/50%)]">from ${unitPrice[s.id]?.toFixed(2)} / image</p>
                         </div>
                       </div>
 
                       <AnimatePresence>
-                        {isActive && entry && (
+                        {isExpanded && entry && (
                           <motion.div
                             initial={{ height: 0, opacity: 0, marginTop: 0 }}
                             animate={{ height: "auto", opacity: 1, marginTop: 14 }}
@@ -308,6 +333,12 @@ export default function ContactForm() {
                           Tip: orders of {VOLUME_DISCOUNT_THRESHOLD}+ images get {VOLUME_DISCOUNT_RATE * 100}% off automatically.
                         </p>
                       )}
+                      {turnaroundSurcharge !== 0 && (
+                        <div className={`flex items-center justify-between text-sm ${turnaroundSurcharge > 0 ? "text-amber-400" : "text-emerald-400"}`}>
+                          <span>{turnaroundOption?.label} turnaround ({turnaroundSurcharge > 0 ? "+" : ""}{turnaroundSurcharge * 100}%)</span>
+                          <span>{turnaroundFee >= 0 ? "+" : ""}${turnaroundFee.toFixed(2)}</span>
+                        </div>
+                      )}
                       <div className="flex items-center justify-between pt-2">
                         <span className="font-bold text-[rgb(var(--fg-rgb))]">Estimated Total</span>
                         <motion.span
@@ -381,6 +412,11 @@ export default function ContactForm() {
                   <span className="text-xl">{opt.icon}</span>
                   <p className="mt-1.5 font-bold text-sm text-[rgb(var(--fg-rgb))]">{opt.label}</p>
                   <p className="text-xs text-[rgb(var(--fg-rgb)/45%)] mt-0.5">{opt.desc}</p>
+                  <p className={`text-[11px] font-bold mt-1 ${
+                    opt.surcharge > 0 ? "text-amber-400" : opt.surcharge < 0 ? "text-emerald-400" : "text-[rgb(var(--fg-rgb)/40%)]"
+                  }`}>
+                    {opt.surcharge > 0 ? `+${opt.surcharge * 100}%` : opt.surcharge < 0 ? `${opt.surcharge * 100}%` : "Base price"}
+                  </p>
                   {turnaround === opt.id && (
                     <motion.div
                       initial={{ scale: 0 }}
