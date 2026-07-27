@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import PricingCalculator from "@/components/PricingCalculator";
 import ContactForm from "@/components/ContactForm";
 
 export default function ContactPage() {
@@ -36,9 +35,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <PricingCalculator />
-
-      <section className="py-20 bg-[var(--bg-alt)]">
+      <section className="py-20 lg:py-28 bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-6">
           <ContactForm />
         </div>
