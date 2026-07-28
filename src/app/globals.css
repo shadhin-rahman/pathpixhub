@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #030303;
-  --bg-alt: #080808;
-  --bg-subtle: #0a0a0a;
+  --bg: #0f0f0f;
+  --bg-alt: #141414;
+  --bg-subtle: #1a1a1a;
   --fg-rgb: 248 248 248;
-  --glass-bg: rgba(255, 255, 255, 0.02);
-  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.08);
   --logo-filter: brightness(0) invert(1);
   --accent-300: 110 231 183;
   --accent-400: 52 211 153;

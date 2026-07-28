@@ -95,7 +95,6 @@ type ServiceSelection = {
   subTypeId?: string;
   complexity?: number;
   tier?: string;
-  quantity: number;
   colorCodes?: string[];
 };
 
@@ -113,6 +112,7 @@ export default function ContactForm() {
   const [selections, setSelections] = useState<Record<string, ServiceSelection>>({});
   const [expandedSvc, setExpandedSvc] = useState<string | null>(null);
   const [expandedSubType, setExpandedSubType] = useState<string | null>(null);
+  const [totalImageCount, setTotalImageCount] = useState(1);
   const [turnaround, setTurnaround] = useState("24");
   const [fileOption, setFileOption] = useState("psd-original-multi");
   const [step, setStep] = useState(1);
@@ -182,7 +182,7 @@ export default function ContactForm() {
     setExpandedSubType(null);
   };
 
-  const getDefaultSelection = (info: ServiceInfo): Partial<ServiceSelection> => {
+  const getDefaultSelection = (info: ServiceInfo): ServiceSelection => {
     if (info.effectiveType === "complexity") return { complexity: 1 };
     if (info.effectiveType === "tier") return { tier: "basic" };
     if (info.effectiveType === "color-variant") return { colorCodes: [""] };
@@ -190,38 +190,28 @@ export default function ContactForm() {
   };
 
   const handleSelect = (selKey: string) => {
-    if (hasSelection(selKey)) {
-      removeSelection(selKey);
-      return;
-    }
+    if (hasSelection(selKey)) { removeSelection(selKey); return; }
     const info = getService(selKey);
     if (!info) return;
-    setSelections(prev => ({ ...prev, [selKey]: { quantity: 50, ...getDefaultSelection(info) } as ServiceSelection }));
+    setSelections(prev => ({ ...prev, [selKey]: getDefaultSelection(info) }));
   };
 
   const handleSubTypeClick = (svcId: string, subTypeId: string) => {
     const selKey = getSelKey(svcId, subTypeId);
-    if (hasSelection(selKey)) {
-      removeSelection(selKey);
-      return;
-    }
+    if (hasSelection(selKey)) { removeSelection(selKey); return; }
     const info = getService(selKey);
     if (!info) return;
-    setSelections(prev => ({ ...prev, [selKey]: { quantity: 50, ...getDefaultSelection(info) } as ServiceSelection }));
+    setSelections(prev => ({ ...prev, [selKey]: getDefaultSelection(info) }));
     setExpandedSubType(subTypeId);
   };
 
   const selectComplexity = (selKey: string, level: number) => {
     setSelections(prev => {
       const existing = prev[selKey];
-      const info = getService(selKey);
-      if (!info) return prev;
-      if (info.effectiveType === "complexity" && existing?.complexity === level) {
-        const n = { ...prev };
-        delete n[selKey];
-        return n;
+      if (existing?.complexity === level) {
+        const n = { ...prev }; delete n[selKey]; return n;
       }
-      return { ...prev, [selKey]: { ...existing ?? { quantity: 50 }, complexity: level } as ServiceSelection };
+      return { ...prev, [selKey]: { ...existing ?? {}, complexity: level } };
     });
   };
 
@@ -229,16 +219,10 @@ export default function ContactForm() {
     setSelections(prev => ({ ...prev, [selKey]: { ...prev[selKey], tier: tierId } }));
   };
 
-  const setQty = (selKey: string, qty: number) => {
-    setSelections(prev => ({
-      ...prev, [selKey]: { ...prev[selKey], quantity: Math.max(1, Math.min(20000, qty || 1)) },
-    }));
-  };
-
   const setColorCodes = (selKey: string, codes: string[]) => {
     setSelections(prev => {
       const existing = prev[selKey];
-      if (!existing) return { ...prev, [selKey]: { quantity: 50, colorCodes: codes } };
+      if (!existing) return { ...prev, [selKey]: { colorCodes: codes } };
       return { ...prev, [selKey]: { ...existing, colorCodes: codes } };
     });
   };
@@ -246,7 +230,7 @@ export default function ContactForm() {
   const addColorVariant = (selKey: string) => {
     setSelections(prev => {
       const existing = prev[selKey];
-      if (!existing) return { ...prev, [selKey]: { quantity: 50, colorCodes: [""] } };
+      if (!existing) return { ...prev, [selKey]: { colorCodes: [""] } };
       return { ...prev, [selKey]: { ...existing, colorCodes: [...(existing.colorCodes ?? []), ""] } };
     });
   };
@@ -278,25 +262,24 @@ export default function ContactForm() {
   const turnaroundSurcharge = turnaroundOption?.surcharge ?? 0;
   const selectedFileOpt = FILE_OPTIONS.find(f => f.id === fileOption);
 
-  const { totalImages, subtotal, discountApplies, discountAmount, turnaroundFee, total, orderedKeys } = useMemo(() => {
-    let images = 0; let sub = 0;
+  const imgCount = Math.max(1, totalImageCount);
+
+  const { subtotal, discountApplies, discountAmount, turnaroundFee, total, orderedKeys } = useMemo(() => {
+    let sub = 0;
     for (const [key, sel] of Object.entries(selections)) {
       const info = getService(key);
       if (!info) continue;
-      const ppi = getPricePerImage(info, sel);
-      images += sel.quantity;
-      sub += ppi * sel.quantity;
+      sub += getPricePerImage(info, sel) * imgCount;
     }
-    const applies = images >= VOLUME_DISCOUNT_THRESHOLD;
+    const applies = imgCount >= VOLUME_DISCOUNT_THRESHOLD;
     const discount = applies ? sub * VOLUME_DISCOUNT_RATE : 0;
     const base = sub - discount;
     const fee = base * turnaroundSurcharge;
     return {
-      totalImages: images, subtotal: sub, discountApplies: applies,
-      discountAmount: discount, turnaroundFee: fee, total: base + fee,
-      orderedKeys: Object.keys(selections),
+      subtotal: sub, discountApplies: applies, discountAmount: discount,
+      turnaroundFee: fee, total: base + fee, orderedKeys: Object.keys(selections),
     };
-  }, [selections, turnaroundSurcharge]);
+  }, [selections, imgCount, turnaroundSurcharge]);
 
   const quoteSummary = useMemo(() => {
     if (orderedKeys.length === 0) return "";
@@ -305,10 +288,9 @@ export default function ContactForm() {
       const sel = selections[key];
       if (!info || !sel) return "";
       const ppi = getPricePerImage(info, sel);
-      const lineTotal = ppi * sel.quantity;
-      return `- ${getDisplayLabel(info, sel)}: ${sel.quantity} images ($${lineTotal.toFixed(2)})`;
+      return `- ${getDisplayLabel(info, sel)}: $${ppi.toFixed(2)}/img × ${imgCount}`;
     });
-    lines.push(`Total images: ${totalImages}`);
+    lines.push(`Total images: ${imgCount}`);
     if (discountApplies) lines.push(`Volume discount: -$${discountAmount.toFixed(2)}`);
     if (turnaroundSurcharge !== 0) lines.push(`Turnaround (${turnaroundOption?.label}): $${turnaroundFee >= 0 ? "+" : ""}${turnaroundFee.toFixed(2)}`);
     lines.push(`File format: ${selectedFileOpt?.label}`);
@@ -316,7 +298,7 @@ export default function ContactForm() {
     if (uploadedFiles.length > 0) lines.push(`Uploaded files: ${uploadedFiles.length}`);
     lines.push(`Estimated total: $${total.toFixed(2)}`);
     return lines.join("\n");
-  }, [orderedKeys, selections, totalImages, discountApplies, discountAmount, turnaroundFee, turnaroundSurcharge, turnaroundOption, total, fileOption, commentsText, uploadedFiles.length]);
+  }, [orderedKeys, selections, imgCount, discountApplies, discountAmount, turnaroundFee, turnaroundSurcharge, turnaroundOption, total, fileOption, commentsText, uploadedFiles.length]);
 
   const STEPS = [
     { id: 1, label: "Choose services" },
@@ -333,17 +315,13 @@ export default function ContactForm() {
       return (
         <div className="space-y-2">
           <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)]">
-            For each color variant, provide a color code or approximate name. If you have swatch files or color reference images, simply note them here and upload under &apos;Supporting files&apos; in the &apos;Preferences&apos; step later.
+            For each color variant, provide a color code or approximate name. If you have swatch files or color reference images, simply note them here and upload under &apos;Supporting files&apos; later.
           </p>
           {codes.map((code, idx) => (
             <div key={idx} className="flex items-center gap-2">
               <span className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/40%)] shrink-0 w-24">Color Variant {idx + 1}</span>
               <input type="text" value={code}
-                onChange={e => {
-                  const next = [...codes];
-                  next[idx] = e.target.value;
-                  setColorCodes(selKey, next);
-                }}
+                onChange={e => { const next = [...codes]; next[idx] = e.target.value; setColorCodes(selKey, next); }}
                 placeholder="Color code or name (e.g. #FF5733, Royal Blue)"
                 className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-xs text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
               {codes.length > 1 && (
@@ -355,9 +333,7 @@ export default function ContactForm() {
             </div>
           ))}
           <button type="button" onClick={() => addColorVariant(selKey)}
-            className="text-[11px] font-bold text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors">
-            + Add another variant
-          </button>
+            className="text-[11px] font-bold text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors">+ Add another variant</button>
         </div>
       );
     }
@@ -377,14 +353,10 @@ export default function ContactForm() {
               return (
                 <button key={level} type="button" onClick={() => selectComplexity(selKey, level)}
                   className={`rounded-xl py-2.5 px-1 text-center border transition-all ${
-                    isActive
-                      ? "border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/10%)]"
-                      : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--fg-rgb)/15%)]"
+                    isActive ? "border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--fg-rgb)/15%)]"
                   }`}>
-                  <p className={`text-[10px] font-bold leading-tight ${isActive ? "text-[rgb(var(--accent-400))]" : "text-[rgb(var(--fg-rgb))]"}`}>
-                    Complexity {level}
-                  </p>
-                  <p className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/40%)] mt-0.5">${price.toFixed(2)}</p>
+                  <p className={`text-[10px] font-bold leading-tight ${isActive ? "text-[rgb(var(--accent-400))]" : "text-[rgb(var(--fg-rgb))]"}`}>Complexity {level}</p>
+                  <p className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/40%)] mt-0.5">${price.toFixed(2)}/img</p>
                 </button>
               );
             })}
@@ -404,9 +376,7 @@ export default function ContactForm() {
               return (
                 <button key={t.id} type="button" onClick={() => selectTier(selKey, t.id)}
                   className={`flex-1 rounded-xl py-2.5 px-3 text-center border transition-all ${
-                    isActive
-                      ? "border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/10%)]"
-                      : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--fg-rgb)/15%)]"
+                    isActive ? "border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--fg-rgb)/15%)]"
                   }`}>
                   <p className={`text-[11px] font-bold ${isActive ? "text-[rgb(var(--accent-400))]" : "text-[rgb(var(--fg-rgb))]"}`}>{t.label}</p>
                   <p className="text-[10px] font-bold text-[rgb(var(--fg-rgb)/40%)] mt-0.5">${price.toFixed(2)}/img</p>
@@ -421,43 +391,21 @@ export default function ContactForm() {
     return null;
   };
 
-  const quantityRow = (selKey: string) => {
-    const sel = selections[selKey];
-    if (!sel) return null;
-    const info = getService(selKey);
-    if (!info) return null;
-    const ppi = getPricePerImage(info, sel);
-    return (
-      <div className="flex items-center gap-3 pt-2">
-        <div className="flex items-center gap-1">
-          <button type="button" onClick={() => setQty(selKey, sel.quantity - 10)}
-            className="w-7 h-7 rounded-lg bg-[rgb(var(--fg-rgb)/6%)] flex items-center justify-center text-xs font-bold text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/12%)] transition-all">−</button>
-          <input type="number" min={1} max={20000} value={sel.quantity}
-            onChange={e => setQty(selKey, parseInt(e.target.value, 10) || 1)}
-            className="w-16 px-1 py-1 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-xs text-center text-[rgb(var(--fg-rgb))] font-bold outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
-          <button type="button" onClick={() => setQty(selKey, sel.quantity + 10)}
-            className="w-7 h-7 rounded-lg bg-[rgb(var(--fg-rgb)/6%)] flex items-center justify-center text-xs font-bold text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/12%)] transition-all">+</button>
-        </div>
-        <span className="text-[11px] text-[rgb(var(--fg-rgb)/35%)]">${ppi.toFixed(2)}/img</span>
-        <span className="text-xs font-bold text-[rgb(var(--fg-rgb))] ml-auto">${(ppi * sel.quantity).toFixed(2)}</span>
-      </div>
-    );
-  };
-
   const getSummaryText = (selKey: string): string => {
     const info = getService(selKey);
     const sel = selections[selKey];
     if (!info || !sel) return "";
-    if (info.effectiveType === "complexity") return `C${sel.complexity}, ×${sel.quantity}`;
+    const ppi = getPricePerImage(info, sel);
+    if (info.effectiveType === "complexity") return `C${sel.complexity} — $${ppi.toFixed(2)}/img`;
     if (info.effectiveType === "tier") {
       const t = info.effectiveTiers.find(t => t.id === sel.tier);
-      return `${t?.label ?? ""}, ×${sel.quantity}`;
+      return `${t?.label ?? ""} — $${ppi.toFixed(2)}/img`;
     }
     if (info.effectiveType === "color-variant") {
       const count = sel.colorCodes?.filter(c => c.trim()).length ?? 0;
-      return `${count} variant(s), ×${sel.quantity}`;
+      return `${count} variant(s) — $${info.effectiveBasePrice.toFixed(2)}/img`;
     }
-    return `×${sel.quantity}`;
+    return `$${info.effectiveBasePrice.toFixed(2)}/img`;
   };
 
   return (
@@ -476,7 +424,6 @@ export default function ContactForm() {
 
         <form action="https://formspree.io/f/xovjbydw" method="POST" encType="multipart/form-data">
         <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8">
-          {/* Left */}
           <div>
             <div className="flex items-center gap-1 p-1 rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/5%)] w-fit mb-6">
               <button type="button" onClick={() => { setWantsQuote(true); setStep(1); }}
@@ -491,16 +438,11 @@ export default function ContactForm() {
 
             {wantsQuote ? (
               <>
-                {/* Step Indicator */}
                 <div className="flex items-center gap-3 mb-8">
                   {STEPS.map((s, i) => (
                     <div key={s.id} className="flex items-center gap-3">
                       <button type="button" onClick={() => { if (s.id <= step) setStep(s.id); }}
-                        className={`flex items-center gap-2 transition-all ${
-                          step === s.id ? "text-[rgb(var(--fg-rgb))]" :
-                          step > s.id ? "text-[rgb(var(--accent-400))]" :
-                          "text-[rgb(var(--fg-rgb)/25%)]"
-                        }`}>
+                        className={`flex items-center gap-2 transition-all ${step === s.id ? "text-[rgb(var(--fg-rgb))]" : step > s.id ? "text-[rgb(var(--accent-400))]" : "text-[rgb(var(--fg-rgb)/25%)]"}`}>
                         <span className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold border-2 transition-all ${
                           step === s.id ? "border-[rgb(var(--accent-500))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" :
                           step > s.id ? "border-[rgb(var(--accent-400))] bg-[rgb(var(--accent-400)/15%)] text-[rgb(var(--accent-400))]" :
@@ -508,9 +450,7 @@ export default function ContactForm() {
                         }`}>{s.id}</span>
                         <span className="text-[11px] font-bold hidden sm:inline">{s.label}</span>
                       </button>
-                      {i < STEPS.length - 1 && (
-                        <div className={`w-8 h-px ${step > s.id ? "bg-[rgb(var(--accent-400)/40%)]" : "bg-[rgb(var(--fg-rgb)/10%)]"}`} />
-                      )}
+                      {i < STEPS.length - 1 && <div className={`w-8 h-px ${step > s.id ? "bg-[rgb(var(--accent-400)/40%)]" : "bg-[rgb(var(--fg-rgb)/10%)]"}`} />}
                     </div>
                   ))}
                 </div>
@@ -520,7 +460,7 @@ export default function ContactForm() {
                   <div className="space-y-2">
                     <p className="text-sm font-bold text-[rgb(var(--fg-rgb))] mb-4">What kind of edits do you need today?</p>
                     <p className="text-[12px] text-[rgb(var(--fg-rgb)/40%)] -mt-3 mb-5">
-                      You can add multiple services for each set of edits. If you have images that require different edits, please request a separate quote for each set.
+                      You can add multiple services for each set of edits.
                     </p>
 
                     {ALL_SERVICES.map(svc => {
@@ -537,7 +477,7 @@ export default function ContactForm() {
                             const key = getSelKey(svc.id, st.id);
                             if (hasSelection(key)) parts.push(getSummaryText(key));
                           }
-                          summaryLine = parts.length > 0 ? parts.join(", ") : "";
+                          summaryLine = parts.join(", ");
                         } else {
                           summaryLine = getSummaryText(svc.id);
                         }
@@ -545,142 +485,83 @@ export default function ContactForm() {
 
                       return (
                         <div key={svc.id}
-                          className={`rounded-2xl border transition-all overflow-hidden ${
-                            hasAnySelection
-                              ? "border-[rgb(var(--accent-500)/40%)] bg-[rgb(var(--accent-500)/2%)]"
-                              : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)]"
-                          }`}>
-                          {/* Card Header */}
+                          className={`rounded-2xl border transition-all overflow-hidden ${hasAnySelection ? "border-[rgb(var(--accent-500)/40%)] bg-[rgb(var(--accent-500)/2%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)]"}`}>
                           <div className="flex items-center gap-3 px-5 py-4 cursor-pointer select-none"
                             onClick={() => {
-                              if (!svc.subTypes && svc.type === "none") {
-                                handleSelect(svc.id);
-                              } else {
-                                toggleExpand(svc.id);
-                              }
+                              if (!svc.subTypes && svc.type === "none") handleSelect(svc.id);
+                              else toggleExpand(svc.id);
                             }}>
                             <div className="flex-1">
                               <p className="font-semibold text-sm text-[rgb(var(--fg-rgb))]">{svc.label}</p>
-                              {summaryLine && (
-                                <p className="text-[10px] text-[rgb(var(--accent-400))] mt-0.5 font-medium">{summaryLine}</p>
-                              )}
+                              {summaryLine && <p className="text-[10px] text-[rgb(var(--accent-400))] mt-0.5 font-medium">{summaryLine}</p>}
                             </div>
                             {(!svc.subTypes && svc.type === "none") ? (
-                              <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
-                                hasAnySelection
-                                  ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]"
-                                  : "border-[rgb(var(--fg-rgb)/20%)]"
-                              }`}>
-                                {hasAnySelection && (
-                                  <svg className="w-3 h-3 text-[rgb(var(--accent-contrast))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                  </svg>
-                                )}
+                              <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${hasAnySelection ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]" : "border-[rgb(var(--fg-rgb)/20%)]"}`}>
+                                {hasAnySelection && <svg className="w-3 h-3 text-[rgb(var(--accent-contrast))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
                               </div>
                             ) : (
-                              <div className={`w-7 h-7 rounded-lg border flex items-center justify-center transition-all ${
-                                isExpanded
-                                  ? "border-[rgb(var(--accent-500)/40%)] bg-[rgb(var(--accent-500)/8%)]"
-                                  : "border-[rgb(var(--fg-rgb)/15%)]"
-                              }`}>
+                              <div className={`w-7 h-7 rounded-lg border flex items-center justify-center transition-all ${isExpanded ? "border-[rgb(var(--accent-500)/40%)] bg-[rgb(var(--accent-500)/8%)]" : "border-[rgb(var(--fg-rgb)/15%)]"}`}>
                                 <svg className={`w-3.5 h-3.5 text-[rgb(var(--fg-rgb)/40%)] transition-transform ${isExpanded ? "rotate-45" : ""}`}
-                                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
-                                </svg>
+                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
                               </div>
                             )}
                           </div>
 
                           <AnimatePresence>
                             {isExpanded && (
-                              <motion.div initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                className="overflow-hidden">
+                              <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
                                 <div className="px-5 pb-5 pt-0 space-y-4 border-t border-[rgb(var(--fg-rgb)/5%)]">
                                   {!svc.subTypes ? (
-                                    <>{renderOptions(svc.id, getService(svc.id)!)}
-                                    {selections[svc.id] && quantityRow(svc.id)}</>
+                                    renderOptions(svc.id, getService(svc.id)!)
                                   ) : (
                                     <>
                                       <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)]">
                                         {svc.id === "shadow" ? "Select the type of shadow you want." :
-                                         svc.id === "photo-retouching" ? "Select one or more types of photo retouching." :
-                                         "Select a service type."}
+                                         svc.id === "photo-retouching" ? "Select one or more types of photo retouching." : "Select a service type."}
                                       </p>
                                       <div className="space-y-2">
                                         {svc.subTypes.map(st => {
                                           const key = getSelKey(svc.id, st.id);
                                           const isSelected = hasSelection(key);
-                                          const sel = selections[key];
                                           const isSubExpanded = expandedSubType === st.id;
                                           const info = getService(key) as ServiceInfo;
                                           const isAutoSelect = st.type === "none";
                                           return (
                                             <div key={st.id}
-                                              className={`rounded-xl border transition-all ${
-                                                isSelected
-                                                  ? "border-[rgb(var(--accent-500)/40%)] bg-[rgb(var(--accent-500)/3%)]"
-                                                  : "border-[rgb(var(--fg-rgb)/6%)]"
-                                              }`}>
+                                              className={`rounded-xl border transition-all ${isSelected ? "border-[rgb(var(--accent-500)/40%)] bg-[rgb(var(--accent-500)/3%)]" : "border-[rgb(var(--fg-rgb)/6%)]"}`}>
                                               <div className="flex items-center gap-3 px-4 py-3 cursor-pointer select-none"
                                                 onClick={() => {
-                                                  if (isAutoSelect) {
-                                                    handleSubTypeClick(svc.id, st.id);
-                                                  } else {
+                                                  if (isAutoSelect) handleSubTypeClick(svc.id, st.id);
+                                                  else {
                                                     setExpandedSubType(isSubExpanded ? null : st.id);
-                                                    if (isSelected && isSubExpanded) {
-                                                      removeSelection(key);
-                                                    } else if (!isSelected) {
-                                                      handleSubTypeClick(svc.id, st.id);
-                                                    }
+                                                    if (isSelected && isSubExpanded) removeSelection(key);
+                                                    else if (!isSelected) handleSubTypeClick(svc.id, st.id);
                                                   }
                                                 }}>
                                                 <div className="flex-1">
                                                   <p className="text-[13px] font-semibold text-[rgb(var(--fg-rgb))]">{st.label}</p>
-                                                  {isSelected && sel && (
-                                                    <p className="text-[10px] text-[rgb(var(--accent-400))] mt-0.5">{getSummaryText(key)}</p>
-                                                  )}
+                                                  {isSelected && <p className="text-[10px] text-[rgb(var(--accent-400))] mt-0.5">{getSummaryText(key)}</p>}
                                                 </div>
                                                 {isAutoSelect ? (
-                                                  <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
-                                                    isSelected
-                                                      ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]"
-                                                      : "border-[rgb(var(--fg-rgb)/20%)]"
-                                                  }`}>
-                                                    {isSelected && (
-                                                      <svg className="w-3 h-3 text-[rgb(var(--accent-contrast))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                                      </svg>
-                                                    )}
+                                                  <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${isSelected ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]" : "border-[rgb(var(--fg-rgb)/20%)]"}`}>
+                                                    {isSelected && <svg className="w-3 h-3 text-[rgb(var(--accent-contrast))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
                                                   </div>
                                                 ) : (
                                                   <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform ${isSubExpanded ? "rotate-180" : ""}`}
-                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                                  </svg>
+                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                                                 )}
                                               </div>
                                               <AnimatePresence>
                                                 {isSelected && isSubExpanded && !isAutoSelect && (
-                                                  <motion.div initial={{ height: 0, opacity: 0 }}
-                                                    animate={{ height: "auto", opacity: 1 }}
-                                                    exit={{ height: 0, opacity: 0 }}
-                                                    className="overflow-hidden">
+                                                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
                                                     <div className="px-4 pb-4 pt-0 space-y-3 border-t border-[rgb(var(--fg-rgb)/5%)]">
                                                       {renderOptions(key, info)}
-                                                      {quantityRow(key)}
                                                     </div>
                                                   </motion.div>
                                                 )}
                                                 {isSelected && isAutoSelect && (
-                                                  <motion.div initial={{ height: 0, opacity: 0 }}
-                                                    animate={{ height: "auto", opacity: 1 }}
-                                                    exit={{ height: 0, opacity: 0 }}
-                                                    className="overflow-hidden">
-                                                    <div className="px-4 pb-4 pt-0 border-t border-[rgb(var(--fg-rgb)/5%)]">
-                                                      {quantityRow(key)}
-                                                    </div>
+                                                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                                                    <div className="px-4 pb-4 pt-0 border-t border-[rgb(var(--fg-rgb)/5%)]" />
                                                   </motion.div>
                                                 )}
                                               </AnimatePresence>
@@ -717,6 +598,23 @@ export default function ContactForm() {
                         className="w-full px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)] resize-none" />
                     </div>
 
+                    {/* Total Image Count */}
+                    <div>
+                      <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Total number of images</label>
+                      <div className="flex items-center gap-2">
+                        <button type="button" onClick={() => setTotalImageCount(Math.max(1, totalImageCount - 10))}
+                          className="w-10 h-10 rounded-xl bg-[rgb(var(--fg-rgb)/6%)] flex items-center justify-center text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/12%)] transition-all">−</button>
+                        <input type="number" min={1} max={100000} value={totalImageCount}
+                          onChange={e => setTotalImageCount(Math.max(1, parseInt(e.target.value, 10) || 1))}
+                          className="w-24 px-3 py-2.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-center text-[rgb(var(--fg-rgb))] font-bold outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
+                        <button type="button" onClick={() => setTotalImageCount(totalImageCount + 10)}
+                          className="w-10 h-10 rounded-xl bg-[rgb(var(--fg-rgb)/6%)] flex items-center justify-center text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/12%)] transition-all">+</button>
+                        {totalImageCount >= VOLUME_DISCOUNT_THRESHOLD && (
+                          <span className="text-[11px] font-bold text-emerald-400">10% discount applied</span>
+                        )}
+                      </div>
+                    </div>
+
                     <div>
                       <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Preferred file format</label>
                       <div className="relative">
@@ -738,9 +636,7 @@ export default function ContactForm() {
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                         {TURNAROUND_OPTIONS.map(opt => (
                           <button key={opt.id} type="button" onClick={() => setTurnaround(opt.id)}
-                            className={`rounded-xl p-3 border text-center transition-all ${
-                              turnaround === opt.id ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/8%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/15%)]"
-                            }`}>
+                            className={`rounded-xl p-3 border text-center transition-all ${turnaround === opt.id ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/8%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/15%)]"}`}>
                             <p className="text-xs font-bold text-[rgb(var(--fg-rgb))]">{opt.label}</p>
                             <p className="text-[10px] text-[rgb(var(--fg-rgb)/40%)]">{opt.desc}</p>
                             <p className={`text-[10px] font-bold mt-0.5 ${opt.surcharge > 0 ? "text-amber-400" : opt.surcharge < 0 ? "text-emerald-400" : "text-[rgb(var(--fg-rgb)/30%)]"}`}>
@@ -766,24 +662,19 @@ export default function ContactForm() {
                     <div onClick={() => fileInputRef.current?.click()}
                       className="border-2 border-dashed border-[rgb(var(--fg-rgb)/15%)] rounded-2xl p-10 text-center cursor-pointer hover:border-[rgb(var(--accent-500)/40%)] transition-all">
                       <div className="w-12 h-12 rounded-xl bg-[rgb(var(--accent-500)/10%)] flex items-center justify-center mx-auto mb-3">
-                        <svg className="w-6 h-6 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                        </svg>
+                        <svg className="w-6 h-6 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
                       </div>
                       <p className="text-sm font-bold text-[rgb(var(--fg-rgb))]">Drop images here or click to upload</p>
                       <p className="text-xs text-[rgb(var(--fg-rgb)/40%)] mt-1">JPG, PNG, PSD, TIFF — Max 50MB each</p>
                     </div>
                     <input ref={fileInputRef} type="file" multiple accept="image/*,.psd,.tiff,.tif" className="hidden" onChange={handleFileUpload} />
-
                     {uploadedFiles.length > 0 && (
                       <div className="space-y-2">
                         <p className="text-xs font-bold text-[rgb(var(--fg-rgb)/50%)]">{uploadedFiles.length} file(s) uploaded</p>
                         {uploadedFiles.map((file, idx) => (
                           <div key={idx} className="flex items-start gap-3 p-3 rounded-xl border border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)]">
                             <div className="shrink-0 w-8 h-8 rounded-lg bg-[rgb(var(--accent-500)/10%)] flex items-center justify-center">
-                              <svg className="w-4 h-4 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                              </svg>
+                              <svg className="w-4 h-4 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="text-xs font-bold text-[rgb(var(--fg-rgb))] truncate">{file.name}</p>
@@ -800,7 +691,6 @@ export default function ContactForm() {
                         ))}
                       </div>
                     )}
-
                     <div className="flex gap-3">
                       <button type="button" onClick={() => setStep(2)}
                         className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
@@ -821,11 +711,9 @@ export default function ContactForm() {
                       <textarea name="message" rows={3} placeholder="Anything else we should know? (optional)" value={message} onChange={e => setMessage(e.target.value)}
                         className="w-full px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)] resize-none" />
                     </div>
-
                     <input type="hidden" name="quote_details" value={quoteSummary} />
                     <input type="hidden" name="turnaround" value={turnaroundOption?.label} />
                     <input type="hidden" name="file_format" value={selectedFileOpt?.label} />
-
                     <div className="flex gap-3">
                       <button type="button" onClick={() => setStep(3)}
                         className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
@@ -872,19 +760,17 @@ export default function ContactForm() {
                   <p className="mt-6 text-sm text-[rgb(var(--fg-rgb)/40%)]">Select services to see your estimate.</p>
                 ) : (
                   <div className="mt-6 space-y-3">
+                    <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)]">{imgCount} image{imgCount > 1 ? "s" : ""}</p>
                     <AnimatePresence>
                       {orderedKeys.map(key => {
                         const info = getService(key);
                         const sel = selections[key];
                         if (!info || !sel) return null;
                         const ppi = getPricePerImage(info, sel);
-                        const lineTotal = ppi * sel.quantity;
+                        const lineTotal = ppi * imgCount;
                         const label = info.subType?.label ?? info.def.label;
                         return (
-                          <motion.div key={key} initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="overflow-hidden">
+                          <motion.div key={key} initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
                             <div className="flex items-start justify-between gap-2">
                               <div className="min-w-0">
                                 <p className="text-sm text-[rgb(var(--fg-rgb)/70%)] truncate">{label}</p>
@@ -902,9 +788,8 @@ export default function ContactForm() {
                         );
                       })}
                     </AnimatePresence>
-
                     <div className="pt-4 mt-4 border-t border-[rgb(var(--fg-rgb)/10%)] space-y-2">
-                      <div className="flex justify-between text-sm text-[rgb(var(--fg-rgb)/50%)]"><span>Total images</span><span>{totalImages}</span></div>
+                      <div className="flex justify-between text-sm text-[rgb(var(--fg-rgb)/50%)]"><span>Images</span><span>{imgCount}</span></div>
                       <div className="flex justify-between text-sm text-[rgb(var(--fg-rgb)/50%)]"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
                       {discountApplies && <div className="flex justify-between text-sm text-[rgb(34_197_94)]"><span>Volume discount</span><span>−${discountAmount.toFixed(2)}</span></div>}
                       {turnaroundSurcharge !== 0 && (
@@ -925,9 +810,7 @@ export default function ContactForm() {
               <div className="glass-card rounded-[2rem] p-8 border-[rgb(var(--fg-rgb)/10%)]">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-xl bg-[rgb(var(--accent-500)/12%)] flex items-center justify-center">
-                    <svg className="w-4 h-4 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
+                    <svg className="w-4 h-4 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
                   </div>
                   <h4 className="text-lg font-bold text-[rgb(var(--fg-rgb))]">Send a Message</h4>
                 </div>
@@ -935,16 +818,12 @@ export default function ContactForm() {
                 <div className="mt-6 space-y-3">
                   <a href="https://wa.me/8801723735896" target="_blank" rel="noopener noreferrer"
                     className="flex items-center gap-3 p-3 rounded-xl glass-card border border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(34_197_94_/_50%)] transition-all text-sm text-[rgb(var(--fg-rgb)/70%)] hover:text-[rgb(34_197_94)]">
-                    <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                    </svg>
+                    <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
                     Chat on WhatsApp
                   </a>
                   <a href="mailto:info@pathpixhub.com"
                     className="flex items-center gap-3 p-3 rounded-xl glass-card border border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm text-[rgb(var(--fg-rgb)/70%)] hover:text-[rgb(var(--accent-400))]">
-                    <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
+                    <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                     Send us an Email
                   </a>
                 </div>
