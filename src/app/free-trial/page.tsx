@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { services } from "@/data/services";
 import ScrollReveal from "@/components/ScrollReveal";
+import { fetchCountryCode, isCountryBlocked, setBypassCode, isAdmin } from "@/lib/countryBlocker";
 
 const COUNTRIES = [
   "Afghanistan","Albania","Algeria","Andorra","Angola","Argentina","Armenia",
@@ -66,6 +67,10 @@ export default function FreeTrialPage() {
   const [files, setFiles] = useState<File[]>([]);
   const [dragOver, setDragOver] = useState(false);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [countryCode, setCountryCode] = useState<string | null>(null);
+  const [countryLoaded, setCountryLoaded] = useState(false);
+  const [bypassInput, setBypassInput] = useState("");
+  const [bypassError, setBypassError] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -74,7 +79,19 @@ export default function FreeTrialPage() {
       setAlreadyUsed(true);
       setUsedEmail(localStorage.getItem(STORAGE_KEY) || "");
     }
+    const params = new URLSearchParams(window.location.search);
+    const bypass = params.get("access");
+    if (bypass) {
+      setBypassCode(bypass);
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+    fetchCountryCode().then((code) => {
+      setCountryCode(code);
+      setCountryLoaded(true);
+    });
   }, []);
+
+  const blocked = countryLoaded && countryCode !== null && isCountryBlocked(countryCode) && !isAdmin();
 
   const handleFiles = (newFiles: FileList | null) => {
     if (!newFiles) return;
@@ -110,6 +127,46 @@ export default function FreeTrialPage() {
     }
     setSubmitted(true);
   };
+
+  const handleBypassSubmit = () => {
+    if (!bypassInput.trim()) return;
+    setBypassCode(bypassInput.trim());
+    if (isAdmin()) {
+      setBypassError(false);
+      setCountryCode(null);
+      setCountryLoaded(false);
+      fetchCountryCode().then((code) => { setCountryCode(code); setCountryLoaded(true); });
+    } else {
+      setBypassError(true);
+    }
+  };
+
+  if (blocked) {
+    return (
+      <section className="pt-40 pb-32 bg-[var(--bg)]">
+        <div className="max-w-lg mx-auto px-6">
+          <div className="glass-card rounded-3xl p-10 border-[rgb(var(--fg-rgb)/10%)] text-center">
+            <div className="w-16 h-16 rounded-full bg-[rgb(239_68_68_/_10%)] flex items-center justify-center mx-auto mb-6">
+              <svg className="w-8 h-8 text-[rgb(239_68_68)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 0v2m0-2h2m-2 0H10m9.364-7.364A9 9 0 1112 3a9 9 0 017.364 4.636z" /></svg>
+            </div>
+            <h1 className="text-3xl font-bold text-[rgb(var(--fg-rgb))] mb-3">Access Restricted</h1>
+            <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] leading-relaxed mb-6">
+              We&apos;re sorry, but the free trial is currently unavailable in your region. If you believe this is a mistake or have been granted access, please enter your access code below.
+            </p>
+            <div className="flex gap-2 max-w-xs mx-auto">
+              <input type="text" value={bypassInput} onChange={e => { setBypassInput(e.target.value); setBypassError(false); }}
+                placeholder="Access code"
+                className="flex-1 px-4 py-3 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
+              <button type="button" onClick={handleBypassSubmit}
+                className="px-5 py-3 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] transition-all">Submit</button>
+            </div>
+            {bypassError && <p className="text-[11px] text-red-400 mt-2">Invalid access code.</p>}
+            <p className="text-[11px] text-[rgb(var(--fg-rgb)/30%)] mt-4">Contact the site administrator if you need access.</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   // Already used screen
   if (alreadyUsed) {
