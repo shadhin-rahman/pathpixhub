@@ -113,6 +113,7 @@ export default function ContactForm() {
   const [fileOption, setFileOption] = useState("psd-original-multi");
   const [step, setStep] = useState(1);
   const [commentsText, setCommentsText] = useState("");
+  const [imageLinks, setImageLinks] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -276,9 +277,10 @@ export default function ContactForm() {
     if (turnaroundSurcharge !== 0) lines.push(`Turnaround (${turnaroundOption?.label}): $${turnaroundFee >= 0 ? "+" : ""}${turnaroundFee.toFixed(2)}`);
     lines.push(`File format: ${selectedFileOpt?.label}`);
     if (commentsText) lines.push(`Comments: ${commentsText}`);
+    if (imageLinks.trim()) lines.push(`Image links:\n${imageLinks.trim()}`);
     lines.push(`Estimated total: $${total.toFixed(2)}`);
     return lines.join("\n");
-  }, [orderedKeys, selections, imgCount, discountApplies, discountAmount, turnaroundFee, turnaroundSurcharge, turnaroundOption, total, fileOption, commentsText]);
+  }, [orderedKeys, selections, imgCount, discountApplies, discountAmount, turnaroundFee, turnaroundSurcharge, turnaroundOption, total, fileOption, commentsText, imageLinks]);
 
   const STEPS = [
     { id: 1, label: "Choose services" },
@@ -389,9 +391,6 @@ export default function ContactForm() {
 
   return (
     <div className="relative">
-      <div className="premium-blur w-[500px] h-[500px] top-[-15%] left-[-10%]" />
-      <div className="premium-blur w-[400px] h-[400px] bottom-[-15%] right-[-10%]" />
-
       <div className="relative max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Get in Touch</h2>
@@ -623,8 +622,16 @@ export default function ContactForm() {
                       </div>
                     </div>
 
+                    <div>
+                      <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Your image links (optional)</label>
+                      <textarea value={imageLinks} onChange={e => setImageLinks(e.target.value)}
+                        rows={3} placeholder="Paste your Dropbox, Google Drive, or WeTransfer links here...&#10;You can add multiple links, one per line."
+                        className="w-full px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)] resize-none" />
+                      <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-1.5">Share your files via any preferred method. We&apos;ll access them after you confirm the quote.</p>
+                    </div>
+
                     <div className="rounded-xl border border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] p-4">
-                      <p className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/50%)] uppercase tracking-wider mb-2">File sharing</p>
+                      <p className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/50%)] uppercase tracking-wider mb-2">How to share your files</p>
                       <p className="text-[12px] text-[rgb(var(--fg-rgb)/50%)] leading-relaxed">
                         After submitting, we&apos;ll send a quote via email. Once confirmed, you can share your files using Dropbox, Google Drive, or WeTransfer — and we&apos;ll send you a download link for the edited images.
                       </p>
@@ -653,6 +660,7 @@ export default function ContactForm() {
                     <input type="hidden" name="quote_details" value={quoteSummary} />
                     <input type="hidden" name="turnaround" value={turnaroundOption?.label} />
                     <input type="hidden" name="file_format" value={selectedFileOpt?.label} />
+                    <input type="hidden" name="image_links" value={imageLinks} />
                     <div className="flex gap-3">
                       <button type="button" onClick={() => setStep(2)}
                         className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
