@@ -1,5 +1,4 @@
 const BLOCKED_COUNTRIES = [
-  "BD",
   "IN",
   "NG",
   "PK",
