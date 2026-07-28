@@ -228,7 +228,7 @@ export default function FreeTrialPage() {
       {/* Hero */}
       <section className="relative pt-32 pb-0 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <Image src="/images/about/lifestyle-1.jpg" alt="" fill className="object-cover object-center saturate-[1.1] brightness-105" sizes="100vw" priority />
+          <Image src="/images/about/lifestyle-1.jpg" alt="" fill className="object-cover saturate-[1.1] brightness-105" sizes="100vw" priority style={{ objectPosition: '50% 25%' }} />
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-[var(--bg)]" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent" />
         </div>
