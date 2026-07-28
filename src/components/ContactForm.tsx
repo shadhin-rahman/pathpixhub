@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useRef } from "react";
+import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const VOLUME_DISCOUNT_THRESHOLD = 500;
@@ -23,35 +23,31 @@ const ALL_SERVICES: ServiceDef[] = [
   { id: "multi-clipping-path", label: "Multi-clipping path", basePrice: 1.19, type: "complexity", complexityLevels: 4 },
   { id: "image-masking", label: "Image masking", basePrice: 1.19, type: "complexity", complexityLevels: 5 },
   { id: "background-removal", label: "Background removal", basePrice: 0.39, type: "none" },
-  {
-    id: "shadow", label: "Shadow", subTypes: [
-      { id: "drop", label: "Drop shadow", basePrice: 0.25, type: "none" },
-      { id: "existing", label: "Existing shadow", basePrice: 0.25, type: "none" },
-      { id: "floating", label: "Floating shadow", basePrice: 0.28, type: "none" },
-      { id: "natural", label: "Natural shadow", basePrice: 0.25, type: "complexity", complexityLevels: 3 },
-      { id: "reflection", label: "Reflection shadow", basePrice: 0.30, type: "complexity", complexityLevels: 3 },
-    ],
-  },
-  {
-    id: "photo-retouching", label: "Photo retouching", subTypes: [
-      { id: "dust-spot-scratch", label: "Dust, spot and scratch removal", basePrice: 0.69, type: "tier", tiers: [
-        { id: "basic", label: "Basic retouching", multiplier: 0.8 },
-        { id: "advance", label: "Advance retouching", multiplier: 1.2 },
-      ]},
-      { id: "wrinkle-clothing", label: "Wrinkle on clothing", basePrice: 0.79, type: "tier", tiers: [
-        { id: "basic", label: "Basic retouching", multiplier: 1.0 },
-        { id: "advance", label: "Advance retouching", multiplier: 1.4 },
-      ]},
-      { id: "beauty-airbrushing", label: "Beauty airbrushing", basePrice: 0.89, type: "tier", tiers: [
-        { id: "basic", label: "Basic retouching", multiplier: 1.0 },
-        { id: "advance", label: "Advance retouching", multiplier: 1.5 },
-      ]},
-      { id: "camera-reflection", label: "Camera reflection removal", basePrice: 0.99, type: "tier", tiers: [
-        { id: "basic", label: "Basic retouching", multiplier: 1.0 },
-        { id: "advance", label: "Advance retouching", multiplier: 1.4 },
-      ]},
-    ],
-  },
+  { id: "shadow", label: "Shadow", subTypes: [
+    { id: "drop", label: "Drop shadow", basePrice: 0.25, type: "none" },
+    { id: "existing", label: "Existing shadow", basePrice: 0.25, type: "none" },
+    { id: "floating", label: "Floating shadow", basePrice: 0.28, type: "none" },
+    { id: "natural", label: "Natural shadow", basePrice: 0.25, type: "complexity", complexityLevels: 3 },
+    { id: "reflection", label: "Reflection shadow", basePrice: 0.30, type: "complexity", complexityLevels: 3 },
+  ]},
+  { id: "photo-retouching", label: "Photo retouching", subTypes: [
+    { id: "dust-spot-scratch", label: "Dust, spot and scratch removal", basePrice: 0.69, type: "tier", tiers: [
+      { id: "basic", label: "Basic retouching", multiplier: 0.8 },
+      { id: "advance", label: "Advance retouching", multiplier: 1.2 },
+    ]},
+    { id: "wrinkle-clothing", label: "Wrinkle on clothing", basePrice: 0.79, type: "tier", tiers: [
+      { id: "basic", label: "Basic retouching", multiplier: 1.0 },
+      { id: "advance", label: "Advance retouching", multiplier: 1.4 },
+    ]},
+    { id: "beauty-airbrushing", label: "Beauty airbrushing", basePrice: 0.89, type: "tier", tiers: [
+      { id: "basic", label: "Basic retouching", multiplier: 1.0 },
+      { id: "advance", label: "Advance retouching", multiplier: 1.5 },
+    ]},
+    { id: "camera-reflection", label: "Camera reflection removal", basePrice: 0.99, type: "tier", tiers: [
+      { id: "basic", label: "Basic retouching", multiplier: 1.0 },
+      { id: "advance", label: "Advance retouching", multiplier: 1.4 },
+    ]},
+  ]},
   { id: "symmetrical-edit", label: "Symmetrical edit", basePrice: 0.79, type: "none" },
   { id: "ghost-mannequin", label: "Ghost mannequin", basePrice: 0.89, type: "complexity", complexityLevels: 2 },
   { id: "color-change", label: "Color change", basePrice: 0.99, type: "color-variant" },
@@ -116,13 +112,10 @@ export default function ContactForm() {
   const [turnaround, setTurnaround] = useState("24");
   const [fileOption, setFileOption] = useState("psd-original-multi");
   const [step, setStep] = useState(1);
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [imageComments, setImageComments] = useState<Record<number, string>>({});
   const [commentsText, setCommentsText] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const getSelKey = (svcId: string, subTypeId?: string) => subTypeId ? `${svcId}:${subTypeId}` : svcId;
 
@@ -161,9 +154,8 @@ export default function ContactForm() {
     return 1.0;
   };
 
-  const getPricePerImage = (info: ServiceInfo, sel: ServiceSelection): number => {
-    return info.effectiveBasePrice * getMultiplier(info, sel);
-  };
+  const getPricePerImage = (info: ServiceInfo, sel: ServiceSelection): number =>
+    info.effectiveBasePrice * getMultiplier(info, sel);
 
   const getDisplayLabel = (info: ServiceInfo, sel: ServiceSelection): string => {
     const base = info.subType?.label ?? info.def.label;
@@ -221,9 +213,8 @@ export default function ContactForm() {
 
   const setColorCodes = (selKey: string, codes: string[]) => {
     setSelections(prev => {
-      const existing = prev[selKey];
-      if (!existing) return { ...prev, [selKey]: { colorCodes: codes } };
-      return { ...prev, [selKey]: { ...existing, colorCodes: codes } };
+      if (!prev[selKey]) return { ...prev, [selKey]: { colorCodes: codes } };
+      return { ...prev, [selKey]: { ...prev[selKey], colorCodes: codes } };
     });
   };
 
@@ -249,19 +240,9 @@ export default function ContactForm() {
     setSelections(prev => { const n = { ...prev }; delete n[selKey]; return n; });
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    setUploadedFiles(prev => [...prev, ...files]);
-  };
-  const removeFile = (idx: number) => {
-    setUploadedFiles(prev => prev.filter((_, i) => i !== idx));
-    setImageComments(prev => { const n = { ...prev }; delete n[idx]; return n; });
-  };
-
   const turnaroundOption = TURNAROUND_OPTIONS.find(t => t.id === turnaround);
   const turnaroundSurcharge = turnaroundOption?.surcharge ?? 0;
   const selectedFileOpt = FILE_OPTIONS.find(f => f.id === fileOption);
-
   const imgCount = Math.max(1, totalImageCount);
 
   const { subtotal, discountApplies, discountAmount, turnaroundFee, total, orderedKeys } = useMemo(() => {
@@ -295,16 +276,14 @@ export default function ContactForm() {
     if (turnaroundSurcharge !== 0) lines.push(`Turnaround (${turnaroundOption?.label}): $${turnaroundFee >= 0 ? "+" : ""}${turnaroundFee.toFixed(2)}`);
     lines.push(`File format: ${selectedFileOpt?.label}`);
     if (commentsText) lines.push(`Comments: ${commentsText}`);
-    if (uploadedFiles.length > 0) lines.push(`Uploaded files: ${uploadedFiles.length}`);
     lines.push(`Estimated total: $${total.toFixed(2)}`);
     return lines.join("\n");
-  }, [orderedKeys, selections, imgCount, discountApplies, discountAmount, turnaroundFee, turnaroundSurcharge, turnaroundOption, total, fileOption, commentsText, uploadedFiles.length]);
+  }, [orderedKeys, selections, imgCount, discountApplies, discountAmount, turnaroundFee, turnaroundSurcharge, turnaroundOption, total, fileOption, commentsText]);
 
   const STEPS = [
     { id: 1, label: "Choose services" },
-    { id: 2, label: "Add comments" },
-    { id: 3, label: "Upload images" },
-    { id: 4, label: "Contact information" },
+    { id: 2, label: "Details & preferences" },
+    { id: 3, label: "Contact information" },
   ];
 
   const renderOptions = (selKey: string, info: ServiceInfo) => {
@@ -315,7 +294,7 @@ export default function ContactForm() {
       return (
         <div className="space-y-2">
           <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)]">
-            For each color variant, provide a color code or approximate name. If you have swatch files or color reference images, simply note them here and upload under &apos;Supporting files&apos; later.
+            For each color variant, provide a color code or approximate name. If you have swatch files or color reference images, simply note them here.
           </p>
           {codes.map((code, idx) => (
             <div key={idx} className="flex items-center gap-2">
@@ -343,7 +322,7 @@ export default function ContactForm() {
       return (
         <div>
           <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)] mb-3">
-            How complex are your images? If your images have different levels of complexity, choose the average for this order.
+            How complex are your images? Choose the average for this order.
           </p>
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(mults.length, 6)}, minmax(0, 1fr))` }} className="gap-1.5">
             {mults.map((mult, i) => {
@@ -422,7 +401,7 @@ export default function ContactForm() {
           </p>
         </div>
 
-        <form action="https://formspree.io/f/xovjbydw" method="POST" encType="multipart/form-data">
+        <form action="https://formspree.io/f/xovjbydw" method="POST">
         <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8">
           <div>
             <div className="flex items-center gap-1 p-1 rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/5%)] w-fit mb-6">
@@ -459,9 +438,7 @@ export default function ContactForm() {
                 {step === 1 && (
                   <div className="space-y-2">
                     <p className="text-sm font-bold text-[rgb(var(--fg-rgb))] mb-4">What kind of edits do you need today?</p>
-                    <p className="text-[12px] text-[rgb(var(--fg-rgb)/40%)] -mt-3 mb-5">
-                      You can add multiple services for each set of edits.
-                    </p>
+                    <p className="text-[12px] text-[rgb(var(--fg-rgb)/40%)] -mt-3 mb-5">You can add multiple services for each set of edits.</p>
 
                     {ALL_SERVICES.map(svc => {
                       const isExpanded = expandedSvc === svc.id;
@@ -588,7 +565,7 @@ export default function ContactForm() {
                   </div>
                 )}
 
-                {/* ===== STEP 2: COMMENTS & PREFERENCES ===== */}
+                {/* ===== STEP 2: DETAILS & PREFERENCES ===== */}
                 {step === 2 && (
                   <div className="space-y-6">
                     <div>
@@ -598,7 +575,6 @@ export default function ContactForm() {
                         className="w-full px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)] resize-none" />
                     </div>
 
-                    {/* Total Image Count */}
                     <div>
                       <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Total number of images</label>
                       <div className="flex items-center gap-2">
@@ -647,6 +623,13 @@ export default function ContactForm() {
                       </div>
                     </div>
 
+                    <div className="rounded-xl border border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] p-4">
+                      <p className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/50%)] uppercase tracking-wider mb-2">File sharing</p>
+                      <p className="text-[12px] text-[rgb(var(--fg-rgb)/50%)] leading-relaxed">
+                        After submitting, we&apos;ll send a quote via email. Once confirmed, you can share your files using Dropbox, Google Drive, or WeTransfer — and we&apos;ll send you a download link for the edited images.
+                      </p>
+                    </div>
+
                     <div className="flex gap-3">
                       <button type="button" onClick={() => setStep(1)}
                         className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
@@ -656,52 +639,8 @@ export default function ContactForm() {
                   </div>
                 )}
 
-                {/* ===== STEP 3: UPLOAD ===== */}
+                {/* ===== STEP 3: CONTACT INFO ===== */}
                 {step === 3 && (
-                  <div className="space-y-4">
-                    <div onClick={() => fileInputRef.current?.click()}
-                      className="border-2 border-dashed border-[rgb(var(--fg-rgb)/15%)] rounded-2xl p-10 text-center cursor-pointer hover:border-[rgb(var(--accent-500)/40%)] transition-all">
-                      <div className="w-12 h-12 rounded-xl bg-[rgb(var(--accent-500)/10%)] flex items-center justify-center mx-auto mb-3">
-                        <svg className="w-6 h-6 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
-                      </div>
-                      <p className="text-sm font-bold text-[rgb(var(--fg-rgb))]">Drop images here or click to upload</p>
-                      <p className="text-xs text-[rgb(var(--fg-rgb)/40%)] mt-1">JPG, PNG, PSD, TIFF — Max 50MB each</p>
-                    </div>
-                    <input ref={fileInputRef} type="file" multiple accept="image/*,.psd,.tiff,.tif" className="hidden" onChange={handleFileUpload} />
-                    {uploadedFiles.length > 0 && (
-                      <div className="space-y-2">
-                        <p className="text-xs font-bold text-[rgb(var(--fg-rgb)/50%)]">{uploadedFiles.length} file(s) uploaded</p>
-                        {uploadedFiles.map((file, idx) => (
-                          <div key={idx} className="flex items-start gap-3 p-3 rounded-xl border border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)]">
-                            <div className="shrink-0 w-8 h-8 rounded-lg bg-[rgb(var(--accent-500)/10%)] flex items-center justify-center">
-                              <svg className="w-4 h-4 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-xs font-bold text-[rgb(var(--fg-rgb))] truncate">{file.name}</p>
-                              <input type="text" placeholder="Add a comment for this image..."
-                                value={imageComments[idx] ?? ""}
-                                onChange={e => setImageComments(prev => ({ ...prev, [idx]: e.target.value }))}
-                                className="w-full mt-1.5 px-2 py-1.5 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-[11px] text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
-                            </div>
-                            <button type="button" onClick={() => removeFile(idx)}
-                              className="shrink-0 w-6 h-6 rounded flex items-center justify-center text-[rgb(var(--fg-rgb)/30%)] hover:text-red-400 hover:bg-red-400/10 transition-all">
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    <div className="flex gap-3">
-                      <button type="button" onClick={() => setStep(2)}
-                        className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
-                      <button type="button" onClick={() => setStep(4)}
-                        className="flex-1 py-3 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] transition-all">CONTINUE →</button>
-                    </div>
-                  </div>
-                )}
-
-                {/* ===== STEP 4: CONTACT INFO ===== */}
-                {step === 4 && (
                   <div className="space-y-5">
                     <div className="space-y-3">
                       <input type="text" name="name" placeholder="Your name" required value={name} onChange={e => setName(e.target.value)}
@@ -715,7 +654,7 @@ export default function ContactForm() {
                     <input type="hidden" name="turnaround" value={turnaroundOption?.label} />
                     <input type="hidden" name="file_format" value={selectedFileOpt?.label} />
                     <div className="flex gap-3">
-                      <button type="button" onClick={() => setStep(3)}
+                      <button type="button" onClick={() => setStep(2)}
                         className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
                       <button type="submit"
                         className="flex-1 py-3.5 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] hover:scale-[1.01] transition-all">Submit Quote Request</button>
