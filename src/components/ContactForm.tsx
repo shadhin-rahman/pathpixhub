@@ -52,10 +52,7 @@ const ALL_SERVICES: ServiceDef[] = [
   { id: "symmetrical-edit", label: "Symmetrical edit", basePrice: 0.79, type: "none" },
   { id: "ghost-mannequin", label: "Ghost mannequin", basePrice: 0.89, type: "complexity", complexityLevels: 2 },
   { id: "color-change", label: "Color change", basePrice: 0.99, type: "color-variant" },
-  { id: "car-editing", label: "Car editing", basePrice: 2.99, type: "tier", tiers: [
-    { id: "basic", label: "Basic", multiplier: 1.0 },
-    { id: "advance", label: "Advance", multiplier: 1.5 },
-  ]},
+  { id: "car-editing", label: "Car editing", basePrice: 2.99, type: "none" },
 ];
 
 const TURNAROUND_OPTIONS = [
@@ -356,7 +353,7 @@ export default function ContactForm() {
                   className={`rounded-xl py-3.5 px-2 text-center border transition-all ${
                     isActive ? "border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--fg-rgb)/15%)]"
                   }`}>
-                  <p className={`text-sm font-bold leading-tight ${isActive ? "text-[rgb(var(--accent-400))]" : "text-[rgb(var(--fg-rgb))]"}`}>Complexity {level}</p>
+                  <p className={`text-sm font-semibold leading-tight ${isActive ? "text-[rgb(var(--accent-400))]" : "text-[rgb(var(--fg-rgb))]"}`}>Complexity {level}</p>
                   <p className="text-xs font-bold text-[rgb(var(--fg-rgb)/40%)] mt-1">${price.toFixed(2)}/img</p>
                 </button>
               );
