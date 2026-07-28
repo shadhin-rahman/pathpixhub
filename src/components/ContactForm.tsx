@@ -346,18 +346,18 @@ export default function ContactForm() {
           <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)] mb-3">
             How complex are your images? Choose the average for this order.
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(mults.length, 6)}, minmax(0, 1fr))` }} className="gap-1.5">
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(mults.length, 6)}, minmax(0, 1fr))` }} className="gap-2">
             {mults.map((mult, i) => {
               const level = i + 1;
               const price = info.effectiveBasePrice * mult;
               const isActive = sel?.complexity === level;
               return (
                 <button key={level} type="button" onClick={() => selectComplexity(selKey, level)}
-                  className={`rounded-xl py-2.5 px-1 text-center border transition-all ${
+                  className={`rounded-xl py-3.5 px-2 text-center border transition-all ${
                     isActive ? "border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--fg-rgb)/15%)]"
                   }`}>
-                  <p className={`text-[10px] font-bold leading-tight ${isActive ? "text-[rgb(var(--accent-400))]" : "text-[rgb(var(--fg-rgb))]"}`}>Complexity {level}</p>
-                  <p className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/40%)] mt-0.5">${price.toFixed(2)}/img</p>
+                  <p className={`text-sm font-bold leading-tight ${isActive ? "text-[rgb(var(--accent-400))]" : "text-[rgb(var(--fg-rgb))]"}`}>Complexity {level}</p>
+                  <p className="text-xs font-bold text-[rgb(var(--fg-rgb)/40%)] mt-1">${price.toFixed(2)}/img</p>
                 </button>
               );
             })}
