@@ -68,13 +68,13 @@ export default function CinematicShowcase({ services }: CinematicServiceProps) {
           {/* Progress dots */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
             {Array.from({ length: CARD_COUNT }, (_, idx) => (
-              <Dot key={idx} index={idx} scrollProgress={scrollProgress} totalCards={CARD_COUNT} />
+              <Dot key={idx} index={idx} scrollProgress={scrollYProgress} totalCards={CARD_COUNT} />
             ))}
           </div>
 
           {/* Counter */}
           <div className="absolute top-5 right-6 md:top-7 md:right-8 z-10">
-            <Counter scrollProgress={scrollProgress} totalCards={CARD_COUNT} />
+            <Counter scrollProgress={scrollYProgress} totalCards={CARD_COUNT} />
           </div>
         </div>
       </div>
@@ -167,7 +167,7 @@ function Counter({
   return (
     <div className="relative w-16 h-8">
       {Array.from({ length: totalCards }, (_, i) => (
-        <CounterItem key={i} index={i} scrollProgress={scrollProgress} totalCards={totalCards} />
+        <CounterItem key={i} index={i} scrollProgress={scrollYProgress} totalCards={totalCards} />
       ))}
     </div>
   );
