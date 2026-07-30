@@ -7,7 +7,7 @@ import IntroAnimation from "@/components/IntroAnimation";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import CookieConsent from "@/components/CookieConsent";
-import WhatsAppChat from "@/components/WhatsAppChat";
+import ChatWidget from "@/components/ChatWidget";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], display: "swap" });
 
@@ -49,7 +49,7 @@ export default function RootLayout({
         <main id="main-content" className="min-h-screen">{children}</main>
         <Footer />
         <ScrollToTop />
-        <WhatsAppChat />
+        <ChatWidget />
         <CookieConsent />
       </body>
     </html>
