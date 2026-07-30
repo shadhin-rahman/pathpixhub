@@ -142,7 +142,6 @@ export default function Header() {
                     {[
                       { name: "Portfolio", href: "/portfolio" },
                       { name: "Pricing", href: "/pricing" },
-                      { name: "Subscription", href: "/subscription" },
                       { name: "About", href: "/about" },
                       { name: "Contact", href: "/contact" },
                     ].map((item) => (
