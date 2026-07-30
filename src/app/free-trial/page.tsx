@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { services } from "@/data/services";
 import ScrollReveal from "@/components/ScrollReveal";
+import AIPreviewTool from "@/components/AIPreviewTool";
 import { fetchCountryCode, isCountryBlocked, setBypassCode, isAdmin } from "@/lib/countryBlocker";
 
 const COUNTRIES = [
@@ -575,6 +576,22 @@ export default function FreeTrialPage() {
           </AnimatePresence>
         </div>
       </section>
+
+      {/* AI Preview Tool */}
+      <ScrollReveal>
+      <section className="py-20 bg-[var(--bg-alt)]">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-10">
+            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-4">Instant Preview</h2>
+            <h3 className="text-3xl md:text-4xl font-bold tracking-tight gradient-text">Try AI Preview Tool</h3>
+            <p className="mt-3 text-[rgb(var(--fg-rgb)/60%)] max-w-lg mx-auto">
+              Upload an image and see a 10-second AI preview. Our experts deliver pixel-perfect results beyond any filter.
+            </p>
+          </div>
+          <AIPreviewTool className="max-w-2xl mx-auto" />
+        </div>
+      </section>
+      </ScrollReveal>
 
       {/* CTA */}
       <ScrollReveal>

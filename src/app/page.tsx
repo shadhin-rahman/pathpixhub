@@ -16,6 +16,7 @@ import TextReveal from "@/components/TextReveal";
 import ImageScaleScroll from "@/components/ImageScaleScroll";
 import MagneticButton from "@/components/MagneticButton";
 import { ScrollProgressBar } from "@/components/HorizontalScroll";
+import BeforeAfterSlider from "@/components/BeforeAfterSlider";
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -296,6 +297,56 @@ export default function Home() {
         <ServiceCarousel services={services} />
       </section>
       </ScrollReveal>
+
+      <section className="py-28 lg:py-36 mesh-gradient">
+        <div className="max-w-7xl mx-auto px-6">
+          <TextReveal>
+            <div className="text-center mb-16">
+              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">See the Difference</h2>
+              <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Before & After</h3>
+              <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] max-w-xl mx-auto">Drag the slider to see our editing quality in action</p>
+            </div>
+          </TextReveal>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            <TextReveal>
+              <BeforeAfterSlider
+                beforeSrc="/images/service-showcase/clipping-path-before.png"
+                afterSrc="/images/service-showcase/clipping-path.png"
+                beforeAlt="Before clipping path"
+                afterAlt="After clipping path"
+              />
+              <p className="text-center mt-4 text-sm font-semibold text-[rgb(var(--fg-rgb)/60%)]">Clipping Path</p>
+            </TextReveal>
+            <TextReveal>
+              <BeforeAfterSlider
+                beforeSrc="/images/service-showcase/background-removal-before.png"
+                afterSrc="/images/service-showcase/background-removal.png"
+                beforeAlt="Before background removal"
+                afterAlt="After background removal"
+              />
+              <p className="text-center mt-4 text-sm font-semibold text-[rgb(var(--fg-rgb)/60%)]">Background Removal</p>
+            </TextReveal>
+            <TextReveal>
+              <BeforeAfterSlider
+                beforeSrc="/images/service-showcase/photo-retouching-before.png"
+                afterSrc="/images/service-showcase/photo-retouching.png"
+                beforeAlt="Before photo retouching"
+                afterAlt="After photo retouching"
+              />
+              <p className="text-center mt-4 text-sm font-semibold text-[rgb(var(--fg-rgb)/60%)]">Photo Retouching</p>
+            </TextReveal>
+            <TextReveal>
+              <BeforeAfterSlider
+                beforeSrc="/images/service-showcase/car-editing-before.png"
+                afterSrc="/images/service-showcase/car-editing.png"
+                beforeAlt="Before car editing"
+                afterAlt="After car editing"
+              />
+              <p className="text-center mt-4 text-sm font-semibold text-[rgb(var(--fg-rgb)/60%)]">Car Editing</p>
+            </TextReveal>
+          </div>
+        </div>
+      </section>
 
       <section className="py-28 lg:py-36 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
