@@ -15,12 +15,16 @@ interface CinematicServiceProps {
 
 export default function CinematicShowcase({ services }: CinematicServiceProps) {
   const showcaseImages = [
-    { id: "clipping-path", src: "/images/hero-slider/bicycle.jpg" },
-    { id: "background-removal", src: "/images/hero-slider/car-editing-1.jpg" },
-    { id: "photo-retouching", src: "/images/hero-slider/ecommerce-product.jpg" },
-    { id: "color-change", src: "/images/hero-slider/Beauty retouching.jpg" },
-    { id: "car-editing", src: "/images/hero-slider/Skin Retouch.jpg" },
-    { id: "ghost-mannequin", src: "/images/hero-slider/background.jpg" },
+    { id: "clipping-path", src: "/images/service-showcase/clipping-path-cover.jpg" },
+    { id: "background-removal", src: "/images/service-showcase/background-removal-cover.jpg" },
+    { id: "photo-retouching", src: "/images/service-showcase/photo-retouching-cover.jpg" },
+    { id: "multi-clipping-path", src: "/images/service-showcase/multi-clipping-path-cover.jpg" },
+    { id: "color-change", src: "/images/service-showcase/color-change-cover.jpg" },
+    { id: "car-editing", src: "/images/service-showcase/car-editing-cover.jpg" },
+    { id: "ghost-mannequin", src: "/images/service-showcase/ghost-mannequin-cover.jpg" },
+    { id: "image-masking", src: "/images/service-showcase/image-masking-cover.jpg" },
+    { id: "shadow-creation", src: "/images/service-showcase/shadow-creation-cover.jpg" },
+    { id: "ecommerce-editing", src: "/images/service-showcase/ecommerce-editing-cover.jpg" },
   ];
 
   return (
