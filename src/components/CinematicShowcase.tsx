@@ -13,22 +13,22 @@ interface CinematicServiceProps {
   }[];
 }
 
-export default function CinematicShowcase({ services }: CinematicServiceProps) {
-  const showcaseImages = [
-    { id: "clipping-path", src: "/images/service-showcase/clipping-path-cover.jpg" },
-    { id: "background-removal", src: "/images/service-showcase/background-removal-cover.jpg" },
-    { id: "photo-retouching", src: "/images/service-showcase/photo-retouching-cover.jpg" },
-    { id: "multi-clipping-path", src: "/images/service-showcase/multi-clipping-path-cover.jpg" },
-    { id: "color-change", src: "/images/service-showcase/color-change-cover.jpg" },
-    { id: "car-editing", src: "/images/service-showcase/car-editing-cover.jpg" },
-    { id: "ghost-mannequin", src: "/images/service-showcase/ghost-mannequin-cover.jpg" },
-    { id: "image-masking", src: "/images/service-showcase/image-masking-cover.jpg" },
-    { id: "shadow-creation", src: "/images/service-showcase/shadow-creation-cover.jpg" },
-    { id: "ecommerce-editing", src: "/images/service-showcase/ecommerce-editing-cover.jpg" },
-  ];
+const showcaseImages = [
+  { id: "clipping-path", src: "/images/service-showcase/clipping-path-cover.jpg" },
+  { id: "background-removal", src: "/images/service-showcase/background-removal-cover.jpg" },
+  { id: "photo-retouching", src: "/images/service-showcase/photo-retouching-cover.jpg" },
+  { id: "multi-clipping-path", src: "/images/service-showcase/multi-clipping-path-cover.jpg" },
+  { id: "color-change", src: "/images/service-showcase/color-change-cover.jpg" },
+  { id: "car-editing", src: "/images/service-showcase/car-editing-cover.jpg" },
+  { id: "ghost-mannequin", src: "/images/service-showcase/ghost-mannequin-cover.jpg" },
+  { id: "image-masking", src: "/images/service-showcase/image-masking-cover.jpg" },
+  { id: "shadow-creation", src: "/images/service-showcase/shadow-creation-cover.jpg" },
+  { id: "ecommerce-editing", src: "/images/service-showcase/ecommerce-editing-cover.jpg" },
+];
 
+export default function CinematicShowcase({ services }: CinematicServiceProps) {
   return (
-    <section className="py-16 lg:py-24 bg-[var(--bg)]">
+    <section className="py-20 lg:py-28 bg-[var(--bg)]">
       <div className="max-w-7xl mx-auto px-6 mb-16">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -41,11 +41,12 @@ export default function CinematicShowcase({ services }: CinematicServiceProps) {
         </motion.div>
       </div>
 
-      <div className="space-y-6 md:space-y-10 px-3 md:px-6">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-6 space-y-8 md:space-y-12">
         {showcaseImages.map((item, idx) => {
           const service = services.find(s => s.id === item.id) || services[idx];
+          const isEven = idx % 2 === 0;
           return (
-            <CinematicCard key={item.id} item={item} service={service} index={idx} />
+            <CinematicCard key={item.id} item={item} service={service} index={idx} isEven={isEven} />
           );
         })}
       </div>
@@ -57,10 +58,12 @@ function CinematicCard({
   item,
   service,
   index,
+  isEven,
 }: {
   item: { id: string; src: string };
   service: { id: string; title: string; tagline: string };
   index: number;
+  isEven: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -68,64 +71,60 @@ function CinematicCard({
     offset: ["start end", "end start"],
   });
 
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.92, 1, 0.92]);
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.4, 1, 1, 0.4]);
-  const y = useTransform(scrollYProgress, [0, 1], [60, -60]);
-
-  const isEven = index % 2 === 0;
+  const y = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
   return (
     <motion.div
       ref={ref}
-      style={{ scale, opacity }}
-      className="group relative"
+      initial={{ opacity: 0, y: 60 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className="group"
     >
       <Link href={`/services/${service.id}`}>
-        <div className="relative w-full overflow-hidden rounded-2xl md:rounded-3xl" style={{ height: "clamp(300px, 60vw, 700px)" }}>
-          <motion.div style={{ y }} className="absolute inset-0">
-            <Image
-              src={item.src}
-              alt={service.title}
-              fill
-              className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
-              sizes="100vw"
-              priority={index < 2}
-            />
-          </motion.div>
+        <div className={`flex flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"} gap-6 md:gap-10 items-center`}>
+          {/* Image container */}
+          <div className="w-full md:w-[55%] relative">
+            <div className="relative overflow-hidden rounded-2xl md:rounded-3xl" style={{ aspectRatio: "4 / 3" }}>
+              <motion.div style={{ y }} className="absolute inset-0">
+                <Image
+                  src={item.src}
+                  alt={service.title}
+                  fill
+                  className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.03]"
+                  sizes="(max-width: 768px) 100vw, 55vw"
+                  priority={index < 2}
+                />
+              </motion.div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </div>
+          </div>
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-          <div className={`absolute bottom-0 ${isEven ? "left-0" : "right-0"} p-6 md:p-12 max-w-2xl`}>
+          {/* Text content */}
+          <div className={`w-full md:w-[45%] flex flex-col justify-center ${isEven ? "md:pl-4" : "md:pr-4"}`}>
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.7, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+              initial={{ opacity: 0, x: isEven ? 30 : -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
-              <p className="text-[10px] md:text-xs font-bold text-[rgb(var(--accent-400))] uppercase tracking-[0.3em] mb-3">
+              <span className="text-[10px] md:text-xs font-bold text-[rgb(var(--accent-400))] uppercase tracking-[0.3em]">
                 Service {String(index + 1).padStart(2, "0")}
-              </p>
-              <h3 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-[0.95] tracking-tight">
+              </span>
+              <h3 className="mt-3 text-3xl md:text-4xl lg:text-5xl font-bold text-[rgb(var(--fg-rgb))] leading-[1.05] tracking-tight">
                 {service.title}
               </h3>
-              <p className="mt-3 md:mt-4 text-sm md:text-base text-white/60 max-w-md leading-relaxed">
+              <p className="mt-4 text-sm md:text-base text-[rgb(var(--fg-rgb)/55%)] leading-relaxed max-w-md">
                 {service.tagline}
               </p>
-              <div className="mt-5 md:mt-6 inline-flex items-center gap-2 text-sm font-bold text-[rgb(var(--accent-400))] group-hover:gap-3 transition-all duration-300">
-                Explore Service
+              <div className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[rgb(var(--accent-400))] group-hover:gap-3 transition-all duration-300">
+                View Service
                 <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </div>
             </motion.div>
-          </div>
-
-          <div className={isEven ? "absolute top-6 right-6 md:top-12 md:right-12" : "absolute top-6 left-6 md:top-12 md:left-12"}>
-            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm bg-white/5 group-hover:bg-[rgb(var(--accent-500))]/20 group-hover:border-[rgb(var(--accent-500))]/40 transition-all duration-500">
-              <svg className="w-4 h-4 md:w-5 md:h-5 text-white/60 group-hover:text-[rgb(var(--accent-400))] transition-colors duration-500 -rotate-45 group-hover:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </div>
           </div>
         </div>
       </Link>
