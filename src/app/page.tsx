@@ -28,15 +28,6 @@ export default function Home() {
   const heroOpacity = useTransform(heroScroll, [0, 0.8], [1, 0]);
   const heroY = useTransform(heroScroll, [0, 1], [0, 100]);
 
-  const showcaseImages = [
-    { src: "/images/hero-slider/bicycle.jpg", title: "Bicycle", category: "Product" },
-    { src: "/images/hero-slider/car-editing-1.jpg", title: "Automotive", category: "Vehicle" },
-    { src: "/images/hero-slider/ecommerce-product.jpg", title: "E-Commerce", category: "Product" },
-    { src: "/images/hero-slider/Beauty retouching.jpg", title: "Beauty", category: "Retouching" },
-    { src: "/images/hero-slider/background.jpg", title: "Lifestyle", category: "Background" },
-    { src: "/images/hero-slider/Skin Retouch.jpg", title: "Fashion", category: "Retouching" },
-  ];
-
   return (
     <>
       <ScrollProgressBar />
@@ -143,21 +134,74 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== CINEMATIC SERVICES SHOWCASE ===== */}
-      <section className="py-16 lg:py-24 bg-[var(--bg)]">
+      <section className="py-20 lg:py-28 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
-          <TextReveal>
-            <div className="mb-16">
-              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">What We Offer</h2>
-              <h3 className="text-5xl md:text-7xl font-bold tracking-tight gradient-text">Our Services</h3>
+          <div className="flex flex-col lg:flex-row items-stretch gap-6">
+            <div className="w-full lg:w-1/3 shrink-0 flex flex-col justify-center">
+              <TextReveal><h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">From Our Studio</h2></TextReveal>
+              <TextReveal><h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text pb-2">Every Product, Every Angle</h3></TextReveal>
+              <TextReveal>
+                <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-lg">
+                  Bicycles, vehicles, apparel, or accessories — whatever you shoot, we edit it with the same pixel-perfect care.
+                </p>
+              </TextReveal>
+              <TextReveal>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  {["Clipping Path", "Background Removal", "Shadow Creation", "Photo Retouching", "Beauty Airbrushing", "Car Image Editing"].map((tag) => (
+                    <span key={tag} className="px-4 py-2 rounded-full glass-card text-xs font-semibold text-[rgb(var(--fg-rgb)/70%)]">{tag}</span>
+                  ))}
+                </div>
+              </TextReveal>
             </div>
-          </TextReveal>
+            <div className="w-full lg:w-2/3 flex items-stretch">
+              <ImageScaleScroll scaleFrom={0.9} scaleTo={1} className="w-full rounded-3xl">
+                <div className="relative w-full rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]" style={{ aspectRatio: "1600 / 700", maxHeight: "50rem", minHeight: "10rem" }}>
+                  {[
+                    { src: "/images/hero-slider/bicycle.jpg", alt: "bicycle photo editing", delay: "0s" },
+                    { src: "/images/hero-slider/car-editing-1.jpg", alt: "car photo editing", delay: "-8s" },
+                    { src: "/images/hero-slider/ecommerce-product.jpg", alt: "ecommerce product photo editing", delay: "-16s" },
+                    { src: "/images/hero-slider/background.jpg", alt: "background removal", delay: "-24s" },
+                    { src: "/images/hero-slider/Beauty retouching.jpg", alt: "beauty retouching", delay: "-32s" },
+                    { src: "/images/hero-slider/Blank poster.jpg", alt: "blank poster", delay: "-40s" },
+                    { src: "/images/hero-slider/Skin Retouch.jpg", alt: "skin retouch", delay: "-48s" },
+                  ].map((slide) => (
+                    <div key={slide.src} className="absolute inset-0 flex items-center justify-center" style={{ animation: "hero-fade-7 56s ease-in-out infinite", animationDelay: slide.delay }}>
+                      <Image src={slide.src} alt={slide.alt} fill className="object-cover mobile-object-contain" sizes="66vw" />
+                    </div>
+                  ))}
+                </div>
+              </ImageScaleScroll>
+            </div>
+          </div>
         </div>
+      </section>
 
-        <div className="space-y-4">
-          {services.map((service, idx) => (
-            <CinematicServiceCard key={service.id} service={service} index={idx} />
-          ))}
+      <section className="py-28 lg:py-36 mesh-gradient">
+        <div className="max-w-7xl mx-auto px-6">
+          <TextReveal><div className="text-center mb-20">
+            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">What We Offer</h2>
+            <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Services</h3>
+          </div></TextReveal>
+          <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {services.map((service) => {
+              const softColors = ["#fca5a5","#d8b4fe","#f9a8d4","#fde68a","#93c5fd","#86efac","#fdba74","#5eead4","#a5b4fc","#fda4af"];
+              const ci = ["clipping-path","background-removal","shadow-creation","ghost-mannequin","image-masking","color-change","photo-retouching","multi-clipping-path","ecommerce-editing","car-editing"].indexOf(service.id) % softColors.length;
+              return (
+              <StaggerItem key={service.id}>
+              <Link href={`/services/${service.id}`} className="group block rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-xl" style={{ backgroundColor: softColors[ci] }}>
+                <div className="flex items-center gap-4 p-4 md:p-5">
+                  <div className="relative w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-xl overflow-hidden bg-white/30 flex items-center justify-center">
+                    <Image src={`/images/service-cards/${service.id}.png`} alt={service.title} fill className="object-contain p-1.5 group-hover:scale-105 transition-transform duration-700" sizes="80px" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-sm md:text-base text-[rgb(var(--fg-rgb)/85%)] leading-tight">{service.title}</h3>
+                    <p className="mt-0.5 text-xs text-[rgb(var(--fg-rgb)/55%)] line-clamp-2">{service.tagline}</p>
+                  </div>
+                </div>
+              </Link>
+              </StaggerItem>
+            )})}
+          </StaggerReveal>
         </div>
       </section>
 
@@ -168,41 +212,13 @@ export default function Home() {
       </section>
       </ScrollReveal>
 
-      {/* ===== FULL-PAGE IMAGE SHOWCASE ===== */}
-      <section className="py-20 lg:py-28 bg-[var(--bg-alt)]">
-        <div className="max-w-7xl mx-auto px-6">
-          <TextReveal>
-            <div className="mb-12">
-              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Studio Work</h2>
-              <h3 className="text-4xl md:text-6xl font-bold tracking-tight gradient-text">Every Product, Every Angle</h3>
-            </div>
-          </TextReveal>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {showcaseImages.map((img, i) => (
-              <ImageScaleScroll key={img.src} scaleFrom={0.9} scaleTo={1}>
-                <div className="group relative aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer">
-                  <Image src={img.src} alt={img.title} fill className="object-cover transition-transform duration-700 group-hover:scale-110" sizes="(max-width: 768px) 50vw, 33vw" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                    <p className="text-[10px] font-bold text-[rgb(var(--accent-400))] uppercase tracking-[0.2em]">{img.category}</p>
-                    <p className="text-lg font-bold text-white mt-1">{img.title}</p>
-                  </div>
-                </div>
-              </ImageScaleScroll>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section className="py-28 lg:py-36 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
-          <TextReveal>
-            <div className="text-center mb-16">
-              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">See the Difference</h2>
-              <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Before &amp; After</h3>
-              <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] max-w-xl mx-auto">Drag the slider to see our editing quality in action</p>
-            </div>
-          </TextReveal>
+          <TextReveal><div className="text-center mb-16">
+            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">See the Difference</h2>
+            <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Before &amp; After</h3>
+            <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] max-w-xl mx-auto">Drag the slider to see our editing quality in action</p>
+          </div></TextReveal>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {[
               { before: "/images/service-showcase/clipping-path-before.png", after: "/images/service-showcase/clipping-path.png", label: "Clipping Path" },
@@ -223,25 +239,33 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="grid grid-cols-2 gap-4">
-              {[
-                { src: "/images/service-cards/clipping-path.png", speed: 0.15, mt: "" },
-                { src: "/images/service-cards/background-removal.png", speed: -0.15, mt: "mt-8" },
-                { src: "/images/service-cards/color-change.png", speed: 0.15, mt: "-mt-8" },
-                { src: "/images/service-cards/car-editing.png", speed: -0.15, mt: "" },
-              ].map((item) => (
-                <ImageScaleScroll key={item.src} scaleFrom={0.85} scaleTo={1}>
-                  <ParallaxImage src={item.src} alt="service" speed={item.speed} scale={[1, 1.1]} className={`aspect-square rounded-3xl glass-card ${item.mt} bg-white/20`}>
-                    <Image src={item.src} alt="service" width={400} height={400} className="w-full h-full object-contain p-4" />
-                  </ParallaxImage>
-                </ImageScaleScroll>
-              ))}
+              <ImageScaleScroll scaleFrom={0.85} scaleTo={1}>
+                <ParallaxImage src="/images/service-cards/clipping-path.png" alt="clipping path" speed={0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card bg-white/20">
+                  <Image src="/images/service-cards/clipping-path.png" alt="clipping path" width={400} height={400} className="w-full h-full object-contain p-4" />
+                </ParallaxImage>
+              </ImageScaleScroll>
+              <ImageScaleScroll scaleFrom={0.85} scaleTo={1}>
+                <ParallaxImage src="/images/service-cards/background-removal.png" alt="background removal" speed={-0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card mt-8 bg-white/20">
+                  <Image src="/images/service-cards/background-removal.png" alt="background removal" width={400} height={400} className="w-full h-full object-contain p-4" />
+                </ParallaxImage>
+              </ImageScaleScroll>
+              <ImageScaleScroll scaleFrom={0.85} scaleTo={1}>
+                <ParallaxImage src="/images/service-cards/color-change.png" alt="color change" speed={0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card -mt-8 bg-white/20">
+                  <Image src="/images/service-cards/color-change.png" alt="color change" width={400} height={400} className="w-full h-full object-contain p-4" />
+                </ParallaxImage>
+              </ImageScaleScroll>
+              <ImageScaleScroll scaleFrom={0.85} scaleTo={1}>
+                <ParallaxImage src="/images/service-cards/car-editing.png" alt="car editing" speed={-0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card bg-white/20">
+                  <Image src="/images/service-cards/car-editing.png" alt="car editing" width={400} height={400} className="w-full h-full object-contain p-4" />
+                </ParallaxImage>
+              </ImageScaleScroll>
             </div>
             <div>
               <TextReveal><h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">About Us</h2></TextReveal>
               <TextReveal><h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Your Virtual Photo Editing Studio</h3></TextReveal>
               <TextReveal>
                 <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
-                  We provide expert image editing services for e-commerce brands, product photographers, Amazon sellers, and businesses worldwide.
+                  We provide expert image editing services for e-commerce brands, product photographers, Amazon sellers, and businesses worldwide. From clipping path and background removal to multi-clipping paths, color correction, and photo retouching — we handle every detail with care.
                 </p>
               </TextReveal>
               <TextReveal>
@@ -357,57 +381,5 @@ export default function Home() {
         </div>
       </section>
     </>
-  );
-}
-
-function CinematicServiceCard({ service, index }: { service: typeof services[0]; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], [30, -30]);
-
-  const softColors = ["#fca5a5", "#d8b4fe", "#f9a8d4", "#fde68a", "#93c5fd", "#86efac", "#fdba74", "#5eead4", "#a5b4fc", "#fda4af"];
-  const colorIndex = ["clipping-path", "background-removal", "shadow-creation", "ghost-mannequin", "image-masking", "color-change", "photo-retouching", "multi-clipping-path", "ecommerce-editing", "car-editing"].indexOf(service.id) % softColors.length;
-  const isEven = index % 2 === 0;
-
-  return (
-    <motion.div ref={ref} style={{ y }}>
-      <Link href={`/services/${service.id}`} className="group block mx-3 md:mx-6 rounded-3xl overflow-hidden relative" style={{ backgroundColor: softColors[colorIndex] }}>
-        <div className={`flex flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"} items-stretch min-h-[280px] md:min-h-[360px]`}>
-          <div className="w-full md:w-1/2 flex items-center justify-center p-8 md:p-12 relative overflow-hidden">
-            <motion.div
-              className="relative w-40 h-40 md:w-56 md:h-56"
-              whileHover={{ scale: 1.05, rotate: isEven ? 2 : -2 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Image
-                src={`/images/service-cards/${service.id}.png`}
-                alt={service.title}
-                fill
-                className="object-contain drop-shadow-2xl"
-                sizes="224px"
-              />
-            </motion.div>
-          </div>
-          <div className="w-full md:w-1/2 flex flex-col justify-center p-8 md:p-12">
-            <p className="text-[10px] font-bold text-[rgb(var(--fg-rgb)/40%)] uppercase tracking-[0.3em] mb-3">
-              Service {String(index + 1).padStart(2, "0")}
-            </p>
-            <h3 className="text-2xl md:text-4xl font-bold text-[rgb(var(--fg-rgb)/90%)] leading-tight group-hover:text-[rgb(var(--fg-rgb))] transition-colors">
-              {service.title}
-            </h3>
-            <p className="mt-3 text-sm text-[rgb(var(--fg-rgb)/55%)] leading-relaxed max-w-md">
-              {service.tagline}
-            </p>
-            <div className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[rgb(var(--accent-500))] group-hover:gap-3 transition-all">
-              Explore Service
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-            </div>
-          </div>
-        </div>
-      </Link>
-    </motion.div>
   );
 }
