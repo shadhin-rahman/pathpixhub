@@ -167,7 +167,7 @@ function Counter({
   return (
     <div className="relative w-16 h-8">
       {Array.from({ length: totalCards }, (_, i) => (
-        <CounterItem key={i} index={i} scrollProgress={scrollYProgress} totalCards={totalCards} />
+        <CounterItem key={i} index={i} scrollProgress={scrollProgress} totalCards={totalCards} />
       ))}
     </div>
   );
