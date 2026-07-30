@@ -126,13 +126,13 @@ const PRO_SERVICES = [
 ];
 
 const FAQ_ITEMS = [
-  { q: "Can I switch plans anytime?", a: "Yes! Upgrade or downgrade anytime. Upgrades take effect immediately. Downgrades apply at next billing cycle." },
-  { q: "What is Path Credit and how does it work?", a: "Path Credits are prepaid editing credits. Auto top-up earns bonus credits (5-25%) that never expire." },
-  { q: "Is there a free trial?", a: "Yes! All paid plans include a 14-day free trial with 10 free images. No credit card needed for Standard." },
-  { q: "How does the loyalty program work?", a: "6 consecutive months = 10% lifetime discount. Bonus credits on every top-up. Refer friends for free months!" },
-  { q: "Can I cancel anytime?", a: "Yes, cancel anytime with no penalties. Access continues until billing period ends." },
-  { q: "Can I pause my subscription?", a: "Of course! Pause manually or auto-pause after 1 inactive billing cycle. Monthly fee drops to $4/mo and all specs are saved. No reactivation fee!" },
-  { q: "How much do I save with annual billing?", a: "Save 20% with annual! Standard $79/yr, Pro $199/yr, Enterprise $4,999/yr. Price locked 12 months." },
+  { q: "আমি কি যেকোনো সময় প্ল্যান পরিবর্তন করতে পারি?", a: "হ্যাঁ! আপনি যেকোনো সময় আপগ্রেড বা ডাউনগ্রেড করতে পারেন। আপগ্রেড করলে সাথে সাথে নতুন ফিচার পাবেন। ডাউনগ্রেড পরবর্তী বিলিং সাইকেলে কার্যকর হবে।" },
+  { q: "পাথ ক্রেডিট কী এবং কিভাবে কাজ করে?", a: "পাথ ক্রেডিট প্রি-পেইড এডিটিং ক্রেডিট। অটো টপ-আপ চালু করলে বোনাস ক্রেডিট পান (৫-২৫%)। এই বোনাস ক্রেডিট কখনো এক্সপায়ার হয় না।" },
+  { q: "ফ্রি ট্রায়াল কি আছে?", a: "হ্যাঁ! সব পেইড প্ল্যানে ১৪ দিনের ফ্রি ট্রায়াল, ১০টি ইমেজ সম্পূর্ণ ফ্রি। Standard-এর জন্য ক্রেডিট কার্ড লাগে না। Pro এবং Enterprise-এ ট্রায়ালের মধ্যে যেকোনো সময় বাতিল করতে পারেন, কোন চার্জ নেই।" },
+  { q: "লয়ালটি প্রোগ্রাম কিভাবে কাজ করে?", a: "টানা ৬ মাস সাবস্ক্রাইব থাকলে ১০% স্থায়ী ডিসকাউন্ট। প্রতি টপ-আপে বোনাস ক্রেডিট। বন্ধু রেফার করলে ১ মাস ফ্রি — কোন সীমা নেই!" },
+  { q: "যেকোনো সময় কি সাবস্ক্রিপশন বাতিল করতে পারি?", a: "হ্যাঁ, যেকোনো সময় বাতিল করতে পারেন — কোন জরিমানা নেই। বিলিং পিরিয়ড শেষ না হওয়া পর্যন্ত অ্যাক্সেস থাকবে। আমরা ডিসকাউন্ট অফার করব আপনাকে ধরে রাখতে।" },
+  { q: "সাবস্ক্রিপশন পজ করা যায়?", a: "অবশ্যই! আপনি ম্যানুয়ালি সাবস্ক্রিপশন পজ করতে পারেন অথবা ১ বিলিং সাইকেল ইনঅ্যাকটিভ থাকলে অটো-পজ হবে। পজ অবস্থায় মাসিক ফি কমে $৪/মাস হয় এবং আপনার স্পেসিফিকেশন ও সেটিংস সংরক্ষিত থাকে। পুনরায় অ্যাক্টিভেট করতে কোন চার্জ নেই — যত দিন ইচ্ছা পজ রাখতে পারেন!" },
+  { q: "বার্ষিক বিলিংয়ে কত সাশ্রয় হবে?", a: "বার্ষিক বিলিং এ ২০% সাশ্রয়! Standard: $৭৯/বছর ($১৫.৮ save), Pro: $১৯৯/বছর ($৩৯.৮ save), Enterprise: $৪,৯৯৯/বছর ($৯৮৯ save)। দাম ১২ মাস লক থাকে।" },
 ];
 
 export default function PricingPage() {
@@ -371,22 +371,30 @@ export default function PricingPage() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Subscription: Billing Toggle */}
+            {/* Subscription: Billing Toggle + Currency */}
             <section className="pt-12 pb-0 bg-[var(--bg-alt)]">
               <div className="max-w-7xl mx-auto px-6 text-center">
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight gradient-text">
-                  Monthly or Annual billing
+                  মাসিক অথবা বার্ষিক বিলিং
                 </h2>
-                <p className="mt-3 text-[rgb(var(--fg-rgb)/55%)]">Save 20% with annual billing</p>
+                <p className="mt-3 text-[rgb(var(--fg-rgb)/55%)]">বার্ষিক বিলিংএ ২০% সাশ্রয়</p>
                 <div className="mt-6 flex items-center justify-center gap-4">
-                  <span className={`text-sm font-bold transition-colors ${!annual ? "text-[rgb(var(--fg-rgb))]" : "text-[rgb(var(--fg-rgb)/40%)]"}`}>Monthly</span>
+                  <span className={`text-sm font-bold transition-colors ${!annual ? "text-[rgb(var(--fg-rgb))]" : "text-[rgb(var(--fg-rgb)/40%)]"}`}>মাসিক</span>
                   <button type="button" onClick={() => setAnnual(!annual)}
                     className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${annual ? "bg-[rgb(var(--accent-500))]" : "bg-[rgb(var(--fg-rgb)/15%)]"}`}>
                     <span className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow-md transition-transform duration-300 ${annual ? "left-[30px]" : "left-0.5"}`} />
                   </button>
                   <span className={`text-sm font-bold transition-colors ${annual ? "text-[rgb(var(--fg-rgb))]" : "text-[rgb(var(--fg-rgb)/40%)]"}`}>
-                    Annual <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 ml-1">Save 20%</span>
+                    বার্ষিক <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 ml-1">২০% সাশ্রয়</span>
                   </span>
+                </div>
+                <div className="mt-4 flex items-center justify-center gap-2">
+                  <span className="text-xs text-[rgb(var(--fg-rgb)/40%)]">মুদ্রা:</span>
+                  {["$ USD", "C$ CAD", "£ GBP", "€ EUR"].map((c, ci) => (
+                    <span key={ci} className={`text-xs px-2 py-1 rounded-lg font-bold ${ci === 0 ? "bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-400))] border border-[rgb(var(--accent-500)/20%)]" : "text-[rgb(var(--fg-rgb)/30%)] hover:text-[rgb(var(--fg-rgb)/50%)] cursor-pointer transition-colors"}`}>
+                      {c}
+                    </span>
+                  ))}
                 </div>
               </div>
             </section>
@@ -395,7 +403,11 @@ export default function PricingPage() {
             <section className="pb-20 bg-[var(--bg-alt)]">
               <div className="max-w-7xl mx-auto px-6 pt-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-                  {TIERS.map((tier, i) => (
+                  {TIERS.map((tier, i) => {
+                    const savings = annual && tier.monthlyPrice > 0
+                      ? { total: tier.monthlyPrice * 12 - tier.yearlyPrice, perMonth: ((tier.monthlyPrice * 12 - tier.yearlyPrice) / 12).toFixed(2) }
+                      : null;
+                    return (
                     <motion.div key={tier.name}
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -413,9 +425,12 @@ export default function PricingPage() {
                         <span className="text-4xl font-extrabold text-[rgb(var(--fg-rgb))]">
                           {tier.monthlyPrice === 0 ? "$0" : annual ? `$${tier.yearlyPrice}` : `$${tier.monthlyPrice}`}
                         </span>
-                        <span className="text-sm text-[rgb(var(--fg-rgb)/40%)] font-semibold">/mo</span>
+                        <span className="text-sm text-[rgb(var(--fg-rgb)/40%)] font-semibold">/{annual ? "বছর" : "মাস"}</span>
                       </div>
-                      <p className="text-xs text-[rgb(var(--fg-rgb)/35%)] mt-1">+ {tier.perImage} per image</p>
+                      {savings && (
+                        <p className="text-xs text-emerald-400 font-bold mt-1">${savings.total} সাশ্রয় (${savings.perMonth}/মাস)</p>
+                      )}
+                      <p className="text-xs text-[rgb(var(--fg-rgb)/35%)] mt-1">+ {tier.perImage} ছবি</p>
                       <p className="mt-3 text-sm text-[rgb(var(--fg-rgb)/55%)] min-h-[40px]">{tier.desc}</p>
                       <div className="h-px bg-[rgb(var(--fg-rgb)/8%)] my-4" />
                       <ul className="space-y-2.5 mb-6 flex-1">
@@ -443,7 +458,17 @@ export default function PricingPage() {
                         {tier.cta}
                       </Link>
                     </motion.div>
-                  ))}
+                    );
+                  })}
+                </div>
+
+                {/* VIP Extra Care */}
+                <div className="mt-8 rounded-2xl border-2 border-purple-500/30 bg-[var(--bg)] p-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-lg">👑</span>
+                    <h3 className="text-lg font-bold text-purple-400">VIP এক্সট্রা কেয়ার</h3>
+                  </div>
+                  <p className="text-sm text-[rgb(var(--fg-rgb)/55%)]">ডেডিকেটেড অ্যাকাউন্ট ম্যানেজার • ২৪/৭ প্রায়োরিটি সাপোর্ট • ১ ঘণ্টা ইমার্জেন্সি রেসপন্স • কাস্টম ওয়ার্কফ্লো সেটআপ • ব্যক্তিগত এক্সপার্ট টিম</p>
                 </div>
               </div>
             </section>
@@ -481,6 +506,182 @@ export default function PricingPage() {
                       <p className="text-2xl font-extrabold text-[rgb(var(--accent-400))] mb-1">{svc.price}</p>
                       <p className="text-xs text-[rgb(var(--fg-rgb)/35%)] mb-4">one-time fee</p>
                       <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">{svc.desc}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* Subscription: Plan Calculator */}
+            <section className="py-20 bg-[var(--bg-alt)]">
+              <div className="max-w-4xl mx-auto px-6">
+                <div className="text-center mb-12">
+                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-400))] text-sm font-bold mb-4 border border-[rgb(var(--accent-500)/15%)]">
+                    Plan Calculator
+                  </span>
+                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight gradient-text">
+                    আপনার প্রয়োজন অনুযায়ী সঠিক প্ল্যান খুঁজুন
+                  </h2>
+                  <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)]">ভলিউম, স্পিড ও সাপোর্ট লেভেল সিলেক্ট করে দেখুন কোন প্ল্যান আপনার জন্য বেস্ট</p>
+                </div>
+                <div className="rounded-2xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg)] p-8">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                      <label className="text-xs uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3 block">📸 মাসিক ইমেজ ভলিউম</label>
+                      <div className="space-y-2">
+                        {["১-৫০টি ইমেজ", "৫১-২৫০টি ইমেজ", "২৫১-১০০০টি ইমেজ", "১০০০+ ইমেজ"].map((o, oi) => (
+                          <label key={oi} className="flex items-center gap-3 p-3 rounded-xl border border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--accent-500)/40%)] cursor-pointer transition-colors">
+                            <input type="radio" name="volume" defaultChecked={oi === 0} className="accent-[rgb(var(--accent-500))]" />
+                            <span className="text-sm text-[rgb(var(--fg-rgb)/70%)]">{o}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-xs uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3 block">⚡ স্পিড প্রয়োজন</label>
+                      <div className="space-y-2">
+                        {["২৪ ঘণ্টা (সাধারণ)", "১২ ঘণ্টা (ফাস্ট)", "৬ ঘণ্টা (এক্সপ্রেস)", "৪৫ মিনিট (VIP)"].map((o, oi) => (
+                          <label key={oi} className="flex items-center gap-3 p-3 rounded-xl border border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--accent-500)/40%)] cursor-pointer transition-colors">
+                            <input type="radio" name="speed" defaultChecked={oi === 0} className="accent-[rgb(var(--accent-500))]" />
+                            <span className="text-sm text-[rgb(var(--fg-rgb)/70%)]">{o}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-xs uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3 block">🛡️ সাপোর্ট লেভেল</label>
+                      <div className="space-y-2">
+                        {["সাধারণ সাপোর্ট", "আনলিমিটেড রিভিশন", "ডেডিকেটেড টিম"].map((o, oi) => (
+                          <label key={oi} className="flex items-center gap-3 p-3 rounded-xl border border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--accent-500)/40%)] cursor-pointer transition-colors">
+                            <input type="radio" name="support" defaultChecked={oi === 0} className="accent-[rgb(var(--accent-500))]" />
+                            <span className="text-sm text-[rgb(var(--fg-rgb)/70%)]">{o}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-8 p-6 rounded-2xl bg-[rgb(var(--accent-500)/5%)] border border-[rgb(var(--accent-500)/15%)] text-center">
+                    <p className="text-xs text-[rgb(var(--fg-rgb)/40%)] uppercase tracking-wider font-bold mb-2">প্রস্তাবিত প্ল্যান</p>
+                    <p className="text-2xl font-extrabold gradient-text">Pro Plan</p>
+                    <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] mt-1">$19.9 /মাস — ৬ ঘণ্টা এক্সপ্রেস, আনলিমিটেড রিভিশন ও টাইম অ্যাকাউন্ট</p>
+                    <p className="text-xs text-[rgb(var(--accent-400))] mt-2 font-bold">🎯 আপনার জন্য বেস্ট ম্যাচ</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Subscription: Growth Journey */}
+            <section className="py-20 bg-[var(--bg)]">
+              <div className="max-w-7xl mx-auto px-6">
+                <div className="text-center mb-12">
+                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-400))] text-sm font-bold mb-4 border border-[rgb(var(--accent-500)/15%)]">
+                    Growth Journey
+                  </span>
+                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight gradient-text">
+                    ছোট থেকে বড় — আপনার গ্রোথ পাথ
+                  </h2>
+                  <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)]">আজ Free প্ল্যান দিয়ে শুরু করুন, প্রয়োজন বাড়লে আপগ্রেড করুন। আমরা আপনার সাথে বাড়ি!</p>
+                </div>
+                <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0">
+                  {[
+                    { icon: "🆓", name: "ফ্রি", price: "$0", desc: "পে-অ্যাস-ইউ-গো ২৪ঘ ডেলিভারি", color: "border-[rgb(var(--fg-rgb)/8%)]" },
+                    { icon: "🔥", name: "স্ট্যান্ডার্ড", price: "$7.9/mo", desc: "১২ঘ ফাস্ট ডেলিভারি, ৫টি প্রায়োরিটি টিকেট", color: "border-orange-500/30" },
+                    { icon: "⭐", name: "Pro", price: "$19.9/mo", desc: "৬ঘ আল্ট্রা ফাস্ট + আনলিমিটেড রিভিশন", color: "border-[rgb(var(--accent-500)/50%)]" },
+                    { icon: "👑", name: "এন্টারপ্রাইজ", price: "$499/mo", desc: "৪৫মিনিট VIP SLA + ডেডিকেটেড টিম", color: "border-purple-500/30" },
+                  ].map((step, si) => (
+                    <div key={si} className="flex items-center">
+                      <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: si * 0.1 }}
+                        className={`rounded-2xl border-2 ${step.color} bg-[var(--bg-alt)] p-5 text-center w-48`}
+                      >
+                        <span className="text-2xl">{step.icon}</span>
+                        <p className="font-bold text-sm text-[rgb(var(--fg-rgb))] mt-2">{step.name}</p>
+                        <p className="text-lg font-extrabold gradient-text">{step.price}</p>
+                        <p className="text-[11px] text-[rgb(var(--fg-rgb)/40%)] mt-1">{step.desc}</p>
+                      </motion.div>
+                      {si < 3 && (
+                        <svg className="w-8 h-8 text-[rgb(var(--fg-rgb)/15%)] mx-2 shrink-0 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-8 text-center text-sm text-[rgb(var(--fg-rgb)/40%)]">
+                  💡 প্রতিটি আপগ্রেডের সাথে আপনি পান: দ্রুত ডেলিভারি, বেশি সাপোর্ট, আরও ফিচার — আপনার বিজনেস যত বাড়ে, আমাদের সার্ভিস তত বাড়ে
+                </p>
+              </div>
+            </section>
+
+            {/* Subscription: Customer Protection */}
+            <section className="py-20 bg-[var(--bg-alt)]">
+              <div className="max-w-7xl mx-auto px-6">
+                <div className="text-center mb-12">
+                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-400))] text-sm font-bold mb-4 border border-[rgb(var(--accent-500)/15%)]">
+                    Customer Protection
+                  </span>
+                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight gradient-text">
+                    ছোট কাস্টমারদের না হারিয়ে ব্যবসায়িক বৃদ্ধি
+                  </h2>
+                  <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)] max-w-xl mx-auto">
+                    যে স্মার্ট কৌশলগুলোর মাধ্যমে ছোট ক্লায়েন্টও হ্যাপি থাকবে এবং রেভিনিউও বহুগুণ বাড়বে
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {[
+                    { icon: "📊", title: "স্মার্ট টিকেট কিউ", desc: "Free ২৪ঘ, Standard ১২ঘ, Pro ৬ঘ, Enterprise ৪৫মিনিট — প্রত্যেকের জন্য আলাদা স্পিড" },
+                    { icon: "🛡️", title: "Grandfather Protection", desc: "বিদ্যমান ক্লায়েন্টরা ২-৩ বছর ফ্রি Pro/Enterprise পাবেন। তারা সম্মানিত বোধ করবে।" },
+                    { icon: "⚡", title: "Off-Peak স্মার্ট স্পিড", desc: "অফ-পিক সময়ে Standard কাস্টমারদের স্বয়ংক্রিয়ভাবে দ্রুত সমাধান — সারপ্রাইজ ফাস্ট সার্ভিস!" },
+                    { icon: "💬", title: "সফ্ট আপগ্রেড নজ", desc: "কখনো ব্লক করবেন না। মেসেজ: '৬ ঘণ্টায় পেতে Pro সাবস্ক্রাইব করুন' — স্বেচ্ছায় আপগ্রেড।" },
+                  ].map((item, i) => (
+                    <motion.div key={i}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.1 }}
+                      className="rounded-2xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg)] p-6 hover:shadow-lg hover:-translate-y-1 transition-all"
+                    >
+                      <span className="text-3xl">{item.icon}</span>
+                      <h3 className="font-bold text-[rgb(var(--fg-rgb))] mt-3 mb-2">{item.title}</h3>
+                      <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">{item.desc}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* Subscription: Loyalty Rewards */}
+            <section className="py-20 bg-[var(--bg)]">
+              <div className="max-w-7xl mx-auto px-6">
+                <div className="text-center mb-12">
+                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-400))] text-sm font-bold mb-4 border border-[rgb(var(--accent-500)/15%)]">
+                    Loyalty Rewards
+                  </span>
+                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight gradient-text">
+                    যত থাকবেন, তত সঞ্চয়
+                  </h2>
+                  <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)]">আমরা লয়াল ক্লায়েন্টদের রিওয়ার্ড দিই। প্রতি মাসে থাকার সাথে সাথে আনলক হয় নতুন ভ্যালু।</p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[
+                    { icon: "💎", title: "পাথ ক্রেডিট বোনাস", desc: "প্রতি অটো টপ-আপে বোনাস ক্রেডিট। Pro ইউজাররা ১৫% এক্সট্রা পান — মানে প্রতি মাসে ফ্রি এডিট।" },
+                    { icon: "🔥", title: "৬ মাস লয়ালটি ডিসকাউন্ট", desc: "টানা ৬ মাস সাবস্ক্রাইব থাকলে ১০% স্থায়ী ডিসকাউন্ট। আমরা দীর্ঘমেয়াদী পার্টনারদের ভ্যালু দিই।" },
+                    { icon: "🤝", title: "রেফারেল প্রোগ্রাম", desc: "বন্ধুকে রেফার করুন — দুজনেই ১ মাস ফ্রি পান। কোন লিমিট নেই — ১২ জন রেফার করলে ১২ মাস ফ্রি।" },
+                    { icon: "📦", title: "বার্ষিক লক-ইন বেনিফিট", desc: "বার্ষিক বিলিং বেছে নিয়ে আজকের দাম ১২ মাস লক করুন। কোন দাম বাড়বে না, কোন সারপ্রাইজ নেই।" },
+                    { icon: "🛡️", title: "Grandfather প্রটেকশন", desc: "বিদ্যমান ক্লায়েন্টরা ২-৩ বছর ফ্রি বেনিফিট পাবেন। আপগ্রেড করতে পারেন, পার্কস কখনো হারাবেন না।" },
+                    { icon: "⏸️", title: "সাবস্ক্রিপশন পজ — আপনার ডেটা নিরাপদ", desc: "ম্যানুয়ালি পজ করুন বা অটো-পজ। পজ অবস্থায় ফি $৪/মাস, সেটিংস সংরক্ষিত। পুনরায় অ্যাক্টিভেট ফ্রি!" },
+                  ].map((item, i) => (
+                    <motion.div key={i}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.08 }}
+                      className="rounded-2xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-alt)] p-6 hover:shadow-lg hover:-translate-y-1 transition-all"
+                    >
+                      <span className="text-3xl">{item.icon}</span>
+                      <h3 className="font-bold text-[rgb(var(--fg-rgb))] mt-3 mb-2">{item.title}</h3>
+                      <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">{item.desc}</p>
                     </motion.div>
                   ))}
                 </div>
