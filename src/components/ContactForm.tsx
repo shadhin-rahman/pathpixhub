@@ -56,7 +56,7 @@ const ALL_SERVICES: ServiceDef[] = [
 ];
 
 const TURNAROUND_OPTIONS = [
-  { id: "2", label: "2 Hours", desc: "Flash Sale Rush", surcharge: 0.20, rush: true },
+  { id: "6", label: "6-8 Hours", desc: "Flash Sale Rush", surcharge: 0.15, rush: true },
   { id: "12", label: "12 Hours", desc: "Fast delivery", surcharge: 0.02 },
   { id: "24", label: "24 Hours", desc: "Standard", surcharge: 0 },
   { id: "48", label: "48 Hours", desc: "Relaxed", surcharge: -0.01 },

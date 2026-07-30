@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, Clock, DollarSign } from "lucide-react";
+import { Mail, Clock, DollarSign, MapPin } from "lucide-react";
 import { services } from "@/data/services";
 
 export default function Footer() {
@@ -17,6 +17,10 @@ export default function Footer() {
               <div className="flex items-center gap-2.5 text-sm text-[rgb(var(--fg-rgb)/50%)]">
                 <Mail className="w-4 h-4 text-[rgb(var(--accent-400))]" />
                 <a href="mailto:info@pathpixhub.com" className="hover:text-[rgb(var(--accent-400))] transition-colors">info@pathpixhub.com</a>
+              </div>
+              <div className="flex items-center gap-2.5 text-sm text-[rgb(var(--fg-rgb)/50%)]">
+                <MapPin className="w-4 h-4 text-[rgb(var(--accent-400))]" />
+                <span>Uttara-1230, Dhaka, Bangladesh</span>
               </div>
               <div className="flex items-center gap-2.5 text-sm text-[rgb(var(--fg-rgb)/50%)]">
                 <Clock className="w-4 h-4 text-[rgb(var(--accent-400))]" />

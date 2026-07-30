@@ -211,7 +211,7 @@ export default function FreeTrialPage() {
             </div>
             <h1 className="text-3xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">Free Trial Submitted!</h1>
             <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">
-              Thank you! We&apos;ll review your images and get back to you within <span className="font-bold text-[rgb(34_197_94)]">2 hours</span>.
+              Thank you! We&apos;ll review your images and get back to you within <span className="font-bold text-[rgb(34_197_94)]">6-8 hours</span>.
               Your edited images will be delivered within 24 hours.
             </p>
             <Link href="/"
@@ -444,7 +444,7 @@ export default function FreeTrialPage() {
                             </div>
                             <div>
                               <p className="font-bold text-sm text-[rgb(var(--fg-rgb))]">24-Hour Turnaround</p>
-                              <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] mt-1">We&apos;ll respond within <span className="font-bold text-[rgb(34_197_94)]">2 hours</span> and deliver your edited images within 24 hours.</p>
+                              <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] mt-1">We&apos;ll respond within <span className="font-bold text-[rgb(34_197_94)]">6-8 hours</span> and deliver your edited images within 24 hours.</p>
                             </div>
                           </div>
                         </div>
@@ -566,7 +566,7 @@ export default function FreeTrialPage() {
                           className="w-full px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm">
                           Submit Free Trial
                         </button>
-                        <p className="text-xs text-[rgb(var(--fg-rgb)/30%)] text-center">We&apos;ll edit your images and respond within 2 hours.</p>
+                        <p className="text-xs text-[rgb(var(--fg-rgb)/30%)] text-center">We&apos;ll edit your images and respond within 6-8 hours.</p>
                       </form>
                     </div>
                   </div>
