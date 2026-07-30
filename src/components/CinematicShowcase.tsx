@@ -41,7 +41,7 @@ export default function CinematicShowcase({ services }: CinematicServiceProps) {
         </motion.div>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-4 md:px-6 space-y-8 md:space-y-12">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-6 space-y-10 md:space-y-16">
         {showcaseImages.map((item, idx) => {
           const service = services.find(s => s.id === item.id) || services[idx];
           const isEven = idx % 2 === 0;
@@ -71,7 +71,7 @@ function CinematicCard({
     offset: ["start end", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  const y = useTransform(scrollYProgress, [0, 1], [30, -30]);
 
   return (
     <motion.div
@@ -83,48 +83,61 @@ function CinematicCard({
       className="group"
     >
       <Link href={`/services/${service.id}`}>
-        <div className={`flex flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"} gap-6 md:gap-10 items-center`}>
-          {/* Image container */}
-          <div className="w-full md:w-[55%] relative">
-            <div className="relative overflow-hidden rounded-2xl md:rounded-3xl" style={{ aspectRatio: "4 / 3" }}>
-              <motion.div style={{ y }} className="absolute inset-0">
-                <Image
-                  src={item.src}
-                  alt={service.title}
-                  fill
-                  className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.03]"
-                  sizes="(max-width: 768px) 100vw, 55vw"
-                  priority={index < 2}
-                />
-              </motion.div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            </div>
-          </div>
+        <div className="relative rounded-2xl md:rounded-3xl overflow-hidden" style={{ aspectRatio: "16 / 7" }}>
 
-          {/* Text content */}
-          <div className={`w-full md:w-[45%] flex flex-col justify-center ${isEven ? "md:pl-4" : "md:pr-4"}`}>
+          {/* Full background image */}
+          <motion.div style={{ y }} className="absolute inset-0">
+            <Image
+              src={item.src}
+              alt={service.title}
+              fill
+              className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.03]"
+              sizes="(max-width: 768px) 100vw, 80vw"
+              priority={index < 2}
+            />
+          </motion.div>
+
+          {/* Gradient overlay - always visible on left side for text readability */}
+          <div className={`absolute inset-0 bg-gradient-to-${isEven ? "r" : "l"} from-black/70 via-black/30 to-transparent`} />
+
+          {/* Text content - positioned to side normally, slides over image on hover */}
+          <div className={`absolute inset-0 flex items-end md:items-center p-6 md:p-10 lg:p-14`}>
             <motion.div
-              initial={{ opacity: 0, x: isEven ? 30 : -30 }}
+              initial={{ opacity: 0, x: isEven ? -30 : 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.7, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className={`max-w-md transition-transform duration-500 ease-out
+                ${isEven
+                  ? "md:group-hover:translate-x-[calc(100%-100%+2rem)]"
+                  : "md:group-hover:-translate-x-[calc(100%-100%-2rem)]"
+                }`}
             >
               <span className="text-[10px] md:text-xs font-bold text-[rgb(var(--accent-400))] uppercase tracking-[0.3em]">
                 Service {String(index + 1).padStart(2, "0")}
               </span>
-              <h3 className="mt-3 text-3xl md:text-4xl lg:text-5xl font-bold text-[rgb(var(--fg-rgb))] leading-[1.05] tracking-tight">
+              <h3 className="mt-3 text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-[1.05] tracking-tight">
                 {service.title}
               </h3>
-              <p className="mt-4 text-sm md:text-base text-[rgb(var(--fg-rgb)/55%)] leading-relaxed max-w-md">
+              <p className="mt-3 md:mt-4 text-sm md:text-base text-white/60 leading-relaxed">
                 {service.tagline}
               </p>
-              <div className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[rgb(var(--accent-400))] group-hover:gap-3 transition-all duration-300">
+              <div className="mt-5 md:mt-6 inline-flex items-center gap-2 text-sm font-bold text-[rgb(var(--accent-400))] group-hover:gap-3 transition-all duration-300">
                 View Service
                 <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </div>
             </motion.div>
+          </div>
+
+          {/* Corner arrow indicator */}
+          <div className={`absolute top-5 ${isEven ? "right-5 md:right-7" : "left-5 md:left-7"} md:top-7`}>
+            <div className="w-10 h-10 md:w-11 md:h-11 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm bg-white/5 group-hover:bg-[rgb(var(--accent-500))]/20 group-hover:border-[rgb(var(--accent-500))]/40 transition-all duration-500">
+              <svg className="w-4 h-4 md:w-5 md:h-5 text-white/60 group-hover:text-[rgb(var(--accent-400))] transition-colors duration-500 -rotate-45 group-hover:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </div>
           </div>
         </div>
       </Link>
