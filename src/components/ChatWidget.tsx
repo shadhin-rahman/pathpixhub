@@ -1,8 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MessageCircle, Phone, X } from "lucide-react";
+import { MessageCircle, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+
+declare global {
+  interface Window {
+    Tawk_API?: {
+      maximize?: () => void;
+    };
+  }
+}
 
 const TAWKTO_PROPERTY_ID = "YOUR_TAWKTO_PROPERTY_ID";
 const TAWKTO_WIDGET_ID = "YOUR_TAWKTO_WIDGET_ID";
