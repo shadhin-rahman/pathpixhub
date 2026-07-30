@@ -13,10 +13,9 @@ export default function AIPreviewTool({ className = "" }: AIPreviewToolProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [processedFilter, setProcessedFilter] = useState<string | null>(null);
-  const [progress, setProgress] = useState("");
 
   const filters = [
-    { id: "bgremove", label: "BG Remove", icon: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16", desc: "Remove Background", premium: true },
+    { id: "bgremove", label: "BG Remove", icon: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16", desc: "Remove Background" },
     { id: "enhance", label: "Enhance", icon: "M13 10V3L4 14h7v7l9-11h-7z", desc: "Brightness + Contrast" },
     { id: "retouch", label: "Smooth", icon: "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z", desc: "Skin Smoothing" },
     { id: "shadow", label: "Shadow", icon: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4", desc: "Add Drop Shadow" },
@@ -34,112 +33,119 @@ export default function AIPreviewTool({ className = "" }: AIPreviewToolProps) {
     reader.readAsDataURL(file);
   }, []);
 
-  const removeBackground = useCallback(async (imageSrc: string) => {
-    const { removeBackground: removeBG } = await import("@imgly/background-removal");
+  const sampleBackground = (ctx: CanvasRenderingContext2D, w: number, h: number): [number, number, number] => {
+    const corners: [number, number][] = [
+      [2, 2], [w - 3, 2], [2, h - 3], [w - 3, h - 3],
+      [Math.floor(w * 0.1), 2], [Math.floor(w * 0.9), 2],
+      [2, Math.floor(h * 0.1)], [2, Math.floor(h * 0.9)],
+      [Math.floor(w * 0.1), h - 3], [Math.floor(w * 0.9), h - 3],
+    ];
+    let rSum = 0, gSum = 0, bSum = 0;
+    for (const [x, y] of corners) {
+      const d = ctx.getImageData(x, y, 1, 1).data;
+      rSum += d[0]; gSum += d[1]; bSum += d[2];
+    }
+    return [Math.round(rSum / corners.length), Math.round(gSum / corners.length), Math.round(bSum / corners.length)];
+  };
 
-    const response = await fetch(imageSrc);
-    const blob = await response.blob();
+  const colorDist = (r1: number, g1: number, b1: number, r2: number, g2: number, b2: number): number => {
+    const rm = (r1 + r2) / 2;
+    const dr = r1 - r2, dg = g1 - g2, db = b1 - b2;
+    return Math.sqrt((2 + rm / 256) * dr * dr + 4 * dg * dg + (2 + (255 - rm) / 256) * db * db);
+  };
 
-    const resultBlob = await removeBG(blob, {
-      progress: (key: string, current: number, total: number) => {
-        if (key === "compute:inference") {
-          const pct = Math.round((current / total) * 100);
-          setProgress(`Processing... ${pct}%`);
-        }
-      },
-    });
-
-    return URL.createObjectURL(resultBlob);
-  }, []);
-
-  const applyFilter = useCallback(async (filterId: string) => {
+  const applyFilter = useCallback((filterId: string) => {
     if (!preview || !canvasRef.current) return;
     setIsProcessing(true);
     setProcessedFilter(null);
-    setProgress("Loading AI model...");
 
-    try {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const img = new window.Image();
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+      const w = canvas.width;
+      const h = canvas.height;
+
       if (filterId === "bgremove") {
-        const resultUrl = await removeBackground(preview);
+        const [bgR, bgG, bgB] = sampleBackground(ctx, w, h);
+        const tolerance = 50;
+        const edgeFeather = 10;
 
-        const img = new window.Image();
-        img.onload = () => {
-          const canvas = canvasRef.current!;
-          canvas.width = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext("2d")!;
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0);
-          setIsProcessing(false);
-          setProcessedFilter(filterId);
-          setProgress("");
-        };
-        img.src = resultUrl;
-        return;
-      }
-
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-
-      const img = new window.Image();
-      img.onload = () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-
-        switch (filterId) {
-          case "enhance":
-            for (let i = 0; i < data.length; i += 4) {
-              data[i] = Math.min(255, data[i] * 1.15 + 8);
-              data[i + 1] = Math.min(255, data[i + 1] * 1.15 + 8);
-              data[i + 2] = Math.min(255, data[i + 2] * 1.15 + 8);
+        const mask = new Float32Array(w * h);
+        for (let y = 0; y < h; y++) {
+          for (let x = 0; x < w; x++) {
+            const i = (y * w + x) * 4;
+            const dist = colorDist(data[i], data[i + 1], data[i + 2], bgR, bgG, bgB);
+            let alpha = dist < tolerance ? 0 : 1;
+            if (alpha === 1 && dist < tolerance + edge feather) {
+              alpha = (dist - tolerance) / edge feather;
             }
-            break;
-
-          case "retouch":
-            for (let i = 0; i < data.length; i += 4) {
-              const brightness = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
-              const warmth = brightness > 128 ? 1.02 : 0.98;
-              data[i] = Math.min(255, data[i] * warmth + 3);
-              data[i + 1] = Math.min(255, data[i + 1] * warmth + 2);
-              data[i + 2] = Math.min(255, data[i + 2] * warmth + 5);
-            }
-            break;
-
-          case "shadow": {
-            const tempCanvas = document.createElement("canvas");
-            tempCanvas.width = canvas.width;
-            tempCanvas.height = canvas.height;
-            const tempCtx = tempCanvas.getContext("2d")!;
-            tempCtx.putImageData(imageData, 0, 0);
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const shadowOffset = Math.max(8, Math.min(canvas.width, canvas.height) * 0.03);
-            const shadowBlur = Math.max(15, Math.min(canvas.width, canvas.height) * 0.05);
-            ctx.shadowColor = "rgba(0, 0, 0, 0.4)";
-            ctx.shadowBlur = shadowBlur;
-            ctx.shadowOffsetX = shadowOffset;
-            ctx.shadowOffsetY = shadowOffset;
-            ctx.drawImage(tempCanvas, 0, 0);
-            break;
+            const edgeDist = Math.min(x, y, w - 1 - x, h - 1 - y);
+            if (edgeDist < 3) alpha = Math.min(alpha, edgeDist / 3);
+            mask[y * w + x] = alpha;
           }
         }
 
-        ctx.putImageData(imageData, 0, 0);
-        setIsProcessing(false);
-        setProcessedFilter(filterId);
-        setProgress("");
-      };
-      img.src = preview;
-    } catch {
+        for (let y = 1; y < h - 1; y++) {
+          for (let x = 1; x < w - 1; x++) {
+            const idx = y * w + x;
+            if (mask[idx] > 0.1 && mask[idx] < 0.9) {
+              let sum = 0;
+              for (let dy = -1; dy <= 1; dy++) {
+                for (let dx = -1; dx <= 1; dx++) {
+                  sum += mask[(y + dy) * w + (x + dx)];
+                }
+              }
+              mask[idx] = sum / 9;
+            }
+          }
+        }
+
+        for (let i = 0; i < data.length / 4; i++) {
+          data[i * 4 + 3] = Math.round(mask[i] * 255);
+        }
+      } else if (filterId === "enhance") {
+        for (let i = 0; i < data.length; i += 4) {
+          data[i] = Math.min(255, data[i] * 1.15 + 8);
+          data[i + 1] = Math.min(255, data[i + 1] * 1.15 + 8);
+          data[i + 2] = Math.min(255, data[i + 2] * 1.15 + 8);
+        }
+      } else if (filterId === "retouch") {
+        for (let i = 0; i < data.length; i += 4) {
+          const b = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+          const w = b > 128 ? 1.02 : 0.98;
+          data[i] = Math.min(255, data[i] * w + 3);
+          data[i + 1] = Math.min(255, data[i + 1] * w + 2);
+          data[i + 2] = Math.min(255, data[i + 2] * w + 5);
+        }
+      } else if (filterId === "shadow") {
+        const tempCanvas = document.createElement("canvas");
+        tempCanvas.width = w; tempCanvas.height = h;
+        tempCanvas.getContext("2d")!.putImageData(imageData, 0, 0);
+        ctx.clearRect(0, 0, w, h);
+        const off = Math.max(8, Math.min(w, h) * 0.03);
+        const blur = Math.max(15, Math.min(w, h) * 0.05);
+        ctx.shadowColor = "rgba(0,0,0,0.4)";
+        ctx.shadowBlur = blur;
+        ctx.shadowOffsetX = off;
+        ctx.shadowOffsetY = off;
+        ctx.drawImage(tempCanvas, 0, 0);
+      }
+
+      if (filterId !== "shadow") ctx.putImageData(imageData, 0, 0);
       setIsProcessing(false);
-      setProgress("");
-    }
-  }, [preview, removeBackground]);
+      setProcessedFilter(filterId);
+    };
+    img.src = preview;
+  }, [preview]);
 
   const resetToOriginal = useCallback(() => {
     if (!canvasRef.current || !originalRef.current) return;
@@ -161,11 +167,8 @@ export default function AIPreviewTool({ className = "" }: AIPreviewToolProps) {
       <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileSelect} className="hidden" />
 
       {!preview ? (
-        <button
-          type="button"
-          onClick={() => fileInputRef.current?.click()}
-          className="w-full aspect-video rounded-2xl border-2 border-dashed border-[rgb(var(--fg-rgb)/15%)] hover:border-[rgb(var(--accent-500)/40%)] bg-[var(--bg-subtle)] flex flex-col items-center justify-center gap-4 transition-all cursor-pointer group"
-        >
+        <button type="button" onClick={() => fileInputRef.current?.click()}
+          className="w-full aspect-video rounded-2xl border-2 border-dashed border-[rgb(var(--fg-rgb)/15%)] hover:border-[rgb(var(--accent-500)/40%)] bg-[var(--bg-subtle)] flex flex-col items-center justify-center gap-4 transition-all cursor-pointer group">
           <div className="w-16 h-16 rounded-full bg-[rgb(var(--accent-500)/10%)] flex items-center justify-center group-hover:scale-110 transition-transform">
             <svg className="w-8 h-8 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -185,7 +188,7 @@ export default function AIPreviewTool({ className = "" }: AIPreviewToolProps) {
                 <div className="text-center">
                   <div className="w-12 h-12 border-3 border-[rgb(var(--accent-400))] border-t-transparent rounded-full animate-spin mx-auto" />
                   <p className="text-sm font-bold text-white mt-3">AI Processing...</p>
-                  <p className="text-xs text-white/60 mt-1">{progress || "Analyzing your image"}</p>
+                  <p className="text-xs text-white/60 mt-1">Enhancing your image</p>
                 </div>
               </div>
             )}
@@ -208,20 +211,8 @@ export default function AIPreviewTool({ className = "" }: AIPreviewToolProps) {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {filters.map((f) => (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => applyFilter(f.id)}
-                disabled={isProcessing}
-                className={`rounded-xl py-3 px-2 text-center border transition-all relative ${
-                  processedFilter === f.id
-                    ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/8%)]"
-                    : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/15%)]"
-                } ${isProcessing ? "opacity-50 cursor-not-allowed" : ""}`}
-              >
-                {f.premium && (
-                  <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.5 rounded-full bg-[rgb(var(--accent-500))] text-[7px] font-bold text-white uppercase">AI</span>
-                )}
+              <button key={f.id} type="button" onClick={() => applyFilter(f.id)} disabled={isProcessing}
+                className={`rounded-xl py-3 px-2 text-center border transition-all ${processedFilter === f.id ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/8%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/15%)]"} ${isProcessing ? "opacity-50 cursor-not-allowed" : ""}`}>
                 <div className="w-8 h-8 rounded-lg bg-[rgb(var(--accent-500)/10%)] flex items-center justify-center mx-auto">
                   <svg className="w-4 h-4 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={f.icon} />
@@ -235,35 +226,19 @@ export default function AIPreviewTool({ className = "" }: AIPreviewToolProps) {
 
           {processedFilter && (
             <div className="flex items-center justify-between">
-              <button
-                type="button"
-                onClick={resetToOriginal}
-                className="text-xs text-[rgb(var(--fg-rgb)/40%)] hover:text-[rgb(var(--fg-rgb)/60%)] transition-colors flex items-center gap-1"
-              >
+              <button type="button" onClick={resetToOriginal} className="text-xs text-[rgb(var(--fg-rgb)/40%)] hover:text-[rgb(var(--fg-rgb)/60%)] transition-colors flex items-center gap-1">
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                 Reset
               </button>
-              <a
-                href="/contact"
-                className="inline-flex items-center px-5 py-2.5 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-xs hover:bg-[rgb(var(--accent-400))] transition-all"
-              >
+              <a href="/contact" className="inline-flex items-center px-5 py-2.5 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-xs hover:bg-[rgb(var(--accent-400))] transition-all">
                 Get Professional Edit
                 <svg className="w-3.5 h-3.5 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </a>
             </div>
           )}
 
-          <p className="text-[10px] text-[rgb(var(--fg-rgb)/30%)] text-center">
-            AI-powered preview. Our experts deliver pixel-perfect results.
-          </p>
-
-          <button
-            type="button"
-            onClick={() => { setPreview(null); setProcessedFilter(null); originalRef.current = null; }}
-            className="w-full text-center text-xs text-[rgb(var(--fg-rgb)/40%)] hover:text-[rgb(var(--fg-rgb)/60%)] transition-colors"
-          >
-            Upload different image
-          </button>
+          <p className="text-[10px] text-[rgb(var(--fg-rgb)/30%)] text-center">Client-side preview. Our experts deliver pixel-perfect results.</p>
+          <button type="button" onClick={() => { setPreview(null); setProcessedFilter(null); originalRef.current = null; }} className="w-full text-center text-xs text-[rgb(var(--fg-rgb)/40%)] hover:text-[rgb(var(--fg-rgb)/60%)] transition-colors">Upload different image</button>
         </div>
       )}
     </div>
