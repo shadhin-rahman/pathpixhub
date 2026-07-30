@@ -11,7 +11,6 @@ import StaggerReveal, { StaggerItem } from "@/components/StaggerReveal";
 import ParallaxImage from "@/components/ParallaxImage";
 import ScrollIndicator from "@/components/ScrollIndicator";
 import CountUp from "@/components/CountUp";
-import ServiceCarousel from "@/components/ServiceCarousel";
 import TextReveal from "@/components/TextReveal";
 import ImageScaleScroll from "@/components/ImageScaleScroll";
 import MagneticButton from "@/components/MagneticButton";
@@ -179,13 +178,6 @@ export default function Home() {
 
       <CinematicShowcase services={services} />
 
-      <ScrollReveal>
-      <section className="py-16 overflow-hidden bg-[var(--bg)] relative border-y border-[rgb(var(--fg-rgb)/8%)]">
-        <h2 className="text-center text-2xl md:text-3xl font-bold tracking-tight gradient-text mb-10 px-6">Explore Our Expertise</h2>
-        <ServiceCarousel services={services} />
-      </section>
-      </ScrollReveal>
-
       <section className="py-28 lg:py-36 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
           <TextReveal><div className="text-center mb-16">
@@ -198,7 +190,13 @@ export default function Home() {
               { before: "/images/service-showcase/clipping-path-before.png", after: "/images/service-showcase/clipping-path.png", label: "Clipping Path" },
               { before: "/images/service-showcase/background-removal-before.png", after: "/images/service-showcase/background-removal.png", label: "Background Removal" },
               { before: "/images/service-showcase/photo-retouching-before.png", after: "/images/service-showcase/photo-retouching.png", label: "Photo Retouching" },
+              { before: "/images/service-showcase/multi-clipping-path-before.png", after: "/images/service-showcase/multi-clipping-path.png", label: "Multi Clipping Path" },
+              { before: "/images/service-showcase/color-change-before.png", after: "/images/service-showcase/color-change.png", label: "Color Change" },
               { before: "/images/service-showcase/car-editing-before.png", after: "/images/service-showcase/car-editing.png", label: "Car Editing" },
+              { before: "/images/service-showcase/ghost-mannequin-before.png", after: "/images/service-showcase/ghost-mannequin.png", label: "Ghost Mannequin" },
+              { before: "/images/service-showcase/image-masking-before.png", after: "/images/service-showcase/image-masking.png", label: "Image Masking" },
+              { before: "/images/service-showcase/shadow-creation-before.png", after: "/images/service-showcase/shadow-creation.png", label: "Shadow Creation" },
+              { before: "/images/service-showcase/ecommerce-editing-before.png", after: "/images/service-showcase/ecommerce-editing.png", label: "E-commerce Editing" },
             ].map((item) => (
               <TextReveal key={item.label}>
                 <BeforeAfterSlider beforeSrc={item.before} afterSrc={item.after} beforeAlt={`Before ${item.label}`} afterAlt={`After ${item.label}`} />
