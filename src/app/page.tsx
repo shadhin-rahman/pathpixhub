@@ -17,6 +17,7 @@ import ImageScaleScroll from "@/components/ImageScaleScroll";
 import MagneticButton from "@/components/MagneticButton";
 import { ScrollProgressBar } from "@/components/HorizontalScroll";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
+import CinematicShowcase from "@/components/CinematicShowcase";
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -176,34 +177,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-28 lg:py-36 mesh-gradient">
-        <div className="max-w-7xl mx-auto px-6">
-          <TextReveal><div className="text-center mb-20">
-            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">What We Offer</h2>
-            <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Services</h3>
-          </div></TextReveal>
-          <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {services.map((service) => {
-              const softColors = ["#fca5a5","#d8b4fe","#f9a8d4","#fde68a","#93c5fd","#86efac","#fdba74","#5eead4","#a5b4fc","#fda4af"];
-              const ci = ["clipping-path","background-removal","shadow-creation","ghost-mannequin","image-masking","color-change","photo-retouching","multi-clipping-path","ecommerce-editing","car-editing"].indexOf(service.id) % softColors.length;
-              return (
-              <StaggerItem key={service.id}>
-              <Link href={`/services/${service.id}`} className="group block rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-xl" style={{ backgroundColor: softColors[ci] }}>
-                <div className="flex items-center gap-4 p-4 md:p-5">
-                  <div className="relative w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-xl overflow-hidden bg-white/30 flex items-center justify-center">
-                    <Image src={`/images/service-cards/${service.id}.png`} alt={service.title} fill className="object-contain p-1.5 group-hover:scale-105 transition-transform duration-700" sizes="80px" />
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="font-bold text-sm md:text-base text-[rgb(var(--fg-rgb)/85%)] leading-tight">{service.title}</h3>
-                    <p className="mt-0.5 text-xs text-[rgb(var(--fg-rgb)/55%)] line-clamp-2">{service.tagline}</p>
-                  </div>
-                </div>
-              </Link>
-              </StaggerItem>
-            )})}
-          </StaggerReveal>
-        </div>
-      </section>
+      <CinematicShowcase services={services} />
 
       <ScrollReveal>
       <section className="py-16 overflow-hidden bg-[var(--bg)] relative border-y border-[rgb(var(--fg-rgb)/8%)]">
