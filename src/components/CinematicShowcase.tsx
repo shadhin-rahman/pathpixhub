@@ -35,20 +35,18 @@ export default function CinematicShowcase({ services }: CinematicServiceProps) {
     offset: ["start start", "end end"],
   });
 
-  const trackX = useTransform(scrollYProgress, [0, 1], ["0%", `-${(CARD_COUNT - 1) * 75}%`]);
+  const trackX = useTransform(scrollYProgress, [0, 1], ["0%", `${-(CARD_COUNT - 1) * 75}%`]);
 
   return (
     <section ref={sectionRef} className="relative" style={{ height: `${CARD_COUNT * 70}vh` }}>
       <div className="sticky top-0 h-screen flex flex-col">
-        {/* Header */}
         <div className="px-6 md:px-12 pt-10 md:pt-14 pb-4">
           <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-3">What We Offer</h2>
           <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight gradient-text">Our Services</h3>
         </div>
 
-        {/* Frame */}
         <div className="flex-1 mx-4 md:mx-8 mb-8 rounded-2xl md:rounded-3xl overflow-hidden border border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--accent-500)/3%)] relative" style={{ perspective: "1200px" }}>
-          {/* Horizontal track */}
+
           <motion.div style={{ x: trackX }} className="flex h-full">
             {showcaseImages.map((item, idx) => {
               const service = services.find(s => s.id === item.id) || services[idx];
@@ -65,14 +63,12 @@ export default function CinematicShowcase({ services }: CinematicServiceProps) {
             })}
           </motion.div>
 
-          {/* Progress dots */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
             {Array.from({ length: CARD_COUNT }, (_, idx) => (
               <Dot key={idx} index={idx} scrollProgress={scrollYProgress} totalCards={CARD_COUNT} />
             ))}
           </div>
 
-          {/* Counter */}
           <div className="absolute top-5 right-6 md:top-7 md:right-8 z-10">
             <Counter scrollProgress={scrollYProgress} totalCards={CARD_COUNT} />
           </div>
@@ -101,9 +97,9 @@ function ServiceSlide({
 
   const cardScale = useTransform(scrollProgress, [cardStart, cardCenter, cardEnd], [0.85, 1, 0.85]);
   const cardRotateY = useTransform(scrollProgress, [cardStart, cardCenter, cardEnd], [index === 0 ? 0 : 8, 0, index === totalCards - 1 ? 0 : -8]);
-  const cardOpacity = useTransform(scrollProgress, [cardStart - 0.05, cardStart + 0.02, cardEnd - 0.02, cardEnd + 0.05], [0.3, 1, 1, 0.3]);
+  const cardOpacity = useTransform(scrollProgress, [cardStart, cardCenter + 0.02, cardEnd], [0.3, 1, 0.3]);
   const textX = useTransform(scrollProgress, [cardStart, cardCenter, cardEnd], [40, 0, -40]);
-  const textOpacity = useTransform(scrollProgress, [cardStart + 0.02, cardCenter - 0.05, cardCenter + 0.05, cardEnd - 0.02], [0, 1, 1, 0]);
+  const textOpacity = useTransform(scrollProgress, [cardStart, cardCenter, cardEnd], [0, 1, 0]);
 
   return (
     <motion.div
@@ -153,7 +149,7 @@ function Dot({
 }) {
   const start = index / totalCards;
   const end = (index + 1) / totalCards;
-  const opacity = useTransform(scrollProgress, [start - 0.05, start, end - 0.05, end], [0.2, 1, 1, 0.2]);
+  const opacity = useTransform(scrollProgress, [start, (start + end) / 2, end], [0.2, 1, 0.2]);
   return <motion.div style={{ opacity }} className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))]" />;
 }
 
@@ -184,7 +180,7 @@ function CounterItem({
 }) {
   const start = index / totalCards;
   const end = (index + 1) / totalCards;
-  const opacity = useTransform(scrollProgress, [start - 0.05, start, end - 0.05, end], [0, 1, 1, 0]);
+  const opacity = useTransform(scrollProgress, [start, (start + end) / 2, end], [0, 1, 0]);
   return (
     <motion.span
       style={{ opacity }}
