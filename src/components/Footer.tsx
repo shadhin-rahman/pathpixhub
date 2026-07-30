@@ -86,6 +86,11 @@ export default function Footer() {
                   Terms &amp; Conditions
                 </Link>
               </li>
+              <li>
+                <Link href="/subscription" className="text-sm text-[rgb(var(--fg-rgb)/60%)] hover:text-[rgb(var(--accent-400))] transition-colors">
+                  Subscription Plans
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
