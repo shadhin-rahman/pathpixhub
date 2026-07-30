@@ -116,7 +116,7 @@ function CinematicCard({
             </motion.div>
           </div>
 
-          <div className={`absolute top-6 ${isEven ? "right-6" : "left-6"} md:top-12 md:${isEven ? "right-12" : "left-12"}`}>
+          <div className={isEven ? "absolute top-6 right-6 md:top-12 md:right-12" : "absolute top-6 left-6 md:top-12 md:left-12"}>
             <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm bg-white/5 group-hover:bg-[rgb(var(--accent-500))]/20 group-hover:border-[rgb(var(--accent-500))]/40 transition-all duration-500">
               <svg className="w-4 h-4 md:w-5 md:h-5 text-white/60 group-hover:text-[rgb(var(--accent-400))] transition-colors duration-500 -rotate-45 group-hover:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
