@@ -71,7 +71,7 @@ function ServiceCard({
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.4, 1, 1, 0.4]);
 
   return (
-    <div ref={ref} className="w-full rounded-2xl md:rounded-3xl overflow-hidden" style={{ aspectRatio: "16 / 7" }}>
+    <div ref={ref} className="w-full rounded-2xl md:rounded-3xl overflow-hidden aspect-[4/3] md:aspect-[16/7]">
       <motion.div style={{ scale, opacity }} className="relative w-full h-full">
         <Link href={`/services/${service.id}`} className="block w-full h-full group">
           <motion.div style={{ y }} className="absolute inset-0">
@@ -89,19 +89,19 @@ function ServiceCard({
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
           {/* Content */}
-          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 lg:p-14">
+          <div className="absolute bottom-0 left-0 right-0 p-4 md:p-10 lg:p-14">
             <span className="text-[10px] md:text-xs font-bold text-[rgb(var(--accent-400))] uppercase tracking-[0.3em]">
               Service {String(index + 1).padStart(2, "0")}
             </span>
-            <h3 className="mt-2 text-3xl md:text-4xl lg:text-6xl font-bold text-white leading-[0.95] tracking-tight">
+            <h3 className="mt-1 md:mt-2 text-lg md:text-4xl lg:text-6xl font-bold text-white leading-tight md:leading-[0.95] tracking-tight">
               {service.title}
             </h3>
-            <p className="mt-3 md:mt-4 text-sm md:text-base text-white/60 max-w-lg leading-relaxed">
+            <p className="mt-1 md:mt-4 text-xs md:text-base text-white/60 max-w-lg leading-snug md:leading-relaxed">
               {service.tagline}
             </p>
-            <div className="mt-4 md:mt-6 inline-flex items-center gap-2 text-sm font-bold text-[rgb(var(--accent-400))] group-hover:gap-3 transition-all duration-300">
+            <div className="mt-2 md:mt-6 inline-flex items-center gap-1 md:gap-2 text-xs md:text-sm font-bold text-[rgb(var(--accent-400))] group-hover:gap-3 transition-all duration-300">
               View Service
-              <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3 h-3 md:w-4 md:h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </div>

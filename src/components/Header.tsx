@@ -183,7 +183,7 @@ export default function Header() {
                       <span className="text-[rgb(var(--fg-rgb)/30%)] ml-2 text-base font-normal">({services.length})</span>
                     </h3>
 
-                    <div className="space-y-1 max-h-[50vh] overflow-y-auto pr-2">
+                    <div className="space-y-1 max-h-[55vh] md:max-h-[50vh] overflow-y-auto pr-2">
                       {services.map((s, i) => (
                         <motion.div
                           key={s.id}
