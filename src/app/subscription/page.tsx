@@ -11,7 +11,7 @@ const TIERS = [
     badgeColor: "",
     monthlyPrice: 0,
     yearlyPrice: 0,
-    perImage: "$1.45",
+    perImage: 1.45,
     desc: "Pay-as-you-go for occasional edits",
     turnaround: "24h",
     turnaroundLabel: "24-Hour Delivery",
@@ -34,7 +34,7 @@ const TIERS = [
     badgeColor: "bg-orange-500/10 text-orange-400 border border-orange-500/20",
     monthlyPrice: 7.9,
     yearlyPrice: 79,
-    perImage: "Included",
+    perImage: 0,
     desc: "12h fast delivery for growing sellers",
     turnaround: "12h",
     turnaroundLabel: "12-Hour Fast",
@@ -57,7 +57,7 @@ const TIERS = [
     badgeColor: "bg-blue-500/10 text-blue-400 border border-blue-500/20",
     monthlyPrice: 19.9,
     yearlyPrice: 199,
-    perImage: "Included",
+    perImage: 0,
     desc: "Ultra fast 6h delivery for growing studios",
     turnaround: "6h",
     turnaroundLabel: "6-Hour Express",
@@ -81,7 +81,7 @@ const TIERS = [
     badgeColor: "bg-purple-500/10 text-purple-400 border border-purple-500/20",
     monthlyPrice: 499,
     yearlyPrice: 4999,
-    perImage: "Custom",
+    perImage: 0,
     desc: "Full white-glove VIP management for large brands",
     turnaround: "45m",
     turnaroundLabel: "45-Min VIP",
@@ -98,6 +98,13 @@ const TIERS = [
     ctaLink: "/contact",
     style: "",
   },
+];
+
+const CURRENCIES = [
+  { code: "USD", symbol: "$", rate: 1, label: "$ USD" },
+  { code: "CAD", symbol: "C$", rate: 1.36, label: "C$ CAD" },
+  { code: "GBP", symbol: "£", rate: 0.79, label: "£ GBP" },
+  { code: "EUR", symbol: "€", rate: 0.92, label: "€ EUR" },
 ];
 
 const PRO_SERVICES = [
@@ -120,6 +127,38 @@ const FAQ_ITEMS = [
 export default function SubscriptionPage() {
   const [annual, setAnnual] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [currency, setCurrency] = useState(0);
+  const [volume, setVolume] = useState(0);
+  const [speed, setSpeed] = useState(0);
+  const [support, setSupport] = useState(0);
+
+  const curr = CURRENCIES[currency];
+
+  const formatPrice = (usd: number) => {
+    const converted = usd * curr.rate;
+    return `${curr.symbol}${converted.toFixed(converted >= 100 ? 0 : 2)}`;
+  };
+
+  const getRecommendedPlan = () => {
+    let score = 0;
+    if (volume >= 2) score += 2; else if (volume >= 1) score += 1;
+    if (speed >= 2) score += 2; else if (speed >= 1) score += 1;
+    if (support >= 1) score += support + 1;
+    if (score >= 5) return 3;
+    if (score >= 3) return 2;
+    if (score >= 1) return 1;
+    return 0;
+  };
+
+  const recommended = getRecommendedPlan();
+  const recommendedNames = ["Free", "Standard", "Pro", "Enterprise"];
+  const recommendedPrices = [0, 7.9, 19.9, 499];
+  const recommendedDescs = [
+    "24h standard delivery",
+    "12h fast delivery, 5 priority tickets",
+    "6h express, unlimited revisions & time account",
+    "45min VIP SLA, dedicated team",
+  ];
 
   return (
     <>
@@ -153,10 +192,11 @@ export default function SubscriptionPage() {
           </div>
           <div className="mt-4 flex items-center justify-center gap-2">
             <span className="text-xs text-[rgb(var(--fg-rgb)/40%)]">Currency:</span>
-            {["$ USD", "C$ CAD", "£ GBP", "€ EUR"].map((c, ci) => (
-              <span key={ci} className={`text-xs px-2 py-1 rounded-lg font-bold ${ci === 0 ? "bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-400))] border border-[rgb(var(--accent-500)/20%)]" : "text-[rgb(var(--fg-rgb)/30%)] hover:text-[rgb(var(--fg-rgb)/50%)] cursor-pointer transition-colors"}`}>
-                {c}
-              </span>
+            {CURRENCIES.map((c, ci) => (
+              <button key={ci} onClick={() => setCurrency(ci)}
+                className={`text-xs px-2 py-1 rounded-lg font-bold transition-all ${currency === ci ? "bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-400))] border border-[rgb(var(--accent-500)/20%)]" : "text-[rgb(var(--fg-rgb)/30%)] hover:text-[rgb(var(--fg-rgb)/50%)] border border-transparent"}`}>
+                {c.label}
+              </button>
             ))}
           </div>
         </div>
@@ -168,7 +208,7 @@ export default function SubscriptionPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
             {TIERS.map((tier, i) => {
               const savings = annual && tier.monthlyPrice > 0
-                ? { total: tier.monthlyPrice * 12 - tier.yearlyPrice, perMonth: ((tier.monthlyPrice * 12 - tier.yearlyPrice) / 12).toFixed(2) }
+                ? { total: tier.monthlyPrice * 12 - tier.yearlyPrice, perMonth: ((tier.monthlyPrice * 12 - tier.yearlyPrice) / 12) }
                 : null;
               return (
               <motion.div key={tier.name}
@@ -186,14 +226,14 @@ export default function SubscriptionPage() {
                 <h3 className="text-xl font-bold text-[rgb(var(--fg-rgb))]">{tier.name}</h3>
                 <div className="mt-3 flex items-baseline gap-1">
                   <span className="text-4xl font-extrabold text-[rgb(var(--fg-rgb))]">
-                    {tier.monthlyPrice === 0 ? "$0" : annual ? `$${tier.yearlyPrice}` : `$${tier.monthlyPrice}`}
+                    {tier.monthlyPrice === 0 ? formatPrice(0) : annual ? formatPrice(tier.yearlyPrice) : formatPrice(tier.monthlyPrice)}
                   </span>
                   <span className="text-sm text-[rgb(var(--fg-rgb)/40%)] font-semibold">/{annual ? "yr" : "mo"}</span>
                 </div>
                 {savings && (
-                  <p className="text-xs text-emerald-400 font-bold mt-1">${savings.total} savings (${savings.perMonth}/mo)</p>
+                  <p className="text-xs text-emerald-400 font-bold mt-1">{formatPrice(savings.total)} savings ({formatPrice(savings.perMonth)}/mo)</p>
                 )}
-                <p className="text-xs text-[rgb(var(--fg-rgb)/35%)] mt-1">+ {tier.perImage} per image</p>
+                <p className="text-xs text-[rgb(var(--fg-rgb)/35%)] mt-1">+ {tier.perImage > 0 ? `${formatPrice(tier.perImage)} per image` : "Included"}</p>
                 <p className="mt-3 text-sm text-[rgb(var(--fg-rgb)/55%)] min-h-[40px]">{tier.desc}</p>
                 <div className="h-px bg-[rgb(var(--fg-rgb)/8%)] my-4" />
                 <ul className="space-y-2.5 mb-6 flex-1">
@@ -293,8 +333,8 @@ export default function SubscriptionPage() {
                 <label className="text-xs uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3 block">📸 Monthly Image Volume</label>
                 <div className="space-y-2">
                   {["1-50 images", "51-250 images", "251-1000 images", "1000+ images"].map((o, oi) => (
-                    <label key={oi} className="flex items-center gap-3 p-3 rounded-xl border border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--accent-500)/40%)] cursor-pointer transition-colors">
-                      <input type="radio" name="volume" defaultChecked={oi === 0} className="accent-[rgb(var(--accent-500))]" />
+                    <label key={oi} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${volume === oi ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/5%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--accent-500)/30%)]"}`}>
+                      <input type="radio" name="volume" checked={volume === oi} onChange={() => setVolume(oi)} className="accent-[rgb(var(--accent-500))]" />
                       <span className="text-sm text-[rgb(var(--fg-rgb)/70%)]">{o}</span>
                     </label>
                   ))}
@@ -304,8 +344,8 @@ export default function SubscriptionPage() {
                 <label className="text-xs uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3 block">⚡ Speed Requirement</label>
                 <div className="space-y-2">
                   {["24 hours (Standard)", "12 hours (Fast)", "6 hours (Express)", "45 minutes (VIP)"].map((o, oi) => (
-                    <label key={oi} className="flex items-center gap-3 p-3 rounded-xl border border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--accent-500)/40%)] cursor-pointer transition-colors">
-                      <input type="radio" name="speed" defaultChecked={oi === 0} className="accent-[rgb(var(--accent-500))]" />
+                    <label key={oi} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${speed === oi ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/5%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--accent-500)/30%)]"}`}>
+                      <input type="radio" name="speed" checked={speed === oi} onChange={() => setSpeed(oi)} className="accent-[rgb(var(--accent-500))]" />
                       <span className="text-sm text-[rgb(var(--fg-rgb)/70%)]">{o}</span>
                     </label>
                   ))}
@@ -315,8 +355,8 @@ export default function SubscriptionPage() {
                 <label className="text-xs uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3 block">🛡️ Support Level</label>
                 <div className="space-y-2">
                   {["Standard Support", "Unlimited Revisions", "Dedicated Team"].map((o, oi) => (
-                    <label key={oi} className="flex items-center gap-3 p-3 rounded-xl border border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--accent-500)/40%)] cursor-pointer transition-colors">
-                      <input type="radio" name="support" defaultChecked={oi === 0} className="accent-[rgb(var(--accent-500))]" />
+                    <label key={oi} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${support === oi ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/5%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--accent-500)/30%)]"}`}>
+                      <input type="radio" name="support" checked={support === oi} onChange={() => setSupport(oi)} className="accent-[rgb(var(--accent-500))]" />
                       <span className="text-sm text-[rgb(var(--fg-rgb)/70%)]">{o}</span>
                     </label>
                   ))}
@@ -325,8 +365,8 @@ export default function SubscriptionPage() {
             </div>
             <div className="mt-8 p-6 rounded-2xl bg-[rgb(var(--accent-500)/5%)] border border-[rgb(var(--accent-500)/15%)] text-center">
               <p className="text-xs text-[rgb(var(--fg-rgb)/40%)] uppercase tracking-wider font-bold mb-2">Suggested Plan</p>
-              <p className="text-2xl font-extrabold gradient-text">Pro Plan</p>
-              <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] mt-1">$19.9 /mo — 6-hour Express, Unlimited Revisions & Time Account</p>
+              <p className="text-2xl font-extrabold gradient-text">{recommendedNames[recommended]} Plan</p>
+              <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] mt-1">{formatPrice(recommendedPrices[recommended])} /mo — {recommendedDescs[recommended]}</p>
               <p className="text-xs text-[rgb(var(--accent-400))] mt-2 font-bold">🎯 Best match for you</p>
             </div>
           </div>
