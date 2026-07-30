@@ -12,10 +12,10 @@ import ParallaxImage from "@/components/ParallaxImage";
 import ScrollIndicator from "@/components/ScrollIndicator";
 import CountUp from "@/components/CountUp";
 import ServiceCarousel from "@/components/ServiceCarousel";
-import TextReveal, { WordReveal } from "@/components/TextReveal";
+import TextReveal from "@/components/TextReveal";
 import ImageScaleScroll from "@/components/ImageScaleScroll";
 import MagneticButton from "@/components/MagneticButton";
-import { ScrollProgressBar, RevealOnScroll } from "@/components/ImageScaleScroll";
+import { ScrollProgressBar } from "@/components/HorizontalScroll";
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);

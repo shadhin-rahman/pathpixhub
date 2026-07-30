@@ -69,21 +69,23 @@ export function RevealOnScroll({ children, className = "", direction = "up", del
   });
 
   const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const offset = useTransform(scrollYProgress, [0, 1], [60, 0]);
+  const yUp = useTransform(scrollYProgress, [0, 1], [60, 0]);
+  const yDown = useTransform(scrollYProgress, [0, 1], [-60, 0]);
+  const xLeft = useTransform(scrollYProgress, [0, 1], [60, 0]);
+  const xRight = useTransform(scrollYProgress, [0, 1], [-60, 0]);
 
-  const directionMap = {
-    up: { y: offset },
-    down: { y: useTransform(scrollYProgress, [0, 1], [-60, 0]) },
-    left: { x: offset },
-    right: { x: useTransform(scrollYProgress, [0, 1], [-60, 0]) },
+  const transforms: Record<string, object> = {
+    up: { y: yUp },
+    down: { y: yDown },
+    left: { x: xLeft },
+    right: { x: xRight },
   };
 
   return (
     <motion.div
       ref={ref}
-      style={{ opacity, ...directionMap[direction] }}
+      style={{ opacity, ...transforms[direction] }}
       className={className}
-      transition={{ delay }}
     >
       {children}
     </motion.div>
