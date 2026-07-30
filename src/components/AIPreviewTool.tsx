@@ -85,8 +85,8 @@ export default function AIPreviewTool({ className = "" }: AIPreviewToolProps) {
             const i = (y * w + x) * 4;
             const dist = colorDist(data[i], data[i + 1], data[i + 2], bgR, bgG, bgB);
             let alpha = dist < tolerance ? 0 : 1;
-            if (alpha === 1 && dist < tolerance + edge feather) {
-              alpha = (dist - tolerance) / edge feather;
+            if (alpha === 1 && dist < tolerance + edgeFeather) {
+              alpha = (dist - tolerance) / edgeFeather;
             }
             const edgeDist = Math.min(x, y, w - 1 - x, h - 1 - y);
             if (edgeDist < 3) alpha = Math.min(alpha, edgeDist / 3);
