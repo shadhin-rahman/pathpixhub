@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import Script from "next/script";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { services } from "@/data/services";
 import Testimonials from "@/components/Testimonials";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -9,12 +12,30 @@ import ParallaxImage from "@/components/ParallaxImage";
 import ScrollIndicator from "@/components/ScrollIndicator";
 import CountUp from "@/components/CountUp";
 import ServiceCarousel from "@/components/ServiceCarousel";
+import TextReveal, { WordReveal } from "@/components/TextReveal";
+import ImageScaleScroll from "@/components/ImageScaleScroll";
+import MagneticButton from "@/components/MagneticButton";
+import { ScrollProgressBar, RevealOnScroll } from "@/components/ImageScaleScroll";
 
 export default function Home() {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: heroScroll } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const heroScale = useTransform(heroScroll, [0, 1], [1, 1.15]);
+  const heroOpacity = useTransform(heroScroll, [0, 0.8], [1, 0]);
+  const heroY = useTransform(heroScroll, [0, 1], [0, 100]);
+
   return (
     <>
-      <ScrollReveal direction="none" scale={1.05} duration={1.2}>
-      <section className="relative w-full aspect-video max-h-[85vh] overflow-hidden">
+      <ScrollProgressBar />
+
+      <motion.section
+        ref={heroRef}
+        className="relative w-full aspect-video max-h-[85vh] overflow-hidden"
+        style={{ scale: heroScale }}
+      >
         <video
           className="hero-video absolute inset-0 w-full h-full object-cover"
           autoPlay
@@ -25,6 +46,71 @@ export default function Home() {
         >
           <source src="/videos/beauty.mp4" type="video/mp4" />
         </video>
+
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
+
+        <motion.div
+          className="absolute inset-0 flex items-center justify-center"
+          style={{ opacity: heroOpacity, y: heroY }}
+        >
+          <div className="text-center px-6 max-w-5xl">
+            <motion.div
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-card text-xs font-bold text-[rgb(var(--accent-300))] tracking-[0.2em] uppercase mb-8 border-[rgb(var(--accent-500)/30%)]"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
+              <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))] animate-pulse" />
+              Professional Photo Editing
+            </motion.div>
+
+            <motion.h1
+              className="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.9] text-white"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              Pixel Perfect
+              <br />
+              <span className="text-[rgb(var(--accent-400))]">Results</span>
+            </motion.h1>
+
+            <motion.p
+              className="mt-6 text-lg sm:text-xl text-white/70 max-w-lg mx-auto"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+            >
+              Expert photo editing for e-commerce, fashion & advertising.
+            </motion.p>
+
+            <motion.div
+              className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1 }}
+            >
+              <MagneticButton strength={0.15}>
+                <Link
+                  href="/free-trial"
+                  className="group px-10 py-5 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm inline-flex items-center gap-3"
+                >
+                  Start Free Trial
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                </Link>
+              </MagneticButton>
+              <MagneticButton strength={0.15}>
+                <Link
+                  href="/services"
+                  className="px-10 py-5 rounded-full glass-card text-white font-semibold hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm"
+                >
+                  View Services
+                </Link>
+              </MagneticButton>
+            </motion.div>
+          </div>
+        </motion.div>
+
         <div className="absolute bottom-6 left-6 z-10 flex flex-wrap gap-3">
           <span className="px-4 py-2 rounded-full glass-card text-xs font-bold text-[rgb(var(--accent-400))] tracking-wider uppercase border-[rgb(var(--accent-500)/30%)]">
             From $0.39 / Image
@@ -34,130 +120,143 @@ export default function Home() {
           </span>
         </div>
         <ScrollIndicator />
-      </section>
-      </ScrollReveal>
+      </motion.section>
 
       <section className="relative bg-[#1b2d41] overflow-hidden py-3 border-t border-b border-[#1b2d41]">
         <div className="flex gap-16 w-max marquee-trial items-center">
           {Array.from({ length: 8 }, (_, i) => (
             <div key={i} className="flex items-center gap-16">
-              <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
-                <span className="w-1 h-1 rounded-full bg-[#22c55e]" />
-                24/7 Customer Support
-              </span>
-              <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
-                <span className="w-1 h-1 rounded-full bg-[#22c55e]" />
-                12hr Fast Turnaround
-              </span>
-              <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
-                <span className="w-1 h-1 rounded-full bg-[#22c55e]" />
-                From $0.39 / Image
-              </span>
-              <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
-                <span className="w-1 h-1 rounded-full bg-[#22c55e]" />
-                100% Satisfaction
-              </span>
-              <span className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
-                <span className="w-1 h-1 rounded-full bg-[#22c55e]" />
-                Free Trial Available
-              </span>
+              {[
+                "24/7 Customer Support",
+                "12hr Fast Turnaround",
+                "From $0.39 / Image",
+                "100% Satisfaction",
+                "Free Trial Available",
+              ].map((text) => (
+                <span key={text} className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
+                  <span className="w-1 h-1 rounded-full bg-[#22c55e]" />
+                  {text}
+                </span>
+              ))}
             </div>
           ))}
         </div>
       </section>
 
-      <ScrollReveal>
       <section className="relative overflow-hidden mesh-gradient">
         <div className="premium-blur w-[500px] h-[500px] top-[-20%] right-[-10%]" />
-        <div className="relative w-full max-w-7xl mx-auto px-6 py-16 sm:py-20">
+        <div className="relative w-full max-w-7xl mx-auto px-6 py-20 sm:py-28">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-[rgb(var(--accent-300))] text-sm font-medium mb-6">
-              <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))] animate-pulse" />
-              Professional Photo Editing Services
-            </div>
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.95] text-[rgb(var(--fg-rgb))]">
-              Transform Your Photos
-              <br />
-              <span className="text-[rgb(var(--accent-400))]">with Precision</span>
-            </h1>
-            <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/70%)] leading-relaxed max-w-lg">
-              From flawless clipping paths to high-end retouching — pixel-perfect results
-              with fast turnaround for e-commerce, fashion, and advertising.
-            </p>
-            <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
-              <Link
-                href="/free-trial"
-                className="group px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm inline-flex items-center gap-2"
-              >
-                Start Free Trial
-                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-              </Link>
-              <Link
-                href="/services"
-                className="px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-semibold hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm"
-              >
-                View Services
-              </Link>
-            </div>
+            <TextReveal>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-[rgb(var(--accent-300))] text-sm font-medium mb-6">
+                <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))] animate-pulse" />
+                Professional Photo Editing Services
+              </div>
+            </TextReveal>
+            <TextReveal>
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.95] text-[rgb(var(--fg-rgb))]">
+                Transform Your Photos
+                <br />
+                <span className="text-[rgb(var(--accent-400))]">with Precision</span>
+              </h1>
+            </TextReveal>
+            <TextReveal>
+              <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/70%)] leading-relaxed max-w-lg">
+                From flawless clipping paths to high-end retouching — pixel-perfect results
+                with fast turnaround for e-commerce, fashion, and advertising.
+              </p>
+            </TextReveal>
+            <TextReveal>
+              <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
+                <MagneticButton strength={0.12}>
+                  <Link
+                    href="/free-trial"
+                    className="group px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm inline-flex items-center gap-2"
+                  >
+                    Start Free Trial
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                  </Link>
+                </MagneticButton>
+                <MagneticButton strength={0.12}>
+                  <Link
+                    href="/services"
+                    className="px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-semibold hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm"
+                  >
+                    View Services
+                  </Link>
+                </MagneticButton>
+              </div>
+            </TextReveal>
           </div>
         </div>
       </section>
-      </ScrollReveal>
 
-      <ScrollReveal>
-      <section className="py-16 lg:py-24 bg-[var(--bg-alt)]">
+      <section className="py-20 lg:py-28 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col lg:flex-row items-stretch gap-6">
             <div className="w-full lg:w-1/3 shrink-0 flex flex-col justify-center">
-              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">From Our Studio</h2>
-              <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text pb-2">Every Product, Every Angle</h3>
-              <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-lg">
-                Bicycles, vehicles, apparel, or accessories — whatever you shoot, we edit it with the
-                same pixel-perfect care. A rotating look at a few recent categories we work with.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                {["Clipping Path", "Background Removal", "Shadow Creation", "Photo Retouching", "Beauty Airbrushing", "Car Image Editing"].map((tag) => (
-                  <span key={tag} className="px-4 py-2 rounded-full glass-card text-xs font-semibold text-[rgb(var(--fg-rgb)/70%)]">
-                    {tag}
-                  </span>
-                ))}
-              </div>
+              <TextReveal>
+                <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">From Our Studio</h2>
+              </TextReveal>
+              <TextReveal>
+                <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text pb-2">Every Product, Every Angle</h3>
+              </TextReveal>
+              <TextReveal>
+                <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-lg">
+                  Bicycles, vehicles, apparel, or accessories — whatever you shoot, we edit it with the
+                  same pixel-perfect care. A rotating look at a few recent categories we work with.
+                </p>
+              </TextReveal>
+              <TextReveal>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  {["Clipping Path", "Background Removal", "Shadow Creation", "Photo Retouching", "Beauty Airbrushing", "Car Image Editing"].map((tag) => (
+                    <span key={tag} className="px-4 py-2 rounded-full glass-card text-xs font-semibold text-[rgb(var(--fg-rgb)/70%)]">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </TextReveal>
             </div>
             <div className="w-full lg:w-2/3 flex items-stretch">
-              <div className="relative w-full rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]"
-                style={{ aspectRatio: "1600 / 700", maxHeight: "50rem", minHeight: "10rem" }}
-              >
-                {[
-                  { src: "/images/hero-slider/bicycle.jpg", alt: "bicycle photo editing", delay: "0s" },
-                  { src: "/images/hero-slider/car-editing-1.jpg", alt: "car photo editing", delay: "-8s" },
-                  { src: "/images/hero-slider/ecommerce-product.jpg", alt: "ecommerce product photo editing", delay: "-16s" },
-                  { src: "/images/hero-slider/background.jpg", alt: "background removal", delay: "-24s" },
-                  { src: "/images/hero-slider/Beauty retouching.jpg", alt: "beauty retouching", delay: "-32s" },
-                  { src: "/images/hero-slider/Blank poster.jpg", alt: "blank poster", delay: "-40s" },
-                  { src: "/images/hero-slider/Skin Retouch.jpg", alt: "skin retouch", delay: "-48s" },
-                ].map((slide) => (
-                  <div key={slide.src} className="absolute inset-0 flex items-center justify-center" style={{ animation: "hero-fade-7 56s ease-in-out infinite", animationDelay: slide.delay }}>
-                    <Image
-                      src={slide.src}
-                      alt={slide.alt}
-                      fill
-                      className="object-cover mobile-object-contain"
-                      sizes="66vw"
-                    />
-                  </div>
-                ))}
-              </div>
+              <ImageScaleScroll scaleFrom={0.9} scaleTo={1} className="w-full rounded-3xl">
+                <div
+                  className="relative w-full rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]"
+                  style={{ aspectRatio: "1600 / 700", maxHeight: "50rem", minHeight: "10rem" }}
+                >
+                  {[
+                    { src: "/images/hero-slider/bicycle.jpg", alt: "bicycle photo editing", delay: "0s" },
+                    { src: "/images/hero-slider/car-editing-1.jpg", alt: "car photo editing", delay: "-8s" },
+                    { src: "/images/hero-slider/ecommerce-product.jpg", alt: "ecommerce product photo editing", delay: "-16s" },
+                    { src: "/images/hero-slider/background.jpg", alt: "background removal", delay: "-24s" },
+                    { src: "/images/hero-slider/Beauty retouching.jpg", alt: "beauty retouching", delay: "-32s" },
+                    { src: "/images/hero-slider/Blank poster.jpg", alt: "blank poster", delay: "-40s" },
+                    { src: "/images/hero-slider/Skin Retouch.jpg", alt: "skin retouch", delay: "-48s" },
+                  ].map((slide) => (
+                    <div key={slide.src} className="absolute inset-0 flex items-center justify-center" style={{ animation: "hero-fade-7 56s ease-in-out infinite", animationDelay: slide.delay }}>
+                      <Image
+                        src={slide.src}
+                        alt={slide.alt}
+                        fill
+                        className="object-cover mobile-object-contain"
+                        sizes="66vw"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </ImageScaleScroll>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-24 lg:py-32 mesh-gradient">
+      <section className="py-28 lg:py-36 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">What We Offer</h2>
-            <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Services</h3>
-          </div>
+          <TextReveal>
+            <div className="text-center mb-20">
+              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">What We Offer</h2>
+              <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Services</h3>
+            </div>
+          </TextReveal>
           <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {services.map((service) => {
               const softColors = ["#fca5a5","#d8b4fe","#f9a8d4","#fde68a","#93c5fd","#86efac","#fdba74","#5eead4","#a5b4fc","#fda4af"];
@@ -190,7 +289,6 @@ export default function Home() {
           </StaggerReveal>
         </div>
       </section>
-      </ScrollReveal>
 
       <ScrollReveal>
       <section className="py-16 overflow-hidden bg-[var(--bg)] relative border-y border-[rgb(var(--fg-rgb)/8%)]">
@@ -199,78 +297,95 @@ export default function Home() {
       </section>
       </ScrollReveal>
 
-      <ScrollReveal>
-      <section className="py-24 lg:py-32 bg-[var(--bg-alt)]">
+      <section className="py-28 lg:py-36 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="grid grid-cols-2 gap-4">
-              <ParallaxImage src="/images/service-cards/clipping-path.png" alt="clipping path" speed={0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card bg-white/20">
-                <Image src="/images/service-cards/clipping-path.png" alt="clipping path" width={400} height={400} className="w-full h-full object-contain p-4" />
-              </ParallaxImage>
-              <ParallaxImage src="/images/service-cards/background-removal.png" alt="background removal" speed={-0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card mt-8 bg-white/20">
-                <Image src="/images/service-cards/background-removal.png" alt="background removal" width={400} height={400} className="w-full h-full object-contain p-4" />
-              </ParallaxImage>
-              <ParallaxImage src="/images/service-cards/color-change.png" alt="color change" speed={0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card -mt-8 bg-white/20">
-                <Image src="/images/service-cards/color-change.png" alt="color change" width={400} height={400} className="w-full h-full object-contain p-4" />
-              </ParallaxImage>
-              <ParallaxImage src="/images/service-cards/car-editing.png" alt="car editing" speed={-0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card bg-white/20">
-                <Image src="/images/service-cards/car-editing.png" alt="car editing" width={400} height={400} className="w-full h-full object-contain p-4" />
-              </ParallaxImage>
+              <ImageScaleScroll scaleFrom={0.85} scaleTo={1}>
+                <ParallaxImage src="/images/service-cards/clipping-path.png" alt="clipping path" speed={0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card bg-white/20">
+                  <Image src="/images/service-cards/clipping-path.png" alt="clipping path" width={400} height={400} className="w-full h-full object-contain p-4" />
+                </ParallaxImage>
+              </ImageScaleScroll>
+              <ImageScaleScroll scaleFrom={0.85} scaleTo={1}>
+                <ParallaxImage src="/images/service-cards/background-removal.png" alt="background removal" speed={-0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card mt-8 bg-white/20">
+                  <Image src="/images/service-cards/background-removal.png" alt="background removal" width={400} height={400} className="w-full h-full object-contain p-4" />
+                </ParallaxImage>
+              </ImageScaleScroll>
+              <ImageScaleScroll scaleFrom={0.85} scaleTo={1}>
+                <ParallaxImage src="/images/service-cards/color-change.png" alt="color change" speed={0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card -mt-8 bg-white/20">
+                  <Image src="/images/service-cards/color-change.png" alt="color change" width={400} height={400} className="w-full h-full object-contain p-4" />
+                </ParallaxImage>
+              </ImageScaleScroll>
+              <ImageScaleScroll scaleFrom={0.85} scaleTo={1}>
+                <ParallaxImage src="/images/service-cards/car-editing.png" alt="car editing" speed={-0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card bg-white/20">
+                  <Image src="/images/service-cards/car-editing.png" alt="car editing" width={400} height={400} className="w-full h-full object-contain p-4" />
+                </ParallaxImage>
+              </ImageScaleScroll>
             </div>
             <div>
-              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">About Us</h2>
-              <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Your Virtual Photo Editing Studio</h3>
-              <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
-                We provide expert image editing services for e-commerce brands, product photographers,
-                Amazon sellers, and businesses worldwide. From clipping path and background removal
-                to multi-clipping paths, color correction, and photo retouching — we handle every detail with care.
-              </p>
-              <div className="mt-8 grid grid-cols-2 gap-4">
-                <CountUp end={200} suffix="+" label="Projects" />
-                <CountUp end={12} suffix="hr" label="Turnaround" />
-                <CountUp end={100} suffix="%" label="Satisfaction" />
-                <CountUp end={50} suffix="+" label="Clients" />
-              </div>
+              <TextReveal>
+                <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">About Us</h2>
+              </TextReveal>
+              <TextReveal>
+                <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Your Virtual Photo Editing Studio</h3>
+              </TextReveal>
+              <TextReveal>
+                <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
+                  We provide expert image editing services for e-commerce brands, product photographers,
+                  Amazon sellers, and businesses worldwide. From clipping path and background removal
+                  to multi-clipping paths, color correction, and photo retouching — we handle every detail with care.
+                </p>
+              </TextReveal>
+              <TextReveal>
+                <div className="mt-8 grid grid-cols-2 gap-4">
+                  <CountUp end={200} suffix="+" label="Projects" />
+                  <CountUp end={12} suffix="hr" label="Turnaround" />
+                  <CountUp end={100} suffix="%" label="Satisfaction" />
+                  <CountUp end={50} suffix="+" label="Clients" />
+                </div>
+              </TextReveal>
             </div>
           </div>
         </div>
       </section>
-      </ScrollReveal>
 
-      <ScrollReveal>
-      <section className="py-24 lg:py-32 mesh-gradient">
+      <section className="py-28 lg:py-36 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Why Choose Us</h2>
-            <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Built for Speed & Quality</h3>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
+          <TextReveal>
+            <div className="text-center mb-16">
+              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Why Choose Us</h2>
+              <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Built for Speed & Quality</h3>
+            </div>
+          </TextReveal>
+          <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
             {[
               { icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z", title: "12hr Fast Turnaround", desc: "Most orders delivered within 12 hours. Urgent? Ask about our 6hr express service." },
               { icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z", title: "From $0.39 / Image", desc: "Professional editing starting at just $0.39 per image. Volume discounts available." },
               { icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z", title: "100% Satisfaction", desc: "Pixel-perfect quality guaranteed. Free revisions until you're completely satisfied." },
               { icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z", title: "Dedicated Team", desc: "Skilled editors assigned to your project, ensuring consistency and quality every time." },
             ].map((item) => (
-              <div key={item.title} className="glass-card rounded-2xl px-6 py-8 text-center border-[rgb(var(--fg-rgb)/5%)]">
-                <div className="w-12 h-12 rounded-full bg-[rgb(var(--accent-500)/12%)] flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-6 h-6 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} /></svg>
+              <StaggerItem key={item.title}>
+                <div className="glass-card rounded-2xl px-6 py-8 text-center border-[rgb(var(--fg-rgb)/5%)]">
+                  <div className="w-12 h-12 rounded-full bg-[rgb(var(--accent-500)/12%)] flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-6 h-6 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} /></svg>
+                  </div>
+                  <h3 className="font-bold text-[rgb(var(--fg-rgb))]">{item.title}</h3>
+                  <p className="mt-2 text-sm text-[rgb(var(--fg-rgb)/50%)] leading-relaxed">{item.desc}</p>
                 </div>
-                <h3 className="font-bold text-[rgb(var(--fg-rgb))]">{item.title}</h3>
-                <p className="mt-2 text-sm text-[rgb(var(--fg-rgb)/50%)] leading-relaxed">{item.desc}</p>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerReveal>
         </div>
       </section>
-      </ScrollReveal>
 
-      <ScrollReveal>
-      <section className="py-24 lg:py-32 bg-[var(--bg-alt)]">
+      <section className="py-28 lg:py-36 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">How It Works</h2>
-            <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Process</h3>
-          </div>
+          <TextReveal>
+            <div className="text-center mb-20">
+              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">How It Works</h2>
+              <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Process</h3>
+            </div>
+          </TextReveal>
           <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 gap-6" staggerDelay={0.06}>
             {[
               { step: "01", title: "Client Consultation & Order Submission", desc: "We start by understanding your specific needs — background removal, shadow creation, or precise color adjustments — reviewing your instructions before any editing begins." },
@@ -298,58 +413,24 @@ export default function Home() {
 
       <Testimonials />
 
-      <section className="py-24 lg:py-32 bg-[var(--bg-alt)]">
+      <section className="py-28 lg:py-36 bg-[var(--bg-alt)]">
         <div className="max-w-4xl mx-auto px-6">
-          <Script id="faq-schema" type="application/ld+json" strategy="beforeInteractive" dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              mainEntity: [
-                { "@type": "Question", name: "What types of images work best for clipping paths?", acceptedAnswer: { "@type": "Answer", text: "Clipping paths are ideal for images with clear, defined edges. They work well for product photos, e-commerce images, and any subjects that need isolation from the background." } },
-                { "@type": "Question", name: "How does background removal help my business?", acceptedAnswer: { "@type": "Answer", text: "Removing the background can make your product images look cleaner and more professional, helping customers focus directly on the product and improving visual appeal in online stores." } },
-                { "@type": "Question", name: "What is image masking, and when is it used?", acceptedAnswer: { "@type": "Answer", text: "Image masking is a technique for handling complex subjects with soft edges, like hair or fur. It's used when clipping paths alone aren't sufficient for high-detail areas." } },
-                { "@type": "Question", name: "Can I request specific shadow styles for my photos?", acceptedAnswer: { "@type": "Answer", text: "Yes! We offer custom shadow options, including natural, drop, and reflection shadows, to suit your aesthetic needs." } },
-                { "@type": "Question", name: "What does the ghost mannequin service involve?", acceptedAnswer: { "@type": "Answer", text: "Our ghost mannequin service provides a 3D effect for apparel images, giving a lifelike shape to clothes without using a model. It's ideal for fashion and e-commerce brands." } },
-                { "@type": "Question", name: "Do you offer bulk editing services for large image volumes?", acceptedAnswer: { "@type": "Answer", text: "Yes, we offer scalable solutions for businesses with large image volumes. Contact us for custom pricing and service options for high-volume edits." } },
-                { "@type": "Question", name: "What is the turnaround time for your services?", acceptedAnswer: { "@type": "Answer", text: "Our standard turnaround is 12 hours for most jobs. Need it faster? Ask about our 6-hour express service. Contact us for specific timelines." } },
-              ],
-            }),
-          }} />
-          <div className="text-center mb-16">
-            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Good to Know</h2>
-            <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">FAQs</h3>
-            <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)]">General requirements for our image editing services.</p>
-          </div>
+          <TextReveal>
+            <div className="text-center mb-16">
+              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Good to Know</h2>
+              <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">FAQs</h3>
+              <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)]">General requirements for our image editing services.</p>
+            </div>
+          </TextReveal>
           <div className="space-y-4">
             {[
-              {
-                q: "What types of images work best for clipping paths?",
-                a: "Clipping paths are ideal for images with clear, defined edges. They work well for product photos, e-commerce images, and any subjects that need isolation from the background.",
-              },
-              {
-                q: "How does background removal help my business?",
-                a: "Removing the background can make your product images look cleaner and more professional, helping customers focus directly on the product and improving visual appeal in online stores.",
-              },
-              {
-                q: "What is image masking, and when is it used?",
-                a: "Image masking is a technique for handling complex subjects with soft edges, like hair or fur. It's used when clipping paths alone aren't sufficient for high-detail areas.",
-              },
-              {
-                q: "Can I request specific shadow styles for my photos?",
-                a: "Yes! We offer custom shadow options, including natural, drop, and reflection shadows, to suit your aesthetic needs.",
-              },
-              {
-                q: "What does the ghost mannequin service involve?",
-                a: "Our ghost mannequin service provides a 3D effect for apparel images, giving a lifelike shape to clothes without using a model. It's ideal for fashion and e-commerce brands.",
-              },
-              {
-                q: "Do you offer bulk editing services for large image volumes?",
-                a: "Yes, we offer scalable solutions for businesses with large image volumes. Contact us for custom pricing and service options for high-volume edits.",
-              },
-              {
-                q: "What is the turnaround time for your services?",
-                a: "Our standard turnaround is 12 hours for most jobs. Need it faster? Ask about our 6-hour express service. Contact us for specific timelines.",
-              },
+              { q: "What types of images work best for clipping paths?", a: "Clipping paths are ideal for images with clear, defined edges. They work well for product photos, e-commerce images, and any subjects that need isolation from the background." },
+              { q: "How does background removal help my business?", a: "Removing the background can make your product images look cleaner and more professional, helping customers focus directly on the product and improving visual appeal in online stores." },
+              { q: "What is image masking, and when is it used?", a: "Image masking is a technique for handling complex subjects with soft edges, like hair or fur. It's used when clipping paths alone aren't sufficient for high-detail areas." },
+              { q: "Can I request specific shadow styles for my photos?", a: "Yes! We offer custom shadow options, including natural, drop, and reflection shadows, to suit your aesthetic needs." },
+              { q: "What does the ghost mannequin service involve?", a: "Our ghost mannequin service provides a 3D effect for apparel images, giving a lifelike shape to clothes without using a model. It's ideal for fashion and e-commerce brands." },
+              { q: "Do you offer bulk editing services for large image volumes?", a: "Yes, we offer scalable solutions for businesses with large image volumes. Contact us for custom pricing and service options for high-volume edits." },
+              { q: "What is the turnaround time for your services?", a: "Our standard turnaround is 12 hours for most jobs. Need it faster? Ask about our 6-hour express service. Contact us for specific timelines." },
             ].map((item) => (
               <details key={item.q} className="faq-item glass-card rounded-2xl px-6 py-5 border-[rgb(var(--fg-rgb)/5%)]">
                 <summary className="flex items-center justify-between gap-4">
@@ -362,20 +443,27 @@ export default function Home() {
           </div>
         </div>
       </section>
-      </ScrollReveal>
 
-      <section className="py-24 lg:py-32 mesh-gradient text-center">
+      <section className="py-28 lg:py-36 mesh-gradient text-center">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Ready to Start?</h2>
-          <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] text-lg max-w-xl mx-auto">
-            Send us 2 images and we&apos;ll edit them for free — no obligation.
-          </p>
-          <Link
-            href="/free-trial"
-            className="mt-8 inline-flex items-center px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm"
-          >
-            Request Free Trial
-          </Link>
+          <TextReveal>
+            <h2 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Ready to Start?</h2>
+          </TextReveal>
+          <TextReveal>
+            <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] text-lg max-w-xl mx-auto">
+              Send us 2 images and we&apos;ll edit them for free — no obligation.
+            </p>
+          </TextReveal>
+          <TextReveal>
+            <MagneticButton strength={0.15}>
+              <Link
+                href="/free-trial"
+                className="mt-8 inline-flex items-center px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm"
+              >
+                Request Free Trial
+              </Link>
+            </MagneticButton>
+          </TextReveal>
         </div>
       </section>
     </>
