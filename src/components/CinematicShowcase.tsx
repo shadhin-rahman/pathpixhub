@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 
 interface CinematicServiceProps {
   services: {
@@ -28,12 +28,13 @@ const showcaseImages = [
 
 export default function CinematicShowcase({ services }: CinematicServiceProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const CARD_COUNT = showcaseImages.length;
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
 
-  const CARD_COUNT = showcaseImages.length;
   const trackX = useTransform(scrollYProgress, [0, 1], ["0%", `-${(CARD_COUNT - 1) * 75}%`]);
 
   return (
@@ -48,37 +49,32 @@ export default function CinematicShowcase({ services }: CinematicServiceProps) {
         {/* Frame */}
         <div className="flex-1 mx-4 md:mx-8 mb-8 rounded-2xl md:rounded-3xl overflow-hidden border border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--accent-500)/3%)] relative" style={{ perspective: "1200px" }}>
           {/* Horizontal track */}
-          <motion.div
-            style={{ x: trackX }}
-            className="flex h-full"
-          >
+          <motion.div style={{ x: trackX }} className="flex h-full">
             {showcaseImages.map((item, idx) => {
               const service = services.find(s => s.id === item.id) || services[idx];
               return (
-                <ServiceSlide key={item.id} item={item} service={service} index={idx} scrollProgress={scrollYProgress} totalCards={CARD_COUNT} />
+                <ServiceSlide
+                  key={item.id}
+                  item={item}
+                  service={service}
+                  index={idx}
+                  scrollProgress={scrollYProgress}
+                  totalCards={CARD_COUNT}
+                />
               );
             })}
           </motion.div>
 
           {/* Progress dots */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-            {showcaseImages.map((_, idx) => {
-              const start = idx / CARD_COUNT;
-              const end = (idx + 1) / CARD_COUNT;
-              const dotOpacity = useTransform(scrollYProgress, [start - 0.05, start, end - 0.05, end], [0.2, 1, 1, 0.2]);
-              return (
-                <motion.div
-                  key={idx}
-                  style={{ opacity: dotOpacity }}
-                  className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))]"
-                />
-              );
-            })}
+            {Array.from({ length: CARD_COUNT }, (_, idx) => (
+              <Dot key={idx} index={idx} scrollProgress={scrollProgress} totalCards={CARD_COUNT} />
+            ))}
           </div>
 
           {/* Counter */}
           <div className="absolute top-5 right-6 md:top-7 md:right-8 z-10">
-            <Counter scrollProgress={scrollYProgress} totalCards={CARD_COUNT} />
+            <Counter scrollProgress={scrollProgress} totalCards={CARD_COUNT} />
           </div>
         </div>
       </div>
@@ -96,7 +92,7 @@ function ServiceSlide({
   item: { id: string; src: string };
   service: { id: string; title: string; tagline: string };
   index: number;
-  scrollProgress: ReturnType<typeof useScroll>["scrollYProgress"];
+  scrollProgress: MotionValue<number>;
   totalCards: number;
 }) {
   const cardStart = index / totalCards;
@@ -106,22 +102,15 @@ function ServiceSlide({
   const cardScale = useTransform(scrollProgress, [cardStart, cardCenter, cardEnd], [0.85, 1, 0.85]);
   const cardRotateY = useTransform(scrollProgress, [cardStart, cardCenter, cardEnd], [index === 0 ? 0 : 8, 0, index === totalCards - 1 ? 0 : -8]);
   const cardOpacity = useTransform(scrollProgress, [cardStart - 0.05, cardStart + 0.02, cardEnd - 0.02, cardEnd + 0.05], [0.3, 1, 1, 0.3]);
-
   const textX = useTransform(scrollProgress, [cardStart, cardCenter, cardEnd], [40, 0, -40]);
   const textOpacity = useTransform(scrollProgress, [cardStart + 0.02, cardCenter - 0.05, cardCenter + 0.05, cardEnd - 0.02], [0, 1, 1, 0]);
 
   return (
     <motion.div
-      style={{
-        scale: cardScale,
-        rotateY: cardRotateY,
-        opacity: cardOpacity,
-        minWidth: "75vw",
-      }}
+      style={{ scale: cardScale, rotateY: cardRotateY, opacity: cardOpacity, minWidth: "75vw" }}
       className="h-full px-3 md:px-5 flex items-center shrink-0"
     >
       <Link href={`/services/${service.id}`} className="block w-full h-[85%] relative rounded-xl md:rounded-2xl overflow-hidden group">
-        {/* Image */}
         <Image
           src={item.src}
           alt={service.title}
@@ -130,15 +119,8 @@ function ServiceSlide({
           sizes="75vw"
           priority={index < 2}
         />
-
-        {/* Bottom gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-
-        {/* Content */}
-        <motion.div
-          style={{ x: textX, opacity: textOpacity }}
-          className="absolute bottom-0 left-0 right-0 p-6 md:p-10"
-        >
+        <motion.div style={{ x: textX, opacity: textOpacity }} className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
           <span className="text-[10px] md:text-xs font-bold text-[rgb(var(--accent-400))] uppercase tracking-[0.3em]">
             Service {String(index + 1).padStart(2, "0")}
           </span>
@@ -160,31 +142,55 @@ function ServiceSlide({
   );
 }
 
+function Dot({
+  index,
+  scrollProgress,
+  totalCards,
+}: {
+  index: number;
+  scrollProgress: MotionValue<number>;
+  totalCards: number;
+}) {
+  const start = index / totalCards;
+  const end = (index + 1) / totalCards;
+  const opacity = useTransform(scrollProgress, [start - 0.05, start, end - 0.05, end], [0.2, 1, 1, 0.2]);
+  return <motion.div style={{ opacity }} className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))]" />;
+}
+
 function Counter({
   scrollProgress,
   totalCards,
 }: {
-  scrollProgress: ReturnType<typeof useScroll>["scrollYProgress"];
+  scrollProgress: MotionValue<number>;
   totalCards: number;
 }) {
-  const items = Array.from({ length: totalCards }, (_, i) => {
-    const start = i / totalCards;
-    const end = (i + 1) / totalCards;
-    const opacity = useTransform(scrollProgress, [start - 0.05, start, end - 0.05, end], [0, 1, 1, 0]);
-    return { index: i, opacity };
-  });
-
   return (
     <div className="relative w-16 h-8">
-      {items.map(({ index, opacity }) => (
-        <motion.span
-          key={index}
-          style={{ opacity }}
-          className="absolute inset-0 flex items-center justify-center text-sm font-mono font-bold text-white/70"
-        >
-          {String(index + 1).padStart(2, "0")} / {String(totalCards).padStart(2, "0")}
-        </motion.span>
+      {Array.from({ length: totalCards }, (_, i) => (
+        <CounterItem key={i} index={i} scrollProgress={scrollProgress} totalCards={totalCards} />
       ))}
     </div>
+  );
+}
+
+function CounterItem({
+  index,
+  scrollProgress,
+  totalCards,
+}: {
+  index: number;
+  scrollProgress: MotionValue<number>;
+  totalCards: number;
+}) {
+  const start = index / totalCards;
+  const end = (index + 1) / totalCards;
+  const opacity = useTransform(scrollProgress, [start - 0.05, start, end - 0.05, end], [0, 1, 1, 0]);
+  return (
+    <motion.span
+      style={{ opacity }}
+      className="absolute inset-0 flex items-center justify-center text-sm font-mono font-bold text-white/70"
+    >
+      {String(index + 1).padStart(2, "0")} / {String(totalCards).padStart(2, "0")}
+    </motion.span>
   );
 }
