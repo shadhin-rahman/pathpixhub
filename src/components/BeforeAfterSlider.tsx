@@ -130,18 +130,6 @@ export default function BeforeAfterSlider({
           </motion.div>
         </div>
 
-        {/* Labels - always visible, modern */}
-        <div className="absolute top-4 left-4 z-20">
-          <div className="px-3.5 py-1.5 rounded-full bg-black/45 backdrop-blur-md text-white text-[10px] font-bold tracking-[0.2em] uppercase border border-white/15">
-            Before
-          </div>
-        </div>
-        <div className="absolute top-4 right-4 z-20">
-          <div className="px-3.5 py-1.5 rounded-full bg-[rgb(var(--accent-500))]/80 backdrop-blur-md text-white text-[10px] font-bold tracking-[0.2em] uppercase border border-white/15">
-            After
-          </div>
-        </div>
-
         {/* First-time hint */}
         <AnimatePresence>
           {!hasInteracted && !isDragging && (
