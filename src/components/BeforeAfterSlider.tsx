@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback, useEffect } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface BeforeAfterSliderProps {
   beforeSrc: string;
@@ -21,18 +22,19 @@ export default function BeforeAfterSlider({
   const containerRef = useRef<HTMLDivElement>(null);
   const [sliderPos, setSliderPos] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   const updatePosition = useCallback((clientX: number) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = clientX - rect.left;
-    const percent = Math.max(5, Math.min(95, (x / rect.width) * 100));
+    const percent = Math.max(2, Math.min(98, (x / rect.width) * 100));
     setSliderPos(percent);
   }, []);
 
   const handleStart = useCallback((clientX: number) => {
     setIsDragging(true);
+    setHasInteracted(true);
     updatePosition(clientX);
   }, [updatePosition]);
 
@@ -52,12 +54,14 @@ export default function BeforeAfterSlider({
       window.addEventListener("mouseup", handleEnd);
       window.addEventListener("touchmove", handleMove);
       window.addEventListener("touchend", handleEnd);
+      window.addEventListener("touchcancel", handleEnd);
     }
     return () => {
       window.removeEventListener("mousemove", handleMove);
       window.removeEventListener("mouseup", handleEnd);
       window.removeEventListener("touchmove", handleMove);
       window.removeEventListener("touchend", handleEnd);
+      window.removeEventListener("touchcancel", handleEnd);
     };
   }, [isDragging, updatePosition]);
 
@@ -65,74 +69,97 @@ export default function BeforeAfterSlider({
     <div
       ref={containerRef}
       className={`relative overflow-hidden rounded-2xl select-none cursor-ew-resize group ${className}`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => { setIsHovered(false); setIsDragging(false); }}
     >
-      <div className="relative w-full aspect-[4/3]">
+      <div className="relative w-full aspect-[4/3] bg-[var(--bg-subtle)]">
+        {/* After image (base layer) */}
         <Image
           src={afterSrc}
           alt={afterAlt}
           fill
+          priority
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
         />
 
+        {/* Before image (clipped by slider) */}
         <div
-          className="absolute inset-0 overflow-hidden"
-          style={{ width: `${sliderPos}%` }}
+          className="absolute inset-0"
+          style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
         >
           <Image
             src={beforeSrc}
             alt={beforeAlt}
             fill
+            priority
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 50vw"
-            style={{ width: containerRef.current ? `${containerRef.current.offsetWidth}px` : "100vw" }}
           />
         </div>
 
-        {/* Slider line */}
+        {/* Divider line */}
         <div
           className="absolute top-0 bottom-0 z-20"
           style={{ left: `${sliderPos}%`, transform: "translateX(-50%)" }}
         >
-          <div className={`w-px bg-white transition-all duration-200 ${isDragging ? "opacity-100" : "opacity-60"}`} style={{ height: "100%" }} />
-
-          {/* Handle */}
-          <div
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-200 ${
-              isDragging ? "scale-110" : isHovered ? "scale-105" : "scale-100"
-            }`}
-            onMouseDown={handleMouseDown}
-            onTouchStart={handleTouchStart}
-          >
-            <div className="relative">
-              <div className={`w-12 h-12 rounded-full bg-white/95 backdrop-blur-md shadow-2xl flex items-center justify-center border border-white/50 transition-all ${isDragging ? "shadow-[0_0_20px_rgba(255,255,255,0.3)]" : ""}`}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className="text-gray-700">
-                  <path d="M8 18L2 12L8 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M16 6L22 12L16 18" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-              {/* Pulse ring */}
-              {!isDragging && !isHovered && (
-                <div className="absolute inset-0 rounded-full border-2 border-white/40 animate-ping" style={{ animationDuration: "2s" }} />
-              )}
-            </div>
+          <div className={`relative h-full w-[2px] ${isDragging ? "bg-white" : "bg-white/90"} shadow-[0_0_12px_rgba(255,255,255,0.5)]`}>
+            <div className="absolute inset-y-0 -left-1 w-1 bg-white/20 blur-sm" />
           </div>
         </div>
 
-        {/* Labels */}
-        <div className={`absolute top-4 left-4 px-3 py-1.5 rounded-full bg-black/50 text-white text-[10px] font-bold tracking-[0.15em] uppercase backdrop-blur-md transition-all duration-300 ${isHovered || sliderPos > 20 ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}>
-          Before
-        </div>
-        <div className={`absolute top-4 right-4 px-3 py-1.5 rounded-full bg-[rgb(var(--accent-500))]/80 text-white text-[10px] font-bold tracking-[0.15em] uppercase backdrop-blur-md transition-all duration-300 ${isHovered || sliderPos < 80 ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}>
-          After
+        {/* Modern handle */}
+        <div
+          className="absolute z-30 top-1/2 -translate-y-1/2"
+          style={{ left: `${sliderPos}%`, transform: "translate(-50%, -50%)" }}
+          onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
+        >
+          <motion.div
+            animate={isDragging ? { scale: 1.15 } : { scale: 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center cursor-grab active:cursor-grabbing transition-shadow duration-300 ${
+              isDragging
+                ? "bg-white shadow-[0_4px_24px_rgba(0,0,0,0.35)]"
+                : "bg-white/95 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[0_4px_28px_rgba(0,0,0,0.35)]"
+            }`}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-gray-800">
+              <path d="M8.5 7L4 11.5L8.5 16" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M15.5 16L20 11.5L15.5 7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+              <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" opacity="0.4"/>
+            </svg>
+          </motion.div>
         </div>
 
-        {/* Bottom instruction */}
-        <div className={`absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-black/40 text-white/80 text-[10px] font-medium backdrop-blur-md transition-all duration-300 ${!isDragging && isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}>
-          Drag to compare
+        {/* Labels - always visible, modern */}
+        <div className="absolute top-4 left-4 z-20">
+          <div className="px-3.5 py-1.5 rounded-full bg-black/45 backdrop-blur-md text-white text-[10px] font-bold tracking-[0.2em] uppercase border border-white/15">
+            Before
+          </div>
         </div>
+        <div className="absolute top-4 right-4 z-20">
+          <div className="px-3.5 py-1.5 rounded-full bg-[rgb(var(--accent-500))]/80 backdrop-blur-md text-white text-[10px] font-bold tracking-[0.2em] uppercase border border-white/15">
+            After
+          </div>
+        </div>
+
+        {/* First-time hint */}
+        <AnimatePresence>
+          {!hasInteracted && !isDragging && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20"
+            >
+              <div className="px-4 py-2 rounded-full bg-black/45 backdrop-blur-md text-white/90 text-[11px] font-medium flex items-center gap-2 border border-white/10">
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 11V7a5 5 0 0110 0v4M5 11h14v7a2 2 0 01-2 2H7a2 2 0 01-2-2v-7z"/>
+                </svg>
+                Drag to compare
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
