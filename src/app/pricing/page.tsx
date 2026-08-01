@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { services, priceMap } from "@/data/services";
 
@@ -22,6 +22,42 @@ const cardColors = [
 
 const slideItems = [...services, ...services, ...services];
 const trialRepeats = Array.from({ length: 10 }, (_, i) => i);
+
+function ShowcaseCard({ src, beforeSrc, alt, color }: { src: string; beforeSrc: string; alt: string; color: string }) {
+  const [aspect, setAspect] = useState<number | null>(null);
+
+  return (
+    <div className="rounded-2xl p-4 pb-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+      style={{ backgroundColor: color }}
+    >
+      <div
+        className="relative w-full rounded-xl overflow-hidden bg-white/10"
+        style={{ aspectRatio: aspect ?? "4 / 3" }}
+      >
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="object-cover group-hover:opacity-0 transition-opacity duration-500"
+          sizes="(max-width: 768px) 256px, 320px"
+          onLoad={(e) => {
+            const img = e.target as HTMLImageElement;
+            if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+              setAspect(img.naturalWidth / img.naturalHeight);
+            }
+          }}
+        />
+        <Image
+          src={beforeSrc}
+          alt={`${alt} before`}
+          fill
+          className="object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          sizes="(max-width: 768px) 256px, 320px"
+        />
+      </div>
+    </div>
+  );
+}
 
 export default function PricingPage() {
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -152,32 +188,18 @@ export default function PricingPage() {
             const ci = i % cardColors.length;
             return (
               <div key={`${s.id}-${i}`} className="flex-shrink-0 w-64 md:w-80 group">
-                <div className="rounded-2xl p-4 pb-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-                  style={{ backgroundColor: cardColors[ci] }}
+                <ShowcaseCard
+                  src={`/images/service-showcase/${s.id}.png`}
+                  beforeSrc={`/images/service-showcase/${s.id}-before.png`}
+                  alt={s.title}
+                  color={cardColors[ci]}
+                />
+                <Link
+                  href={`/services/${s.id}`}
+                  className="block mt-3 text-[rgb(var(--fg-rgb)/80%)] font-bold text-sm text-center leading-tight hover:text-[rgb(var(--accent-500))] transition-colors"
                 >
-                  <div className="relative w-full h-48 md:h-56 rounded-xl overflow-hidden bg-white/10">
-                    <Image
-                      src={`/images/service-showcase/${s.id}.png`}
-                      alt={s.title}
-                      fill
-                      className="object-cover group-hover:opacity-0 transition-opacity duration-500"
-                      sizes="(max-width: 768px) 256px, 320px"
-                    />
-                    <Image
-                      src={`/images/service-showcase/${s.id}-before.png`}
-                      alt={`${s.title} before`}
-                      fill
-                      className="object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                      sizes="(max-width: 768px) 256px, 320px"
-                    />
-                  </div>
-                  <Link
-                    href={`/services/${s.id}`}
-                    className="block mt-3 text-[rgb(var(--fg-rgb)/80%)] font-bold text-sm text-center leading-tight hover:text-[rgb(var(--accent-500))] transition-colors"
-                  >
-                    {s.title}
-                  </Link>
-                </div>
+                  {s.title}
+                </Link>
               </div>
             );
           })}
