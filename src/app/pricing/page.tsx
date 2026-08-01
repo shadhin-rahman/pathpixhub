@@ -185,8 +185,8 @@ export default function PricingPage() {
             return (
               <div key={`${s.id}-${i}`} className="flex-shrink-0 w-64 md:w-80 group">
                 <ShowcaseCard
-                  src={`/images/service-showcase/${s.id}.png`}
-                  beforeSrc={`/images/service-showcase/${s.id}-before.png`}
+                  src={`/images/pricing/${s.id}.png`}
+                  beforeSrc={`/images/pricing/${s.id}-before.png`}
                   alt={s.title}
                   color={cardColors[ci]}
                 />

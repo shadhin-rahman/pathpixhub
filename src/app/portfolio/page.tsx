@@ -7,15 +7,15 @@ export const metadata: Metadata = {
 };
 
 const portfolioItems = [
-  { title: "Clipping Path", img: "/images/service-showcase/clipping-path.png", category: "Cutouts" },
-  { title: "Ghost Mannequin", img: "/images/service-showcase/ghost-mannequin.png", category: "Apparel" },
-  { title: "Wrinkle Removal", img: "/images/service-showcase/photo-retouching.png", category: "Retouching" },
-  { title: "Jewelry Editing", img: "/images/service-showcase/ecommerce-editing.png", category: "Product" },
-  { title: "Color Change", img: "/images/service-showcase/color-change.png", category: "Color" },
-  { title: "Shadow Creation", img: "/images/service-showcase/shadow-creation.png", category: "Shadow" },
-  { title: "Background Removal", img: "/images/service-showcase/background-removal.png", category: "Background" },
-  { title: "Image Masking", img: "/images/service-showcase/image-masking.png", category: "Masking" },
-  { title: "Multi Clipping Path", img: "/images/service-showcase/multi-clipping-path.png", category: "Clipping" },
+  { title: "Clipping Path", img: "/images/before-after/clipping-path.png", category: "Cutouts" },
+  { title: "Ghost Mannequin", img: "/images/before-after/ghost-mannequin.png", category: "Apparel" },
+  { title: "Wrinkle Removal", img: "/images/before-after/photo-retouching.png", category: "Retouching" },
+  { title: "Jewelry Editing", img: "/images/before-after/ecommerce-editing.png", category: "Product" },
+  { title: "Color Change", img: "/images/before-after/color-change.png", category: "Color" },
+  { title: "Shadow Creation", img: "/images/before-after/shadow-creation.png", category: "Shadow" },
+  { title: "Background Removal", img: "/images/before-after/background-removal.png", category: "Background" },
+  { title: "Image Masking", img: "/images/before-after/image-masking.png", category: "Masking" },
+  { title: "Multi Clipping Path", img: "/images/before-after/multi-clipping-path.png", category: "Clipping" },
 ];
 
 export default function PortfolioPage() {

@@ -40,7 +40,7 @@ export default function ServicesPage() {
                 >
                   <div className="relative aspect-[4/3] overflow-hidden bg-white/20">
                     <Image
-                      src={`/images/service-showcase/${service.id}.png`}
+                      src={`/images/before-after/${service.id}.png`}
                       alt={service.title}
                       fill
                       className="object-contain p-6 group-hover:scale-105 transition-transform duration-700"

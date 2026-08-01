@@ -14,16 +14,16 @@ interface CinematicServiceProps {
 }
 
 const showcaseImages = [
-  { id: "clipping-path", src: "/images/service-showcase/clipping-path-cover.jpg" },
-  { id: "background-removal", src: "/images/service-showcase/background-removal-cover.jpg" },
-  { id: "photo-retouching", src: "/images/service-showcase/photo-retouching-cover.jpg" },
-  { id: "multi-clipping-path", src: "/images/service-showcase/multi-clipping-path-cover.jpg" },
-  { id: "color-change", src: "/images/service-showcase/color-change-cover.jpg" },
-  { id: "car-editing", src: "/images/service-showcase/car-editing-cover.jpg" },
-  { id: "ghost-mannequin", src: "/images/service-showcase/ghost-mannequin-cover.jpg" },
-  { id: "image-masking", src: "/images/service-showcase/image-masking-cover.jpg" },
-  { id: "shadow-creation", src: "/images/service-showcase/shadow-creation-cover.jpg" },
-  { id: "ecommerce-editing", src: "/images/service-showcase/ecommerce-editing-cover.jpg" },
+  { id: "clipping-path", src: "/images/covers/clipping-path-cover.jpg" },
+  { id: "background-removal", src: "/images/covers/background-removal-cover.jpg" },
+  { id: "photo-retouching", src: "/images/covers/photo-retouching-cover.jpg" },
+  { id: "multi-clipping-path", src: "/images/covers/multi-clipping-path-cover.jpg" },
+  { id: "color-change", src: "/images/covers/color-change-cover.jpg" },
+  { id: "car-editing", src: "/images/covers/car-editing-cover.jpg" },
+  { id: "ghost-mannequin", src: "/images/covers/ghost-mannequin-cover.jpg" },
+  { id: "image-masking", src: "/images/covers/image-masking-cover.jpg" },
+  { id: "shadow-creation", src: "/images/covers/shadow-creation-cover.jpg" },
+  { id: "ecommerce-editing", src: "/images/covers/ecommerce-editing-cover.jpg" },
 ];
 
 export default function CinematicShowcase({ services }: CinematicServiceProps) {

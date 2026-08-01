@@ -79,7 +79,7 @@ export const services: Service[] = [
     audience: ["Online retailers and marketplace sellers", "Product photographers", "Marketing and advertising teams", "Real estate agents"],
     industries: ["E-commerce & marketplace", "Real estate & property", "Fashion & apparel", "Food & beverage"],
     icon: "🖼️",
-    image: "/images/service-showcase/background-removal.png",
+    image: "/images/before-after/background-removal.png",
   },
   {
     id: "image-masking",
@@ -126,7 +126,7 @@ export const services: Service[] = [
     audience: ["E-commerce product photographers", "Catalog and brochure designers", "Furniture and home decor brands", "Automotive listing platforms"],
     industries: ["E-commerce & retail", "Furniture & home decor", "Electronics & gadgets", "Automotive"],
     icon: "🌓",
-    image: "/images/service-showcase/shadow-creation.png",
+    image: "/images/before-after/shadow-creation.png",
   },
   {
     id: "ghost-mannequin",

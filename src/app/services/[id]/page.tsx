@@ -29,7 +29,7 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
     <>
       <section className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden">
         <Image
-          src={`/images/service-showcase/${service.id}-cover.jpg`}
+          src={`/images/covers/${service.id}-cover.jpg`}
           alt={service.title}
           fill
           className="object-cover"

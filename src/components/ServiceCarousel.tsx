@@ -107,7 +107,7 @@ export default function ServiceCarousel({ services }: { services: Service[] }) {
             >
               <div className="relative w-full h-48 md:h-56 rounded-xl overflow-hidden bg-white/30">
                 <Image
-                  src={`/images/service-showcase/${s.id}.png`}
+                  src={`/images/before-after/${s.id}.png`}
                   alt={s.title}
                   fill
                   draggable={false}
@@ -115,7 +115,7 @@ export default function ServiceCarousel({ services }: { services: Service[] }) {
                   sizes="(max-width: 768px) 256px, 320px"
                 />
                 <Image
-                  src={`/images/service-showcase/${s.id}-before.png`}
+                  src={`/images/before-after/${s.id}-before.png`}
                   alt={`${s.title} before`}
                   fill
                   draggable={false}
