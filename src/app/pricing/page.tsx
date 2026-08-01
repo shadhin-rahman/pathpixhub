@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { ChevronRight } from "lucide-react";
 import { services, priceMap } from "@/data/services";
 
@@ -24,36 +24,50 @@ const slideItems = [...services, ...services, ...services];
 const trialRepeats = Array.from({ length: 10 }, (_, i) => i);
 
 function ShowcaseCard({ src, beforeSrc, alt, color }: { src: string; beforeSrc: string; alt: string; color: string }) {
-  const [aspect, setAspect] = useState<number | null>(null);
-
   return (
     <div className="rounded-2xl p-4 pb-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
       style={{ backgroundColor: color }}
     >
-      <div
-        className="relative w-full rounded-xl overflow-hidden bg-white/10"
-        style={{ aspectRatio: aspect ?? "4 / 3" }}
-      >
+      <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-white/10">
+        {/* Blurred After backdrop - fills the whole uniform box */}
         <Image
           src={src}
-          alt={alt}
+          alt=""
+          aria-hidden
           fill
-          className="object-cover group-hover:opacity-0 transition-opacity duration-500"
-          sizes="(max-width: 768px) 256px, 320px"
-          onLoad={(e) => {
-            const img = e.target as HTMLImageElement;
-            if (img.naturalWidth > 0 && img.naturalHeight > 0) {
-              setAspect(img.naturalWidth / img.naturalHeight);
-            }
-          }}
-        />
-        <Image
-          src={beforeSrc}
-          alt={`${alt} before`}
-          fill
-          className="object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          className="object-cover blur-2xl scale-110 opacity-70"
           sizes="(max-width: 768px) 256px, 320px"
         />
+
+        {/* After image - shown by default, never cropped */}
+        <div className="absolute inset-0 transition-opacity duration-500 group-hover:opacity-0">
+          <Image
+            src={src}
+            alt={alt}
+            fill
+            className="object-contain"
+            sizes="(max-width: 768px) 256px, 320px"
+          />
+        </div>
+
+        {/* Before image - fades in on hover, never cropped */}
+        <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+          <Image
+            src={beforeSrc}
+            alt=""
+            aria-hidden
+            fill
+            className="object-cover blur-2xl scale-110 opacity-70"
+            sizes="(max-width: 768px) 256px, 320px"
+          />
+          <Image
+            src={beforeSrc}
+            alt={`${alt} before`}
+            fill
+            className="object-contain absolute inset-0"
+            sizes="(max-width: 768px) 256px, 320px"
+          />
+        </div>
       </div>
     </div>
   );
