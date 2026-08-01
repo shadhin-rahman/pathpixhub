@@ -22,7 +22,6 @@ export default function BeforeAfterSlider({
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
-  const [aspectRatio, setAspectRatio] = useState<number | null>(null);
   const autoplayRef = useRef(true);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const controlsRef = useRef<ReturnType<typeof animate> | null>(null);
@@ -128,34 +127,45 @@ export default function BeforeAfterSlider({
       ref={containerRef}
       className={`relative overflow-hidden rounded-2xl select-none cursor-ew-resize group ${className}`}
     >
-      <div
-        className="relative w-full bg-[var(--bg-subtle)]"
-        style={{ aspectRatio: aspectRatio ?? "4 / 3" }}
-      >
-        {/* After image (base layer) - shown by default */}
+      <div className="relative w-full aspect-[4/3] bg-[var(--bg-subtle)] overflow-hidden">
+        {/* Blurred After backdrop - fills the whole uniform box */}
         <Image
           src={afterSrc}
-          alt={afterAlt}
+          alt=""
+          aria-hidden
           fill
-          priority
-          className="object-cover"
+          className="object-cover blur-2xl scale-110 opacity-70"
           sizes="(max-width: 768px) 100vw, 50vw"
-          onLoad={(e) => {
-            const img = e.target as HTMLImageElement;
-            if (img.naturalWidth > 0 && img.naturalHeight > 0) {
-              setAspectRatio(img.naturalWidth / img.naturalHeight);
-            }
-          }}
         />
 
-        {/* Before image - revealed on the left by sweep or drag */}
+        {/* After image (base layer) - shown by default, never cropped */}
+        <div className="absolute inset-0">
+          <Image
+            src={afterSrc}
+            alt={afterAlt}
+            fill
+            priority
+            className="object-contain"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        </div>
+
+        {/* Before image - revealed on the left by sweep or drag, never cropped */}
         <motion.div className="absolute inset-0" style={{ clipPath }}>
+          <Image
+            src={beforeSrc}
+            alt=""
+            aria-hidden
+            fill
+            className="object-cover blur-2xl scale-110 opacity-70"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
           <Image
             src={beforeSrc}
             alt={beforeAlt}
             fill
             priority
-            className="object-cover"
+            className="object-contain absolute inset-0"
             sizes="(max-width: 768px) 100vw, 50vw"
           />
         </motion.div>
