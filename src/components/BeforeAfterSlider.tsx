@@ -128,44 +128,24 @@ export default function BeforeAfterSlider({
       className={`relative overflow-hidden rounded-2xl select-none cursor-ew-resize group ${className}`}
     >
       <div className="relative w-full aspect-[4/3] bg-[var(--bg-subtle)] overflow-hidden">
-        {/* Blurred After backdrop - fills the whole uniform box */}
+        {/* After image (base layer) - shown by default */}
         <Image
           src={afterSrc}
-          alt=""
-          aria-hidden
+          alt={afterAlt}
           fill
-          className="object-cover blur-2xl scale-110 opacity-70"
+          priority
+          className="object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
         />
 
-        {/* After image (base layer) - shown by default, never cropped */}
-        <div className="absolute inset-0">
-          <Image
-            src={afterSrc}
-            alt={afterAlt}
-            fill
-            priority
-            className="object-contain"
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
-        </div>
-
-        {/* Before image - revealed on the left by sweep or drag, never cropped */}
+        {/* Before image - revealed on the left by sweep or drag */}
         <motion.div className="absolute inset-0" style={{ clipPath }}>
-          <Image
-            src={beforeSrc}
-            alt=""
-            aria-hidden
-            fill
-            className="object-cover blur-2xl scale-110 opacity-70"
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
           <Image
             src={beforeSrc}
             alt={beforeAlt}
             fill
             priority
-            className="object-contain absolute inset-0"
+            className="object-cover"
             sizes="(max-width: 768px) 100vw, 50vw"
           />
         </motion.div>

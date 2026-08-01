@@ -29,42 +29,24 @@ function ShowcaseCard({ src, beforeSrc, alt, color }: { src: string; beforeSrc: 
       style={{ backgroundColor: color }}
     >
       <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-white/10">
-        {/* Blurred After backdrop - fills the whole uniform box */}
-        <Image
-          src={src}
-          alt=""
-          aria-hidden
-          fill
-          className="object-cover blur-2xl scale-110 opacity-70"
-          sizes="(max-width: 768px) 256px, 320px"
-        />
-
-        {/* After image - shown by default, never cropped */}
+        {/* After image - shown by default */}
         <div className="absolute inset-0 transition-opacity duration-500 group-hover:opacity-0">
           <Image
             src={src}
             alt={alt}
             fill
-            className="object-contain"
+            className="object-cover"
             sizes="(max-width: 768px) 256px, 320px"
           />
         </div>
 
-        {/* Before image - fades in on hover, never cropped */}
+        {/* Before image - fades in on hover */}
         <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-          <Image
-            src={beforeSrc}
-            alt=""
-            aria-hidden
-            fill
-            className="object-cover blur-2xl scale-110 opacity-70"
-            sizes="(max-width: 768px) 256px, 320px"
-          />
           <Image
             src={beforeSrc}
             alt={`${alt} before`}
             fill
-            className="object-contain absolute inset-0"
+            className="object-cover"
             sizes="(max-width: 768px) 256px, 320px"
           />
         </div>
