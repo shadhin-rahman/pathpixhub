@@ -2,7 +2,7 @@
 
 import { useRef, useState, useCallback, useEffect } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, animate, useMotionValue, useTransform } from "framer-motion";
 
 interface BeforeAfterSliderProps {
   beforeSrc: string;
@@ -20,23 +20,74 @@ export default function BeforeAfterSlider({
   className = "",
 }: BeforeAfterSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [sliderPos, setSliderPos] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const autoplayRef = useRef(true);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const controlsRef = useRef<ReturnType<typeof animate> | null>(null);
 
-  const updatePosition = useCallback((clientX: number) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const percent = Math.max(2, Math.min(98, (x / rect.width) * 100));
-    setSliderPos(percent);
+  const sweep = useMotionValue(0);
+  const sweepPercent = useTransform(sweep, (v) => `${v}%`);
+  const clipPath = useTransform(sweep, (v) => `inset(0 ${100 - v}% 0 0 round 0 14px 14px 0)`);
+
+  const stopAll = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    controlsRef.current?.stop();
   }, []);
 
-  const handleStart = useCallback((clientX: number) => {
-    setIsDragging(true);
-    setHasInteracted(true);
-    updatePosition(clientX);
-  }, [updatePosition]);
+  const sweepForward = useCallback(() => {
+    controlsRef.current = animate(sweep, 85, {
+      duration: 1.8,
+      ease: "easeInOut",
+      onComplete: () => {
+        controlsRef.current = animate(sweep, 0, {
+          duration: 1.6,
+          ease: "easeInOut",
+          delay: 0.6,
+          onComplete: () => {
+            timeoutRef.current = setTimeout(sweepForward, 1600);
+          },
+        });
+      },
+    });
+  }, [sweep]);
+
+  const startAutoplay = useCallback(() => {
+    if (!autoplayRef.current) return;
+    stopAll();
+    sweep.set(0);
+    sweepForward();
+  }, [stopAll, sweep, sweepForward]);
+
+  useEffect(() => {
+    startAutoplay();
+    return () => stopAll();
+  }, [startAutoplay, stopAll]);
+
+  const updatePosition = useCallback(
+    (clientX: number) => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const percent = Math.max(2, Math.min(98, (x / rect.width) * 100));
+      sweep.set(percent);
+    },
+    [sweep]
+  );
+
+  const handleStart = useCallback(
+    (clientX: number) => {
+      autoplayRef.current = false;
+      stopAll();
+      setIsDragging(true);
+      setHasInteracted(true);
+      updatePosition(clientX);
+    },
+    [stopAll, updatePosition]
+  );
 
   const handleMouseDown = (e: React.MouseEvent) => handleStart(e.clientX);
   const handleTouchStart = (e: React.TouchEvent) => handleStart(e.touches[0].clientX);
@@ -47,7 +98,13 @@ export default function BeforeAfterSlider({
       const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
       updatePosition(clientX);
     };
-    const handleEnd = () => setIsDragging(false);
+    const handleEnd = () => {
+      setIsDragging(false);
+      timeoutRef.current = setTimeout(() => {
+        autoplayRef.current = true;
+        startAutoplay();
+      }, 5000);
+    };
 
     if (isDragging) {
       window.addEventListener("mousemove", handleMove);
@@ -63,7 +120,7 @@ export default function BeforeAfterSlider({
       window.removeEventListener("touchend", handleEnd);
       window.removeEventListener("touchcancel", handleEnd);
     };
-  }, [isDragging, updatePosition]);
+  }, [isDragging, updatePosition, startAutoplay]);
 
   return (
     <div
@@ -71,7 +128,7 @@ export default function BeforeAfterSlider({
       className={`relative overflow-hidden rounded-2xl select-none cursor-ew-resize group ${className}`}
     >
       <div className="relative w-full aspect-[4/3] bg-[var(--bg-subtle)]">
-        {/* After image (base layer) */}
+        {/* After image (base layer) - shown by default */}
         <Image
           src={afterSrc}
           alt={afterAlt}
@@ -81,11 +138,8 @@ export default function BeforeAfterSlider({
           sizes="(max-width: 768px) 100vw, 50vw"
         />
 
-        {/* Before image (clipped by slider) */}
-        <div
-          className="absolute inset-0"
-          style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
-        >
+        {/* Before image - revealed on the left by sweep or drag */}
+        <motion.div className="absolute inset-0" style={{ clipPath }}>
           <Image
             src={beforeSrc}
             alt={beforeAlt}
@@ -94,29 +148,19 @@ export default function BeforeAfterSlider({
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 50vw"
           />
-        </div>
-
-        {/* Divider line */}
-        <div
-          className="absolute top-0 bottom-0 z-20"
-          style={{ left: `${sliderPos}%`, transform: "translateX(-50%)" }}
-        >
-          <div className={`relative h-full w-[2px] ${isDragging ? "bg-white" : "bg-white/90"} shadow-[0_0_12px_rgba(255,255,255,0.5)]`}>
-            <div className="absolute inset-y-0 -left-1 w-1 bg-white/20 blur-sm" />
-          </div>
-        </div>
+        </motion.div>
 
         {/* Modern handle */}
-        <div
-          className="absolute z-30 top-1/2 -translate-y-1/2"
-          style={{ left: `${sliderPos}%`, transform: "translate(-50%, -50%)" }}
+        <motion.div
+          className="absolute z-30 top-1/2 cursor-grab active:cursor-grabbing"
+          style={{ left: sweepPercent, x: "-50%", y: "-50%" }}
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
         >
           <motion.div
             animate={isDragging ? { scale: 1.15 } : { scale: 1 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center cursor-grab active:cursor-grabbing transition-shadow duration-300 ${
+            className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-shadow duration-300 ${
               isDragging
                 ? "bg-white shadow-[0_4px_24px_rgba(0,0,0,0.35)]"
                 : "bg-white/95 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[0_4px_28px_rgba(0,0,0,0.35)]"
@@ -128,7 +172,7 @@ export default function BeforeAfterSlider({
               <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" opacity="0.4"/>
             </svg>
           </motion.div>
-        </div>
+        </motion.div>
 
         {/* First-time hint */}
         <AnimatePresence>
@@ -141,9 +185,9 @@ export default function BeforeAfterSlider({
             >
               <div className="px-4 py-2 rounded-full bg-black/45 backdrop-blur-md text-white/90 text-[11px] font-medium flex items-center gap-2 border border-white/10">
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 11V7a5 5 0 0110 0v4M5 11h14v7a2 2 0 01-2 2H7a2 2 0 01-2-2v-7z"/>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/>
                 </svg>
-                Drag to compare
+                Drag to reveal Before
               </div>
             </motion.div>
           )}
