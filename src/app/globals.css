@@ -203,7 +203,7 @@
 
 @keyframes marquee-slide {
   from { transform: translateX(0); }
-  to { transform: translateX(-3440px); }
+  to { transform: translateX(-33.3333%); }
 }
 
 @keyframes marquee-trial {
