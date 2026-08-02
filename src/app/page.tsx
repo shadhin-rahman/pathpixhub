@@ -18,7 +18,6 @@ import { ScrollProgressBar } from "@/components/HorizontalScroll";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
 import CinematicShowcase from "@/components/CinematicShowcase";
 import BeforeAfterHover from "@/components/BeforeAfterHover";
-import ColorVariants from "@/components/ColorVariants";
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -193,6 +192,7 @@ export default function Home() {
               { before: "/images/before-after/background-removal-before.jpg", after: "/images/before-after/background-removal-after.jpg", label: "Background Removal" },
               { before: "/images/before-after/photo-retouching-before.jpg", after: "/images/before-after/photo-retouching-after.jpg", label: "Photo Retouching" },
               { before: "/images/before-after/multi-clipping-path-before.jpg", after: "/images/before-after/multi-clipping-path-after.jpg", label: "Multi Clipping Path" },
+              { before: "/images/before-after/color-change-before.jpg", after: "/images/before-after/color-change-after.jpg", label: "Color Change" },
               { before: "/images/before-after/car-editing-before.jpg", after: "/images/before-after/car-editing-after.jpg", label: "Car Editing" },
               { before: "/images/before-after/ghost-mannequin-before.jpg", after: "/images/before-after/ghost-mannequin-after.jpg", label: "Ghost Mannequin" },
               { before: "/images/before-after/image-masking-before.jpg", after: "/images/before-after/image-masking-after.png", label: "Image Masking" },
@@ -204,10 +204,6 @@ export default function Home() {
                 <p className="text-center mt-4 text-sm font-semibold text-[rgb(var(--fg-rgb)/60%)]">{item.label}</p>
               </TextReveal>
             ))}
-            <TextReveal>
-              <ColorVariants />
-              <p className="text-center mt-4 text-sm font-semibold text-[rgb(var(--fg-rgb)/60%)]">Color Change</p>
-            </TextReveal>
           </div>
         </div>
       </section>
