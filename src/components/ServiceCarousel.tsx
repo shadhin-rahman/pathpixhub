@@ -4,6 +4,7 @@ import { useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Service } from "@/data/services";
+import { serviceImagePath } from "@/data/services";
 
 const SOFT_COLORS = ["#fca5a5", "#d8b4fe", "#f9a8d4", "#fde68a", "#93c5fd", "#86efac", "#fdba74", "#5eead4", "#a5b4fc", "#fda4af"];
 
@@ -107,7 +108,7 @@ export default function ServiceCarousel({ services }: { services: Service[] }) {
             >
               <div className="relative w-full h-48 md:h-56 rounded-xl overflow-hidden bg-white/30">
                 <Image
-                  src={`/images/before-after/${s.id}.png`}
+                  src={serviceImagePath(s.id, "before-after", "after")}
                   alt={s.title}
                   fill
                   draggable={false}
@@ -115,7 +116,7 @@ export default function ServiceCarousel({ services }: { services: Service[] }) {
                   sizes="(max-width: 768px) 256px, 320px"
                 />
                 <Image
-                  src={`/images/before-after/${s.id}-before.png`}
+                  src={serviceImagePath(s.id, "before-after", "before")}
                   alt={`${s.title} before`}
                   fill
                   draggable={false}

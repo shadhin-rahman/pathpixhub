@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { services, priceMap } from "@/data/services";
+import { services, priceMap, serviceImagePath } from "@/data/services";
 import ScrollReveal from "@/components/ScrollReveal";
 import StaggerReveal, { StaggerItem } from "@/components/StaggerReveal";
 
@@ -40,7 +40,7 @@ export default function ServicesPage() {
                 >
                   <div className="relative aspect-[4/3] overflow-hidden bg-white/20">
                     <Image
-                      src={`/images/before-after/${service.id}.png`}
+                      src={serviceImagePath(service.id, "before-after", "after")}
                       alt={service.title}
                       fill
                       className="object-contain p-6 group-hover:scale-105 transition-transform duration-700"

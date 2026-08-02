@@ -7,15 +7,15 @@ export const metadata: Metadata = {
 };
 
 const portfolioItems = [
-  { title: "Clipping Path", img: "/images/before-after/clipping-path.png", category: "Cutouts" },
-  { title: "Ghost Mannequin", img: "/images/before-after/ghost-mannequin.png", category: "Apparel" },
-  { title: "Wrinkle Removal", img: "/images/before-after/photo-retouching.png", category: "Retouching" },
-  { title: "Jewelry Editing", img: "/images/before-after/ecommerce-editing.png", category: "Product" },
-  { title: "Color Change", img: "/images/before-after/color-change.png", category: "Color" },
-  { title: "Shadow Creation", img: "/images/before-after/shadow-creation.png", category: "Shadow" },
-  { title: "Background Removal", img: "/images/before-after/background-removal.png", category: "Background" },
-  { title: "Image Masking", img: "/images/before-after/image-masking.png", category: "Masking" },
-  { title: "Multi Clipping Path", img: "/images/before-after/multi-clipping-path.png", category: "Clipping" },
+  { title: "Clipping Path", img: "/images/before-after/clipping-path-after.jpg", category: "Cutouts" },
+  { title: "Ghost Mannequin", img: "/images/before-after/ghost-mannequin-after.jpg", category: "Apparel" },
+  { title: "Wrinkle Removal", img: "/images/before-after/photo-retouching-after.jpg", category: "Retouching" },
+  { title: "Jewelry Editing", img: "/images/before-after/ecommerce-editing-after.jpg", category: "Product" },
+  { title: "Color Change", img: "/images/before-after/color-change-after.jpg", category: "Color" },
+  { title: "Shadow Creation", img: "/images/before-after/shadow-creation-after.jpg", category: "Shadow" },
+  { title: "Background Removal", img: "/images/before-after/background-removal-after.jpg", category: "Background" },
+  { title: "Image Masking", img: "/images/before-after/image-masking-after.png", category: "Masking" },
+  { title: "Multi Clipping Path", img: "/images/before-after/multi-clipping-path-after.jpg", category: "Clipping" },
 ];
 
 export default function PortfolioPage() {

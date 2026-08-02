@@ -32,6 +32,11 @@ export const priceMap: Record<string, string> = {
   "car-editing": "FROM $2.99 / IMAGE",
 };
 
+export function serviceImagePath(id: string, folder: "before-after" | "pricing", type: "before" | "after"): string {
+  const ext = id === "image-masking" && type === "after" ? "png" : "jpg";
+  return `/images/${folder}/${id}-${type}.${ext}`;
+}
+
 export const services: Service[] = [
   {
     id: "clipping-path",
@@ -79,7 +84,7 @@ export const services: Service[] = [
     audience: ["Online retailers and marketplace sellers", "Product photographers", "Marketing and advertising teams", "Real estate agents"],
     industries: ["E-commerce & marketplace", "Real estate & property", "Fashion & apparel", "Food & beverage"],
     icon: "🖼️",
-    image: "/images/before-after/background-removal.png",
+    image: serviceImagePath("background-removal", "before-after", "after"),
   },
   {
     id: "image-masking",
@@ -126,7 +131,7 @@ export const services: Service[] = [
     audience: ["E-commerce product photographers", "Catalog and brochure designers", "Furniture and home decor brands", "Automotive listing platforms"],
     industries: ["E-commerce & retail", "Furniture & home decor", "Electronics & gadgets", "Automotive"],
     icon: "🌓",
-    image: "/images/before-after/shadow-creation.png",
+    image: serviceImagePath("shadow-creation", "before-after", "after"),
   },
   {
     id: "ghost-mannequin",

@@ -187,16 +187,16 @@ export default function Home() {
           </div></TextReveal>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {[
-              { before: "/images/before-after/clipping-path-before.png", after: "/images/before-after/clipping-path.png", label: "Clipping Path" },
-              { before: "/images/before-after/background-removal-before.png", after: "/images/before-after/background-removal.png", label: "Background Removal" },
-              { before: "/images/before-after/photo-retouching-before.png", after: "/images/before-after/photo-retouching.png", label: "Photo Retouching" },
-              { before: "/images/before-after/multi-clipping-path-before.png", after: "/images/before-after/multi-clipping-path.png", label: "Multi Clipping Path" },
-              { before: "/images/before-after/color-change-before.png", after: "/images/before-after/color-change.png", label: "Color Change" },
-              { before: "/images/before-after/car-editing-before.png", after: "/images/before-after/car-editing.png", label: "Car Editing" },
-              { before: "/images/before-after/ghost-mannequin-before.png", after: "/images/before-after/ghost-mannequin.png", label: "Ghost Mannequin" },
-              { before: "/images/before-after/image-masking-before.png", after: "/images/before-after/image-masking.png", label: "Image Masking" },
-              { before: "/images/before-after/shadow-creation-before.png", after: "/images/before-after/shadow-creation.png", label: "Shadow Creation" },
-              { before: "/images/before-after/ecommerce-editing-before.png", after: "/images/before-after/ecommerce-editing.png", label: "E-commerce Editing" },
+              { before: "/images/before-after/clipping-path-before.jpg", after: "/images/before-after/clipping-path-after.jpg", label: "Clipping Path" },
+              { before: "/images/before-after/background-removal-before.jpg", after: "/images/before-after/background-removal-after.jpg", label: "Background Removal" },
+              { before: "/images/before-after/photo-retouching-before.jpg", after: "/images/before-after/photo-retouching-after.jpg", label: "Photo Retouching" },
+              { before: "/images/before-after/multi-clipping-path-before.jpg", after: "/images/before-after/multi-clipping-path-after.jpg", label: "Multi Clipping Path" },
+              { before: "/images/before-after/color-change-before.jpg", after: "/images/before-after/color-change-after.jpg", label: "Color Change" },
+              { before: "/images/before-after/car-editing-before.jpg", after: "/images/before-after/car-editing-after.jpg", label: "Car Editing" },
+              { before: "/images/before-after/ghost-mannequin-before.jpg", after: "/images/before-after/ghost-mannequin-after.jpg", label: "Ghost Mannequin" },
+              { before: "/images/before-after/image-masking-before.jpg", after: "/images/before-after/image-masking-after.png", label: "Image Masking" },
+              { before: "/images/before-after/shadow-creation-before.jpg", after: "/images/before-after/shadow-creation-after.jpg", label: "Shadow Creation" },
+              { before: "/images/before-after/ecommerce-editing-before.jpg", after: "/images/before-after/ecommerce-editing-after.jpg", label: "E-commerce Editing" },
             ].map((item) => (
               <TextReveal key={item.label}>
                 <BeforeAfterSlider beforeSrc={item.before} afterSrc={item.after} beforeAlt={`Before ${item.label}`} afterAlt={`After ${item.label}`} />

@@ -3,9 +3,9 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { ChevronRight } from "lucide-react";
-import { services, priceMap } from "@/data/services";
+import { services, priceMap, serviceImagePath } from "@/data/services";
 
 const cardColors = [
   "#fca5a5",
@@ -24,11 +24,16 @@ const slideItems = [...services, ...services, ...services];
 const trialRepeats = Array.from({ length: 10 }, (_, i) => i);
 
 function ShowcaseCard({ src, beforeSrc, alt, color }: { src: string; beforeSrc: string; alt: string; color: string }) {
+  const [aspect, setAspect] = useState<number | null>(null);
+
   return (
     <div className="rounded-2xl p-4 pb-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
       style={{ backgroundColor: color }}
     >
-      <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-white/10">
+      <div
+        className="relative w-full rounded-xl overflow-hidden bg-white/10"
+        style={{ aspectRatio: aspect ?? "4 / 3" }}
+      >
         {/* After image - shown by default */}
         <div className="absolute inset-0 transition-opacity duration-500 group-hover:opacity-0">
           <Image
@@ -37,6 +42,12 @@ function ShowcaseCard({ src, beforeSrc, alt, color }: { src: string; beforeSrc: 
             fill
             className="object-cover"
             sizes="(max-width: 768px) 256px, 320px"
+            onLoad={(e) => {
+              const img = e.target as HTMLImageElement;
+              if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+                setAspect(img.naturalWidth / img.naturalHeight);
+              }
+            }}
           />
         </div>
 
@@ -185,8 +196,8 @@ export default function PricingPage() {
             return (
               <div key={`${s.id}-${i}`} className="flex-shrink-0 w-64 md:w-80 group">
                 <ShowcaseCard
-                  src={`/images/pricing/${s.id}.png`}
-                  beforeSrc={`/images/pricing/${s.id}-before.png`}
+                  src={serviceImagePath(s.id, "pricing", "after")}
+                  beforeSrc={serviceImagePath(s.id, "pricing", "before")}
                   alt={s.title}
                   color={cardColors[ci]}
                 />
