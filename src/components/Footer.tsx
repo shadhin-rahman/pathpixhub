@@ -162,15 +162,10 @@ export default function Footer() {
       </div>
 
       <div className="relative border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-[10px] tracking-[0.25em] uppercase text-white/30">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-center">
+          <p className="text-[10px] tracking-[0.25em] uppercase text-white/30 text-center">
             Every Pixel Matters
           </p>
-          <div className="flex items-center gap-5 text-[10px] tracking-[0.15em] uppercase text-white/30">
-            <Link href="/privacy-policy" className="hover:text-[rgb(var(--accent-400))] transition-colors">Privacy</Link>
-            <Link href="/terms-and-conditions" className="hover:text-[rgb(var(--accent-400))] transition-colors">Terms</Link>
-            <Link href="/contact" className="hover:text-[rgb(var(--accent-400))] transition-colors">Contact</Link>
-          </div>
         </div>
       </div>
     </motion.footer>
