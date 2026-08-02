@@ -22,7 +22,6 @@ export default function BeforeAfterSlider({
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
-  const [aspectRatio, setAspectRatio] = useState<number | null>(null);
   const autoplayRef = useRef(true);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const controlsRef = useRef<ReturnType<typeof animate> | null>(null);
@@ -128,10 +127,7 @@ export default function BeforeAfterSlider({
       ref={containerRef}
       className={`relative overflow-hidden rounded-2xl select-none cursor-ew-resize group ${className}`}
     >
-      <div
-        className="relative w-full bg-[var(--bg-subtle)] overflow-hidden"
-        style={{ aspectRatio: aspectRatio ?? "4 / 3" }}
-      >
+      <div className="relative w-full aspect-[4/3] bg-[var(--bg-subtle)] overflow-hidden">
         {/* After image (base layer) - shown by default */}
         <Image
           src={afterSrc}
@@ -140,12 +136,6 @@ export default function BeforeAfterSlider({
           priority
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
-          onLoad={(e) => {
-            const img = e.target as HTMLImageElement;
-            if (img.naturalWidth > 0 && img.naturalHeight > 0) {
-              setAspectRatio(img.naturalWidth / img.naturalHeight);
-            }
-          }}
         />
 
         {/* Before image - revealed on the left by sweep or drag */}
