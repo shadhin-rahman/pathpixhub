@@ -28,9 +28,9 @@ export default function Footer() {
       />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgb(var(--accent-500)/50%)] to-transparent" />
 
-      <div className="relative max-w-7xl mx-auto px-6 pt-20 pb-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-12">
-          <div className="lg:col-span-4">
+      <div className="relative max-w-7xl mx-auto px-6 pt-16 pb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10">
+          <div className="lg:col-span-5">
             <span className="logo-text text-2xl font-bold text-white">PathPixHub</span>
             <p className="mt-4 text-sm text-white/60 leading-relaxed max-w-sm">
               Professional photo editing for e-commerce, fashion, and advertising — pixel-perfect
@@ -52,23 +52,10 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-3">
             <span className="text-xs uppercase tracking-[0.3em] font-bold text-white/40">Services</span>
             <ul className="mt-5 space-y-2.5">
-              {services.slice(0, 5).map((s) => (
-                <li key={s.id}>
-                  <Link href={`/services/${s.id}`} className="text-sm text-white/60 hover:text-[rgb(var(--accent-400))] transition-colors">
-                    {s.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="lg:col-span-2">
-            <span className="text-xs uppercase tracking-[0.3em] font-bold text-white/40">&nbsp;</span>
-            <ul className="mt-5 space-y-2.5">
-              {services.slice(5, 10).map((s) => (
+              {services.map((s) => (
                 <li key={s.id}>
                   <Link href={`/services/${s.id}`} className="text-sm text-white/60 hover:text-[rgb(var(--accent-400))] transition-colors">
                     {s.title}
