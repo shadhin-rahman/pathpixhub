@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { services, priceMap } from "@/data/services";
+import { services, priceMap, serviceImagePath } from "@/data/services";
 import ScrollReveal from "@/components/ScrollReveal";
 import StaggerReveal, { StaggerItem } from "@/components/StaggerReveal";
+import BeforeAfterSlider from "@/components/BeforeAfterSlider";
 
 export async function generateStaticParams() {
   return services.map((s) => ({ id: s.id }));
@@ -49,6 +50,23 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
           </div>
         </div>
       </section>
+
+      <ScrollReveal>
+      <section className="py-16 md:py-24 bg-[var(--bg)]">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6 text-center">See the Difference</h2>
+          <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text text-center mb-12">Before &amp; After</h3>
+          <div className="max-w-3xl mx-auto">
+            <BeforeAfterSlider
+              beforeSrc={serviceImagePath(service.id, "before-after", "before")}
+              afterSrc={serviceImagePath(service.id, "before-after", "after")}
+              beforeAlt={`Before ${service.title}`}
+              afterAlt={`After ${service.title}`}
+            />
+          </div>
+        </div>
+      </section>
+      </ScrollReveal>
 
       <ScrollReveal>
       <section className="py-16 md:py-24 bg-[var(--bg-alt)]">
