@@ -73,9 +73,6 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-black/45 backdrop-blur-md text-white/90 text-[11px] font-semibold tracking-[0.15em] uppercase border border-white/10">
-                  Color Variations
-                </span>
               </div>
             </div>
           ) : (
