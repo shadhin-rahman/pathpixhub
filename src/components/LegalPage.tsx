@@ -26,14 +26,21 @@ export default function LegalPage({
 }: LegalPageProps) {
   return (
     <>
-      <section className="pt-40 pb-20 mesh-gradient">
-        <div className="max-w-3xl mx-auto px-6">
+      <section className="relative pt-40 pb-24 overflow-hidden bg-[#081526]">
+        <div className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(900px 500px at 85% -10%, rgba(16, 185, 129, 0.10), transparent 60%), radial-gradient(700px 400px at 0% 110%, rgba(30, 64, 175, 0.25), transparent 60%)",
+          }}
+        />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgb(var(--accent-500)/50%)] to-transparent" />
+        <div className="relative max-w-3xl mx-auto px-6">
           <div className="flex items-center gap-3 mb-6">
             <span className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold">Legal</span>
-            <span className="text-xs uppercase font-mono tracking-[0.2em] text-[rgb(var(--fg-rgb)/40%)] font-bold">Effective {effectiveDate}</span>
+            <span className="text-xs uppercase font-mono tracking-[0.2em] text-white/40 font-bold">Effective {effectiveDate}</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight gradient-text">{title}</h1>
-          <p className="mt-8 text-lg text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white">{title}</h1>
+          <p className="mt-8 text-lg text-white/60 leading-relaxed">
             {intro}
           </p>
         </div>
