@@ -68,7 +68,7 @@ export default function PrivacyPolicyPage() {
   return (
     <LegalPage
       effectiveDate="May 06, 2026"
-      title="Privacy Policy"
+      title={<>Privacy <span className="text-[#c7ea46]">Policy</span></>}
       intro="Protecting your privacy is our top priority. Here is how we collect, use, and safeguard your personal information when you interact with our website or use our services."
       contentsIntro="Browse the clauses below. Click any item to jump straight to that section."
       sections={sections}

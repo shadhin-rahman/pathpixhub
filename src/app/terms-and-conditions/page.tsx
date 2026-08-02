@@ -128,7 +128,7 @@ export default function TermsPage() {
   return (
     <LegalPage
       effectiveDate="May 06, 2026"
-      title="Terms & Conditions"
+      title={<>Terms &amp; <span className="text-[#c7ea46]">Conditions</span></>}
       intro="Please review these Terms and Conditions carefully before using this website and all related services from PathPixHub. If you do not agree to all clauses, you should stop using the site immediately."
       contentsIntro="Browse the clauses below. Click any item to jump straight to that section."
       sections={sections}

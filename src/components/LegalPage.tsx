@@ -7,7 +7,7 @@ interface LegalSection {
 
 interface LegalPageProps {
   effectiveDate: string;
-  title: string;
+  title: React.ReactNode;
   intro: string;
   contentsIntro?: string;
   sections: LegalSection[];
@@ -34,12 +34,12 @@ export default function LegalPage({
           }}
         />
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgb(var(--accent-500)/50%)] to-transparent" />
-        <div className="relative max-w-3xl mx-auto px-6">
+        <div className="relative max-w-5xl mx-4 md:mx-10 px-0">
           <div className="flex items-center gap-3 mb-6">
             <span className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold">Legal</span>
             <span className="text-xs uppercase font-mono tracking-[0.2em] text-white/40 font-bold">Effective {effectiveDate}</span>
           </div>
-          <h1 className="logo-text text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-[1.05] text-balance">
+          <h1 className="logo-text text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-[1.05] text-balance text-left">
             {title}
           </h1>
           <div className="mt-6 w-24 h-1 rounded-full bg-[rgb(var(--accent-500))]" />
