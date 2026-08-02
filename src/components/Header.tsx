@@ -96,7 +96,9 @@ export default function Header() {
               className="fixed top-0 right-0 h-screen w-full md:w-[500px] bg-[var(--bg-alt)] border-l border-[rgb(var(--fg-rgb)/5%)] z-[56] p-8 md:p-12 flex flex-col justify-center overflow-y-auto"
             >
               <div className="mb-10 md:mb-12">
-                <span className="text-[rgb(var(--accent-400))] text-xs uppercase tracking-[0.5em] font-bold">Navigation</span>
+                <span className="text-[rgb(var(--accent-400))] text-xs uppercase tracking-[0.5em] font-bold">
+                  {menuView === "main" ? "Navigation" : "Services"}
+                </span>
               </div>
 
               <AnimatePresence mode="wait">
@@ -168,58 +170,51 @@ export default function Header() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -30 }}
                     transition={{ duration: 0.2 }}
-                    className="space-y-7 md:space-y-8"
                   >
                     <button
                       onClick={() => setMenuView("main")}
-                      className="flex items-center gap-2 text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors group"
+                      className="mb-6 flex items-center gap-2 text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors group"
                     >
-                      <ChevronLeft className="w-5 h-5" />
+                      <ChevronLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
                       <span className="text-xs uppercase tracking-[0.5em] font-bold">Back</span>
                     </button>
 
-                    <h3 className="text-lg md:text-xl font-bold tracking-tight text-[rgb(var(--fg-rgb)/60%)]">
-                      <span className="text-[rgb(var(--accent-400))]">All Services</span>
-                      <span className="text-[rgb(var(--fg-rgb)/30%)] ml-2 text-base font-normal">({services.length})</span>
-                    </h3>
-
-                    <div className="space-y-1 max-h-[55vh] md:max-h-[50vh] overflow-y-auto pr-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[60vh] md:max-h-[55vh] overflow-y-auto pr-1">
                       {services.map((s, i) => (
                         <motion.div
                           key={s.id}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: i * 0.03, duration: 0.3 }}
+                          initial={{ opacity: 0, y: 16 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.04, duration: 0.3 }}
+                          className="h-full"
                         >
                           <Link
                             href={`/services/${s.id}`}
                             onClick={closeMenu}
-                            className="group flex items-center gap-3 py-2 px-3 -mx-3 rounded-xl hover:bg-[rgb(var(--accent-500)/8%)] transition-colors"
+                            className="group flex flex-col gap-3 glass-card rounded-2xl p-4 h-full hover:border-[rgb(var(--accent-500)/40%)] hover:bg-[rgb(var(--accent-500)/5%)] transition-colors"
                           >
-                            <motion.span
-                              className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-500)/30%)] shrink-0"
-                              whileHover={{ scale: 2, backgroundColor: "rgb(var(--accent-500))" }}
-                              transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                            />
-                            <motion.span
-                              className="text-base md:text-lg font-semibold text-[rgb(var(--fg-rgb)/60%)]"
-                              whileHover={{ x: 6, color: "rgb(var(--accent-400))" }}
-                              transition={{ type: "spring", stiffness: 200, damping: 12 }}
-                            >
+                            <span className="w-10 h-10 rounded-xl bg-[rgb(var(--accent-500)/12%)] flex items-center justify-center text-lg shrink-0">
+                              {s.icon}
+                            </span>
+                            <span className="text-sm font-bold text-[rgb(var(--fg-rgb)/80%)] group-hover:text-[rgb(var(--accent-400))] transition-colors leading-tight">
                               {s.title}
-                            </motion.span>
+                            </span>
+                            <span className="text-xs text-[rgb(var(--fg-rgb)/45%)] leading-relaxed line-clamp-2">
+                              {s.tagline}
+                            </span>
                           </Link>
                         </motion.div>
                       ))}
-                      <Link
-                        href="/services"
-                        onClick={closeMenu}
-                        className="inline-flex items-center gap-1.5 pt-2 text-sm font-bold text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors"
-                      >
-                        View all services
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                      </Link>
                     </div>
+
+                    <Link
+                      href="/services"
+                      onClick={closeMenu}
+                      className="mt-6 inline-flex items-center gap-1.5 text-sm font-bold text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors"
+                    >
+                      View all services
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                    </Link>
                   </motion.div>
                 )}
               </AnimatePresence>
