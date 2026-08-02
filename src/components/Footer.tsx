@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { services } from "@/data/services";
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
@@ -28,7 +27,7 @@ export default function Footer() {
       />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgb(var(--accent-500)/50%)] to-transparent" />
 
-      <div className="relative max-w-7xl mx-auto px-6 pt-16 pb-8">
+      <div className="relative max-w-7xl mx-auto px-6 pt-14 pb-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10">
           <div className="lg:col-span-5">
             <span className="logo-text text-2xl font-bold text-white">PathPixHub</span>
@@ -55,7 +54,13 @@ export default function Footer() {
           <div className="lg:col-span-3">
             <span className="text-xs uppercase tracking-[0.3em] font-bold text-white/40">Services</span>
             <ul className="mt-5 space-y-2.5">
-              {services.map((s) => (
+              {[
+                { id: "clipping-path", title: "Clipping Path" },
+                { id: "background-removal", title: "Background Removal" },
+                { id: "shadow-creation", title: "Shadow Creation" },
+                { id: "image-masking", title: "Image Masking" },
+                { id: "ghost-mannequin", title: "Ghost Mannequin" },
+              ].map((s) => (
                 <li key={s.id}>
                   <Link href={`/services/${s.id}`} className="text-sm text-white/60 hover:text-[rgb(var(--accent-400))] transition-colors">
                     {s.title}
