@@ -12,24 +12,29 @@ export default function Header() {
   const [servicesOpen, setServicesOpen] = useState(false);
   const pathname = usePathname();
 
+  const isLegalPage =
+    pathname === "/privacy-policy" ||
+    pathname === "/cookie-policy" ||
+    pathname === "/terms-and-conditions";
+
   const openMenu = () => { setIsOpen(true); setServicesOpen(false); };
   const closeMenu = () => { setIsOpen(false); setServicesOpen(false); };
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 py-4 md:py-6">
+    <nav className={`fixed top-0 left-0 w-full z-50 py-4 md:py-6 ${isLegalPage ? "bg-[#081526]/70 backdrop-blur-xl border-b border-white/10" : ""}`}>
       <div className="flex justify-between items-center">
         <Link
           href="/"
           className={isOpen ? "z-40" : "z-[60]"}
           onClick={(e) => { if (pathname === "/") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
         >
-          <span className="ml-4 md:ml-10 text-lg md:text-xl font-bold tracking-tight text-[rgb(var(--fg-rgb)/85%)]">
+          <span className={`ml-4 md:ml-10 text-lg md:text-xl font-bold tracking-tight ${isLegalPage ? "text-white" : "text-[rgb(var(--fg-rgb)/85%)]"}`}>
             Path<span className="text-[rgb(var(--accent-400))]">Pix</span>Hub
           </span>
         </Link>
 
         <div className="hidden md:flex items-center gap-3 pr-4 md:pr-10">
-          <ThemeToggle className="w-11 h-11 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))]" />
+          <ThemeToggle className={`w-11 h-11 rounded-full glass-card ${isLegalPage ? "text-white border-white/25 hover:border-white/50" : "text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))]"}`} />
           <Link
             href="/contact"
             className="px-8 py-4 rounded-full bg-[#c7ea46] text-black font-black hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 text-xs uppercase tracking-[0.4em] whitespace-nowrap"
@@ -61,7 +66,7 @@ export default function Header() {
         </div>
 
         <div className="md:hidden flex items-center gap-1.5 pr-4">
-          <ThemeToggle className="w-8 h-8 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-400))]" />
+          <ThemeToggle className={`w-8 h-8 rounded-full glass-card ${isLegalPage ? "text-white border-white/25" : "text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-400))]"}`} />
           <Link
             href="/contact"
             className="px-3 py-2.5 rounded-full bg-[#c7ea46] text-black font-black hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 text-[10px] uppercase tracking-[0.2em] whitespace-nowrap"
