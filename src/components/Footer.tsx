@@ -55,11 +55,11 @@ export default function Footer() {
             <span className="text-xs uppercase tracking-[0.3em] font-bold text-white/40">Services</span>
             <ul className="mt-5 space-y-2.5">
               {[
-                { id: "clipping-path", title: "Clipping Path" },
                 { id: "background-removal", title: "Background Removal" },
-                { id: "shadow-creation", title: "Shadow Creation" },
-                { id: "image-masking", title: "Image Masking" },
-                { id: "ghost-mannequin", title: "Ghost Mannequin" },
+                { id: "photo-retouching", title: "Photo Retouching" },
+                { id: "ecommerce-editing", title: "E-commerce Image Editing" },
+                { id: "car-editing", title: "Car Image Editing" },
+                { id: "color-change", title: "Color Change" },
               ].map((s) => (
                 <li key={s.id}>
                   <Link href={`/services/${s.id}`} className="text-sm text-white/60 hover:text-[rgb(var(--accent-400))] transition-colors">
