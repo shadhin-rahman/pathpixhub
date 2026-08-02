@@ -117,9 +117,10 @@ export default function Footer() {
       </div>
 
       <div className="relative border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-white/40">
             &copy; {new Date().getFullYear()} PathPixHub. All rights reserved.
+            <span className="ml-3 text-[10px] tracking-[0.25em] uppercase text-white/30">Every Pixel Matters</span>
           </p>
           <div className="flex items-center gap-4">
             <a
@@ -150,14 +151,6 @@ export default function Footer() {
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.64.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.64-.07-4.85s.01-3.58.07-4.85c.15-3.23 1.67-4.77 4.92-4.92 1.27-.06 1.64-.07 4.85-.07zm0-2.16c-3.26 0-3.67.01-4.95.07-4.1.19-5.95 2.04-6.14 6.14C.8 8.33.79 8.74.79 12s.01 3.67.07 4.95c.19 4.1 2.04 5.95 6.14 6.14 1.28.06 1.69.07 4.95.07s3.67-.01 4.95-.07c4.1-.19 5.95-2.04 6.14-6.14.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.19-4.1-2.04-5.95-6.14-6.14C15.67.01 15.26 0 12 0zM12 5.84a6.16 6.16 0 100 12.32 6.16 6.16 0 000-12.32zm0 10.16a4 4 0 110-8 4 4 0 010 8zm6.41-10.4a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg>
             </a>
           </div>
-        </div>
-      </div>
-
-      <div className="relative border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-center">
-          <p className="text-[10px] tracking-[0.25em] uppercase text-white/30 text-center">
-            Every Pixel Matters
-          </p>
         </div>
       </div>
     </motion.footer>
