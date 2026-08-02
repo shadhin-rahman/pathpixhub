@@ -23,10 +23,10 @@ export default function AboutPage() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { src: "/images/service-cards/clipping-path.png", alt: "clipping path" },
                 { src: "/images/service-cards/background-removal.png", alt: "background removal" },
-                { src: "/images/service-cards/color-change.png", alt: "color change" },
                 { src: "/images/service-cards/car-editing.png", alt: "car editing" },
+                { src: "/images/service-cards/photo-retouching.png", alt: "photo retouching" },
+                { src: "/images/service-cards/shadow-creation.png", alt: "shadow creation" },
               ].map((img) => (
                 <div key={img.src} className="relative aspect-square rounded-2xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]">
                   <Image
