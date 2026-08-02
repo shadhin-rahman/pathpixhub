@@ -27,7 +27,7 @@ export default function CookieConsent() {
         </p>
         <button
           onClick={accept}
-          className="shrink-0 px-6 py-2.5 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-xs hover:bg-[rgb(var(--accent-400))] transition-all"
+          className="w-full sm:w-auto shrink-0 px-6 py-3 sm:py-2.5 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-xs hover:bg-[rgb(var(--accent-400))] transition-all"
         >
           Accept
         </button>

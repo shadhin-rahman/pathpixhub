@@ -137,11 +137,11 @@ export default function Footer() {
 
       <div className="relative border-t border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col lg:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-white/40">
+          <p className="text-xs text-white/40 text-center">
             &copy; {new Date().getFullYear()} PathPixHub. All rights reserved.
             <span className="ml-3 text-[10px] tracking-[0.25em] uppercase text-white/30">Every Pixel Matters</span>
           </p>
-          <div className="flex items-center gap-5 text-xs">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs">
             <Link href="/privacy-policy" className="text-white/50 hover:text-[rgb(var(--accent-400))] transition-colors">
               Privacy Policy
             </Link>

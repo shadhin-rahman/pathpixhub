@@ -39,7 +39,7 @@ export default function LegalPage({
             <span className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold">Legal</span>
             <span className="text-xs uppercase font-mono tracking-[0.2em] text-white/40 font-bold">Effective {effectiveDate}</span>
           </div>
-          <h1 className="logo-text text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-[1.05]">
+          <h1 className="logo-text text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-[1.05] text-balance">
             {title}
           </h1>
           <div className="mt-6 w-24 h-1 rounded-full bg-[rgb(var(--accent-500))]" />
