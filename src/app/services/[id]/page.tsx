@@ -56,14 +56,38 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6 text-center">See the Difference</h2>
           <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text text-center mb-12">Before &amp; After</h3>
-          <div className="max-w-3xl mx-auto">
-            <BeforeAfterSlider
-              beforeSrc={serviceImagePath(service.id, "before-after", "before")}
-              afterSrc={serviceImagePath(service.id, "before-after", "after")}
-              beforeAlt={`Before ${service.title}`}
-              afterAlt={`After ${service.title}`}
-            />
-          </div>
+          {service.id === "color-change" ? (
+            <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <BeforeAfterSlider
+                beforeSrc={serviceImagePath(service.id, "before-after", "before")}
+                afterSrc={serviceImagePath(service.id, "before-after", "after")}
+                beforeAlt={`Before ${service.title}`}
+                afterAlt={`After ${service.title}`}
+              />
+              <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl bg-[var(--bg-subtle)]">
+                <Image
+                  src="/images/before-after/color-change.gif"
+                  alt="Color change showcase animation"
+                  fill
+                  unoptimized
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-black/45 backdrop-blur-md text-white/90 text-[11px] font-semibold tracking-[0.15em] uppercase border border-white/10">
+                  Color Variations
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="max-w-3xl mx-auto">
+              <BeforeAfterSlider
+                beforeSrc={serviceImagePath(service.id, "before-after", "before")}
+                afterSrc={serviceImagePath(service.id, "before-after", "after")}
+                beforeAlt={`Before ${service.title}`}
+                afterAlt={`After ${service.title}`}
+              />
+            </div>
+          )}
         </div>
       </section>
       </ScrollReveal>
