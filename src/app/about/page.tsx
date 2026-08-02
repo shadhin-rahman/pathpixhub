@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import BeforeAfterHover from "@/components/BeforeAfterHover";
 
 export const metadata: Metadata = {
   title: "About | PathPixHub",
@@ -23,19 +24,13 @@ export default function AboutPage() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { src: "/images/service-cards/background-removal.png", alt: "background removal" },
-                { src: "/images/service-cards/car-editing.png", alt: "car editing" },
-                { src: "/images/service-cards/photo-retouching.png", alt: "photo retouching" },
-                { src: "/images/service-cards/shadow-creation.png", alt: "shadow creation" },
+                { before: "/images/service-cards/car-editing-before.jpg", after: "/images/service-cards/car-editing-after.png", alt: "car editing" },
+                { before: "/images/service-cards/ecommerce-editing-before.jpg", after: "/images/service-cards/ecommerce-editing-after.jpg", alt: "ecommerce editing" },
+                { before: "/images/service-cards/Jewellery%20Retouching-before.jpg", after: "/images/service-cards/Jewellery%20Retouching-after.jpg", alt: "jewellery retouching" },
+                { before: "/images/service-cards/Camera%20reflection%20removal-before.jpg", after: "/images/service-cards/Camera%20reflection%20removal-after.jpg", alt: "camera reflection removal" },
               ].map((img) => (
-                <div key={img.src} className="relative aspect-square rounded-2xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]">
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    className="object-contain p-3"
-                    sizes="(max-width: 1024px) 50vw, 20vw"
-                  />
+                <div key={img.after} className="relative aspect-square rounded-2xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] group">
+                  <BeforeAfterHover before={img.before} after={img.after} alt={img.alt} sizes="(max-width: 1024px) 50vw, 20vw" />
                 </div>
               ))}
             </div>
