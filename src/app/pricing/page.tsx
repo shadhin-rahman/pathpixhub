@@ -23,14 +23,14 @@ const cardColors = [
 const slideItems = [...services, ...services, ...services];
 const trialRepeats = Array.from({ length: 10 }, (_, i) => i);
 
-function ShowcaseCard({ src, beforeSrc, alt, color, price, id }: { src: string; beforeSrc: string; alt: string; color: string; price: string; id: string }) {
+function ShowcaseCard({ src, beforeSrc, alt, color, id }: { src: string; beforeSrc: string; alt: string; color: string; id: string }) {
   return (
     <Link
       href={`/services/${id}`}
-      className="block rounded-3xl p-5 pb-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[rgb(var(--fg-rgb)/10%)] group"
+      className="block rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[rgb(var(--fg-rgb)/10%)] group"
       style={{ backgroundColor: color }}
     >
-      <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-white/10">
+      <div className="relative w-full aspect-[4/3] overflow-hidden">
         {/* After image - shown by default */}
         <div className="absolute inset-0 transition-opacity duration-500 group-hover:opacity-0">
           <Image
@@ -52,24 +52,12 @@ function ShowcaseCard({ src, beforeSrc, alt, color, price, id }: { src: string; 
             sizes="(max-width: 768px) 320px, 384px"
           />
         </div>
-
-        {/* Hover badge */}
-        <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-black/55 backdrop-blur-md text-white text-[10px] font-bold tracking-[0.2em] uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-          Before
-        </div>
       </div>
 
-      <div className="mt-4 flex flex-col items-center gap-3">
-        <h3 className="text-center font-bold text-[rgb(var(--fg-rgb)/85%)] leading-tight hover:text-[rgb(var(--accent-500))] transition-colors text-base md:text-lg">
+      <div className="px-5 py-4">
+        <h3 className="text-center font-bold text-[rgb(var(--fg-rgb)/85%)] leading-tight text-sm md:text-base">
           {alt}
         </h3>
-        <p className="text-xs font-mono tracking-[0.1em] text-[rgb(var(--fg-rgb)/60%)] font-bold text-center">
-          {price}
-        </p>
-        <span className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-xs hover:bg-[rgb(var(--accent-400))] transition-colors shadow-md shadow-[rgb(var(--accent-500)/25%)]">
-          Get an instant quote
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-        </span>
       </div>
     </Link>
   );
@@ -209,7 +197,6 @@ export default function PricingPage() {
                   beforeSrc={serviceImagePath(s.id, "pricing", "before")}
                   alt={s.title}
                   color={cardColors[ci]}
-                  price={priceMap[s.id]}
                   id={s.id}
                 />
               </div>
