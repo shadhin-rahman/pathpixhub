@@ -97,6 +97,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/cookie-policy" className="text-sm text-white/60 hover:text-[rgb(var(--accent-400))] transition-colors">
+                  Cookie Policy
+                </Link>
+              </li>
+              <li>
                 <Link href="/terms-and-conditions" className="text-sm text-white/60 hover:text-[rgb(var(--accent-400))] transition-colors">
                   Terms &amp; Conditions
                 </Link>
