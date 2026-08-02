@@ -27,10 +27,10 @@ function ShowcaseCard({ src, beforeSrc, alt, color, id }: { src: string; beforeS
   return (
     <Link
       href={`/services/${id}`}
-      className="block rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[rgb(var(--fg-rgb)/10%)] group"
+      className="block rounded-2xl p-4 pb-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group"
       style={{ backgroundColor: color }}
     >
-      <div className="relative w-full aspect-[4/3] overflow-hidden">
+      <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-white/10">
         {/* After image - shown by default */}
         <div className="absolute inset-0 transition-opacity duration-500 group-hover:opacity-0">
           <Image
@@ -53,12 +53,9 @@ function ShowcaseCard({ src, beforeSrc, alt, color, id }: { src: string; beforeS
           />
         </div>
       </div>
-
-      <div className="px-5 py-4">
-        <h3 className="text-center font-bold text-[rgb(var(--fg-rgb)/85%)] leading-tight text-sm md:text-base">
-          {alt}
-        </h3>
-      </div>
+      <p className="mt-3 text-center font-bold text-sm text-[rgb(var(--fg-rgb)/85%)] leading-tight">
+        {alt}
+      </p>
     </Link>
   );
 }
