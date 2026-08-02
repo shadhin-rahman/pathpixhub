@@ -212,26 +212,18 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="grid grid-cols-2 gap-4">
-              <ImageScaleScroll scaleFrom={0.85} scaleTo={1}>
-                <ParallaxImage src="/images/service-cards/car-editing-after.png" alt="car editing" speed={0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card bg-white/20 group">
-                  <BeforeAfterHover before="/images/service-cards/car-editing-before.jpg" after="/images/service-cards/car-editing-after.png" alt="car editing" />
-                </ParallaxImage>
-              </ImageScaleScroll>
-              <ImageScaleScroll scaleFrom={0.85} scaleTo={1}>
-                <ParallaxImage src="/images/service-cards/ecommerce-editing-after.jpg" alt="ecommerce editing" speed={-0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card mt-8 bg-white/20 group">
-                  <BeforeAfterHover before="/images/service-cards/ecommerce-editing-before.jpg" after="/images/service-cards/ecommerce-editing-after.jpg" alt="ecommerce editing" />
-                </ParallaxImage>
-              </ImageScaleScroll>
-              <ImageScaleScroll scaleFrom={0.85} scaleTo={1}>
-                <ParallaxImage src="/images/service-cards/Jewellery%20Retouching-after.jpg" alt="jewellery retouching" speed={0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card -mt-8 bg-white/20 group">
-                  <BeforeAfterHover before="/images/service-cards/Jewellery%20Retouching-before.jpg" after="/images/service-cards/Jewellery%20Retouching-after.jpg" alt="jewellery retouching" />
-                </ParallaxImage>
-              </ImageScaleScroll>
-              <ImageScaleScroll scaleFrom={0.85} scaleTo={1}>
-                <ParallaxImage src="/images/service-cards/Camera%20reflection%20removal-after.jpg" alt="camera reflection removal" speed={-0.15} scale={[1, 1.1]} className="aspect-square rounded-3xl glass-card bg-white/20 group">
-                  <BeforeAfterHover before="/images/service-cards/Camera%20reflection%20removal-before.jpg" after="/images/service-cards/Camera%20reflection%20removal-after.jpg" alt="camera reflection removal" />
-                </ParallaxImage>
-              </ImageScaleScroll>
+              <div className="aspect-square rounded-3xl glass-card bg-white/20 overflow-hidden group">
+                <BeforeAfterHover before="/images/service-cards/car-editing-before.jpg" after="/images/service-cards/car-editing-after.png" alt="car editing" />
+              </div>
+              <div className="aspect-square rounded-3xl glass-card mt-8 bg-white/20 overflow-hidden group">
+                <BeforeAfterHover before="/images/service-cards/ecommerce-editing-before.jpg" after="/images/service-cards/ecommerce-editing-after.jpg" alt="ecommerce editing" />
+              </div>
+              <div className="aspect-square rounded-3xl glass-card -mt-8 bg-white/20 overflow-hidden group">
+                <BeforeAfterHover before="/images/service-cards/Jewellery%20Retouching-before.jpg" after="/images/service-cards/Jewellery%20Retouching-after.jpg" alt="jewellery retouching" />
+              </div>
+              <div className="aspect-square rounded-3xl glass-card bg-white/20 overflow-hidden group">
+                <BeforeAfterHover before="/images/service-cards/Camera%20reflection%20removal-before.jpg" after="/images/service-cards/Camera%20reflection%20removal-after.jpg" alt="camera reflection removal" />
+              </div>
             </div>
             <div>
               <TextReveal><h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">About Us</h2></TextReveal>
