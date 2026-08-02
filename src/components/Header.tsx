@@ -3,17 +3,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronLeft } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { services } from "@/data/services";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [menuView, setMenuView] = useState<"main" | "services">("main");
+  const [servicesOpen, setServicesOpen] = useState(false);
   const pathname = usePathname();
 
-  const openMenu = () => { setIsOpen(true); setMenuView("main"); };
-  const closeMenu = () => { setIsOpen(false); setMenuView("main"); };
+  const openMenu = () => { setIsOpen(true); setServicesOpen(false); };
+  const closeMenu = () => { setIsOpen(false); setServicesOpen(false); };
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 py-4 md:py-6">
@@ -96,136 +96,128 @@ export default function Header() {
               className="fixed top-0 right-0 h-screen w-full md:w-[500px] bg-[var(--bg-alt)] border-l border-[rgb(var(--fg-rgb)/5%)] z-[56] p-8 md:p-12 flex flex-col justify-center overflow-y-auto"
             >
               <div className="mb-10 md:mb-12">
-                <span className="text-[rgb(var(--accent-400))] text-xs uppercase tracking-[0.5em] font-bold">
-                  {menuView === "main" ? "Navigation" : "Services"}
-                </span>
+                <span className="text-[rgb(var(--accent-400))] text-xs uppercase tracking-[0.5em] font-bold">Navigation</span>
               </div>
 
-              <AnimatePresence mode="wait">
-                {menuView === "main" ? (
-                  <motion.div
-                    key="main"
-                    initial={{ opacity: 0, x: 30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -30 }}
-                    transition={{ duration: 0.2 }}
-                    className="space-y-7 md:space-y-8"
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-7 md:space-y-8"
+              >
+                <Link
+                  href="/"
+                  onClick={closeMenu}
+                  className="block font-bold text-3xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
+                >
+                  <motion.span
+                    whileHover={{ x: 10 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                    className="inline-block"
                   >
-                    <Link
-                      href="/"
-                      onClick={closeMenu}
-                      className="block font-bold text-3xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
-                    >
-                      <motion.span
-                        whileHover={{ x: 10 }}
-                        transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                        className="inline-block"
-                      >
-                        Home
-                      </motion.span>
-                    </Link>
+                    Home
+                  </motion.span>
+                </Link>
 
-                    <div>
-                      <button
-                        onClick={() => setMenuView("services")}
-                        className="w-full flex items-center justify-between gap-4 font-bold text-3xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
-                      >
-                        <motion.span
-                          whileHover={{ x: 10 }}
-                          transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                          className="inline-block"
-                        >
-                          Services
-                        </motion.span>
-                        <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 rotate-180 text-[rgb(var(--fg-rgb)/40%)]" />
-                      </button>
-                    </div>
-
-                    {[
-                      { name: "Portfolio", href: "/portfolio" },
-                      { name: "Pricing", href: "/pricing" },
-                      { name: "About", href: "/about" },
-                      { name: "Contact", href: "/contact" },
-                    ].map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        onClick={closeMenu}
-                        className="block font-bold text-3xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
-                      >
-                      <motion.span
-                        whileHover={{ x: 10 }}
-                        transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                        className="inline-block"
-                      >
-                        {item.name}
-                      </motion.span>
-                      </Link>
-                    ))}
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="services"
-                    initial={{ opacity: 0, x: 30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -30 }}
-                    transition={{ duration: 0.2 }}
+                <div>
+                  <button
+                    onClick={() => setServicesOpen(!servicesOpen)}
+                    className="w-full flex items-center justify-between gap-4 font-bold text-3xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
                   >
-                    <button
-                      onClick={() => setMenuView("main")}
-                      className="mb-8 flex items-center gap-2 text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors group"
+                    <motion.span
+                      whileHover={{ x: 10 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                      className="inline-block"
                     >
-                      <ChevronLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
-                      <span className="text-xs uppercase tracking-[0.5em] font-bold">Back</span>
-                    </button>
+                      Services
+                    </motion.span>
+                    <motion.svg
+                      animate={{ rotate: servicesOpen ? 90 : 0 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                      className="w-6 h-6 md:w-8 md:h-8 text-[rgb(var(--fg-rgb)/40%)]"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </motion.svg>
+                  </button>
 
-                    <div className="space-y-6 md:space-y-7 max-h-[60vh] md:max-h-[55vh] overflow-y-auto pr-2">
-                      {services.map((s, i) => (
-                        <motion.div
-                          key={s.id}
-                          initial={{ opacity: 0, y: 16 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: i * 0.03, duration: 0.3 }}
-                        >
+                  <AnimatePresence initial={false}>
+                    {servicesOpen && (
+                      <motion.div
+                        key="services"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pt-5 pb-2 pl-5 md:pl-6 space-y-5 md:space-y-6 border-l-2 border-[rgb(var(--accent-500)/25%)] ml-1 max-h-[45vh] md:max-h-[40vh] overflow-y-auto">
+                          {services.map((s, i) => (
+                            <motion.div
+                              key={s.id}
+                              initial={{ opacity: 0, x: -16 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: i * 0.03, duration: 0.25 }}
+                            >
+                              <Link
+                                href={`/services/${s.id}`}
+                                onClick={closeMenu}
+                                className="block font-bold text-xl md:text-3xl text-[rgb(var(--fg-rgb)/75%)] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
+                              >
+                                <motion.span
+                                  whileHover={{ x: 10 }}
+                                  transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                                  className="inline-block"
+                                >
+                                  {s.title}
+                                </motion.span>
+                              </Link>
+                            </motion.div>
+                          ))}
                           <Link
-                            href={`/services/${s.id}`}
+                            href="/services"
                             onClick={closeMenu}
-                            className="block font-bold text-2xl md:text-4xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
+                            className="inline-flex items-center gap-2 pt-1 font-bold text-base md:text-lg text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors tracking-tighter"
                           >
                             <motion.span
                               whileHover={{ x: 10 }}
                               transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                              className="inline-block"
+                              className="inline-flex items-center gap-2"
                             >
-                              {s.title}
+                              View all services
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                             </motion.span>
                           </Link>
-                        </motion.div>
-                      ))}
-                      <motion.div
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: services.length * 0.03, duration: 0.3 }}
-                      >
-                        <Link
-                          href="/services"
-                          onClick={closeMenu}
-                          className="inline-flex items-center gap-2 pt-2 font-bold text-xl md:text-2xl text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors tracking-tighter"
-                        >
-                          <motion.span
-                            whileHover={{ x: 10 }}
-                            transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                            className="inline-flex items-center gap-2"
-                          >
-                            View all services
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                          </motion.span>
-                        </Link>
+                        </div>
                       </motion.div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {[
+                  { name: "Portfolio", href: "/portfolio" },
+                  { name: "Pricing", href: "/pricing" },
+                  { name: "About", href: "/about" },
+                  { name: "Contact", href: "/contact" },
+                ].map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onClick={closeMenu}
+                    className="block font-bold text-3xl md:text-5xl text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors tracking-tighter"
+                  >
+                  <motion.span
+                    whileHover={{ x: 10 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                    className="inline-block"
+                  >
+                    {item.name}
+                  </motion.span>
+                  </Link>
+                ))}
+              </motion.div>
 
               <div className="mt-12 pt-8 border-t border-[rgb(var(--fg-rgb)/10%)] space-y-6 shrink-0">
                 <span className="text-[rgb(var(--fg-rgb)/50%)] text-xs uppercase tracking-[0.5em] font-bold block">Get in touch</span>
