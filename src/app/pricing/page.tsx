@@ -106,7 +106,7 @@ export default function PricingPage() {
                     Chat on WhatsApp
                   </Link>
                   <Link
-                    href="mailto:info@pathpixhub.com"
+                    href="mailto:pathpixhub@gmail.com"
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-card border border-[rgb(var(--fg-rgb)/10%)] text-sm font-semibold text-[rgb(var(--fg-rgb)/70%)] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))] hover:shadow-md transition-all duration-300"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>

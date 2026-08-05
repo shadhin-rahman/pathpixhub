@@ -38,7 +38,7 @@ export default function Footer() {
             <div className="mt-6 space-y-3">
               <div className="flex items-center gap-2.5 text-sm text-white/70">
                 <Mail className="w-4 h-4 text-[rgb(var(--accent-400))]" />
-                <a href="mailto:info@pathpixhub.com" className="hover:text-[rgb(var(--accent-400))] transition-colors">info@pathpixhub.com</a>
+                <a href="mailto:pathpixhub@gmail.com" className="hover:text-[rgb(var(--accent-400))] transition-colors">pathpixhub@gmail.com</a>
               </div>
               <div className="flex items-center gap-2.5 text-sm text-white/70">
                 <Phone className="w-4 h-4 text-[rgb(var(--accent-400))]" />

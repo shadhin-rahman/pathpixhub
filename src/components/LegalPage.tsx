@@ -121,7 +121,7 @@ export default function LegalPage({
               {contactIntro ?? "Email our legal team and we will get back to you."}
             </p>
             <a
-              href="mailto:info@pathpixhub.com"
+              href="mailto:pathpixhub@gmail.com"
               className="mt-5 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] transition-all"
             >
               Email Legal Team

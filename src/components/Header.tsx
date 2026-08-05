@@ -226,8 +226,8 @@ export default function Header() {
 
               <div className="mt-12 pt-8 border-t border-[rgb(var(--fg-rgb)/10%)] space-y-6 shrink-0">
                 <span className="text-[rgb(var(--fg-rgb)/50%)] text-xs uppercase tracking-[0.5em] font-bold block">Get in touch</span>
-                <a href="mailto:info@pathpixhub.com" className="text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors block text-xl font-medium">
-                  info@pathpixhub.com
+                <a href="mailto:pathpixhub@gmail.com" className="text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-500))] transition-colors block text-xl font-medium">
+                  pathpixhub@gmail.com
                 </a>
                 <div className="flex items-center gap-3">
                   <a
