@@ -134,7 +134,7 @@ export default function ContactForm() {
     }
     setSubmitStatus("sending");
     try {
-      const res = await fetch("https://formspree.io/f/xrpzeyjw", {
+      const res = await fetch("/api/send", {
         method: "POST",
         body: data,
         headers: { Accept: "application/json" },
@@ -481,7 +481,7 @@ export default function ContactForm() {
           </p>
         </div>
 
-        <form action="https://formspree.io/f/xrpzeyjw" method="POST" onSubmit={handleSubmit} className="relative">
+        <form action="/api/send" method="POST" onSubmit={handleSubmit} className="relative">
         <div className={submitStatus === "success" ? "hidden" : "grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8"}>
           <div>
             <div className="flex items-center gap-1 p-1 rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/5%)] w-fit mb-6">
