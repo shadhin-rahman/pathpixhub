@@ -120,6 +120,31 @@ export default function ContactForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    if (wantsQuote) {
+      data.set("quote_details", quoteSummary || "");
+      data.set("turnaround", turnaroundOption?.label || "");
+      data.set("file_format", selectedFileOpt?.label || "");
+      data.set("image_links", imageLinks || "");
+    }
+    setSubmitStatus("sending");
+    try {
+      const res = await fetch("https://formspree.io/f/xrpzeyjw", {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+      if (res.ok) setSubmitStatus("success");
+      else setSubmitStatus("error");
+    } catch {
+      setSubmitStatus("error");
+    }
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -456,8 +481,8 @@ export default function ContactForm() {
           </p>
         </div>
 
-        <form action="https://formspree.io/f/xrpzeyjw" method="POST">
-        <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8">
+        <form action="https://formspree.io/f/xrpzeyjw" method="POST" onSubmit={handleSubmit} className="relative">
+        <div className={submitStatus === "success" ? "hidden" : "grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8"}>
           <div>
             <div className="flex items-center gap-1 p-1 rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/5%)] w-fit mb-6">
               <button type="button" onClick={() => { setWantsQuote(true); setStep(1); }}
@@ -721,8 +746,10 @@ export default function ContactForm() {
                     <div className="flex gap-3">
                       <button type="button" onClick={() => setStep(2)}
                         className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
-                      <button type="submit"
-                        className="flex-1 py-3.5 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] hover:scale-[1.01] transition-all">Submit Quote Request</button>
+                      <button type="submit" disabled={submitStatus === "sending" || submitStatus === "success"}
+                        className="flex-1 py-3.5 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] hover:scale-[1.01] transition-all disabled:opacity-60 disabled:hover:scale-100">
+                        {submitStatus === "sending" ? "Sending..." : "Submit Quote Request"}
+                      </button>
                     </div>
                     <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] text-center">We respond within 45 minutes.</p>
                   </div>
@@ -748,8 +775,10 @@ export default function ContactForm() {
                   <textarea name="message" id="message-q" rows={5} required
                     className="w-full px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))] focus:border-[rgb(var(--accent-500)/60%)] outline-none transition-all text-sm resize-none" placeholder="Tell us about your images or project..." />
                 </div>
-                <button type="submit"
-                  className="w-full sm:w-auto px-10 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm">Send Message</button>
+                <button type="submit" disabled={submitStatus === "sending" || submitStatus === "success"}
+                  className={`w-full sm:w-auto px-10 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm disabled:opacity-60 disabled:hover:scale-100 ${submitStatus === "success" ? "hidden" : ""}`}>
+                  {submitStatus === "sending" ? "Sending..." : "Send Message"}
+                </button>
                 <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)]">We respond within 45 minutes.</p>
               </div>
             )}
@@ -835,6 +864,32 @@ export default function ContactForm() {
             )}
           </div>
         </div>
+
+        {submitStatus === "success" && (
+          <div className="glass-card rounded-[2rem] p-10 border-[rgb(var(--fg-rgb)/10%)] text-center">
+            <div className="w-16 h-16 rounded-full bg-[rgb(34_197_94_/_12%)] flex items-center justify-center mx-auto mb-6">
+              <svg className="w-8 h-8 text-[rgb(34_197_94)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+            </div>
+            <h3 className="text-3xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">{wantsQuote ? "Quote Request Sent!" : "Message Sent!"}</h3>
+            <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">
+              Thank you for reaching out! We&apos;ve received your {wantsQuote ? "quote request" : "message"} and will get back to you with a custom quote within <span className="font-bold text-[rgb(34_197_94)]">45 minutes</span>.
+            </p>
+            <button type="button" onClick={() => setSubmitStatus("idle")}
+              className="mt-8 inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm">
+              Send Another Request
+            </button>
+          </div>
+        )}
+
+        {submitStatus === "error" && (
+          <div className="glass-card rounded-[2rem] p-8 border border-red-400/40 text-center">
+            <p className="text-sm text-red-400 leading-relaxed">Something went wrong while sending your request. Please try again, or email us directly at <a href="mailto:pathpixhub@gmail.com" className="underline">pathpixhub@gmail.com</a>.</p>
+            <button type="button" onClick={() => setSubmitStatus("idle")}
+              className="mt-6 px-6 py-3 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-semibold border border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm">
+              Try Again
+            </button>
+          </div>
+        )}
         </form>
       </div>
     </div>

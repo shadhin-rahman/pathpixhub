@@ -73,6 +73,7 @@ export default function FreeTrialPage() {
   const [bypassInput, setBypassInput] = useState("");
   const [bypassError, setBypassError] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "sending" | "error">("idle");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -121,12 +122,27 @@ export default function FreeTrialPage() {
     setStep(1);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    const emailInput = (e.currentTarget.elements.namedItem("email") as HTMLInputElement)?.value;
-    if (emailInput) {
-      markFreeTrialUsed(emailInput);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const emailInput = (form.elements.namedItem("email") as HTMLInputElement)?.value;
+    const data = new FormData(form);
+    setSubmitStatus("sending");
+    try {
+      const res = await fetch("https://formspree.io/f/xrpzeyjw", {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+      if (res.ok) {
+        if (emailInput) markFreeTrialUsed(emailInput);
+        setSubmitted(true);
+      } else {
+        setSubmitStatus("error");
+      }
+    } catch {
+      setSubmitStatus("error");
     }
-    setSubmitted(true);
   };
 
   const handleBypassSubmit = () => {
@@ -562,10 +578,15 @@ export default function FreeTrialPage() {
                             placeholder="Any special instructions for your edits..." />
                         </div>
 
-                        <button type="submit"
-                          className="w-full px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm">
-                          Submit Free Trial
+                        <button type="submit" disabled={submitStatus === "sending"}
+                          className="w-full px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm disabled:opacity-60 disabled:hover:scale-100">
+                          {submitStatus === "sending" ? "Sending..." : "Submit Free Trial"}
                         </button>
+                        {submitStatus === "error" && (
+                          <p className="text-xs text-red-400 text-center bg-red-400/10 border border-red-400/30 rounded-xl px-4 py-3">
+                            Couldn&apos;t send your request. Please try again or email us at <a href="mailto:pathpixhub@gmail.com" className="underline">pathpixhub@gmail.com</a>.
+                          </p>
+                        )}
                         <p className="text-xs text-[rgb(var(--fg-rgb)/30%)] text-center">We&apos;ll edit your images and respond within 6-8 hours.</p>
                       </form>
                     </div>
