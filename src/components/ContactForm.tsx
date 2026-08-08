@@ -456,7 +456,7 @@ export default function ContactForm() {
           </p>
         </div>
 
-        <form action="https://formspree.io/f/xovjbydw" method="POST">
+        <form action="https://formspree.io/f/xrpzeyjw" method="POST">
         <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8">
           <div>
             <div className="flex items-center gap-1 p-1 rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/5%)] w-fit mb-6">

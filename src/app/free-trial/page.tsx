@@ -430,7 +430,7 @@ export default function FreeTrialPage() {
                   {/* Right: Form */}
                   <div className="lg:col-span-3">
                     <div className="glass-card rounded-3xl p-8 md:p-10 border-[rgb(var(--fg-rgb)/5%)]">
-                      <form action="https://formspree.io/f/xovjbydw" method="POST" encType="multipart/form-data" onSubmit={handleSubmit} className="space-y-6">
+                      <form action="https://formspree.io/f/xrpzeyjw" method="POST" encType="multipart/form-data" onSubmit={handleSubmit} className="space-y-6">
                         <input type="hidden" name="_subject" value="Free Trial Request" />
                         <input type="hidden" name="selected_services" value={selectedServices.join(", ")} />
                         <input type="hidden" name="image_purpose" value={usageType} />
