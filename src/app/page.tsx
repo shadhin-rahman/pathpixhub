@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { services } from "@/data/services";
 import Testimonials from "@/components/Testimonials";
+import CreditPlans from "@/components/CreditPlans";
 import StaggerReveal, { StaggerItem } from "@/components/StaggerReveal";
 import ScrollIndicator from "@/components/ScrollIndicator";
 import CountUp from "@/components/CountUp";
@@ -303,6 +304,8 @@ export default function Home() {
       </section>
 
       <Testimonials />
+
+      <CreditPlans />
 
       <section className="py-28 lg:py-36 bg-[var(--bg-alt)]">
         <div className="max-w-4xl mx-auto px-6">

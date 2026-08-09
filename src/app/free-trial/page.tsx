@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { services } from "@/data/services";
 import ScrollReveal from "@/components/ScrollReveal";
 import AIPreviewTool from "@/components/AIPreviewTool";
+import CreditBanner from "@/components/CreditBanner";
 import { fetchCountryCode, isCountryBlocked, setBypassCode, isAdmin } from "@/lib/countryBlocker";
 
 const COUNTRIES = [
@@ -632,6 +633,8 @@ export default function FreeTrialPage() {
         </div>
       </section>
       </ScrollReveal>
+
+      <CreditBanner />
     </>
   );
 }

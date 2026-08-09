@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRef } from "react";
 import { ChevronRight } from "lucide-react";
 import { services, priceMap, serviceImagePath } from "@/data/services";
+import CreditBanner from "@/components/CreditBanner";
 
 const cardColors = [
   "#fca5a5",
@@ -182,6 +183,8 @@ export default function PricingPage() {
           </div>
         </div>
       </section>
+
+      <CreditBanner />
 
       <section className="py-24 overflow-hidden bg-[var(--bg)] relative">
         <div className="flex gap-8 w-max items-stretch marquee-slide" ref={sliderRef}>

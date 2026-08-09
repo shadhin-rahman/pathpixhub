@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import ContactForm from "@/components/ContactForm";
+import CreditBanner from "@/components/CreditBanner";
 
 export default function ContactPage() {
   return (
@@ -40,6 +41,8 @@ export default function ContactPage() {
           <ContactForm />
         </div>
       </section>
+
+      <CreditBanner />
     </>
   );
 }
