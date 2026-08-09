@@ -121,6 +121,7 @@ export default function ContactForm() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [submitStatus, setSubmitStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [submitError, setSubmitError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -140,8 +141,17 @@ export default function ContactForm() {
         headers: { Accept: "application/json" },
       });
       if (res.ok) setSubmitStatus("success");
-      else setSubmitStatus("error");
+      else {
+        let msg = "Could not send your request.";
+        try {
+          const j = await res.json();
+          if (j?.error) msg = j.error as string;
+        } catch { /* ignore */ }
+        setSubmitError(msg);
+        setSubmitStatus("error");
+      }
     } catch {
+      setSubmitError("Network error while sending.");
       setSubmitStatus("error");
     }
   };
@@ -883,8 +893,8 @@ export default function ContactForm() {
 
         {submitStatus === "error" && (
           <div className="glass-card rounded-[2rem] p-8 border border-red-400/40 text-center">
-            <p className="text-sm text-red-400 leading-relaxed">Something went wrong while sending your request. Please try again, or email us directly at <a href="mailto:pathpixhub@gmail.com" className="underline">pathpixhub@gmail.com</a>.</p>
-            <button type="button" onClick={() => setSubmitStatus("idle")}
+            <p className="text-sm text-red-400 leading-relaxed">{submitError} Please try again, or email us directly at <a href="mailto:pathpixhub@gmail.com" className="underline">pathpixhub@gmail.com</a>.</p>
+            <button type="button" onClick={() => { setSubmitStatus("idle"); setSubmitError(""); }}
               className="mt-6 px-6 py-3 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-semibold border border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm">
               Try Again
             </button>
