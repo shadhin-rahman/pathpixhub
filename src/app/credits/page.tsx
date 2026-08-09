@@ -1,0 +1,242 @@
+"use client";
+
+import { useState } from "react";
+import { motion } from "framer-motion";
+import Link from "next/link";
+
+const BUNDLES = [
+  { price: 25, paid: 25, free: 1, credits: 26, per: 0.96 },
+  { price: 50, paid: 50, free: 4, credits: 54, per: 0.93 },
+  { price: 100, paid: 100, free: 13, credits: 113, per: 0.88 },
+  { price: 250, paid: 250, free: 40, credits: 290, per: 0.86, popular: true },
+  { price: 500, paid: 500, free: 100, credits: 600, per: 0.83 },
+  { price: 1000, paid: 1000, free: 250, credits: 1250, per: 0.8 },
+  { price: 2500, paid: 2500, free: 700, credits: 3200, per: 0.78 },
+  { price: 5000, paid: 5000, free: 1550, credits: 6550, per: 0.76 },
+];
+
+const FAQS = [
+  {
+    q: "What is a PathPixHub credit worth?",
+    a: "1 credit = $1 worth of image editing. When you place an order, you can pay with credits instead of reaching for your card — at a lower price per shot.",
+  },
+  {
+    q: "Do credits ever expire?",
+    a: "No. Your credits never expire, so you can stock up during a sale and use them whenever you need — even months later.",
+  },
+  {
+    q: "How do I pay with my credits?",
+    a: "We store your credit balance on your account. When you confirm an order, just choose \u201cPay with credits\u201d at checkout and the amount is deducted automatically.",
+  },
+  {
+    q: "How can I check my credit balance?",
+    a: "Email us at pathpixhub@gmail.com any time and we'll reply with your current balance and order history instantly.",
+  },
+  {
+    q: "Can I get a bigger discount for regular bulk edits?",
+    a: "Yes. Two ways: pick a larger credit pack for a lower per-image rate, or talk to our Enterprise team for a custom monthly volume deal with dedicated rates.",
+  },
+];
+
+const STEPS = [
+  { num: "1", icon: "🛒", title: "Buy a credit pack", desc: "Choose a pack below. Bigger packs include bonus free credits on top." },
+  { num: "2", icon: "📧", title: "Send us your images", desc: "Submit your order through our contact form — tell us the service, quantity and turnaround." },
+  { num: "3", icon: "✅", title: "We edit & deduct credits", desc: "We edit your images first, then deduct the credits from your balance. No card at every step." },
+];
+
+export default function CreditsPage() {
+  const [open, setOpen] = useState<number | null>(0);
+
+  return (
+    <>
+      {/* Hero */}
+      <section className="pt-40 pb-20 mesh-gradient">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center max-w-3xl mx-auto">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-text))] text-sm font-bold mb-6 border border-[rgb(var(--accent-500)/15%)]">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              PathPixHub Credits
+            </span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight gradient-text leading-[1.1]">
+              Save time &amp; money with credits
+            </h1>
+            <p className="mt-5 text-lg text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-2xl mx-auto">
+              Regular customer or big batch coming up? Buy credits once and get the lowest price per edit — with bonus credits the more you buy.
+            </p>
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a href="#bundles"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm">
+                Buy credits
+              </a>
+              <a href="#faq"
+                className="px-8 py-4 rounded-full glass-card border border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))] font-bold hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))] transition-all text-sm">
+                How it works
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust strip */}
+      <section className="border-b border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-alt)]">
+        <div className="max-w-7xl mx-auto px-6 py-6 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[rgb(var(--fg-rgb)/8%)] text-center">
+          {[
+            { icon: "💵", t: "From $0.76 per image", d: "with our biggest packs" },
+            { icon: "⚡", t: "Turnaround from 6 hours", d: "standard & express options" },
+            { icon: "✅", t: "Quality guaranteed", d: "unlimited revisions until perfect" },
+          ].map((x) => (
+            <div key={x.t} className="py-4 px-4">
+              <p className="text-sm font-bold text-[rgb(var(--fg-rgb))]"><span className="mr-1.5">{x.icon}</span>{x.t}</p>
+              <p className="text-xs text-[rgb(var(--fg-rgb)/50%)] mt-1">{x.d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Benefits */}
+      <section className="py-20 lg:py-24 bg-[var(--bg)]">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            { icon: "⏱️", title: "Save time", desc: "Pay once, then fly through checkout on every future order without touching your card again." },
+            { icon: "💰", title: "Save money", desc: "Credits give you the lowest price per edit. The more you buy, the more you save." },
+            { icon: "🤝", title: "Bonus credits", desc: "Every bigger pack is topped up with free bonus credits — 4 to 1,550 free credits on top." },
+          ].map((b, i) => (
+            <motion.div key={b.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className="rounded-2xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-alt)] p-6 hover:border-[rgb(var(--accent-500)/30%)] transition-all"
+            >
+              <span className="text-3xl">{b.icon}</span>
+              <h3 className="mt-4 text-lg font-bold text-[rgb(var(--fg-rgb))]">{b.title}</h3>
+              <p className="mt-2 text-sm text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">{b.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Bundles */}
+      <section id="bundles" className="py-20 lg:py-24 bg-[var(--bg-alt)]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight gradient-text">Buy more, get more</h2>
+            <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)]">Pick a bigger pack and we&apos;ll top you up with bonus credits. <span className="font-bold text-[rgb(var(--fg-rgb))]">1 credit = $1</span> toward your orders.</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {BUNDLES.map((b, i) => (
+              <motion.div key={b.price}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className={`relative rounded-3xl border-2 p-6 flex flex-col bg-[var(--bg)] transition-all hover:-translate-y-1 hover:shadow-xl ${b.popular ? "border-[rgb(var(--accent-500)/60%)] shadow-lg shadow-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/8%)]"}`}
+              >
+                {b.popular && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-bold px-3 py-1 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow">
+                    Most Popular
+                  </span>
+                )}
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl font-extrabold text-[rgb(var(--fg-rgb))]">${b.price.toLocaleString()}</span>
+                  <span className="text-sm text-[rgb(var(--fg-rgb)/40%)] font-semibold">→</span>
+                  <span className="text-3xl font-extrabold text-[rgb(var(--accent-text))]">{b.credits.toLocaleString()} credits</span>
+                </div>
+                <p className="mt-2 text-xs text-[rgb(var(--fg-rgb)/50%)]">
+                  <span className="font-bold text-[rgb(var(--fg-rgb)/75%)]">${b.paid.toLocaleString()} paid</span> + <span className="font-bold text-[rgb(var(--accent-text))]">{b.free.toLocaleString()} free</span>
+                </p>
+                <div className="mt-4 rounded-xl text-center py-2 text-sm font-bold border bg-[rgb(var(--fg-rgb)/4%)] border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb)/70%)]">
+                  ${b.per.toFixed(2)} / credit
+                </div>
+                <Link href={`/payment?plan=${encodeURIComponent("Credit Pack")}&amount=${b.price}&desc=${encodeURIComponent(`${b.credits.toLocaleString()} credits ($${b.paid.toLocaleString()} paid + ${b.free.toLocaleString()} bonus)`)}`}
+                  className={`mt-5 block text-center py-3 rounded-xl font-bold text-sm transition-all ${b.popular ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))]" : "border-2 border-[rgb(var(--fg-rgb)/15%)] text-[rgb(var(--fg-rgb)/70%)] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))]"}`}>
+                  Buy ${b.price.toLocaleString()} pack
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+
+          <p className="mt-8 text-center text-xs text-[rgb(var(--fg-rgb)/45%)]">
+            Prefer a monthly credit plan instead? See{" "}
+            <Link href="/subscription" className="text-[rgb(var(--accent-text))] font-bold hover:underline">Standard / Pro / Enterprise plans</Link>.
+          </p>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="py-20 lg:py-24 bg-[var(--bg)]">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <span className="text-xs uppercase tracking-[0.3em] font-bold text-[rgb(var(--fg-rgb)/40%)]">How it works</span>
+            <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight gradient-text">Credits in 3 simple steps</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {STEPS.map((s, i) => (
+              <motion.div key={s.num}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="relative rounded-2xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-alt)] p-6"
+              >
+                <span className="absolute top-5 right-6 text-5xl font-extrabold text-[rgb(var(--fg-rgb)/6%)]">{s.num}</span>
+                <span className="text-3xl">{s.icon}</span>
+                <h3 className="mt-4 font-bold text-[rgb(var(--fg-rgb))]">{s.title}</h3>
+                <p className="mt-2 text-sm text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">{s.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="py-20 lg:py-24 bg-[var(--bg-alt)]">
+        <div className="max-w-3xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <span className="text-xs uppercase tracking-[0.3em] font-bold text-[rgb(var(--fg-rgb)/40%)]">FAQ</span>
+            <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight gradient-text">Questions about credits?</h2>
+          </div>
+          <div className="space-y-4">
+            {FAQS.map((f, i) => (
+              <div key={i} className="rounded-2xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg)] overflow-hidden">
+                <button type="button" onClick={() => setOpen(open === i ? null : i)}
+                  className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left">
+                  <span className="font-bold text-sm text-[rgb(var(--fg-rgb))]">{f.q}</span>
+                  <motion.span animate={{ rotate: open === i ? 45 : 0 }} transition={{ duration: 0.2 }}
+                    className="shrink-0 w-7 h-7 rounded-full glass-card flex items-center justify-center text-[rgb(var(--fg-rgb))]">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
+                  </motion.span>
+                </button>
+                <motion.div initial={false}
+                  animate={{ height: open === i ? "auto" : 0, opacity: open === i ? 1 : 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="overflow-hidden">
+                  <p className="px-6 pb-5 text-sm text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">{f.a}</p>
+                </motion.div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Alternative CTA */}
+      <section className="py-20 bg-[var(--bg)]">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight gradient-text">Want to pay per order instead?</h2>
+          <p className="mt-3 text-[rgb(var(--fg-rgb)/55%)]">Work first, pay later. Choose your service and turnaround — we edit, then email you a secure payment link.</p>
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/contact"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm">
+              Order My Edits
+            </Link>
+            <Link href="/enterprise"
+              className="px-8 py-4 rounded-full glass-card border border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))] font-bold hover:border-purple-500/50 hover:text-purple-400 transition-all text-sm">
+              Enterprise Bulk Deal
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

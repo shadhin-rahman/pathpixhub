@@ -129,6 +129,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/credits" className="text-sm text-white/60 hover:text-[rgb(var(--accent-400))] transition-colors">
+                  Credits
+                </Link>
+              </li>
+              <li>
                 <Link href="/free-trial" className="text-sm text-white/60 hover:text-[rgb(var(--accent-400))] transition-colors">
                   Free Trial
                 </Link>
