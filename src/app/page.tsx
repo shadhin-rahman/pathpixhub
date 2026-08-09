@@ -89,7 +89,7 @@ export default function Home() {
             <div key={i} className="flex items-center gap-16">
               {["24/7 Customer Support", "12hr Fast Turnaround", "From $0.39 / Image", "100% Satisfaction", "Free Trial Available"].map((text) => (
                 <span key={text} className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
-                  <span className="w-1 h-1 rounded-full bg-[rgb(var(--accent-500))]" />
+                  <span className="w-1 h-1 rounded-full bg-[#89F336]" />
                   {text}
                 </span>
               ))}
