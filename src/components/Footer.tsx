@@ -1,11 +1,13 @@
 "use client";
 import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import EmailModal from "@/components/EmailModal";
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
+  const [emailOpen, setEmailOpen] = useState(false);
   const { scrollYProgress } = useScroll({
     target: footerRef,
     offset: ["start end", "start 0.25"],
@@ -38,7 +40,8 @@ export default function Footer() {
             <div className="mt-6 space-y-3">
               <div className="flex items-center gap-2.5 text-sm text-white/70">
                 <Mail className="w-4 h-4 text-[rgb(var(--accent-400))]" />
-                <a href="mailto:pathpixhub@gmail.com" className="hover:text-[rgb(var(--accent-400))] transition-colors">pathpixhub@gmail.com</a>
+                <button type="button" onClick={() => setEmailOpen(true)}
+                  className="hover:text-[rgb(var(--accent-400))] transition-colors underline underline-offset-2">pathpixhub@gmail.com</button>
               </div>
               <div className="flex items-center gap-2.5 text-sm text-white/70">
                 <Phone className="w-4 h-4 text-[rgb(var(--accent-400))]" />
@@ -156,6 +159,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
+      <EmailModal open={emailOpen} onClose={() => setEmailOpen(false)} />
     </motion.footer>
   );
 }
