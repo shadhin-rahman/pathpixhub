@@ -201,6 +201,19 @@
       linear-gradient(to bottom, var(--bg), var(--bg-alt));
     transition: background-color 0.3s ease;
   }
+
+  .brand-cta {
+    background:
+      radial-gradient(900px 500px at 85% -10%, rgb(var(--accent-500) / 12%), transparent 60%),
+      radial-gradient(700px 400px at 0% 110%, rgb(var(--accent-500) / 8%), transparent 60%),
+      linear-gradient(to bottom, #0a0a0a, #111111);
+  }
+  .brand-cta .gradient-text {
+    background-image: linear-gradient(to bottom right, #ffffff, rgb(255 255 255 / 45%));
+  }
+  .brand-cta p {
+    color: rgb(255 255 255 / 65%);
+  }
 }
 
 @keyframes marquee-slide {
