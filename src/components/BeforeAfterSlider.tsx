@@ -130,7 +130,6 @@ export default function BeforeAfterSlider({
     <div
       ref={containerRef}
       className={`relative overflow-hidden rounded-2xl select-none cursor-ew-resize group ${className}`}
-      data-cursor="drag"
     >
       <div className="relative w-full aspect-[4/3] bg-[var(--bg-subtle)] overflow-hidden">
         {/* After image (base layer) - shown by default */}
