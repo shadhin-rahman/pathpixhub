@@ -19,7 +19,7 @@ const unitPrice: Record<string, number> = {
   "car-editing": 2.99,
 };
 
-// Simple volume discount — set by the client. Adjust the threshold/rate here if it ever changes.
+// Simple volume discount â€” set by the client. Adjust the threshold/rate here if it ever changes.
 const VOLUME_DISCOUNT_THRESHOLD = 500;
 const VOLUME_DISCOUNT_RATE = 0.1;
 
@@ -63,11 +63,11 @@ export default function PricingCalculator() {
 
       <div className="relative max-w-6xl mx-auto px-6">
         <div className="text-center mb-12">
-          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Instant Estimate</h2>
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">Instant Estimate</h2>
           <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Build Your Own Quote</h3>
           <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] max-w-xl mx-auto">
             Select the services you need and roughly how many images, see an estimated cost right
-            away, then send us the details below — no waiting on a reply to get a ballpark number.
+            away, then send us the details below â€” no waiting on a reply to get a ballpark number.
           </p>
         </div>
 
@@ -155,7 +155,7 @@ export default function PricingCalculator() {
           <div className="lg:sticky lg:top-28 h-fit glass-card rounded-[2rem] p-8 border-[rgb(var(--fg-rgb)/10%)]">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-[rgb(var(--accent-500)/12%)] flex items-center justify-center">
-                <svg className="w-4 h-4 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-[rgb(var(--accent-text))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3v-6m-3 6v-9m-2 9h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
@@ -181,7 +181,7 @@ export default function PricingCalculator() {
                         exit={{ opacity: 0, height: 0 }}
                         className="flex items-center justify-between text-sm overflow-hidden"
                       >
-                        <span className="text-[rgb(var(--fg-rgb)/70%)]">{s.title} × {qty}</span>
+                        <span className="text-[rgb(var(--fg-rgb)/70%)]">{s.title} Ã— {qty}</span>
                         <span className="font-semibold text-[rgb(var(--fg-rgb))]">${lineTotal.toFixed(2)}</span>
                       </motion.div>
                     );
@@ -194,7 +194,7 @@ export default function PricingCalculator() {
                     <span>{totalImages}</span>
                   </div>
                   {discountApplies && (
-                    <div className="flex items-center justify-between text-sm text-[rgb(var(--accent-400))]">
+                    <div className="flex items-center justify-between text-sm text-[rgb(var(--accent-text))]">
                       <span>Volume discount ({VOLUME_DISCOUNT_THRESHOLD}+ images, {VOLUME_DISCOUNT_RATE * 100}%)</span>
                       <span>-${(subtotal * VOLUME_DISCOUNT_RATE).toFixed(2)}</span>
                     </div>
@@ -227,7 +227,7 @@ export default function PricingCalculator() {
             </a>
             <p className="mt-4 text-[11px] text-[rgb(var(--fg-rgb)/35%)] leading-relaxed">
               This is an estimate based on starting rates. Final pricing may vary based on image
-              complexity — we&apos;ll confirm the exact price before any work begins.
+              complexity â€” we&apos;ll confirm the exact price before any work begins.
             </p>
           </div>
         </div>

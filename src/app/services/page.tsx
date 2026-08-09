@@ -7,7 +7,7 @@ import StaggerReveal, { StaggerItem } from "@/components/StaggerReveal";
 
 export const metadata: Metadata = {
   title: "Services | PathPixHub",
-  description: "Explore our 10 professional photo editing services — clipping path, background removal, image masking, ghost mannequin, retouching, and more.",
+  description: "Explore our 10 professional photo editing services â€” clipping path, background removal, image masking, ghost mannequin, retouching, and more.",
 };
 
 export default function ServicesPage() {
@@ -16,10 +16,10 @@ export default function ServicesPage() {
       <ScrollReveal>
       <section className="pt-40 pb-20 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">What We Offer</h2>
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">What We Offer</h2>
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Services</h1>
           <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-2xl">
-            We deliver pixel-perfect image editing — powered by skilled artists delivering with obsessive precision.
+            We deliver pixel-perfect image editing â€” powered by skilled artists delivering with obsessive precision.
           </p>
         </div>
       </section>
@@ -55,7 +55,7 @@ export default function ServicesPage() {
                       </span>
                     </div>
                     <p className="mt-1.5 text-sm text-[rgb(var(--fg-rgb)/55%)] line-clamp-2">{service.tagline}</p>
-                    <span className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-[rgb(var(--fg-rgb)/60%)] group-hover:text-[rgb(var(--accent-500))] transition-colors">
+                    <span className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-[rgb(var(--fg-rgb)/60%)] group-hover:text-[rgb(var(--accent-text))] transition-colors">
                       Learn More
                       <svg className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                     </span>
@@ -84,7 +84,7 @@ export default function ServicesPage() {
             </Link>
             <Link
               href="/free-trial"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-semibold border border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))] transition-all text-sm"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-semibold border border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))] transition-all text-sm"
             >
               Start Free Trial
             </Link>

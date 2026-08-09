@@ -36,7 +36,7 @@ export default function CinematicShowcase({ services }: CinematicServiceProps) {
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
-          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">What We Offer</h2>
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">What We Offer</h2>
           <h3 className="text-5xl md:text-7xl font-bold tracking-tight gradient-text">Our Services</h3>
         </motion.div>
       </div>
@@ -90,7 +90,7 @@ function ServiceCard({
 
           {/* Content */}
           <div className="absolute bottom-0 left-0 right-0 p-4 md:p-10 lg:p-14">
-            <span className="text-[10px] md:text-xs font-bold text-[rgb(var(--accent-400))] uppercase tracking-[0.3em]">
+            <span className="text-[10px] md:text-xs font-bold text-[rgb(var(--accent-text))] uppercase tracking-[0.3em]">
               Service {String(index + 1).padStart(2, "0")}
             </span>
             <h3 className="mt-1 md:mt-2 text-lg md:text-4xl lg:text-6xl font-bold text-white leading-tight md:leading-[0.95] tracking-tight">
@@ -99,7 +99,7 @@ function ServiceCard({
             <p className="mt-1 md:mt-4 text-xs md:text-base text-white/60 max-w-lg leading-snug md:leading-relaxed">
               {service.tagline}
             </p>
-            <div className="mt-2 md:mt-6 inline-flex items-center gap-1 md:gap-2 text-xs md:text-sm font-bold text-[rgb(var(--accent-400))] group-hover:gap-3 transition-all duration-300">
+            <div className="mt-2 md:mt-6 inline-flex items-center gap-1 md:gap-2 text-xs md:text-sm font-bold text-[rgb(var(--accent-text))] group-hover:gap-3 transition-all duration-300">
               View Service
               <svg className="w-3 h-3 md:w-4 md:h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />

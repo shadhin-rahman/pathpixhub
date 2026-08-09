@@ -12,6 +12,7 @@
   --accent-400: 156 246 88;
   --accent-500: 137 243 54;
   --accent-600: 108 194 43;
+  --accent-text: 137 243 54;
   --accent-contrast: 0 0 0;
   color-scheme: dark;
 }
@@ -28,6 +29,7 @@
   --accent-400: 156 246 88;
   --accent-500: 137 243 54;
   --accent-600: 108 194 43;
+  --accent-text: 79 137 15;
   --accent-contrast: 0 0 0;
   color-scheme: light;
 }

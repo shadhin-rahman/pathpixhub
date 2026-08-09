@@ -170,7 +170,7 @@ export default function AIPreviewTool({ className = "" }: AIPreviewToolProps) {
         <button type="button" onClick={() => fileInputRef.current?.click()}
           className="w-full aspect-video rounded-2xl border-2 border-dashed border-[rgb(var(--fg-rgb)/15%)] hover:border-[rgb(var(--accent-500)/40%)] bg-[var(--bg-subtle)] flex flex-col items-center justify-center gap-4 transition-all cursor-pointer group">
           <div className="w-16 h-16 rounded-full bg-[rgb(var(--accent-500)/10%)] flex items-center justify-center group-hover:scale-110 transition-transform">
-            <svg className="w-8 h-8 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-8 h-8 text-[rgb(var(--accent-text))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
@@ -178,7 +178,7 @@ export default function AIPreviewTool({ className = "" }: AIPreviewToolProps) {
             <p className="text-sm font-bold text-[rgb(var(--fg-rgb))]">Upload Your Image</p>
             <p className="text-xs text-[rgb(var(--fg-rgb)/40%)] mt-1">AI-powered background removal &amp; enhancement</p>
           </div>
-          <span className="px-4 py-2 rounded-full bg-[rgb(var(--accent-500))/10%] text-[rgb(var(--accent-400))] text-xs font-bold">Try Free Preview</span>
+          <span className="px-4 py-2 rounded-full bg-[rgb(var(--accent-500))/10%] text-[rgb(var(--accent-text))] text-xs font-bold">Try Free Preview</span>
         </button>
       ) : (
         <div className="space-y-4">
@@ -214,7 +214,7 @@ export default function AIPreviewTool({ className = "" }: AIPreviewToolProps) {
               <button key={f.id} type="button" onClick={() => applyFilter(f.id)} disabled={isProcessing}
                 className={`rounded-xl py-3 px-2 text-center border transition-all ${processedFilter === f.id ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/8%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/15%)]"} ${isProcessing ? "opacity-50 cursor-not-allowed" : ""}`}>
                 <div className="w-8 h-8 rounded-lg bg-[rgb(var(--accent-500)/10%)] flex items-center justify-center mx-auto">
-                  <svg className="w-4 h-4 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-[rgb(var(--accent-text))]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={f.icon} />
                   </svg>
                 </div>

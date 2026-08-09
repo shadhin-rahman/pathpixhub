@@ -64,26 +64,26 @@ const TURNAROUND_OPTIONS = [
 ];
 
 const FILE_OPTIONS = [
-  { id: "psd-original-multi", label: "PSD — Original Background, Multiple Layer" },
-  { id: "psd-original-single", label: "PSD — Original Background, Single Layer" },
-  { id: "psd-white-multi", label: "PSD — White Background, Multiple Layer" },
-  { id: "psd-white-single", label: "PSD — White Background, Single Layer" },
-  { id: "psd-transparent-multi", label: "PSD — Transparent Background, Multiple Layer" },
-  { id: "psd-transparent-single", label: "PSD — Transparent Background, Single Layer" },
-  { id: "psd-mask-multi", label: "PSD — Layer Mask, Multiple Layer" },
-  { id: "psd-mask-single", label: "PSD — Layer Mask, Single Layer" },
-  { id: "tif-original-multi", label: "TIF — Original Background, Multiple Layer" },
-  { id: "tif-original-single", label: "TIF — Original Background, Single Layer" },
-  { id: "tif-white-multi", label: "TIF — White Background, Multiple Layer" },
-  { id: "tif-white-single", label: "TIF — White Background, Single Layer" },
-  { id: "tif-transparent-multi", label: "TIF — Transparent Background, Multiple Layer" },
-  { id: "tif-transparent-single", label: "TIF — Transparent Background, Single Layer" },
-  { id: "tif-mask-multi", label: "TIF — Layer Mask, Multiple Layer" },
-  { id: "tif-mask-single", label: "TIF — Layer Mask, Single Layer" },
-  { id: "jpg-white-single", label: "JPG — White Background, Single Layer" },
-  { id: "jpg-original-single", label: "JPG — Original Background, Single Layer" },
-  { id: "png-white-single", label: "PNG — White Background, Single Layer" },
-  { id: "png-transparent-single", label: "PNG — Transparent Background, Single Layer" },
+  { id: "psd-original-multi", label: "PSD â€” Original Background, Multiple Layer" },
+  { id: "psd-original-single", label: "PSD â€” Original Background, Single Layer" },
+  { id: "psd-white-multi", label: "PSD â€” White Background, Multiple Layer" },
+  { id: "psd-white-single", label: "PSD â€” White Background, Single Layer" },
+  { id: "psd-transparent-multi", label: "PSD â€” Transparent Background, Multiple Layer" },
+  { id: "psd-transparent-single", label: "PSD â€” Transparent Background, Single Layer" },
+  { id: "psd-mask-multi", label: "PSD â€” Layer Mask, Multiple Layer" },
+  { id: "psd-mask-single", label: "PSD â€” Layer Mask, Single Layer" },
+  { id: "tif-original-multi", label: "TIF â€” Original Background, Multiple Layer" },
+  { id: "tif-original-single", label: "TIF â€” Original Background, Single Layer" },
+  { id: "tif-white-multi", label: "TIF â€” White Background, Multiple Layer" },
+  { id: "tif-white-single", label: "TIF â€” White Background, Single Layer" },
+  { id: "tif-transparent-multi", label: "TIF â€” Transparent Background, Multiple Layer" },
+  { id: "tif-transparent-single", label: "TIF â€” Transparent Background, Single Layer" },
+  { id: "tif-mask-multi", label: "TIF â€” Layer Mask, Multiple Layer" },
+  { id: "tif-mask-single", label: "TIF â€” Layer Mask, Single Layer" },
+  { id: "jpg-white-single", label: "JPG â€” White Background, Single Layer" },
+  { id: "jpg-original-single", label: "JPG â€” Original Background, Single Layer" },
+  { id: "png-white-single", label: "PNG â€” White Background, Single Layer" },
+  { id: "png-transparent-single", label: "PNG â€” Transparent Background, Single Layer" },
 ];
 
 type ServiceSelection = {
@@ -216,7 +216,7 @@ export default function ContactForm() {
     if (info.effectiveType === "complexity") return `${base} (C${sel.complexity})`;
     if (info.effectiveType === "tier") {
       const t = info.effectiveTiers.find(t => t.id === sel.tier);
-      return `${base} — ${t?.label ?? ""}`;
+      return `${base} â€” ${t?.label ?? ""}`;
     }
     return base;
   };
@@ -323,7 +323,7 @@ export default function ContactForm() {
       const sel = selections[key];
       if (!info || !sel) return "";
       const ppi = getPricePerImage(info, sel);
-      return `- ${getDisplayLabel(info, sel)}: $${ppi.toFixed(2)}/img × ${imgCount}`;
+      return `- ${getDisplayLabel(info, sel)}: $${ppi.toFixed(2)}/img Ã— ${imgCount}`;
     });
     lines.push(`Total images: ${imgCount}`);
     if (discountApplies) lines.push(`Volume discount: -$${discountAmount.toFixed(2)}`);
@@ -367,7 +367,7 @@ export default function ContactForm() {
             </div>
           ))}
           <button type="button" onClick={() => addColorVariant(selKey)}
-            className="text-[11px] font-bold text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] transition-colors">+ Add another variant</button>
+            className="text-[11px] font-bold text-[rgb(var(--accent-text))] hover:text-[rgb(var(--accent-text))] transition-colors">+ Add another variant</button>
         </div>
       );
     }
@@ -389,7 +389,7 @@ export default function ContactForm() {
                   className={`rounded-xl py-3.5 px-2 text-center border transition-all ${
                     isActive ? "border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--fg-rgb)/15%)]"
                   }`}>
-                  <p className={`text-sm font-semibold leading-tight ${isActive ? "text-[rgb(var(--accent-400))]" : "text-[rgb(var(--fg-rgb))]"}`}>Complexity {level}</p>
+                  <p className={`text-sm font-semibold leading-tight ${isActive ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb))]"}`}>Complexity {level}</p>
                   <p className="text-xs font-bold text-[rgb(var(--fg-rgb)/40%)] mt-1">${price.toFixed(2)}/img</p>
                 </button>
               );
@@ -412,7 +412,7 @@ export default function ContactForm() {
                   className={`flex-1 rounded-xl py-2.5 px-3 text-center border transition-all ${
                     isActive ? "border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--fg-rgb)/15%)]"
                   }`}>
-                  <p className={`text-[11px] font-bold ${isActive ? "text-[rgb(var(--accent-400))]" : "text-[rgb(var(--fg-rgb))]"}`}>{t.label}</p>
+                  <p className={`text-[11px] font-bold ${isActive ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb))]"}`}>{t.label}</p>
                   <p className="text-[10px] font-bold text-[rgb(var(--fg-rgb)/40%)] mt-0.5">${price.toFixed(2)}/img</p>
                 </button>
               );
@@ -430,14 +430,14 @@ export default function ContactForm() {
     const sel = selections[selKey];
     if (!info || !sel) return "";
     const ppi = getPricePerImage(info, sel);
-    if (info.effectiveType === "complexity") return `C${sel.complexity} — $${ppi.toFixed(2)}/img`;
+    if (info.effectiveType === "complexity") return `C${sel.complexity} â€” $${ppi.toFixed(2)}/img`;
     if (info.effectiveType === "tier") {
       const t = info.effectiveTiers.find(t => t.id === sel.tier);
-      return `${t?.label ?? ""} — $${ppi.toFixed(2)}/img`;
+      return `${t?.label ?? ""} â€” $${ppi.toFixed(2)}/img`;
     }
     if (info.effectiveType === "color-variant") {
       const count = sel.colorCodes?.filter(c => c.trim()).length ?? 0;
-      return `${count} variant(s) — $${info.effectiveBasePrice.toFixed(2)}/img`;
+      return `${count} variant(s) â€” $${info.effectiveBasePrice.toFixed(2)}/img`;
     }
     return `$${info.effectiveBasePrice.toFixed(2)}/img`;
   };
@@ -484,7 +484,7 @@ export default function ContactForm() {
     <div className="relative">
       <div className="relative max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Get in Touch</h2>
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">Get in Touch</h2>
           <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Get your custom quote</h3>
           <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] max-w-xl mx-auto">
             Tell us what you need, and we&apos;ll send your custom quote within 45 minutes.
@@ -511,10 +511,10 @@ export default function ContactForm() {
                   {STEPS.map((s, i) => (
                     <div key={s.id} className="flex items-center gap-3">
                       <button type="button" onClick={() => { if (s.id <= step) setStep(s.id); }}
-                        className={`flex items-center gap-2 transition-all ${step === s.id ? "text-[rgb(var(--fg-rgb))]" : step > s.id ? "text-[rgb(var(--accent-400))]" : "text-[rgb(var(--fg-rgb)/25%)]"}`}>
+                        className={`flex items-center gap-2 transition-all ${step === s.id ? "text-[rgb(var(--fg-rgb))]" : step > s.id ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb)/25%)]"}`}>
                         <span className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold border-2 transition-all ${
                           step === s.id ? "border-[rgb(var(--accent-500))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" :
-                          step > s.id ? "border-[rgb(var(--accent-400))] bg-[rgb(var(--accent-400)/15%)] text-[rgb(var(--accent-400))]" :
+                          step > s.id ? "border-[rgb(var(--accent-400))] bg-[rgb(var(--accent-400)/15%)] text-[rgb(var(--accent-text))]" :
                           "border-[rgb(var(--fg-rgb)/15%)] text-[rgb(var(--fg-rgb)/30%)]"
                         }`}>{s.id}</span>
                         <span className="text-[11px] font-bold hidden sm:inline">{s.label}</span>
@@ -560,7 +560,7 @@ export default function ContactForm() {
                             }}>
                             <div className="flex-1">
                               <p className="font-semibold text-sm text-[rgb(var(--fg-rgb))]">{svc.label}</p>
-                              {summaryLine && <p className="text-[10px] text-[rgb(var(--accent-400))] mt-0.5 font-medium">{summaryLine}</p>}
+                              {summaryLine && <p className="text-[10px] text-[rgb(var(--accent-text))] mt-0.5 font-medium">{summaryLine}</p>}
                             </div>
                             {(!svc.subTypes && svc.type === "none") ? (
                               <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${hasAnySelection ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]" : "border-[rgb(var(--fg-rgb)/20%)]"}`}>
@@ -607,7 +607,7 @@ export default function ContactForm() {
                                                 }}>
                                                 <div className="flex-1">
                                                   <p className="text-[13px] font-semibold text-[rgb(var(--fg-rgb))]">{st.label}</p>
-                                                  {isSelected && <p className="text-[10px] text-[rgb(var(--accent-400))] mt-0.5">{getSummaryText(key)}</p>}
+                                                  {isSelected && <p className="text-[10px] text-[rgb(var(--accent-text))] mt-0.5">{getSummaryText(key)}</p>}
                                                 </div>
                                                 {isAutoSelect ? (
                                                   <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${isSelected ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]" : "border-[rgb(var(--fg-rgb)/20%)]"}`}>
@@ -649,7 +649,7 @@ export default function ContactForm() {
                     {orderedKeys.length > 0 && (
                       <button type="button" onClick={() => setStep(2)}
                         className="w-full mt-5 py-3.5 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] transition-all">
-                        CONTINUE →
+                        CONTINUE â†’
                       </button>
                     )}
                   </div>
@@ -669,14 +669,14 @@ export default function ContactForm() {
                       <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Total number of images</label>
                       <div className="flex items-center gap-2">
                         <button type="button" onClick={() => setTotalImageCount(Math.max(1, totalImageCount - 10))}
-                          className="w-10 h-10 rounded-xl bg-[rgb(var(--fg-rgb)/6%)] flex items-center justify-center text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/12%)] transition-all">−</button>
+                          className="w-10 h-10 rounded-xl bg-[rgb(var(--fg-rgb)/6%)] flex items-center justify-center text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/12%)] transition-all">âˆ’</button>
                         <input type="number" min={1} max={100000} value={totalImageCount}
                           onChange={e => setTotalImageCount(Math.max(1, parseInt(e.target.value, 10) || 1))}
                           className="w-24 px-3 py-2.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-center text-[rgb(var(--fg-rgb))] font-bold outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
                         <button type="button" onClick={() => setTotalImageCount(totalImageCount + 10)}
                           className="w-10 h-10 rounded-xl bg-[rgb(var(--fg-rgb)/6%)] flex items-center justify-center text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/12%)] transition-all">+</button>
                         {totalImageCount >= VOLUME_DISCOUNT_THRESHOLD && (
-                          <span className="text-[11px] font-bold text-[rgb(var(--accent-400))]">10% discount applied</span>
+                          <span className="text-[11px] font-bold text-[rgb(var(--accent-text))]">10% discount applied</span>
                         )}
                       </div>
                     </div>
@@ -706,7 +706,7 @@ export default function ContactForm() {
                             {opt.rush && <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-amber-500 text-[8px] font-bold text-black uppercase">Rush</span>}
                             <p className="text-xs font-bold text-[rgb(var(--fg-rgb))]">{opt.label}</p>
                             <p className="text-[10px] text-[rgb(var(--fg-rgb)/40%)]">{opt.desc}</p>
-                            <p className={`text-[10px] font-bold mt-0.5 ${opt.surcharge > 0 ? "text-amber-400" : opt.surcharge < 0 ? "text-[rgb(var(--accent-400))]" : "text-[rgb(var(--fg-rgb)/30%)]"}`}>
+                            <p className={`text-[10px] font-bold mt-0.5 ${opt.surcharge > 0 ? "text-amber-400" : opt.surcharge < 0 ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb)/30%)]"}`}>
                               {opt.surcharge > 0 ? `+${opt.surcharge * 100}%` : opt.surcharge < 0 ? `${opt.surcharge * 100}%` : "Base price"}
                             </p>
                           </button>
@@ -725,15 +725,15 @@ export default function ContactForm() {
                     <div className="rounded-xl border border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] p-4">
                       <p className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/50%)] uppercase tracking-wider mb-2">How to share your files</p>
                       <p className="text-[12px] text-[rgb(var(--fg-rgb)/50%)] leading-relaxed">
-                        After submitting, we&apos;ll send a quote via email. Once confirmed, you can share your files using Dropbox, Google Drive, or WeTransfer — and we&apos;ll send you a download link for the edited images.
+                        After submitting, we&apos;ll send a quote via email. Once confirmed, you can share your files using Dropbox, Google Drive, or WeTransfer â€” and we&apos;ll send you a download link for the edited images.
                       </p>
                     </div>
 
                     <div className="flex gap-3">
                       <button type="button" onClick={() => setStep(1)}
-                        className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
+                        className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">â† Back</button>
                       <button type="button" onClick={() => setStep(3)}
-                        className="flex-1 py-3 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] transition-all">CONTINUE →</button>
+                        className="flex-1 py-3 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] transition-all">CONTINUE â†’</button>
                     </div>
                   </div>
                 )}
@@ -755,7 +755,7 @@ export default function ContactForm() {
                     <input type="hidden" name="image_links" value={imageLinks} />
                     <div className="flex gap-3">
                       <button type="button" onClick={() => setStep(2)}
-                        className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
+                        className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">â† Back</button>
                       <button type="submit" disabled={submitStatus === "sending" || submitStatus === "success"}
                         className="flex-1 py-3.5 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] hover:scale-[1.01] transition-all disabled:opacity-60 disabled:hover:scale-100">
                         {submitStatus === "sending" ? "Sending..." : "Submit Quote Request"}
@@ -834,9 +834,9 @@ export default function ContactForm() {
                     <div className="pt-4 mt-4 border-t border-[rgb(var(--fg-rgb)/10%)] space-y-2">
                       <div className="flex justify-between text-sm text-[rgb(var(--fg-rgb)/50%)]"><span>Images</span><span>{imgCount}</span></div>
                       <div className="flex justify-between text-sm text-[rgb(var(--fg-rgb)/50%)]"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
-                      {discountApplies && <div className="flex justify-between text-sm text-[rgb(137_243_54)]"><span>Volume discount</span><span>−${discountAmount.toFixed(2)}</span></div>}
+                      {discountApplies && <div className="flex justify-between text-sm text-[rgb(137_243_54)]"><span>Volume discount</span><span>âˆ’${discountAmount.toFixed(2)}</span></div>}
                       {turnaroundSurcharge !== 0 && (
-                        <div className={`flex justify-between text-sm ${turnaroundSurcharge > 0 ? "text-amber-400" : "text-[rgb(var(--accent-400))]"}`}>
+                        <div className={`flex justify-between text-sm ${turnaroundSurcharge > 0 ? "text-amber-400" : "text-[rgb(var(--accent-text))]"}`}>
                           <span>{turnaroundOption?.label}</span><span>{turnaroundFee >= 0 ? "+" : ""}${turnaroundFee.toFixed(2)}</span>
                         </div>
                       )}
@@ -853,7 +853,7 @@ export default function ContactForm() {
               <div className="glass-card rounded-[2rem] p-8 border-[rgb(var(--fg-rgb)/10%)]">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-xl bg-[rgb(var(--accent-500)/12%)] flex items-center justify-center">
-                    <svg className="w-4 h-4 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                    <svg className="w-4 h-4 text-[rgb(var(--accent-text))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
                   </div>
                   <h4 className="text-lg font-bold text-[rgb(var(--fg-rgb))]">Send a Message</h4>
                 </div>
@@ -865,7 +865,7 @@ export default function ContactForm() {
                     Chat on WhatsApp
                   </a>
                   <a href="mailto:pathpixhub@gmail.com"
-                    className="flex items-center gap-3 p-3 rounded-xl glass-card border border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm text-[rgb(var(--fg-rgb)/70%)] hover:text-[rgb(var(--accent-400))]">
+                    className="flex items-center gap-3 p-3 rounded-xl glass-card border border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm text-[rgb(var(--fg-rgb)/70%)] hover:text-[rgb(var(--accent-text))]">
                     <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                     Send us an Email
                   </a>

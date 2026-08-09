@@ -29,7 +29,7 @@ export default function CountUp({ end, suffix = "", label }: Props) {
         initial={{ opacity: 0, y: 20 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="text-2xl font-bold text-[rgb(var(--accent-400))]"
+        className="text-2xl font-bold text-[rgb(var(--accent-text))]"
       >
         {count}{suffix}
       </motion.span>

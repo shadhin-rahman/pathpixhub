@@ -41,7 +41,7 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
         <div className="absolute inset-0 bg-black/10" />
         <div className="absolute bottom-0 left-0 right-0 pb-10 md:pb-16 lg:pb-20">
           <div className="max-w-7xl mx-auto px-6">
-            <span className="text-xs font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold">
+            <span className="text-xs font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold">
               {service.title}
             </span>
             <h1 className="mt-3 text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]">
@@ -54,7 +54,7 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
       <ScrollReveal>
       <section className="py-16 md:py-24 bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6 text-center">See the Difference</h2>
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6 text-center">See the Difference</h2>
           <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text text-center mb-12">Before &amp; After</h3>
           {service.id === "color-change" ? (
             <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -95,7 +95,7 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
             <div>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border-[rgb(var(--accent-500)/30%)] bg-[rgb(var(--accent-500)/8%)] mb-6">
-                <span className="text-xs font-mono tracking-[0.15em] font-bold text-[rgb(var(--accent-400))]">{priceMap[service.id]}</span>
+                <span className="text-xs font-mono tracking-[0.15em] font-bold text-[rgb(var(--accent-text))]">{priceMap[service.id]}</span>
               </div>
               {service.paragraphs.map((p, i) => (
                 <p key={i} className="mt-4 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed first:mt-0">{p}</p>
@@ -121,7 +121,7 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
               <ul className="space-y-4">
                 {service.features.map((f) => (
                   <li key={f} className="flex items-start gap-3 text-sm text-[rgb(var(--fg-rgb)/60%)]">
-                    <svg className="w-5 h-5 text-[rgb(var(--accent-400))] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-[rgb(var(--accent-text))] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     {f}
@@ -135,7 +135,7 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
 
       <section className="py-16 md:py-24 bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-10 text-center">Why Choose Us</h2>
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-10 text-center">Why Choose Us</h2>
           <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {service.whyChoose.map((w, i) => (
               <StaggerItem key={i}>
@@ -153,12 +153,12 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
       <ScrollReveal>
       <section className="py-16 md:py-24 bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-10 text-center">Who Needs This Service</h2>
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-10 text-center">Who Needs This Service</h2>
           <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl mx-auto">
             {service.audience.map((a, i) => (
               <StaggerItem key={i}>
               <div className="flex items-start gap-3 glass-card rounded-2xl px-5 py-4 border-[rgb(var(--fg-rgb)/5%)]">
-                <svg className="w-5 h-5 text-[rgb(var(--accent-400))] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                <svg className="w-5 h-5 text-[rgb(var(--accent-text))] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                 <span className="text-sm text-[rgb(var(--fg-rgb)/70%)]">{a}</span>
               </div>
               </StaggerItem>
@@ -171,7 +171,7 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
       <ScrollReveal>
       <section className="py-16 md:py-24 bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-10 text-center">Industries We Serve</h2>
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-10 text-center">Industries We Serve</h2>
           <StaggerReveal className="flex flex-wrap justify-center gap-3" staggerDelay={0.04}>
             {service.industries.map((ind, i) => (
               <StaggerItem key={i}>

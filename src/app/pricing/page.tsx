@@ -107,14 +107,14 @@ export default function PricingPage() {
                   </Link>
                   <Link
                     href="mailto:pathpixhub@gmail.com"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-card border border-[rgb(var(--fg-rgb)/10%)] text-sm font-semibold text-[rgb(var(--fg-rgb)/70%)] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))] hover:shadow-md transition-all duration-300"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-card border border-[rgb(var(--fg-rgb)/10%)] text-sm font-semibold text-[rgb(var(--fg-rgb)/70%)] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))] hover:shadow-md transition-all duration-300"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                     Email Us
                   </Link>
                   <Link
                     href="/contact"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-card border border-[rgb(var(--fg-rgb)/10%)] text-sm font-semibold text-[rgb(var(--fg-rgb)/70%)] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-400))] hover:shadow-md transition-all duration-300"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-card border border-[rgb(var(--fg-rgb)/10%)] text-sm font-semibold text-[rgb(var(--fg-rgb)/70%)] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))] hover:shadow-md transition-all duration-300"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
                     Contact Form
@@ -169,7 +169,7 @@ export default function PricingPage() {
                   </div>
                   <Link
                     href={`/services/${s.id}`}
-                    className="font-bold text-sm text-[rgb(var(--fg-rgb)/85%)] leading-tight hover:text-[rgb(var(--accent-500))] transition-colors"
+                    className="font-bold text-sm text-[rgb(var(--fg-rgb)/85%)] leading-tight hover:text-[rgb(var(--accent-text))] transition-colors"
                   >
                     {s.title}
                   </Link>
@@ -204,7 +204,7 @@ export default function PricingPage() {
         <button
           onClick={skipAhead}
           aria-label="Skip ahead"
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full glass-card bg-[var(--bg-alt)/80] backdrop-blur-md text-[rgb(var(--accent-400))] flex items-center justify-center hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 shadow-lg border border-[rgb(var(--fg-rgb)/10%)]"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full glass-card bg-[var(--bg-alt)/80] backdrop-blur-md text-[rgb(var(--accent-text))] flex items-center justify-center hover:bg-[rgb(var(--accent-500))] hover:text-[rgb(var(--accent-contrast))] transition-all duration-300 shadow-lg border border-[rgb(var(--fg-rgb)/10%)]"
         >
           <ChevronRight className="w-5 h-5" />
         </button>

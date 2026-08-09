@@ -127,7 +127,7 @@ export default function ServiceCarousel({ services }: { services: Service[] }) {
               <Link
                 href={`/services/${s.id}`}
                 draggable={false}
-                className="block mt-3 text-[rgb(var(--fg-rgb)/80%)] font-bold text-sm text-center leading-tight hover:text-[rgb(var(--accent-500))] transition-colors"
+                className="block mt-3 text-[rgb(var(--fg-rgb)/80%)] font-bold text-sm text-center leading-tight hover:text-[rgb(var(--accent-text))] transition-colors"
               >
                 {s.title}
               </Link>

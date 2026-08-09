@@ -7,7 +7,7 @@ export default function Testimonials() {
     <section className="py-24 lg:py-32 bg-[var(--bg-alt)]">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Testimonials</h2>
+          <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">Testimonials</h2>
           <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">What Our Clients Say</h3>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">

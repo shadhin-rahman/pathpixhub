@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Portfolio | PathPixHub",
-  description: "Before & after examples of our professional photo editing work — clipping path, background removal, retouching, ghost mannequin, and more.",
+  description: "Before & after examples of our professional photo editing work â€” clipping path, background removal, retouching, ghost mannequin, and more.",
 };
 
 const portfolioItems = [
@@ -24,7 +24,7 @@ export default function PortfolioPage() {
       <section className="pt-40 pb-20 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
           <div className="max-w-2xl">
-            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Our Work</h2>
+            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">Our Work</h2>
             <h1 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Portfolio</h1>
             <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/60%)]">Before & after examples of our editing work.</p>
           </div>
@@ -46,7 +46,7 @@ export default function PortfolioPage() {
                   />
                 </div>
                 <div className="p-5">
-                  <span className="text-xs font-mono tracking-[0.2em] text-[rgb(var(--accent-400))] font-bold">{item.category}</span>
+                  <span className="text-xs font-mono tracking-[0.2em] text-[rgb(var(--accent-text))] font-bold">{item.category}</span>
                   <h3 className="mt-1 text-base font-bold text-[rgb(var(--fg-rgb))]">{item.title}</h3>
                 </div>
               </div>

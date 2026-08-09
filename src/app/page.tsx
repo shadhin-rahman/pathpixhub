@@ -56,7 +56,7 @@ export default function Home() {
               Professional Photo Editing
             </motion.div>
             <motion.h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.9] text-white" initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}>
-              Pixel Perfect<br /><span className="text-[rgb(var(--accent-400))]">Results</span>
+              Pixel Perfect<br /><span className="text-[rgb(var(--accent-text))]">Results</span>
             </motion.h1>
             <motion.p className="mt-6 text-lg sm:text-xl text-white/70 max-w-lg mx-auto" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.8 }}>
               Expert photo editing for e-commerce, fashion &amp; advertising.
@@ -77,8 +77,8 @@ export default function Home() {
           </div>
         </motion.div>
         <div className="absolute bottom-6 left-6 z-10 flex flex-wrap gap-3">
-          <span className="px-4 py-2 rounded-full glass-card text-xs font-bold text-[rgb(var(--accent-400))] tracking-wider uppercase border-[rgb(var(--accent-500)/30%)]">From $0.39 / Image</span>
-          <span className="px-4 py-2 rounded-full glass-card text-xs font-bold text-[rgb(var(--accent-400))] tracking-wider uppercase border-[rgb(var(--accent-500)/30%)]">12hr Turnaround</span>
+          <span className="px-4 py-2 rounded-full glass-card text-xs font-bold text-[rgb(var(--accent-text))] tracking-wider uppercase border-[rgb(var(--accent-500)/30%)]">From $0.39 / Image</span>
+          <span className="px-4 py-2 rounded-full glass-card text-xs font-bold text-[rgb(var(--accent-text))] tracking-wider uppercase border-[rgb(var(--accent-500)/30%)]">12hr Turnaround</span>
         </div>
         <ScrollIndicator />
       </motion.section>
@@ -103,19 +103,19 @@ export default function Home() {
         <div className="relative w-full max-w-7xl mx-auto px-6 py-20 sm:py-28">
           <div className="max-w-2xl">
             <TextReveal>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-[rgb(var(--accent-300))] text-sm font-medium mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-[rgb(var(--accent-text))] text-sm font-medium mb-6">
                 <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))] animate-pulse" />
                 Professional Photo Editing Services
               </div>
             </TextReveal>
             <TextReveal>
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.95] text-[rgb(var(--fg-rgb))]">
-                Transform Your Photos<br /><span className="text-[rgb(var(--accent-400))]">with Precision</span>
+                Transform Your Photos<br /><span className="text-[rgb(var(--accent-text))]">with Precision</span>
               </h1>
             </TextReveal>
             <TextReveal>
               <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/70%)] leading-relaxed max-w-lg">
-                From flawless clipping paths to high-end retouching — pixel-perfect results with fast turnaround for e-commerce, fashion, and advertising.
+                From flawless clipping paths to high-end retouching â€” pixel-perfect results with fast turnaround for e-commerce, fashion, and advertising.
               </p>
             </TextReveal>
             <TextReveal>
@@ -139,11 +139,11 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col lg:flex-row items-stretch gap-6">
             <div className="w-full lg:w-1/3 shrink-0 flex flex-col justify-center">
-              <TextReveal><h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">From Our Studio</h2></TextReveal>
+              <TextReveal><h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">From Our Studio</h2></TextReveal>
               <TextReveal><h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text pb-2">Every Product, Every Angle</h3></TextReveal>
               <TextReveal>
                 <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-lg">
-                  Bicycles, vehicles, apparel, or accessories — whatever you shoot, we edit it with the same pixel-perfect care.
+                  Bicycles, vehicles, apparel, or accessories â€” whatever you shoot, we edit it with the same pixel-perfect care.
                 </p>
               </TextReveal>
               <TextReveal>
@@ -182,7 +182,7 @@ export default function Home() {
       <section className="py-28 lg:py-36 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
           <TextReveal><div className="text-center mb-16">
-            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">See the Difference</h2>
+            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">See the Difference</h2>
             <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Before &amp; After</h3>
             <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] max-w-xl mx-auto">Drag the slider to see our editing quality in action</p>
           </div></TextReveal>
@@ -226,11 +226,11 @@ export default function Home() {
               </div>
             </div>
             <div>
-              <TextReveal><h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">About Us</h2></TextReveal>
+              <TextReveal><h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">About Us</h2></TextReveal>
               <TextReveal><h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Your Virtual Photo Editing Studio</h3></TextReveal>
               <TextReveal>
                 <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
-                  We provide expert image editing services for e-commerce brands, product photographers, Amazon sellers, and businesses worldwide. From clipping path and background removal to multi-clipping paths, color correction, and photo retouching — we handle every detail with care.
+                  We provide expert image editing services for e-commerce brands, product photographers, Amazon sellers, and businesses worldwide. From clipping path and background removal to multi-clipping paths, color correction, and photo retouching â€” we handle every detail with care.
                 </p>
               </TextReveal>
               <TextReveal>
@@ -249,7 +249,7 @@ export default function Home() {
       <section className="py-28 lg:py-36 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
           <TextReveal><div className="text-center mb-16">
-            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Why Choose Us</h2>
+            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">Why Choose Us</h2>
             <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Built for Speed &amp; Quality</h3>
           </div></TextReveal>
           <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
@@ -262,7 +262,7 @@ export default function Home() {
               <StaggerItem key={item.title}>
                 <div className="glass-card rounded-2xl px-6 py-8 text-center border-[rgb(var(--fg-rgb)/5%)]">
                   <div className="w-12 h-12 rounded-full bg-[rgb(var(--accent-500)/12%)] flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-6 h-6 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} /></svg>
+                    <svg className="w-6 h-6 text-[rgb(var(--accent-text))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} /></svg>
                   </div>
                   <h3 className="font-bold text-[rgb(var(--fg-rgb))]">{item.title}</h3>
                   <p className="mt-2 text-sm text-[rgb(var(--fg-rgb)/50%)] leading-relaxed">{item.desc}</p>
@@ -276,12 +276,12 @@ export default function Home() {
       <section className="py-28 lg:py-36 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
           <TextReveal><div className="text-center mb-20">
-            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">How It Works</h2>
+            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">How It Works</h2>
             <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Process</h3>
           </div></TextReveal>
           <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 gap-6" staggerDelay={0.06}>
             {[
-              { step: "01", title: "Client Consultation & Order Submission", desc: "We start by understanding your specific needs — background removal, shadow creation, or precise color adjustments." },
+              { step: "01", title: "Client Consultation & Order Submission", desc: "We start by understanding your specific needs â€” background removal, shadow creation, or precise color adjustments." },
               { step: "02", title: "Image Analysis & Project Assessment", desc: "Every image is different, so we assess the detail needed to set a realistic timeline for delivery." },
               { step: "03", title: "Selecting the Right Tools", desc: "We rely on Adobe Photoshop's pen tool for precise clipping paths, plus masking techniques for complex backgrounds." },
               { step: "04", title: "Clipping Path Creation", desc: "Our editors manually outline each object for clean edges and perfect isolation." },
@@ -292,7 +292,7 @@ export default function Home() {
             ].map((item) => (
               <StaggerItem key={item.step}>
                 <div className="glass-card rounded-[2rem] p-8 flex gap-6">
-                  <span className="text-4xl font-bold text-[rgb(var(--accent-500)/30%)] shrink-0">{item.step}</span>
+                  <span className="text-4xl font-bold text-[rgb(var(--accent-text)/30%)] shrink-0">{item.step}</span>
                   <div>
                     <h3 className="text-lg font-bold text-[rgb(var(--fg-rgb))]">{item.title}</h3>
                     <p className="mt-2 text-sm text-[rgb(var(--fg-rgb)/40%)] leading-relaxed">{item.desc}</p>
@@ -309,7 +309,7 @@ export default function Home() {
       <section className="py-28 lg:py-36 bg-[var(--bg-alt)]">
         <div className="max-w-4xl mx-auto px-6">
           <TextReveal><div className="text-center mb-16">
-            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-6">Good to Know</h2>
+            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">Good to Know</h2>
             <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">FAQs</h3>
           </div></TextReveal>
           <div className="space-y-4">
@@ -325,7 +325,7 @@ export default function Home() {
               <details key={item.q} className="faq-item glass-card rounded-2xl px-6 py-5 border-[rgb(var(--fg-rgb)/5%)]">
                 <summary className="flex items-center justify-between gap-4">
                   <span className="font-semibold text-[rgb(var(--fg-rgb))]">{item.q}</span>
-                  <span className="faq-icon shrink-0 text-2xl leading-none text-[rgb(var(--accent-400))] transition-transform duration-300">+</span>
+                  <span className="faq-icon shrink-0 text-2xl leading-none text-[rgb(var(--accent-text))] transition-transform duration-300">+</span>
                 </summary>
                 <p className="mt-4 text-sm text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">{item.a}</p>
               </details>
@@ -337,7 +337,7 @@ export default function Home() {
       <section className="py-28 lg:py-36 mesh-gradient text-center">
         <div className="max-w-7xl mx-auto px-6">
           <TextReveal><h2 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Ready to Start?</h2></TextReveal>
-          <TextReveal><p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] text-lg max-w-xl mx-auto">Send us 2 images and we&apos;ll edit them for free — no obligation.</p></TextReveal>
+          <TextReveal><p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] text-lg max-w-xl mx-auto">Send us 2 images and we&apos;ll edit them for free â€” no obligation.</p></TextReveal>
           <TextReveal>
             <MagneticButton strength={0.15}>
               <Link href="/free-trial" className="mt-8 inline-flex items-center px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm">Request Free Trial</Link>

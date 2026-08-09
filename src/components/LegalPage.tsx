@@ -35,7 +35,7 @@ export default function LegalPage({
         />
         <div className="relative max-w-5xl mx-4 md:mx-10 px-0">
           <div className="flex items-center gap-3 mb-6">
-            <span className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold">Legal</span>
+            <span className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold">Legal</span>
             <span className="text-xs uppercase font-mono tracking-[0.2em] text-white/40 font-bold">Effective {effectiveDate}</span>
           </div>
           <h1 className="logo-text uppercase text-6xl md:text-7xl lg:text-9xl font-extrabold tracking-tight text-white leading-[0.95] text-balance text-left">
@@ -51,7 +51,7 @@ export default function LegalPage({
       <section className="pb-32 bg-[var(--bg-alt)]">
         <div className="max-w-3xl mx-auto px-6">
           <div className="glass-card rounded-3xl p-8 border-[rgb(var(--fg-rgb)/5%)] mb-14">
-            <h2 className="text-xs uppercase tracking-[0.4em] font-bold text-[rgb(var(--accent-400))] mb-6">Contents</h2>
+            <h2 className="text-xs uppercase tracking-[0.4em] font-bold text-[rgb(var(--accent-text))] mb-6">Contents</h2>
             {contentsIntro && (
               <p className="text-sm text-[rgb(var(--fg-rgb)/50%)] leading-relaxed mb-6">{contentsIntro}</p>
             )}
@@ -60,9 +60,9 @@ export default function LegalPage({
                 <li key={s.title}>
                   <a
                     href={`#section-${i + 1}`}
-                    className="group flex items-baseline gap-3 text-[rgb(var(--fg-rgb)/60%)] hover:text-[rgb(var(--accent-400))] transition-colors"
+                    className="group flex items-baseline gap-3 text-[rgb(var(--fg-rgb)/60%)] hover:text-[rgb(var(--accent-text))] transition-colors"
                   >
-                    <span className="font-mono text-sm text-[rgb(var(--accent-400)/60%)] shrink-0">
+                    <span className="font-mono text-sm text-[rgb(var(--accent-text)/60%)] shrink-0">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span className="text-sm font-semibold group-hover:translate-x-1 transition-transform">
@@ -78,7 +78,7 @@ export default function LegalPage({
             {sections.map((s, i) => (
               <div key={s.title} id={`section-${i + 1}`} className="scroll-mt-32">
                 <div className="flex items-baseline gap-3 mb-4">
-                  <span className="font-mono text-sm text-[rgb(var(--accent-400))] shrink-0">
+                  <span className="font-mono text-sm text-[rgb(var(--accent-text))] shrink-0">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <h2 className="text-2xl font-bold text-[rgb(var(--fg-rgb))] tracking-tight">{s.title}</h2>
@@ -91,7 +91,7 @@ export default function LegalPage({
                     <ul className="space-y-2.5 text-[rgb(var(--fg-rgb)/60%)]">
                       {s.list.map((item, li) => (
                         <li key={li} className="flex items-start gap-3 leading-relaxed">
-                          <svg className="w-5 h-5 text-[rgb(var(--accent-400))] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-5 h-5 text-[rgb(var(--accent-text))] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                           <span>{item}</span>
@@ -110,7 +110,7 @@ export default function LegalPage({
           {version && (
             <div className="mt-16 pt-6 border-t border-[rgb(var(--fg-rgb)/10%)]">
               <p className="text-xs text-[rgb(var(--fg-rgb)/40%)] font-mono tracking-[0.2em] uppercase">
-                Document Version — {version}
+                Document Version â€” {version}
               </p>
             </div>
           )}

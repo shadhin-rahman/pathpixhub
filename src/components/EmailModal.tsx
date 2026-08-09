@@ -57,7 +57,7 @@ export default function EmailModal({
             </div>
 
             <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[rgb(var(--fg-rgb)/5%)] mb-5">
-              <svg className="w-5 h-5 text-[rgb(var(--accent-400))] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+              <svg className="w-5 h-5 text-[rgb(var(--accent-text))] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
               <span className="text-sm font-semibold text-[rgb(var(--fg-rgb))] truncate">{EMAIL}</span>
             </div>
 
@@ -75,7 +75,7 @@ export default function EmailModal({
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full px-5 py-3.5 rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/10%)] font-bold text-sm text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] transition-colors"
               >
-                <svg className="w-4 h-4 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <svg className="w-4 h-4 text-[rgb(var(--accent-text))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 Continue with Gmail
               </a>
               <button

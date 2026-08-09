@@ -21,7 +21,7 @@ export default function CookieConsent() {
       <div className="max-w-7xl mx-auto glass-card rounded-2xl px-6 py-4 border-[rgb(var(--fg-rgb)/10%)] flex flex-col sm:flex-row items-center justify-between gap-4">
         <p className="text-xs sm:text-sm text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
           We use cookies to enhance your experience. By using our site, you consent to our use of cookies.{" "}
-          <a href="/cookie-policy" className="text-[rgb(var(--accent-400))] hover:text-[rgb(var(--accent-300))] underline underline-offset-2">
+          <a href="/cookie-policy" className="text-[rgb(var(--accent-text))] hover:text-[rgb(var(--accent-text))] underline underline-offset-2">
             Learn more
           </a>
         </p>

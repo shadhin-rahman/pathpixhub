@@ -244,7 +244,7 @@ export default function FreeTrialPage() {
               Get 2 Free Edits
             </h1>
             <p className="mt-6 text-lg text-white/80 leading-relaxed max-w-lg">
-              Upload up to 2 images and we&apos;ll edit them for free — no obligation, no credit card required.
+              Upload up to 2 images and we&apos;ll edit them for free â€” no obligation, no credit card required.
               See our quality before you commit.
             </p>
           </div>
@@ -262,9 +262,9 @@ export default function FreeTrialPage() {
             ].map((item) => (
               <div key={item.step} className="glass-card rounded-2xl p-6 border-[rgb(var(--fg-rgb)/5%)] text-center">
                 <div className="w-12 h-12 rounded-full bg-[rgb(var(--accent-500)/12%)] flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-6 h-6 text-[rgb(var(--accent-400))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} /></svg>
+                  <svg className="w-6 h-6 text-[rgb(var(--accent-text))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} /></svg>
                 </div>
-                <span className="text-[10px] font-mono tracking-[0.2em] text-[rgb(var(--accent-400))] font-bold uppercase">Step {item.step}</span>
+                <span className="text-[10px] font-mono tracking-[0.2em] text-[rgb(var(--accent-text))] font-bold uppercase">Step {item.step}</span>
                 <h3 className="mt-2 font-bold text-[rgb(var(--fg-rgb))]">{item.title}</h3>
                 <p className="mt-1.5 text-sm text-[rgb(var(--fg-rgb)/50%)]">{item.desc}</p>
               </div>
@@ -278,7 +278,7 @@ export default function FreeTrialPage() {
         <div className="max-w-5xl mx-auto px-6">
           {/* Step Indicator */}
           <div className="flex items-center justify-center gap-3 mb-12">
-            <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 ${step === 1 ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "bg-[rgb(var(--accent-500)/15%)] text-[rgb(var(--accent-400))]"}`}>
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 ${step === 1 ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "bg-[rgb(var(--accent-500)/15%)] text-[rgb(var(--accent-text))]"}`}>
               <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">1</span>
               Choose Type
             </div>
@@ -306,7 +306,7 @@ export default function FreeTrialPage() {
                     Do you need the edits for personal or business use?
                   </h2>
                   <p className="mt-4 text-[rgb(var(--fg-rgb)/50%)] text-lg">
-                    Select one to continue — both are eligible for free trial.
+                    Select one to continue â€” both are eligible for free trial.
                   </p>
                 </div>
 
@@ -421,7 +421,7 @@ export default function FreeTrialPage() {
                     <button
                       type="button"
                       onClick={goBack}
-                      className="inline-flex items-center gap-2 text-sm text-[rgb(var(--fg-rgb)/50%)] hover:text-[rgb(var(--accent-400))] transition-colors font-medium"
+                      className="inline-flex items-center gap-2 text-sm text-[rgb(var(--fg-rgb)/50%)] hover:text-[rgb(var(--accent-text))] transition-colors font-medium"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" /></svg>
                       Back to type selection
@@ -545,7 +545,7 @@ export default function FreeTrialPage() {
                                   </div>
                                   <button type="button" onClick={() => removeFile(i)}
                                     className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-sm">
-                                    ×
+                                    Ã—
                                   </button>
                                   <div className="absolute bottom-0 left-0 right-0 bg-black/50 px-3 py-1.5">
                                     <p className="text-[10px] text-white/80 truncate">{file.name}</p>
@@ -573,7 +573,7 @@ export default function FreeTrialPage() {
                             <div>
                               <p className="text-sm font-bold text-amber-400">Already Claimed</p>
                               <p className="text-xs text-[rgb(var(--fg-rgb)/60%)] mt-1 leading-relaxed">
-                                You&apos;ve already used your free trial with this email. Each customer is eligible for one free trial only — you can still explore our <a href="/pricing" className="text-amber-400 underline">pricing</a> or <a href="/contact" className="text-amber-400 underline">contact us</a> for your project.
+                                You&apos;ve already used your free trial with this email. Each customer is eligible for one free trial only â€” you can still explore our <a href="/pricing" className="text-amber-400 underline">pricing</a> or <a href="/contact" className="text-amber-400 underline">contact us</a> for your project.
                               </p>
                             </div>
                           </div>
@@ -599,7 +599,7 @@ export default function FreeTrialPage() {
       <section className="py-20 bg-[var(--bg-alt)]">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-10">
-            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-400))] font-bold mb-4">Instant Preview</h2>
+            <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-4">Instant Preview</h2>
             <h3 className="text-3xl md:text-4xl font-bold tracking-tight gradient-text">Try AI Preview Tool</h3>
             <p className="mt-3 text-[rgb(var(--fg-rgb)/60%)] max-w-lg mx-auto">
               Upload an image and see a 10-second AI preview. Our experts deliver pixel-perfect results beyond any filter.
@@ -616,7 +616,7 @@ export default function FreeTrialPage() {
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight gradient-text">Need More Than 2 Images?</h2>
           <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] max-w-xl mx-auto">
-            Get an instant quote for your full project — starting at $0.39 per image with 12hr turnaround.
+            Get an instant quote for your full project â€” starting at $0.39 per image with 12hr turnaround.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/pricing"
