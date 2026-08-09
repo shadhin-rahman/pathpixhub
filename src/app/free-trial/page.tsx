@@ -35,6 +35,12 @@ const SERVICE_COLORS = [
 const STORAGE_KEY = "pathpixhub_free_trial_used";
 const STORAGE_EXPIRY_KEY = "pathpixhub_free_trial_expiry";
 
+const FOUNDER_EMAILS = ["shadhin005rahman@gmail.com"];
+
+function isFounderEmail(email: string): boolean {
+  return FOUNDER_EMAILS.includes(email.toLowerCase().trim());
+}
+
 const slideVariants = {
   enter: (direction: number) => ({ x: direction > 0 ? 300 : -300, opacity: 0 }),
   center: { x: 0, opacity: 1 },
@@ -55,6 +61,7 @@ function hasUsedFreeTrial(): boolean {
 }
 
 function markFreeTrialUsed(email: string) {
+  if (isFounderEmail(email)) return;
   localStorage.setItem(STORAGE_KEY, email.toLowerCase().trim());
   localStorage.setItem(STORAGE_EXPIRY_KEY, (Date.now() + 30 * 24 * 60 * 60 * 1000).toString());
 }
@@ -78,9 +85,10 @@ export default function FreeTrialPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (hasUsedFreeTrial()) {
+    const storedEmail = localStorage.getItem(STORAGE_KEY) || "";
+    if (!isFounderEmail(storedEmail) && hasUsedFreeTrial()) {
       setAlreadyUsed(true);
-      setUsedEmail(localStorage.getItem(STORAGE_KEY) || "");
+      setUsedEmail(storedEmail);
     }
     const params = new URLSearchParams(window.location.search);
     const bypass = params.get("access");
