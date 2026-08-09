@@ -97,6 +97,7 @@ export default function ServiceCarousel({ services }: { services: Service[] }) {
       onTouchStart={pause}
       onTouchEnd={scheduleResume}
       className="flex gap-5 overflow-x-auto px-6 no-scrollbar cursor-grab select-none"
+      data-cursor="drag"
     >
       {loopItems.map((s, i) => {
         const ci = i % SOFT_COLORS.length;

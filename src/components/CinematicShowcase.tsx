@@ -73,7 +73,7 @@ function ServiceCard({
   return (
     <div ref={ref} className="w-full rounded-2xl md:rounded-3xl overflow-hidden aspect-[4/3] md:aspect-[16/7]">
       <motion.div style={{ scale, opacity }} className="relative w-full h-full">
-        <Link href={`/services/${service.id}`} className="block w-full h-full group">
+        <Link href={`/services/${service.id}`} data-cursor="zoom" className="block w-full h-full group">
           <motion.div style={{ y }} className="absolute inset-0">
             <Image
               src={item.src}

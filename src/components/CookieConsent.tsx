@@ -1,20 +1,24 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+function subscribeToConsent(onStoreChange: () => void) {
+  window.addEventListener("pph-consent-change", onStoreChange);
+  return () => window.removeEventListener("pph-consent-change", onStoreChange);
+}
+
+function getConsentSnapshot() {
+  return typeof localStorage !== "undefined" && localStorage.getItem("pph-cookie-consent") != null;
+}
 
 export default function CookieConsent() {
-  const [show, setShow] = useState(false);
+  const accepted = useSyncExternalStore(subscribeToConsent, getConsentSnapshot, () => false);
 
-  useEffect(() => {
-    const consent = localStorage.getItem("pph-cookie-consent");
-    if (!consent) setShow(true);
-  }, []);
+  if (accepted) return null;
 
   const accept = () => {
     localStorage.setItem("pph-cookie-consent", "accepted");
-    setShow(false);
+    window.dispatchEvent(new Event("pph-consent-change"));
   };
-
-  if (!show) return null;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-[9999] p-4">

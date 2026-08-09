@@ -38,6 +38,7 @@ export default function BeforeAfterSlider({
     controlsRef.current?.stop();
   }, []);
 
+  const sweepLoopRef = useRef<() => void>(() => {});
   const sweepForward = useCallback(() => {
     controlsRef.current = animate(sweep, 85, {
       duration: 1.8,
@@ -48,12 +49,15 @@ export default function BeforeAfterSlider({
           ease: "easeInOut",
           delay: 0.6,
           onComplete: () => {
-            timeoutRef.current = setTimeout(sweepForward, 1600);
+            timeoutRef.current = setTimeout(sweepLoopRef.current, 1600);
           },
         });
       },
     });
   }, [sweep]);
+  useEffect(() => {
+    sweepLoopRef.current = sweepForward;
+  }, [sweepForward]);
 
   const startAutoplay = useCallback(() => {
     if (!autoplayRef.current) return;
@@ -126,6 +130,7 @@ export default function BeforeAfterSlider({
     <div
       ref={containerRef}
       className={`relative overflow-hidden rounded-2xl select-none cursor-ew-resize group ${className}`}
+      data-cursor="drag"
     >
       <div className="relative w-full aspect-[4/3] bg-[var(--bg-subtle)] overflow-hidden">
         {/* After image (base layer) - shown by default */}
