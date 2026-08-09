@@ -47,28 +47,26 @@ const slideVariants = {
   exit: (direction: number) => ({ x: direction > 0 ? -300 : 300, opacity: 0 }),
 };
 
-function hasUsedFreeTrial(): boolean {
-  if (typeof window === "undefined") return false;
-  const used = localStorage.getItem(STORAGE_KEY);
-  const expiry = localStorage.getItem(STORAGE_EXPIRY_KEY);
-  if (!used || !expiry) return false;
-  if (Date.now() > parseInt(expiry, 10)) {
-    localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(STORAGE_EXPIRY_KEY);
-    return false;
-  }
-  return true;
-}
-
 function markFreeTrialUsed(email: string) {
   if (isFounderEmail(email)) return;
   localStorage.setItem(STORAGE_KEY, email.toLowerCase().trim());
   localStorage.setItem(STORAGE_EXPIRY_KEY, (Date.now() + 30 * 24 * 60 * 60 * 1000).toString());
 }
 
+function isEmailUsed(email: string): boolean {
+  const used = localStorage.getItem(STORAGE_KEY);
+  if (!used) return false;
+  if (isFounderEmail(email)) return false;
+  const expiry = localStorage.getItem(STORAGE_EXPIRY_KEY);
+  if (expiry && Date.now() > parseInt(expiry, 10)) {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_EXPIRY_KEY);
+    return false;
+  }
+  return used.toLowerCase().trim() === email.toLowerCase().trim();
+}
+
 export default function FreeTrialPage() {
-  const [alreadyUsed, setAlreadyUsed] = useState(false);
-  const [usedEmail, setUsedEmail] = useState("");
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
   const [usageType, setUsageType] = useState<"commercial" | "personal" | "">("");
@@ -82,14 +80,10 @@ export default function FreeTrialPage() {
   const [submitted, setSubmitted] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "sending" | "error">("idle");
   const [submitError, setSubmitError] = useState("");
+  const [reusedNotice, setReusedNotice] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const storedEmail = localStorage.getItem(STORAGE_KEY) || "";
-    if (!isFounderEmail(storedEmail) && hasUsedFreeTrial()) {
-      setAlreadyUsed(true);
-      setUsedEmail(storedEmail);
-    }
     const params = new URLSearchParams(window.location.search);
     const bypass = params.get("access");
     if (bypass) {
@@ -136,6 +130,12 @@ export default function FreeTrialPage() {
     const form = e.currentTarget;
     const emailInput = (form.elements.namedItem("email") as HTMLInputElement)?.value;
     const data = new FormData(form);
+    if (emailInput && isEmailUsed(emailInput)) {
+      setReusedNotice(true);
+      setSubmitStatus("idle");
+      return;
+    }
+    setReusedNotice(false);
     setSubmitStatus("sending");
     try {
       const res = await fetch("/api/send", {
@@ -195,37 +195,6 @@ export default function FreeTrialPage() {
             </div>
             {bypassError && <p className="text-[11px] text-red-400 mt-2">Invalid access code.</p>}
             <p className="text-[11px] text-[rgb(var(--fg-rgb)/30%)] mt-4">Contact the site administrator if you need access.</p>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  // Already used screen
-  if (alreadyUsed) {
-    return (
-      <section className="pt-40 pb-32 bg-[var(--bg)]">
-        <div className="max-w-xl mx-auto px-6 text-center">
-          <div className="glass-card rounded-3xl p-10 border-[rgb(var(--fg-rgb)/5%)]">
-            <div className="w-16 h-16 rounded-full bg-[rgb(239_68_68_/_10%)] flex items-center justify-center mx-auto mb-6">
-              <svg className="w-8 h-8 text-[rgb(239_68_68)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
-            </div>
-            <h1 className="text-3xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">Free Trial Already Used</h1>
-            <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">
-              You&apos;ve already claimed your free trial with <span className="font-bold text-[rgb(var(--fg-rgb))]">{usedEmail}</span>.
-              Each customer is eligible for one free trial only.
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/pricing"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm">
-                View Pricing
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-              </Link>
-              <Link href="/contact"
-                className="px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-semibold border border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm">
-                Contact Us
-              </Link>
-            </div>
           </div>
         </div>
       </section>
@@ -598,6 +567,17 @@ export default function FreeTrialPage() {
                           className="w-full px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm disabled:opacity-60 disabled:hover:scale-100">
                           {submitStatus === "sending" ? "Sending..." : "Submit Free Trial"}
                         </button>
+                        {reusedNotice && (
+                          <div className="rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-3.5 flex items-start gap-3">
+                            <svg className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <div>
+                              <p className="text-sm font-bold text-amber-400">Already Claimed</p>
+                              <p className="text-xs text-[rgb(var(--fg-rgb)/60%)] mt-1 leading-relaxed">
+                                You&apos;ve already used your free trial with this email. Each customer is eligible for one free trial only — you can still explore our <a href="/pricing" className="text-amber-400 underline">pricing</a> or <a href="/contact" className="text-amber-400 underline">contact us</a> for your project.
+                              </p>
+                            </div>
+                          </div>
+                        )}
                         {submitStatus === "error" && (
                           <p className="text-xs text-red-400 text-center bg-red-400/10 border border-red-400/30 rounded-xl px-4 py-3">
                             {submitError} Please try again or email us at <a href="mailto:pathpixhub@gmail.com" className="underline">pathpixhub@gmail.com</a>.
