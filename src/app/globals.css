@@ -8,10 +8,10 @@
   --glass-bg: rgba(255, 255, 255, 0.04);
   --glass-border: rgba(255, 255, 255, 0.08);
   --logo-filter: brightness(0) invert(1);
-  --accent-300: 157 200 118;
-  --accent-400: 139 190 95;
-  --accent-500: 121 179 76;
-  --accent-600: 98 146 58;
+  --accent-300: 175 248 125;
+  --accent-400: 156 246 88;
+  --accent-500: 137 243 54;
+  --accent-600: 108 194 43;
   --accent-contrast: 0 0 0;
   color-scheme: dark;
 }
@@ -24,10 +24,10 @@
   --glass-bg: rgba(0, 0, 0, 0.03);
   --glass-border: rgba(0, 0, 0, 0.08);
   --logo-filter: none;
-  --accent-300: 157 200 118;
-  --accent-400: 139 190 95;
-  --accent-500: 121 179 76;
-  --accent-600: 98 146 58;
+  --accent-300: 175 248 125;
+  --accent-400: 156 246 88;
+  --accent-500: 137 243 54;
+  --accent-600: 108 194 43;
   --accent-contrast: 0 0 0;
   color-scheme: light;
 }
