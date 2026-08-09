@@ -1,0 +1,240 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { PAYONEER_ACTIVE, PAYONEER_PAYMENT_URL, PAYONEER_EMAIL, CURRENCIES } from "@/lib/payment";
+
+const CARD_BRANDS = ["VISA", "Mastercard", "AMEX", "Discover", "PayPal", "UnionPay"];
+
+const TRUST_POINTS = [
+  "256-bit SSL encrypted checkout",
+  "We never store your card details",
+  "Instant payment confirmation",
+  "Money-back guarantee on quality",
+];
+
+const STEPS = [
+  { icon: "🧾", title: "1. Review your order", desc: "Check your service, quantity and total before paying." },
+  { icon: "🔒", title: "2. Pay securely", desc: "You'll be redirected to Payoneer's secure global checkout." },
+  { icon: "🚀", title: "3. We start editing", desc: "As soon as payment is confirmed, our team begins your order." },
+];
+
+export default function PaymentPage() {
+  const [loaded, setLoaded] = useState(false);
+  const [plan, setPlan] = useState("");
+  const [desc, setDesc] = useState("");
+  const [images, setImages] = useState("");
+  const [amount, setAmount] = useState(0);
+  const [currency, setCurrency] = useState(0);
+  const [hasAmount, setHasAmount] = useState(false);
+
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    setPlan(p.get("plan") || "");
+    setDesc(p.get("desc") || "");
+    setImages(p.get("images") || "");
+    const amt = parseFloat(p.get("amount") || "");
+    if (!Number.isNaN(amt) && amt > 0) {
+      setAmount(amt);
+      setHasAmount(true);
+    }
+    const cur = CURRENCIES.findIndex((c) => c.code === (p.get("currency") || "").toUpperCase());
+    if (cur >= 0) setCurrency(cur);
+    setLoaded(true);
+  }, []);
+
+  const curr = CURRENCIES[currency];
+  const converted = hasAmount ? amount * curr.rate : 0;
+
+  const formatMoney = (n: number) => {
+    const symbol = curr.symbol === "AED " || curr.symbol === "SAR " ? "" : curr.symbol;
+    return `${symbol}${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
+
+  const payNowHref = PAYONEER_ACTIVE && PAYONEER_PAYMENT_URL
+    ? PAYONEER_PAYMENT_URL
+    : null;
+
+  return (
+    <div className="min-h-screen bg-[var(--bg)]">
+      <section className="pt-36 pb-16 mesh-gradient">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex items-center justify-center gap-2 mb-5">
+            <span className="w-9 h-9 rounded-full bg-[rgb(var(--accent-500)/12%)] flex items-center justify-center border border-[rgb(var(--accent-500)/20%)]">
+              <svg className="w-5 h-5 text-[rgb(var(--accent-text))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+            </span>
+            <span className="text-sm font-bold text-[rgb(var(--accent-text))] uppercase tracking-wider">Secure Checkout</span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight gradient-text text-center leading-[1.1]">
+            Complete your payment
+          </h1>
+          <p className="mt-4 text-lg text-[rgb(var(--fg-rgb)/60%)] text-center max-w-2xl mx-auto leading-relaxed">
+            Pay in your local currency — we receive your payment in USD. Global payments powered by Payoneer.
+          </p>
+        </div>
+      </section>
+
+      {!loaded && (
+        <section className="pb-24">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="h-80 rounded-3xl border-2 border-[rgb(var(--fg-rgb)/8%)] animate-pulse bg-[rgb(var(--fg-rgb)/3%)]" />
+          </div>
+        </section>
+      )}
+
+      {loaded && (
+        <section className="pb-24">
+          <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-8 items-start">
+
+            {/* Order Summary */}
+            <div className="rounded-3xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg)] p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="text-xl">🧾</span>
+                <h2 className="text-xl font-bold text-[rgb(var(--fg-rgb))]">Order Summary</h2>
+              </div>
+
+              <div className="space-y-4 text-sm">
+                <div className="flex justify-between gap-4">
+                  <span className="text-[rgb(var(--fg-rgb)/50%)]">Service</span>
+                  <span className="font-bold text-[rgb(var(--fg-rgb)/80%)] text-right">{plan || (desc ? "Custom Editing Quote" : "Photo Editing Service")}</span>
+                </div>
+                {desc && (
+                  <div className="flex justify-between gap-4">
+                    <span className="text-[rgb(var(--fg-rgb)/50%)]">Details</span>
+                    <span className="font-bold text-[rgb(var(--fg-rgb)/80%)] text-right max-w-[60%]">{desc}</span>
+                  </div>
+                )}
+                {images && (
+                  <div className="flex justify-between gap-4">
+                    <span className="text-[rgb(var(--fg-rgb)/50%)]">Images</span>
+                    <span className="font-bold text-[rgb(var(--fg-rgb)/80%)]">{images}</span>
+                  </div>
+                )}
+                <div className="h-px bg-[rgb(var(--fg-rgb)/8%)]" />
+                <div className="flex justify-between gap-4">
+                  <span className="text-[rgb(var(--fg-rgb)/50%)]">Amount ({curr.code})</span>
+                  <span className="font-extrabold text-[rgb(var(--fg-rgb))]">
+                    {hasAmount ? formatMoney(converted) : "—"}
+                  </span>
+                </div>
+                {hasAmount && (
+                  <div className="flex justify-between gap-4">
+                    <span className="text-[rgb(var(--fg-rgb)/50%)]">You pay ≈</span>
+                    <span className="font-bold text-[rgb(var(--accent-text))]">{formatMoney(converted)} {curr.code}</span>
+                  </div>
+                )}
+                {hasAmount && (
+                  <p className="text-xs text-[rgb(var(--fg-rgb)/40%)]">
+                    * Exchange rate shown is approximate. Final amount is set by Payoneer at checkout using live rates — you pay in {curr.code}, we receive the USD equivalent.
+                  </p>
+                )}
+              </div>
+
+              {/* Currency selector */}
+              <div className="mt-8">
+                <p className="text-xs uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3">
+                  Choose your payment currency
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {CURRENCIES.map((c, i) => (
+                    <button key={c.code} type="button" onClick={() => setCurrency(i)}
+                      className={`text-xs px-3 py-2 rounded-xl font-bold transition-all ${currency === i ? "bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-text))] border border-[rgb(var(--accent-500)/25%)]" : "text-[rgb(var(--fg-rgb)/35%)] hover:text-[rgb(var(--fg-rgb)/60%)] border border-[rgb(var(--fg-rgb)/10%)]"}`}>
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Payment Method */}
+            <div className="rounded-3xl border-2 border-[rgb(var(--accent-500)/25%)] bg-[var(--bg)] p-8 shadow-xl shadow-[rgb(var(--accent-500)/8%)]">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-[rgb(var(--fg-rgb))]">Payment Method</h2>
+                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-text))] border border-[rgb(var(--accent-500)/25%)]">Recommended</span>
+              </div>
+
+              {/* Payoneer card */}
+              <div className="rounded-2xl border-2 border-[rgb(var(--accent-500)/30%)] bg-[rgb(var(--accent-500)/4%)] p-5">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#ff7200] to-[#ff9d00] flex items-center justify-center text-white text-sm font-extrabold">P</span>
+                    <span className="text-lg font-extrabold text-[rgb(var(--fg-rgb))] tracking-tight">Payoneer</span>
+                  </div>
+                  <span className="ml-auto text-[10px] font-bold px-2 py-1 rounded-full bg-[rgb(var(--fg-rgb)/6%)] text-[rgb(var(--fg-rgb)/50%)] border border-[rgb(var(--fg-rgb)/10%)]">Secure Checkout</span>
+                </div>
+                <p className="mt-3 text-xs text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">
+                  Pay by credit/debit card, PayPal, or bank transfer — whatever is easiest for you. Your payment is protected by Payoneer&apos;s trusted global payment network.
+                </p>
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                  {CARD_BRANDS.map((b) => (
+                    <span key={b} className="text-[10px] font-bold px-2.5 py-1.5 rounded-md bg-[var(--bg-alt)] text-[rgb(var(--fg-rgb)/55%)] border border-[rgb(var(--fg-rgb)/10%)]">{b}</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Pay Now */}
+              <div className="mt-6">
+                {payNowHref ? (
+                  <a href={payNowHref} target="_blank" rel="noopener noreferrer"
+                    className="w-full inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm shadow-lg shadow-[rgb(var(--accent-500)/25%)]">
+                    Pay Now — {hasAmount ? `${formatMoney(converted)} ${curr.code}` : "Secure Payment"}
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                  </a>
+                ) : (
+                  <a href={`mailto:${PAYONEER_EMAIL}?subject=${encodeURIComponent(plan ? `Payment for ${plan} plan` : "Payment for my order")}&body=${encodeURIComponent(hasAmount ? `I'd like to complete payment for my order (${formatMoney(converted)} ${curr.code}). Please send me the secure payment link.` : "I'd like to complete payment for my order. Please send me the secure payment link.")}`}
+                    className="w-full inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm shadow-lg shadow-[rgb(var(--accent-500)/25%)]">
+                    Request Secure Payment Link
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                  </a>
+                )}
+                <p className="mt-3 text-center text-xs text-[rgb(var(--fg-rgb)/40%)]">
+                  {payNowHref
+                    ? "You'll be redirected to Payoneer's secure checkout. Never share your card details by email."
+                    : `Your secure payment link will be sent to your email. Or email us at ${PAYONEER_EMAIL}.`}
+                </p>
+              </div>
+
+              {/* Trust points */}
+              <ul className="mt-6 space-y-2">
+                {TRUST_POINTS.map((t) => (
+                  <li key={t} className="flex items-start gap-2 text-xs text-[rgb(var(--fg-rgb)/55%)]">
+                    <svg className="w-4 h-4 mt-0.5 text-[rgb(var(--accent-text))] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* What happens next */}
+          <div className="max-w-6xl mx-auto px-6 mt-12">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold tracking-tight gradient-text">What happens next?</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {STEPS.map((s, i) => (
+                <motion.div key={s.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08 }}
+                  className="rounded-2xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-alt)] p-6 text-center hover:shadow-lg hover:-translate-y-1 transition-all">
+                  <span className="text-3xl">{s.icon}</span>
+                  <h3 className="font-bold text-[rgb(var(--fg-rgb))] mt-3 mb-1">{s.title}</h3>
+                  <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">{s.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+            <div className="mt-10 text-center">
+              <Link href="/contact"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-bold border border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm">
+                Need help? Contact our team
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+    </div>
+  );
+}

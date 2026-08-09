@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import { fetchCountryCode, isCountryBlocked, setBypassCode, isAdmin } from "@/lib/countryBlocker";
 
 const VOLUME_DISCOUNT_THRESHOLD = 500;
@@ -884,8 +885,15 @@ export default function ContactForm() {
             <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">
               Thank you for reaching out! We&apos;ve received your {wantsQuote ? "quote request" : "message"} and will get back to you with a custom quote within <span className="font-bold text-[rgb(137_243_54)]">45 minutes</span>.
             </p>
+            {wantsQuote && (
+              <Link href={`/payment?amount=${total.toFixed(2)}&currency=USD&images=${totalImageCount}&desc=${encodeURIComponent("Photo editing order")}`}
+                className="mt-8 inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm shadow-lg shadow-[rgb(var(--accent-500)/25%)]">
+                Proceed to Secure Payment
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </Link>
+            )}
             <button type="button" onClick={() => setSubmitStatus("idle")}
-              className="mt-8 inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm">
+              className="mt-4 inline-flex items-center gap-2 px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-bold border border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm">
               Send Another Request
             </button>
           </div>

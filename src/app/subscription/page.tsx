@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { PAYONEER_PAYME_URL, WHATSAPP_LINK } from "@/lib/payment";
 
 const TIERS = [
   {
@@ -47,8 +48,8 @@ const TIERS = [
       { text: "Unlimited Revisions", included: false },
     ],
     loyalty: "1 month free with annual",
-    cta: "Get Started",
-    ctaLink: "/contact",
+    cta: "Order via Email",
+    ctaLink: "/free-trial",
     style: "border-orange-500/30",
   },
   {
@@ -70,8 +71,8 @@ const TIERS = [
       { text: "15% Path Credit Bonus", included: true },
     ],
     loyalty: "2 months free with annual",
-    cta: "Get Started",
-    ctaLink: "/contact",
+    cta: "Pay Now",
+    ctaLink: "",
     style: "border-[rgb(var(--accent-500)/60%)] shadow-xl shadow-[rgb(var(--accent-500)/10%)] scale-[1.02]",
     featured: true,
   },
@@ -95,7 +96,7 @@ const TIERS = [
     ],
     loyalty: "3 months free + setup with annual",
     cta: "Contact Sales",
-    ctaLink: "/contact",
+    ctaLink: "",
     style: "",
   },
 ];
@@ -159,6 +160,16 @@ export default function SubscriptionPage() {
     "6h express, unlimited revisions & time account",
     "45min VIP SLA, dedicated team",
   ];
+
+  const getTierHref = (tier: (typeof TIERS)[number]): string => {
+    if (tier.name === "Pro") {
+      return PAYONEER_PAYME_URL || `/payment?plan=Pro&amount=${annual ? 199 : 19.9}&desc=${encodeURIComponent("Pro plan")}`;
+    }
+    if (tier.name === "Enterprise") {
+      return WHATSAPP_LINK || "/contact";
+    }
+    return tier.ctaLink;
+  };
 
   return (
     <>
@@ -256,7 +267,9 @@ export default function SubscriptionPage() {
                 <div className={`rounded-xl text-center py-3 font-bold text-sm ${tier.turnaroundColor || "bg-[rgb(var(--fg-rgb)/5%)] text-[rgb(var(--fg-rgb)/50%)]"} border`}>
                   ⚡ {tier.turnaroundLabel}
                 </div>
-                <Link href={tier.ctaLink}
+                <Link href={getTierHref(tier)}
+                  target={getTierHref(tier).startsWith("http") ? "_blank" : undefined}
+                  rel={getTierHref(tier).startsWith("http") ? "noopener noreferrer" : undefined}
                   className={`mt-4 block text-center py-3 rounded-xl font-bold text-sm transition-all ${tier.featured ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))]" : "border-2 border-[rgb(var(--fg-rgb)/15%)] text-[rgb(var(--fg-rgb)/70%)] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))]"}`}>
                   {tier.cta}
                 </Link>
@@ -272,6 +285,32 @@ export default function SubscriptionPage() {
               <h3 className="text-lg font-bold text-purple-400">VIP Extra Care</h3>
             </div>
             <p className="text-sm text-[rgb(var(--fg-rgb)/55%)]">Dedicated Account Manager • 24/7 Priority Support • 1-Hour Emergency Response • Custom Workflow Setup • Personal Expert Team</p>
+          </div>
+
+          {/* Simple & secure payments */}
+          <div className="mt-8 rounded-2xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg)] p-6">
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              <span className="text-lg">💳</span>
+              <h3 className="text-lg font-bold text-[rgb(var(--fg-rgb))]">Simple & secure payments</h3>
+              <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-text))] border border-[rgb(var(--accent-500)/25%)]">Powered by Payoneer</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="rounded-xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-alt)] p-4">
+                <p className="font-bold text-sm text-[rgb(var(--fg-rgb))] mb-1">📧 Order via Email</p>
+                <p className="text-xs text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">Submit your images through our form. We edit first, then email you a secure Payoneer payment link.</p>
+              </div>
+              <div className="rounded-xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-alt)] p-4">
+                <p className="font-bold text-sm text-[rgb(var(--fg-rgb))] mb-1">💳 Pay Now (Card/PayPal)</p>
+                <p className="text-xs text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">Fixed-price plans use a direct payment link — pay by card, PayPal, or bank transfer in your own currency.</p>
+              </div>
+              <div className="rounded-xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-alt)] p-4">
+                <p className="font-bold text-sm text-[rgb(var(--fg-rgb))] mb-1">🤝 Custom / Enterprise</p>
+                <p className="text-xs text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">Contact our sales team for a custom quote and dedicated invoicing — built around your workflow.</p>
+              </div>
+            </div>
+            <p className="mt-4 text-xs text-[rgb(var(--fg-rgb)/40%)]">
+              🔒 You pay in your local currency — we receive payment in USD. Secured by Payoneer&apos;s global payment network. Visa • Mastercard • AMEX • PayPal • Bank transfer
+            </p>
           </div>
         </div>
       </section>
