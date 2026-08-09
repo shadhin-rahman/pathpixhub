@@ -51,7 +51,7 @@ export default function CookiePolicyPage() {
   return (
     <LegalPage
       effectiveDate="May 06, 2026"
-      title={<><span className="block">Cookie</span><span className="block text-[#8FD102]">Policy</span></>}
+      title={<><span className="block">Cookie</span><span className="block text-[#79B34C]">Policy</span></>}
       intro="This Cookie Policy explains what cookies are, how PathPixHub uses them, and how you can manage your preferences when you visit our website."
       contentsIntro="Browse the sections below. Click any item to jump straight to that section."
       sections={sections}
