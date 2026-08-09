@@ -43,7 +43,7 @@ const PLANS = [
     turnaroundColor: "bg-purple-500/10 border-purple-500/20 text-purple-400",
     features: ["45-min VIP response SLA", "Dedicated account manager", "Dedicated expert team", "Business security SLA"],
     cta: "Contact Sales",
-    href: "/contact",
+    href: "/enterprise",
     featured: false,
     accent: "text-purple-400",
   },
@@ -99,9 +99,15 @@ export default function CreditPlans() {
               <Link href={plan.href}
                 target={plan.href.startsWith("http") ? "_blank" : undefined}
                 rel={plan.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                className={`mt-8 block text-center py-3.5 rounded-xl font-bold text-sm transition-all ${plan.featured ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))]" : "border-2 border-[rgb(var(--fg-rgb)/15%)] text-[rgb(var(--fg-rgb)/70%)] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))]"}`}>
+                className="mt-8 block text-center py-3.5 rounded-xl font-bold text-sm transition-all bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] shadow-lg shadow-[rgb(var(--accent-500)/15%)]">
                 {plan.cta}
               </Link>
+              {plan.name === "Enterprise" && (
+                <Link href="/enterprise"
+                  className="mt-2 text-center block text-xs font-bold text-purple-400 hover:text-purple-300 hover:underline transition-all">
+                  See what &amp; how it works →
+                </Link>
+              )}
             </motion.div>
           ))}
         </div>

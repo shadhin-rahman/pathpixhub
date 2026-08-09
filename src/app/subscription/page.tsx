@@ -169,7 +169,7 @@ export default function SubscriptionPage() {
       return PAYONEER_PAYME_URL || `/payment?plan=Pro&amount=${annual ? 199 : 19.9}&desc=${encodeURIComponent("Pro credit plan")}`;
     }
     if (tier.name === "Enterprise") {
-      return WHATSAPP_LINK || "/contact";
+      return "/enterprise";
     }
     return tier.ctaLink;
   };
@@ -273,9 +273,15 @@ export default function SubscriptionPage() {
                 <Link href={getTierHref(tier)}
                   target={getTierHref(tier).startsWith("http") ? "_blank" : undefined}
                   rel={getTierHref(tier).startsWith("http") ? "noopener noreferrer" : undefined}
-                  className={`mt-4 block text-center py-3 rounded-xl font-bold text-sm transition-all ${tier.featured ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))]" : "border-2 border-[rgb(var(--fg-rgb)/15%)] text-[rgb(var(--fg-rgb)/70%)] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))]"}`}>
+                  className="mt-4 block text-center py-3 rounded-xl font-bold text-sm transition-all bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] shadow-lg shadow-[rgb(var(--accent-500)/15%)]">
                   {tier.cta}
                 </Link>
+                {tier.name === "Enterprise" && (
+                  <Link href="/enterprise"
+                    className="mt-2 block text-center text-xs font-bold text-purple-400 hover:text-purple-300 hover:underline transition-all">
+                    See what &amp; how it works →
+                  </Link>
+                )}
               </motion.div>
               );
             })}
