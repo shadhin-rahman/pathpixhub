@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import Cursor from "@/components/Cursor";
 import IntroAnimation from "@/components/IntroAnimation";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -40,6 +41,7 @@ export default function RootLayout({
       <body className={`${jakarta.className} bg-[var(--bg)] text-[rgb(var(--fg-rgb))] antialiased`} suppressHydrationWarning>
         <div className="grain" />
         <IntroAnimation />
+        <Cursor />
         <Header />
         <a href="#main-content" className="fixed -top-full left-4 z-[9999] px-4 py-2 bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] text-sm font-bold rounded-b-lg focus:top-0 transition-all duration-300 outline-none">
           Skip to main content
