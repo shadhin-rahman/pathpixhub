@@ -66,13 +66,13 @@ export async function POST(request: Request) {
     }
     const body = lines.join("\n").trim() || "(no message content)";
 
-    const attachments: { filename: string; contentType?: string; content: Uint8Array }[] = [];
+    const attachments: { filename: string; contentType?: string; content: Buffer }[] = [];
     const uploads = data.getAll("images").filter((v): v is File => v instanceof File && typeof File !== "undefined");
     for (const file of uploads.slice(0, 10)) {
       attachments.push({
         filename: file.name || "image.jpg",
         contentType: file.type || "image/jpeg",
-        content: new Uint8Array(await file.arrayBuffer()),
+        content: Buffer.from(await file.arrayBuffer()),
       });
     }
 
