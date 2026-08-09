@@ -17,17 +17,17 @@
 }
 
 :root[data-theme="light"] {
-  --bg: #faf9f7;
-  --bg-alt: #f0eee9;
-  --bg-subtle: #e8e5df;
-  --fg-rgb: 20 19 17;
-  --glass-bg: rgba(0, 0, 0, 0.03);
-  --glass-border: rgba(0, 0, 0, 0.08);
+  --bg: #f7f6f1;
+  --bg-alt: #efede7;
+  --bg-subtle: #e8e5de;
+  --fg-rgb: 24 23 21;
+  --glass-bg: rgba(0, 0, 0, 0.035);
+  --glass-border: rgba(0, 0, 0, 0.09);
   --logo-filter: none;
-  --accent-300: 175 248 125;
-  --accent-400: 156 246 88;
-  --accent-500: 137 243 54;
-  --accent-600: 108 194 43;
+  --accent-300: 152 206 96;
+  --accent-400: 110 171 38;
+  --accent-500: 91 146 24;
+  --accent-600: 73 121 16;
   --accent-contrast: 0 0 0;
   color-scheme: light;
 }
