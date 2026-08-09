@@ -6,9 +6,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { services } from "@/data/services";
 import Testimonials from "@/components/Testimonials";
-import ScrollReveal from "@/components/ScrollReveal";
 import StaggerReveal, { StaggerItem } from "@/components/StaggerReveal";
-import ParallaxImage from "@/components/ParallaxImage";
 import ScrollIndicator from "@/components/ScrollIndicator";
 import CountUp from "@/components/CountUp";
 import TextReveal from "@/components/TextReveal";
@@ -115,7 +113,7 @@ export default function Home() {
             </TextReveal>
             <TextReveal>
               <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/70%)] leading-relaxed max-w-lg">
-                From flawless clipping paths to high-end retouching â€” pixel-perfect results with fast turnaround for e-commerce, fashion, and advertising.
+                From flawless clipping paths to high-end retouching — pixel-perfect results with fast turnaround for e-commerce, fashion, and advertising.
               </p>
             </TextReveal>
             <TextReveal>
@@ -143,7 +141,7 @@ export default function Home() {
               <TextReveal><h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text pb-2">Every Product, Every Angle</h3></TextReveal>
               <TextReveal>
                 <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-lg">
-                  Bicycles, vehicles, apparel, or accessories â€” whatever you shoot, we edit it with the same pixel-perfect care.
+                  Bicycles, vehicles, apparel, or accessories — whatever you shoot, we edit it with the same pixel-perfect care.
                 </p>
               </TextReveal>
               <TextReveal>
@@ -230,7 +228,7 @@ export default function Home() {
               <TextReveal><h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Your Virtual Photo Editing Studio</h3></TextReveal>
               <TextReveal>
                 <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
-                  We provide expert image editing services for e-commerce brands, product photographers, Amazon sellers, and businesses worldwide. From clipping path and background removal to multi-clipping paths, color correction, and photo retouching â€” we handle every detail with care.
+                  We provide expert image editing services for e-commerce brands, product photographers, Amazon sellers, and businesses worldwide. From clipping path and background removal to multi-clipping paths, color correction, and photo retouching — we handle every detail with care.
                 </p>
               </TextReveal>
               <TextReveal>
@@ -281,7 +279,7 @@ export default function Home() {
           </div></TextReveal>
           <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 gap-6" staggerDelay={0.06}>
             {[
-              { step: "01", title: "Client Consultation & Order Submission", desc: "We start by understanding your specific needs â€” background removal, shadow creation, or precise color adjustments." },
+              { step: "01", title: "Client Consultation & Order Submission", desc: "We start by understanding your specific needs — background removal, shadow creation, or precise color adjustments." },
               { step: "02", title: "Image Analysis & Project Assessment", desc: "Every image is different, so we assess the detail needed to set a realistic timeline for delivery." },
               { step: "03", title: "Selecting the Right Tools", desc: "We rely on Adobe Photoshop's pen tool for precise clipping paths, plus masking techniques for complex backgrounds." },
               { step: "04", title: "Clipping Path Creation", desc: "Our editors manually outline each object for clean edges and perfect isolation." },
@@ -337,7 +335,7 @@ export default function Home() {
       <section className="py-28 lg:py-36 brand-cta text-center">
         <div className="max-w-7xl mx-auto px-6">
           <TextReveal><h2 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Ready to Start?</h2></TextReveal>
-          <TextReveal><p className="mt-4 text-lg max-w-xl mx-auto">Send us 2 images and we&apos;ll edit them for free â€” no obligation.</p></TextReveal>
+          <TextReveal><p className="mt-4 text-lg max-w-xl mx-auto">Send us 2 images and we&apos;ll edit them for free — no obligation.</p></TextReveal>
           <TextReveal>
             <MagneticButton strength={0.15}>
               <Link href="/free-trial" className="mt-8 inline-flex items-center px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm">Request Free Trial</Link>

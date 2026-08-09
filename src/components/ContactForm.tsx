@@ -64,26 +64,26 @@ const TURNAROUND_OPTIONS = [
 ];
 
 const FILE_OPTIONS = [
-  { id: "psd-original-multi", label: "PSD â€” Original Background, Multiple Layer" },
-  { id: "psd-original-single", label: "PSD â€” Original Background, Single Layer" },
-  { id: "psd-white-multi", label: "PSD â€” White Background, Multiple Layer" },
-  { id: "psd-white-single", label: "PSD â€” White Background, Single Layer" },
-  { id: "psd-transparent-multi", label: "PSD â€” Transparent Background, Multiple Layer" },
-  { id: "psd-transparent-single", label: "PSD â€” Transparent Background, Single Layer" },
-  { id: "psd-mask-multi", label: "PSD â€” Layer Mask, Multiple Layer" },
-  { id: "psd-mask-single", label: "PSD â€” Layer Mask, Single Layer" },
-  { id: "tif-original-multi", label: "TIF â€” Original Background, Multiple Layer" },
-  { id: "tif-original-single", label: "TIF â€” Original Background, Single Layer" },
-  { id: "tif-white-multi", label: "TIF â€” White Background, Multiple Layer" },
-  { id: "tif-white-single", label: "TIF â€” White Background, Single Layer" },
-  { id: "tif-transparent-multi", label: "TIF â€” Transparent Background, Multiple Layer" },
-  { id: "tif-transparent-single", label: "TIF â€” Transparent Background, Single Layer" },
-  { id: "tif-mask-multi", label: "TIF â€” Layer Mask, Multiple Layer" },
-  { id: "tif-mask-single", label: "TIF â€” Layer Mask, Single Layer" },
-  { id: "jpg-white-single", label: "JPG â€” White Background, Single Layer" },
-  { id: "jpg-original-single", label: "JPG â€” Original Background, Single Layer" },
-  { id: "png-white-single", label: "PNG â€” White Background, Single Layer" },
-  { id: "png-transparent-single", label: "PNG â€” Transparent Background, Single Layer" },
+  { id: "psd-original-multi", label: "PSD — Original Background, Multiple Layer" },
+  { id: "psd-original-single", label: "PSD — Original Background, Single Layer" },
+  { id: "psd-white-multi", label: "PSD — White Background, Multiple Layer" },
+  { id: "psd-white-single", label: "PSD — White Background, Single Layer" },
+  { id: "psd-transparent-multi", label: "PSD — Transparent Background, Multiple Layer" },
+  { id: "psd-transparent-single", label: "PSD — Transparent Background, Single Layer" },
+  { id: "psd-mask-multi", label: "PSD — Layer Mask, Multiple Layer" },
+  { id: "psd-mask-single", label: "PSD — Layer Mask, Single Layer" },
+  { id: "tif-original-multi", label: "TIF — Original Background, Multiple Layer" },
+  { id: "tif-original-single", label: "TIF — Original Background, Single Layer" },
+  { id: "tif-white-multi", label: "TIF — White Background, Multiple Layer" },
+  { id: "tif-white-single", label: "TIF — White Background, Single Layer" },
+  { id: "tif-transparent-multi", label: "TIF — Transparent Background, Multiple Layer" },
+  { id: "tif-transparent-single", label: "TIF — Transparent Background, Single Layer" },
+  { id: "tif-mask-multi", label: "TIF — Layer Mask, Multiple Layer" },
+  { id: "tif-mask-single", label: "TIF — Layer Mask, Single Layer" },
+  { id: "jpg-white-single", label: "JPG — White Background, Single Layer" },
+  { id: "jpg-original-single", label: "JPG — Original Background, Single Layer" },
+  { id: "png-white-single", label: "PNG — White Background, Single Layer" },
+  { id: "png-transparent-single", label: "PNG — Transparent Background, Single Layer" },
 ];
 
 type ServiceSelection = {
@@ -100,6 +100,56 @@ type ServiceInfo = {
   effectiveBasePrice: number;
   effectiveComplexityLevels: number;
   effectiveTiers: TierDef[];
+};
+
+const getSelKey = (svcId: string, subTypeId?: string) => (subTypeId ? `${svcId}:${subTypeId}` : svcId);
+
+const getService = (selKey: string): ServiceInfo | undefined => {
+  for (const svc of ALL_SERVICES) {
+    if (!svc.subTypes && svc.id === selKey) {
+      const t = svc.type ?? "none";
+      return {
+        def: svc, effectiveType: t, effectiveBasePrice: svc.basePrice ?? 0,
+        effectiveComplexityLevels: svc.complexityLevels ?? 6, effectiveTiers: svc.tiers ?? [],
+      };
+    }
+    if (svc.subTypes) {
+      for (const st of svc.subTypes) {
+        if (`${svc.id}:${st.id}` === selKey) {
+          return {
+            def: svc, subType: st, effectiveType: st.type,
+            effectiveBasePrice: st.basePrice, effectiveComplexityLevels: st.complexityLevels ?? 6,
+            effectiveTiers: st.tiers ?? [],
+          };
+        }
+      }
+    }
+  }
+};
+
+const getMultiplier = (info: ServiceInfo, sel: ServiceSelection): number => {
+  if (info.effectiveType === "complexity") {
+    const mults = COMPLEXITY_MULTIPLIERS[info.effectiveComplexityLevels] ?? COMPLEXITY_MULTIPLIERS[6];
+    return mults[(sel.complexity ?? 1) - 1] ?? 1.0;
+  }
+  if (info.effectiveType === "tier") {
+    const t = info.effectiveTiers.find(t => t.id === (sel.tier ?? "basic"));
+    return t?.multiplier ?? 1.0;
+  }
+  return 1.0;
+};
+
+const getPricePerImage = (info: ServiceInfo, sel: ServiceSelection): number =>
+  info.effectiveBasePrice * getMultiplier(info, sel);
+
+const getDisplayLabel = (info: ServiceInfo, sel: ServiceSelection): string => {
+  const base = info.subType?.label ?? info.def.label;
+  if (info.effectiveType === "complexity") return `${base} (C${sel.complexity})`;
+  if (info.effectiveType === "tier") {
+    const t = info.effectiveTiers.find(t => t.id === sel.tier);
+    return `${base} — ${t?.label ?? ""}`;
+  }
+  return base;
 };
 
 export default function ContactForm() {
@@ -170,56 +220,6 @@ export default function ContactForm() {
   }, []);
 
   const blocked = countryLoaded && countryCode !== null && isCountryBlocked(countryCode) && !isAdmin();
-
-  const getSelKey = (svcId: string, subTypeId?: string) => subTypeId ? `${svcId}:${subTypeId}` : svcId;
-
-  const getService = (selKey: string): ServiceInfo | undefined => {
-    for (const svc of ALL_SERVICES) {
-      if (!svc.subTypes && svc.id === selKey) {
-        const t = svc.type ?? "none";
-        return {
-          def: svc, effectiveType: t, effectiveBasePrice: svc.basePrice ?? 0,
-          effectiveComplexityLevels: svc.complexityLevels ?? 6, effectiveTiers: svc.tiers ?? [],
-        };
-      }
-      if (svc.subTypes) {
-        for (const st of svc.subTypes) {
-          if (`${svc.id}:${st.id}` === selKey) {
-            return {
-              def: svc, subType: st, effectiveType: st.type,
-              effectiveBasePrice: st.basePrice, effectiveComplexityLevels: st.complexityLevels ?? 6,
-              effectiveTiers: st.tiers ?? [],
-            };
-          }
-        }
-      }
-    }
-  };
-
-  const getMultiplier = (info: ServiceInfo, sel: ServiceSelection): number => {
-    if (info.effectiveType === "complexity") {
-      const mults = COMPLEXITY_MULTIPLIERS[info.effectiveComplexityLevels] ?? COMPLEXITY_MULTIPLIERS[6];
-      return mults[(sel.complexity ?? 1) - 1] ?? 1.0;
-    }
-    if (info.effectiveType === "tier") {
-      const t = info.effectiveTiers.find(t => t.id === (sel.tier ?? "basic"));
-      return t?.multiplier ?? 1.0;
-    }
-    return 1.0;
-  };
-
-  const getPricePerImage = (info: ServiceInfo, sel: ServiceSelection): number =>
-    info.effectiveBasePrice * getMultiplier(info, sel);
-
-  const getDisplayLabel = (info: ServiceInfo, sel: ServiceSelection): string => {
-    const base = info.subType?.label ?? info.def.label;
-    if (info.effectiveType === "complexity") return `${base} (C${sel.complexity})`;
-    if (info.effectiveType === "tier") {
-      const t = info.effectiveTiers.find(t => t.id === sel.tier);
-      return `${base} â€” ${t?.label ?? ""}`;
-    }
-    return base;
-  };
 
   const hasSelection = (selKey: string): boolean => selKey in selections;
 
@@ -316,24 +316,24 @@ export default function ContactForm() {
     };
   }, [selections, imgCount, turnaroundSurcharge]);
 
-  const quoteSummary = useMemo(() => {
+  const quoteSummary = (() => {
     if (orderedKeys.length === 0) return "";
     const lines = orderedKeys.map((key) => {
       const info = getService(key);
       const sel = selections[key];
       if (!info || !sel) return "";
       const ppi = getPricePerImage(info, sel);
-      return `- ${getDisplayLabel(info, sel)}: $${ppi.toFixed(2)}/img Ã— ${imgCount}`;
+      return `- ${getDisplayLabel(info, sel)}: $${ppi.toFixed(2)}/img x ${imgCount}`;
     });
     lines.push(`Total images: ${imgCount}`);
     if (discountApplies) lines.push(`Volume discount: -$${discountAmount.toFixed(2)}`);
-    if (turnaroundSurcharge !== 0) lines.push(`Turnaround (${turnaroundOption?.label}): $${turnaroundFee >= 0 ? "+" : ""}${turnaroundFee.toFixed(2)}`);
-    lines.push(`File format: ${selectedFileOpt?.label}`);
+    if (turnaroundSurcharge !== 0) lines.push(`Turnaround (${TURNAROUND_OPTIONS.find(t => t.id === turnaround)?.label ?? ""}): $${turnaroundFee >= 0 ? "+" : ""}${turnaroundFee.toFixed(2)}`);
+    lines.push(`File format: ${FILE_OPTIONS.find(f => f.id === fileOption)?.label ?? ""}`);
     if (commentsText) lines.push(`Comments: ${commentsText}`);
     if (imageLinks.trim()) lines.push(`Image links:\n${imageLinks.trim()}`);
     lines.push(`Estimated total: $${total.toFixed(2)}`);
     return lines.join("\n");
-  }, [orderedKeys, selections, imgCount, discountApplies, discountAmount, turnaroundFee, turnaroundSurcharge, turnaroundOption, total, fileOption, commentsText, imageLinks]);
+  })();
 
   const STEPS = [
     { id: 1, label: "Choose services" },
@@ -430,14 +430,14 @@ export default function ContactForm() {
     const sel = selections[selKey];
     if (!info || !sel) return "";
     const ppi = getPricePerImage(info, sel);
-    if (info.effectiveType === "complexity") return `C${sel.complexity} â€” $${ppi.toFixed(2)}/img`;
+    if (info.effectiveType === "complexity") return `C${sel.complexity} — $${ppi.toFixed(2)}/img`;
     if (info.effectiveType === "tier") {
       const t = info.effectiveTiers.find(t => t.id === sel.tier);
-      return `${t?.label ?? ""} â€” $${ppi.toFixed(2)}/img`;
+      return `${t?.label ?? ""} — $${ppi.toFixed(2)}/img`;
     }
     if (info.effectiveType === "color-variant") {
       const count = sel.colorCodes?.filter(c => c.trim()).length ?? 0;
-      return `${count} variant(s) â€” $${info.effectiveBasePrice.toFixed(2)}/img`;
+      return `${count} variant(s) — $${info.effectiveBasePrice.toFixed(2)}/img`;
     }
     return `$${info.effectiveBasePrice.toFixed(2)}/img`;
   };
@@ -649,7 +649,7 @@ export default function ContactForm() {
                     {orderedKeys.length > 0 && (
                       <button type="button" onClick={() => setStep(2)}
                         className="w-full mt-5 py-3.5 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] transition-all">
-                        CONTINUE â†’
+                        CONTINUE →
                       </button>
                     )}
                   </div>
@@ -669,7 +669,7 @@ export default function ContactForm() {
                       <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Total number of images</label>
                       <div className="flex items-center gap-2">
                         <button type="button" onClick={() => setTotalImageCount(Math.max(1, totalImageCount - 10))}
-                          className="w-10 h-10 rounded-xl bg-[rgb(var(--fg-rgb)/6%)] flex items-center justify-center text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/12%)] transition-all">âˆ’</button>
+                          className="w-10 h-10 rounded-xl bg-[rgb(var(--fg-rgb)/6%)] flex items-center justify-center text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/12%)] transition-all">−</button>
                         <input type="number" min={1} max={100000} value={totalImageCount}
                           onChange={e => setTotalImageCount(Math.max(1, parseInt(e.target.value, 10) || 1))}
                           className="w-24 px-3 py-2.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-center text-[rgb(var(--fg-rgb))] font-bold outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
@@ -725,15 +725,15 @@ export default function ContactForm() {
                     <div className="rounded-xl border border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] p-4">
                       <p className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/50%)] uppercase tracking-wider mb-2">How to share your files</p>
                       <p className="text-[12px] text-[rgb(var(--fg-rgb)/50%)] leading-relaxed">
-                        After submitting, we&apos;ll send a quote via email. Once confirmed, you can share your files using Dropbox, Google Drive, or WeTransfer â€” and we&apos;ll send you a download link for the edited images.
+                        After submitting, we&apos;ll send a quote via email. Once confirmed, you can share your files using Dropbox, Google Drive, or WeTransfer — and we&apos;ll send you a download link for the edited images.
                       </p>
                     </div>
 
                     <div className="flex gap-3">
                       <button type="button" onClick={() => setStep(1)}
-                        className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">â† Back</button>
+                        className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
                       <button type="button" onClick={() => setStep(3)}
-                        className="flex-1 py-3 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] transition-all">CONTINUE â†’</button>
+                        className="flex-1 py-3 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] transition-all">CONTINUE →</button>
                     </div>
                   </div>
                 )}
@@ -755,7 +755,7 @@ export default function ContactForm() {
                     <input type="hidden" name="image_links" value={imageLinks} />
                     <div className="flex gap-3">
                       <button type="button" onClick={() => setStep(2)}
-                        className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">â† Back</button>
+                        className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
                       <button type="submit" disabled={submitStatus === "sending" || submitStatus === "success"}
                         className="flex-1 py-3.5 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] hover:scale-[1.01] transition-all disabled:opacity-60 disabled:hover:scale-100">
                         {submitStatus === "sending" ? "Sending..." : "Submit Quote Request"}
@@ -834,7 +834,7 @@ export default function ContactForm() {
                     <div className="pt-4 mt-4 border-t border-[rgb(var(--fg-rgb)/10%)] space-y-2">
                       <div className="flex justify-between text-sm text-[rgb(var(--fg-rgb)/50%)]"><span>Images</span><span>{imgCount}</span></div>
                       <div className="flex justify-between text-sm text-[rgb(var(--fg-rgb)/50%)]"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
-                      {discountApplies && <div className="flex justify-between text-sm text-[rgb(137_243_54)]"><span>Volume discount</span><span>âˆ’${discountAmount.toFixed(2)}</span></div>}
+                      {discountApplies && <div className="flex justify-between text-sm text-[rgb(137_243_54)]"><span>Volume discount</span><span>−${discountAmount.toFixed(2)}</span></div>}
                       {turnaroundSurcharge !== 0 && (
                         <div className={`flex justify-between text-sm ${turnaroundSurcharge > 0 ? "text-amber-400" : "text-[rgb(var(--accent-text))]"}`}>
                           <span>{turnaroundOption?.label}</span><span>{turnaroundFee >= 0 ? "+" : ""}${turnaroundFee.toFixed(2)}</span>

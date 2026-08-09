@@ -244,7 +244,7 @@ export default function FreeTrialPage() {
               Get 2 Free Edits
             </h1>
             <p className="mt-6 text-lg text-white/80 leading-relaxed max-w-lg">
-              Upload up to 2 images and we&apos;ll edit them for free â€” no obligation, no credit card required.
+              Upload up to 2 images and we&apos;ll edit them for free — no obligation, no credit card required.
               See our quality before you commit.
             </p>
           </div>
@@ -306,7 +306,7 @@ export default function FreeTrialPage() {
                     Do you need the edits for personal or business use?
                   </h2>
                   <p className="mt-4 text-[rgb(var(--fg-rgb)/50%)] text-lg">
-                    Select one to continue â€” both are eligible for free trial.
+                    Select one to continue — both are eligible for free trial.
                   </p>
                 </div>
 
@@ -545,7 +545,7 @@ export default function FreeTrialPage() {
                                   </div>
                                   <button type="button" onClick={() => removeFile(i)}
                                     className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-sm">
-                                    Ã—
+                                    ×
                                   </button>
                                   <div className="absolute bottom-0 left-0 right-0 bg-black/50 px-3 py-1.5">
                                     <p className="text-[10px] text-white/80 truncate">{file.name}</p>
@@ -573,7 +573,7 @@ export default function FreeTrialPage() {
                             <div>
                               <p className="text-sm font-bold text-amber-400">Already Claimed</p>
                               <p className="text-xs text-[rgb(var(--fg-rgb)/60%)] mt-1 leading-relaxed">
-                                You&apos;ve already used your free trial with this email. Each customer is eligible for one free trial only â€” you can still explore our <a href="/pricing" className="text-amber-400 underline">pricing</a> or <a href="/contact" className="text-amber-400 underline">contact us</a> for your project.
+                                You&apos;ve already used your free trial with this email. Each customer is eligible for one free trial only — you can still explore our <a href="/pricing" className="text-amber-400 underline">pricing</a> or <a href="/contact" className="text-amber-400 underline">contact us</a> for your project.
                               </p>
                             </div>
                           </div>
@@ -616,7 +616,7 @@ export default function FreeTrialPage() {
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight gradient-text">Need More Than 2 Images?</h2>
           <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] max-w-xl mx-auto">
-            Get an instant quote for your full project â€” starting at $0.39 per image with 12hr turnaround.
+            Get an instant quote for your full project — starting at $0.39 per image with 12hr turnaround.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/pricing"

@@ -103,15 +103,15 @@ const TIERS = [
 const CURRENCIES = [
   { code: "USD", symbol: "$", rate: 1, label: "$ USD" },
   { code: "CAD", symbol: "C$", rate: 1.36, label: "C$ CAD" },
-  { code: "GBP", symbol: "Â£", rate: 0.79, label: "Â£ GBP" },
-  { code: "EUR", symbol: "â‚¬", rate: 0.92, label: "â‚¬ EUR" },
+  { code: "GBP", symbol: "£", rate: 0.79, label: "£ GBP" },
+  { code: "EUR", symbol: "€", rate: 0.92, label: "€ EUR" },
 ];
 
 const PRO_SERVICES = [
-  { icon: "ðŸŽ“", name: "Product Training", price: "$195", desc: "2-hour interactive session covering platform setup, tools & workflow optimization." },
-  { icon: "ðŸ“‹", name: "Custom Specification", price: "$295", desc: "30-min consultation call. Receive one custom spec, quality check & success guide." },
-  { icon: "ðŸš€", name: "Priority Onboarding", price: "$1,295", desc: "We evaluate your needs, onboard up to 5 categories & create custom workflow setup." },
-  { icon: "ðŸ†", name: "Enterprise Onboarding", price: "$4,995", desc: "Unlimited category onboarding, custom workflows, dedicated team â€” full white-glove setup." },
+  { icon: "🎓", name: "Product Training", price: "$195", desc: "2-hour interactive session covering platform setup, tools & workflow optimization." },
+  { icon: "📋", name: "Custom Specification", price: "$295", desc: "30-min consultation call. Receive one custom spec, quality check & success guide." },
+  { icon: "🚀", name: "Priority Onboarding", price: "$1,295", desc: "We evaluate your needs, onboard up to 5 categories & create custom workflow setup." },
+  { icon: "🏆", name: "Enterprise Onboarding", price: "$4,995", desc: "Unlimited category onboarding, custom workflows, dedicated team — full white-glove setup." },
 ];
 
 const FAQ_ITEMS = [
@@ -251,10 +251,10 @@ export default function SubscriptionPage() {
                   ))}
                 </ul>
                 {tier.loyalty && (
-                  <p className="text-[11px] font-bold text-amber-400 mb-3">ðŸŽ {tier.loyalty}</p>
+                  <p className="text-[11px] font-bold text-amber-400 mb-3">🎁 {tier.loyalty}</p>
                 )}
                 <div className={`rounded-xl text-center py-3 font-bold text-sm ${tier.turnaroundColor || "bg-[rgb(var(--fg-rgb)/5%)] text-[rgb(var(--fg-rgb)/50%)]"} border`}>
-                  âš¡ {tier.turnaroundLabel}
+                  ⚡ {tier.turnaroundLabel}
                 </div>
                 <Link href={tier.ctaLink}
                   className={`mt-4 block text-center py-3 rounded-xl font-bold text-sm transition-all ${tier.featured ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))]" : "border-2 border-[rgb(var(--fg-rgb)/15%)] text-[rgb(var(--fg-rgb)/70%)] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))]"}`}>
@@ -268,10 +268,10 @@ export default function SubscriptionPage() {
           {/* VIP Extra Care */}
           <div className="mt-8 rounded-2xl border-2 border-purple-500/30 bg-[var(--bg)] p-6">
             <div className="flex items-center gap-3 mb-3">
-              <span className="text-lg">ðŸ‘‘</span>
+              <span className="text-lg">👑</span>
               <h3 className="text-lg font-bold text-purple-400">VIP Extra Care</h3>
             </div>
-            <p className="text-sm text-[rgb(var(--fg-rgb)/55%)]">Dedicated Account Manager â€¢ 24/7 Priority Support â€¢ 1-Hour Emergency Response â€¢ Custom Workflow Setup â€¢ Personal Expert Team</p>
+            <p className="text-sm text-[rgb(var(--fg-rgb)/55%)]">Dedicated Account Manager • 24/7 Priority Support • 1-Hour Emergency Response • Custom Workflow Setup • Personal Expert Team</p>
           </div>
         </div>
       </section>
@@ -330,7 +330,7 @@ export default function SubscriptionPage() {
           <div className="rounded-2xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg)] p-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <label className="text-xs uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3 block">ðŸ“¸ Monthly Image Volume</label>
+                <label className="text-xs uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3 block">📸 Monthly Image Volume</label>
                 <div className="space-y-2">
                   {["1-50 images", "51-250 images", "251-1000 images", "1000+ images"].map((o, oi) => (
                     <label key={oi} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${volume === oi ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/5%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--accent-500)/30%)]"}`}>
@@ -341,7 +341,7 @@ export default function SubscriptionPage() {
                 </div>
               </div>
               <div>
-                <label className="text-xs uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3 block">âš¡ Speed Requirement</label>
+                <label className="text-xs uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3 block">⚡ Speed Requirement</label>
                 <div className="space-y-2">
                   {["24 hours (Standard)", "12 hours (Fast)", "6 hours (Express)", "45 minutes (VIP)"].map((o, oi) => (
                     <label key={oi} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${speed === oi ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/5%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--accent-500)/30%)]"}`}>
@@ -352,7 +352,7 @@ export default function SubscriptionPage() {
                 </div>
               </div>
               <div>
-                <label className="text-xs uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3 block">ðŸ›¡ï¸ Support Level</label>
+                <label className="text-xs uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3 block">🛡️ Support Level</label>
                 <div className="space-y-2">
                   {["Standard Support", "Unlimited Revisions", "Dedicated Team"].map((o, oi) => (
                     <label key={oi} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${support === oi ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/5%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--accent-500)/30%)]"}`}>
@@ -366,8 +366,8 @@ export default function SubscriptionPage() {
             <div className="mt-8 p-6 rounded-2xl bg-[rgb(var(--accent-500)/5%)] border border-[rgb(var(--accent-500)/15%)] text-center">
               <p className="text-xs text-[rgb(var(--fg-rgb)/40%)] uppercase tracking-wider font-bold mb-2">Suggested Plan</p>
               <p className="text-2xl font-extrabold gradient-text">{recommendedNames[recommended]} Plan</p>
-              <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] mt-1">{formatPrice(recommendedPrices[recommended])} /mo â€” {recommendedDescs[recommended]}</p>
-              <p className="text-xs text-[rgb(var(--accent-text))] mt-2 font-bold">ðŸŽ¯ Best match for you</p>
+              <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] mt-1">{formatPrice(recommendedPrices[recommended])} /mo — {recommendedDescs[recommended]}</p>
+              <p className="text-xs text-[rgb(var(--accent-text))] mt-2 font-bold">🎯 Best match for you</p>
             </div>
           </div>
         </div>
@@ -381,16 +381,16 @@ export default function SubscriptionPage() {
               Growth Journey
             </span>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight gradient-text">
-              From small to big â€” your growth path
+              From small to big — your growth path
             </h2>
             <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)]">Start with Free today, upgrade as you grow. We grow with you!</p>
           </div>
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0">
             {[
-              { icon: "ðŸ†“", name: "Free", price: "$0", desc: "Pay-as-you-go 24h delivery", color: "border-[rgb(var(--fg-rgb)/8%)]" },
-              { icon: "ðŸ”¥", name: "Standard", price: "$7.9/mo", desc: "12h fast delivery, 5 priority tickets", color: "border-orange-500/30" },
-              { icon: "â­", name: "Pro", price: "$19.9/mo", desc: "6h ultra fast + unlimited revisions", color: "border-[rgb(var(--accent-500)/50%)]" },
-              { icon: "ðŸ‘‘", name: "Enterprise", price: "$499/mo", desc: "45min VIP SLA + dedicated team", color: "border-purple-500/30" },
+              { icon: "🆓", name: "Free", price: "$0", desc: "Pay-as-you-go 24h delivery", color: "border-[rgb(var(--fg-rgb)/8%)]" },
+              { icon: "🔥", name: "Standard", price: "$7.9/mo", desc: "12h fast delivery, 5 priority tickets", color: "border-orange-500/30" },
+              { icon: "⭐", name: "Pro", price: "$19.9/mo", desc: "6h ultra fast + unlimited revisions", color: "border-[rgb(var(--accent-500)/50%)]" },
+              { icon: "👑", name: "Enterprise", price: "$499/mo", desc: "45min VIP SLA + dedicated team", color: "border-purple-500/30" },
             ].map((step, si) => (
               <div key={si} className="flex items-center">
                 <motion.div
@@ -412,7 +412,7 @@ export default function SubscriptionPage() {
             ))}
           </div>
           <p className="mt-8 text-center text-sm text-[rgb(var(--fg-rgb)/40%)]">
-            ðŸ’¡ With each upgrade you get: faster delivery, more support, more features â€” as your business grows, our service grows with you
+            💡 With each upgrade you get: faster delivery, more support, more features — as your business grows, our service grows with you
           </p>
         </div>
       </section>
@@ -444,15 +444,15 @@ export default function SubscriptionPage() {
                 {["Clipping Path & BG Removal", "Color Correction & Retouching", "Ghost Mannequin", "Shadow Creation", "Layer Mask"].map(f => (
                   <tr key={f} className="border-b border-[rgb(var(--fg-rgb)/5%)]">
                     <td className="py-3 px-4 text-[rgb(var(--fg-rgb)/70%)]">{f}</td>
-                    {[1,2,3,4].map(j => <td key={j} className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">âœ“</td>)}
+                    {[1,2,3,4].map(j => <td key={j} className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">✓</td>)}
                   </tr>
                 ))}
                 <tr className="border-b border-[rgb(var(--fg-rgb)/5%)]">
                   <td className="py-3 px-4 text-[rgb(var(--fg-rgb)/70%)]">Color Changing</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">âœ“</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">âœ“</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">✓</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">✓</td>
                 </tr>
 
                 <tr><td colSpan={5} className="py-3 px-4 font-bold text-[rgb(var(--fg-rgb)/50%)] text-xs uppercase tracking-wider bg-[rgb(var(--fg-rgb)/3%)]">Delivery & SLA</td></tr>
@@ -465,63 +465,63 @@ export default function SubscriptionPage() {
                 </tr>
                 <tr className="border-b border-[rgb(var(--fg-rgb)/5%)]">
                   <td className="py-3 px-4 text-[rgb(var(--fg-rgb)/70%)]">Rush Option</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">âœ“ (3h)</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">âœ“ (1h)</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">✓ (3h)</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">✓ (1h)</td>
                 </tr>
 
                 <tr><td colSpan={5} className="py-3 px-4 font-bold text-[rgb(var(--fg-rgb)/50%)] text-xs uppercase tracking-wider bg-[rgb(var(--fg-rgb)/3%)]">Support & Service</td></tr>
                 <tr className="border-b border-[rgb(var(--fg-rgb)/5%)]">
                   <td className="py-3 px-4 text-[rgb(var(--fg-rgb)/70%)]">Priority Support</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
                   <td className="py-3 px-4 text-center">5/mo</td>
                   <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">Unlimited</td>
                   <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">Unlimited</td>
                 </tr>
                 <tr className="border-b border-[rgb(var(--fg-rgb)/5%)]">
                   <td className="py-3 px-4 text-[rgb(var(--fg-rgb)/70%)]">Unlimited Revisions</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">âœ“</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">âœ“</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">✓</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">✓</td>
                 </tr>
                 <tr className="border-b border-[rgb(var(--fg-rgb)/5%)]">
                   <td className="py-3 px-4 text-[rgb(var(--fg-rgb)/70%)]">Dedicated Account Manager</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">âœ“</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">✓</td>
                 </tr>
                 <tr className="border-b border-[rgb(var(--fg-rgb)/5%)]">
                   <td className="py-3 px-4 text-[rgb(var(--fg-rgb)/70%)]">Dedicated Expert Team</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">âœ“</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">✓</td>
                 </tr>
 
                 <tr><td colSpan={5} className="py-3 px-4 font-bold text-[rgb(var(--fg-rgb)/50%)] text-xs uppercase tracking-wider bg-[rgb(var(--fg-rgb)/3%)]">Billing & Value</td></tr>
                 <tr className="border-b border-[rgb(var(--fg-rgb)/5%)]">
                   <td className="py-3 px-4 text-[rgb(var(--fg-rgb)/70%)]">Path Credit Bonus</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
                   <td className="py-3 px-4 text-center">5%</td>
                   <td className="py-3 px-4 text-center">15%</td>
                   <td className="py-3 px-4 text-center">25%</td>
                 </tr>
                 <tr className="border-b border-[rgb(var(--fg-rgb)/5%)]">
                   <td className="py-3 px-4 text-[rgb(var(--fg-rgb)/70%)]">Pause Subscription</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">âœ“ ($4/mo)</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">âœ“ ($4/mo)</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">âœ“ ($4/mo)</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">✓ ($4/mo)</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">✓ ($4/mo)</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">✓ ($4/mo)</td>
                 </tr>
                 <tr className="border-b border-[rgb(var(--fg-rgb)/5%)]">
                   <td className="py-3 px-4 text-[rgb(var(--fg-rgb)/70%)]">Business SLA Guarantee</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">âœ•</td>
-                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">âœ“</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-4 text-center text-[rgb(var(--accent-text))] font-bold">✓</td>
                 </tr>
               </tbody>
             </table>
@@ -543,12 +543,12 @@ export default function SubscriptionPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: "ðŸ’Ž", title: "Path Credit Bonus", desc: "Bonus credits on every auto top-up. Pro users get 15% extra â€” meaning free edits every month." },
-              { icon: "ðŸ”¥", title: "6-Month Loyalty Discount", desc: "Stay subscribed for 6 consecutive months = 10% lifetime discount. We value long-term partners." },
-              { icon: "ðŸ¤", title: "Referral Program", desc: "Refer a friend â€” both get 1 month free. No limit â€” refer 12 people, get 12 months free." },
-              { icon: "ðŸ“¦", title: "Annual Lock-In Benefit", desc: "Choose annual billing and lock today's price for 12 months. No price increases, no surprises." },
-              { icon: "ðŸ›¡ï¸", title: "Grandfather Protection", desc: "Existing clients get 2-3 years of free benefits. Upgrade anytime, perks never expire." },
-              { icon: "â¸ï¸", title: "Pause Anytime", desc: "Pause manually or auto-pause. Paused fee is $4/mo, settings preserved. Reactivate free!" },
+              { icon: "💎", title: "Path Credit Bonus", desc: "Bonus credits on every auto top-up. Pro users get 15% extra — meaning free edits every month." },
+              { icon: "🔥", title: "6-Month Loyalty Discount", desc: "Stay subscribed for 6 consecutive months = 10% lifetime discount. We value long-term partners." },
+              { icon: "🤝", title: "Referral Program", desc: "Refer a friend — both get 1 month free. No limit — refer 12 people, get 12 months free." },
+              { icon: "📦", title: "Annual Lock-In Benefit", desc: "Choose annual billing and lock today's price for 12 months. No price increases, no surprises." },
+              { icon: "🛡️", title: "Grandfather Protection", desc: "Existing clients get 2-3 years of free benefits. Upgrade anytime, perks never expire." },
+              { icon: "⏸️", title: "Pause Anytime", desc: "Pause manually or auto-pause. Paused fee is $4/mo, settings preserved. Reactivate free!" },
             ].map((item, i) => (
               <motion.div key={i}
                 initial={{ opacity: 0, y: 20 }}
@@ -603,7 +603,7 @@ export default function SubscriptionPage() {
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight gradient-text">Ready to grow your business?</h2>
           <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)] max-w-xl mx-auto">
-            Join thousands of satisfied customers. Start with a plan that fits â€” upgrade as you grow.
+            Join thousands of satisfied customers. Start with a plan that fits — upgrade as you grow.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/contact"

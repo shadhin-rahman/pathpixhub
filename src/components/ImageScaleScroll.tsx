@@ -61,7 +61,7 @@ interface RevealOnScrollProps {
   delay?: number;
 }
 
-export function RevealOnScroll({ children, className = "", direction = "up", delay = 0 }: RevealOnScrollProps) {
+export function RevealOnScroll({ children, className = "", direction = "up" }: RevealOnScrollProps) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,

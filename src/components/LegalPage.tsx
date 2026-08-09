@@ -110,7 +110,7 @@ export default function LegalPage({
           {version && (
             <div className="mt-16 pt-6 border-t border-[rgb(var(--fg-rgb)/10%)]">
               <p className="text-xs text-[rgb(var(--fg-rgb)/40%)] font-mono tracking-[0.2em] uppercase">
-                Document Version â€” {version}
+                Document Version — {version}
               </p>
             </div>
           )}

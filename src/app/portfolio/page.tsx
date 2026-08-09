@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Portfolio | PathPixHub",
-  description: "Before & after examples of our professional photo editing work â€” clipping path, background removal, retouching, ghost mannequin, and more.",
+  description: "Before & after examples of our professional photo editing work — clipping path, background removal, retouching, ghost mannequin, and more.",
 };
 
 const portfolioItems = [

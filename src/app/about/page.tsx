@@ -5,7 +5,7 @@ import BeforeAfterHover from "@/components/BeforeAfterHover";
 
 export const metadata: Metadata = {
   title: "About | PathPixHub",
-  description: "Your virtual photo editing studio. Learn about our mission, vision, and core values â€” pixel-perfect precision with fast turnaround.",
+  description: "Your virtual photo editing studio. Learn about our mission, vision, and core values — pixel-perfect precision with fast turnaround.",
 };
 
 export default function AboutPage() {
@@ -58,7 +58,7 @@ export default function AboutPage() {
                   { title: "Quality", desc: "Never compromised. Every image meets the highest standards." },
                   { title: "Satisfaction", desc: "Our clients are at the heart of everything we do." },
                   { title: "Dedication", desc: "Every project is an opportunity to show our commitment." },
-                  { title: "Excellence", desc: "We don't settle for good enough â€” always striving for more." },
+                  { title: "Excellence", desc: "We don't settle for good enough — always striving for more." },
                 ].map((v) => (
                   <div key={v.title} className="glass-card rounded-xl p-5 border-[rgb(var(--fg-rgb)/5%)]">
                     <h3 className="font-bold text-[rgb(var(--fg-rgb))] text-sm">{v.title}</h3>
@@ -97,7 +97,7 @@ export default function AboutPage() {
             <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] order-2 lg:order-1">
               <Image
                 src="/images/about/precision-craft.jpg"
-                alt="Careful, hands-on precision â€” the same attention we bring to every image we edit"
+                alt="Careful, hands-on precision — the same attention we bring to every image we edit"
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -108,7 +108,7 @@ export default function AboutPage() {
               <h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text">Craftsmanship in Every Detail</h3>
               <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-lg">
                 Just like a skilled mechanic examines every bolt before calling a job done, our editors inspect
-                every pixel before an image leaves our hands. It&apos;s slow, deliberate, hands-on work â€” and that
+                every pixel before an image leaves our hands. It&apos;s slow, deliberate, hands-on work — and that
                 patience is exactly what makes the difference between a good edit and a flawless one.
               </p>
             </div>
@@ -127,7 +127,7 @@ export default function AboutPage() {
           </p>
           <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed text-center max-w-3xl mx-auto">
             Our founders, each an expert in their field, bring together a diverse set of skills that make PathPixHub
-            more than just a photo editing company â€” we are a trusted partner in the digital world, ensuring that
+            more than just a photo editing company — we are a trusted partner in the digital world, ensuring that
             every image we work on is perfected to the highest standard.
           </p>
           <div className="mt-12 grid grid-cols-3 gap-3 sm:gap-4 max-w-2xl mx-auto">
@@ -151,7 +151,7 @@ export default function AboutPage() {
               <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">Our Approach</h2>
               <p className="text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-xl">
                 We take a personalized approach to every project. Each business has its unique needs, and one-size-fits-all
-                solutions rarely work â€” that&apos;s why we take the time to communicate with our clients, understand their
+                solutions rarely work — that&apos;s why we take the time to communicate with our clients, understand their
                 objectives, and tailor our services to meet their specific needs. We are more than just a service
                 provider; we are a trusted partner in your visual content strategy.
               </p>
@@ -159,7 +159,7 @@ export default function AboutPage() {
             <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)]">
               <Image
                 src="/images/about/client-consultation.jpg"
-                alt="A conversation with a client â€” understanding their goals before we begin editing"
+                alt="A conversation with a client — understanding their goals before we begin editing"
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 40vw"

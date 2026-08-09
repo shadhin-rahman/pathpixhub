@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, ReactNode } from "react";
-import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 interface TextRevealProps {
   children: ReactNode;
@@ -39,13 +39,13 @@ export function WordReveal({ text, className = "", as: Tag = "h2", delay = 0 }: 
   return (
     <Tag className={className}>
       {words.map((word, i) => (
-        <Word key={i} word={word} index={i} total={words.length} delay={delay} />
+        <Word key={i} word={word} index={i} delay={delay} />
       ))}
     </Tag>
   );
 }
 
-function Word({ word, index, total, delay }: { word: string; index: number; total: number; delay: number }) {
+function Word({ word, index, delay }: { word: string; index: number; delay: number }) {
   return (
     <motion.span
       className="inline-block mr-[0.25em]"

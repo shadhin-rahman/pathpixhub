@@ -7,7 +7,7 @@ import StaggerReveal, { StaggerItem } from "@/components/StaggerReveal";
 
 export const metadata: Metadata = {
   title: "Services | PathPixHub",
-  description: "Explore our 10 professional photo editing services â€” clipping path, background removal, image masking, ghost mannequin, retouching, and more.",
+  description: "Explore our 10 professional photo editing services — clipping path, background removal, image masking, ghost mannequin, retouching, and more.",
 };
 
 export default function ServicesPage() {
@@ -19,7 +19,7 @@ export default function ServicesPage() {
           <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">What We Offer</h2>
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Services</h1>
           <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-2xl">
-            We deliver pixel-perfect image editing â€” powered by skilled artists delivering with obsessive precision.
+            We deliver pixel-perfect image editing — powered by skilled artists delivering with obsessive precision.
           </p>
         </div>
       </section>
