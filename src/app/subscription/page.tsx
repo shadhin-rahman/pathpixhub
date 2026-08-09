@@ -48,8 +48,8 @@ const TIERS = [
       { text: "Unlimited Revisions", included: false },
     ],
     loyalty: "1 month free with annual",
-    cta: "Order via Email",
-    ctaLink: "/free-trial",
+    cta: "Buy Credits",
+    ctaLink: "",
     style: "border-orange-500/30",
   },
   {
@@ -162,8 +162,11 @@ export default function SubscriptionPage() {
   ];
 
   const getTierHref = (tier: (typeof TIERS)[number]): string => {
+    if (tier.name === "Standard") {
+      return `/payment?plan=Standard&amount=${annual ? 79 : 7.9}&desc=${encodeURIComponent("Standard credit plan")}`;
+    }
     if (tier.name === "Pro") {
-      return PAYONEER_PAYME_URL || `/payment?plan=Pro&amount=${annual ? 199 : 19.9}&desc=${encodeURIComponent("Pro plan")}`;
+      return PAYONEER_PAYME_URL || `/payment?plan=Pro&amount=${annual ? 199 : 19.9}&desc=${encodeURIComponent("Pro credit plan")}`;
     }
     if (tier.name === "Enterprise") {
       return WHATSAPP_LINK || "/contact";

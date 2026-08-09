@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { PAYONEER_ACTIVE, PAYONEER_PAYMENT_URL, PAYONEER_EMAIL, CURRENCIES } from "@/lib/payment";
+import { PAYONEER_ACTIVE, PAYONEER_PAYMENT_URL, PAYONEER_EMAIL, CURRENCIES, STRIPE_ACTIVE, STRIPE_PAYMENT_LINK } from "@/lib/payment";
 
 const CARD_BRANDS = ["VISA", "Mastercard", "AMEX", "Discover", "PayPal", "UnionPay"];
 
@@ -28,6 +28,15 @@ export default function PaymentPage() {
   const [amount, setAmount] = useState(0);
   const [currency, setCurrency] = useState(0);
   const [hasAmount, setHasAmount] = useState(false);
+  const [currencyOpen, setCurrencyOpen] = useState(false);
+
+  useEffect(() => {
+    function onDocClick() {
+      setCurrencyOpen(false);
+    }
+    document.addEventListener("click", onDocClick);
+    return () => document.removeEventListener("click", onDocClick);
+  }, []);
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
@@ -54,6 +63,10 @@ export default function PaymentPage() {
 
   const payNowHref = PAYONEER_ACTIVE && PAYONEER_PAYMENT_URL
     ? PAYONEER_PAYMENT_URL
+    : null;
+
+  const stripeHref = STRIPE_ACTIVE && STRIPE_PAYMENT_LINK
+    ? STRIPE_PAYMENT_LINK
     : null;
 
   return (
@@ -136,13 +149,28 @@ export default function PaymentPage() {
                 <p className="text-xs uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3">
                   Choose your payment currency
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  {CURRENCIES.map((c, i) => (
-                    <button key={c.code} type="button" onClick={() => setCurrency(i)}
-                      className={`text-xs px-3 py-2 rounded-xl font-bold transition-all ${currency === i ? "bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-text))] border border-[rgb(var(--accent-500)/25%)]" : "text-[rgb(var(--fg-rgb)/35%)] hover:text-[rgb(var(--fg-rgb)/60%)] border border-[rgb(var(--fg-rgb)/10%)]"}`}>
-                      {c.label}
-                    </button>
-                  ))}
+                <div className="relative">
+                  <button type="button" onClick={(e) => { e.stopPropagation(); setCurrencyOpen(!currencyOpen); }}
+                    className="w-full flex items-center justify-between gap-3 px-4 py-3.5 rounded-xl border-2 border-[rgb(var(--fg-rgb)/12%)] bg-[var(--bg-alt)] text-sm font-bold text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] transition-all">
+                    <span className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-[rgb(var(--accent-text))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0 2c2.21 0 4 1.79 4 4v5c0 .55-.45 1-1 1s-1-.45-1-1v-5c0-1.1-.9-2-2-2s-2 .9-2 2v5c0 .55-.45 1-1 1s-1-.45-1-1v-5c0-2.21 1.79-4 4-4z" /></svg>
+                      {curr.label}
+                    </span>
+                    <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/40%)] transition-transform ${currencyOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </button>
+                  {currencyOpen && (
+                    <div className="absolute z-20 mt-2 w-full rounded-xl border-2 border-[rgb(var(--fg-rgb)/12%)] bg-[var(--bg)] shadow-2xl overflow-hidden">
+                      {CURRENCIES.map((c, i) => (
+                        <button key={c.code} type="button" onClick={(e) => { e.stopPropagation(); setCurrency(i); setCurrencyOpen(false); }}
+                          className={`w-full flex items-center justify-between px-4 py-3 text-sm font-bold transition-colors ${currency === i ? "text-[rgb(var(--accent-text))] bg-[rgb(var(--accent-500)/8%)]" : "text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/4%)]"}`}>
+                          {c.label}
+                          {currency === i && (
+                            <svg className="w-4 h-4 text-[rgb(var(--accent-text))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -172,6 +200,27 @@ export default function PaymentPage() {
                   ))}
                 </div>
               </div>
+
+              {/* Stripe card */}
+              {stripeHref && (
+                <div className="mt-4 rounded-2xl border-2 border-[rgb(var(--fg-rgb)/12%)] bg-[rgb(var(--fg-rgb)/3%)] p-5">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#635bff] to-[#7a73ff] flex items-center justify-center text-white text-sm font-extrabold">S</span>
+                      <span className="text-lg font-extrabold text-[rgb(var(--fg-rgb))] tracking-tight">Pay by Card</span>
+                    </div>
+                    <span className="ml-auto text-[10px] font-bold px-2 py-1 rounded-full bg-[rgb(var(--fg-rgb)/6%)] text-[rgb(var(--fg-rgb)/50%)] border border-[rgb(var(--fg-rgb)/10%)]">Powered by Stripe</span>
+                  </div>
+                  <p className="mt-3 text-xs text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">
+                    Prefer to pay right here? Enter your card details securely on Stripe&apos;s checkout — no account needed.
+                  </p>
+                  <a href={stripeHref} target="_blank" rel="noopener noreferrer"
+                    className="mt-4 w-full inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full border-2 border-[#635bff]/50 text-[#8a85ff] font-bold hover:bg-[#635bff]/10 hover:border-[#635bff] transition-all text-sm">
+                    Pay by Card
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M5 6h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z" /></svg>
+                  </a>
+                </div>
+              )}
 
               {/* Pay Now */}
               <div className="mt-6">

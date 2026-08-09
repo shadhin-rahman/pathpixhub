@@ -29,6 +29,16 @@ export const WHATSAPP_LINK = WHATSAPP_NUMBER
 export const PAYONEER_EMAIL =
   process.env.NEXT_PUBLIC_PAYONEER_EMAIL || "pathpixhub@gmail.com";
 
+// Stripe Payment Link — for customers who prefer to pay by card directly.
+// When you create a free Stripe Payment Link, set NEXT_PUBLIC_STRIPE_PAYMENT_LINK
+// and NEXT_PUBLIC_STRIPE_ACTIVE=true. The payment page then shows a
+// "Pay by Card" option alongside Payoneer.
+export const STRIPE_ACTIVE =
+  (process.env.NEXT_PUBLIC_STRIPE_ACTIVE ?? "").toLowerCase() === "true";
+
+export const STRIPE_PAYMENT_LINK =
+  process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || "";
+
 export const CURRENCIES: { code: string; symbol: string; rate: number; label: string }[] = [
   { code: "USD", symbol: "$", rate: 1, label: "$ USD" },
   { code: "EUR", symbol: "€", rate: 0.92, label: "€ EUR" },
