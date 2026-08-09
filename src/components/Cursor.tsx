@@ -9,6 +9,8 @@ export default function Cursor() {
 
   const ringX = useSpring(0, { damping: 15, stiffness: 80, mass: 1.2 });
   const ringY = useSpring(0, { damping: 15, stiffness: 80, mass: 1.2 });
+  const auraX = useSpring(0, { damping: 22, stiffness: 35, mass: 2 });
+  const auraY = useSpring(0, { damping: 22, stiffness: 35, mass: 2 });
 
   useEffect(() => {
     if (typeof window !== "undefined" && "ontouchstart" in window) return;
@@ -17,6 +19,8 @@ export default function Cursor() {
       setDotPos({ x: e.clientX, y: e.clientY });
       ringX.set(e.clientX - 20);
       ringY.set(e.clientY - 20);
+      auraX.set(e.clientX - 80);
+      auraY.set(e.clientY - 80);
     };
     const handleHover = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -28,12 +32,18 @@ export default function Cursor() {
       window.removeEventListener("mousemove", moveMouse);
       window.removeEventListener("mouseover", handleHover);
     };
-  }, [ringX, ringY]);
+  }, [ringX, ringY, auraX, auraY]);
 
   if (isTouch) return null;
 
   return (
     <>
+      <motion.div
+        style={{ translateX: auraX, translateY: auraY }}
+        animate={{ scale: isHovering ? 1.5 : 1 }}
+        transition={{ duration: 0.5 }}
+        className="fixed top-0 left-0 w-40 h-40 rounded-full pointer-events-none z-[9998] hidden md:block bg-[rgb(var(--accent-500)/14%)] blur-2xl"
+      />
       <motion.div
         style={{ translateX: ringX, translateY: ringY }}
         animate={{

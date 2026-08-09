@@ -207,12 +207,12 @@ export default function FreeTrialPage() {
       <section className="pt-40 pb-32 bg-[var(--bg)]">
         <div className="max-w-xl mx-auto px-6 text-center">
           <div className="glass-card rounded-3xl p-10 border-[rgb(var(--fg-rgb)/5%)]">
-            <div className="w-16 h-16 rounded-full bg-[rgb(34_197_94_/_10%)] flex items-center justify-center mx-auto mb-6">
-              <svg className="w-8 h-8 text-[rgb(34_197_94)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+            <div className="w-16 h-16 rounded-full bg-[rgb(143_209_2_/_10%)] flex items-center justify-center mx-auto mb-6">
+              <svg className="w-8 h-8 text-[rgb(143_209_2)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
             </div>
             <h1 className="text-3xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">Free Trial Submitted!</h1>
             <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">
-              Thank you! We&apos;ll review your images and get back to you within <span className="font-bold text-[rgb(34_197_94)]">6-8 hours</span>.
+              Thank you! We&apos;ll review your images and get back to you within <span className="font-bold text-[rgb(143_209_2)]">6-8 hours</span>.
               Your edited images will be delivered within 24 hours.
             </p>
             <Link href="/"
@@ -438,14 +438,14 @@ export default function FreeTrialPage() {
                         <input type="hidden" name="turnaround" value="24 hours" />
 
                         {/* Turnaround Notice */}
-                        <div className="rounded-2xl border-2 border-[rgb(34_197_94_/_30%)] bg-[rgb(34_197_94_/_6%)] p-5">
+                        <div className="rounded-2xl border-2 border-[rgb(143_209_2_/_30%)] bg-[rgb(143_209_2_/_6%)] p-5">
                           <div className="flex items-start gap-3">
-                            <div className="shrink-0 w-10 h-10 rounded-xl bg-[rgb(34_197_94_/_15%)] flex items-center justify-center mt-0.5">
-                              <svg className="w-5 h-5 text-[rgb(34_197_94)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <div className="shrink-0 w-10 h-10 rounded-xl bg-[rgb(143_209_2_/_15%)] flex items-center justify-center mt-0.5">
+                              <svg className="w-5 h-5 text-[rgb(143_209_2)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
                             <div>
                               <p className="font-bold text-sm text-[rgb(var(--fg-rgb))]">24-Hour Turnaround</p>
-                              <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] mt-1">We&apos;ll respond within <span className="font-bold text-[rgb(34_197_94)]">6-8 hours</span> and deliver your edited images within 24 hours.</p>
+                              <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] mt-1">We&apos;ll respond within <span className="font-bold text-[rgb(143_209_2)]">6-8 hours</span> and deliver your edited images within 24 hours.</p>
                             </div>
                           </div>
                         </div>
