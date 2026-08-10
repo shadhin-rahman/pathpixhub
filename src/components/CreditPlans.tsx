@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { PAYONEER_PAYME_URL } from "@/lib/payment";
+import PayPerOrderCard from "./PayPerOrderCard";
 
 const PLANS = [
   {
@@ -61,11 +62,11 @@ export default function CreditPlans() {
             Save with our credit plans
           </h2>
           <p className="mt-4 text-lg text-[rgb(var(--fg-rgb)/60%)] max-w-2xl mx-auto">
-            Buy credits once, use them gradually. Priority delivery, bonus credits and dedicated support — as your business grows, we grow with you.
+            Buy credits once, use them gradually — or skip the pack and pay per order. We edit first, you pay later.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
           {PLANS.map((plan, i) => (
             <motion.div key={plan.name}
               initial={{ opacity: 0, y: 24 }}
@@ -110,6 +111,7 @@ export default function CreditPlans() {
               </Link>
             </motion.div>
           ))}
+          <PayPerOrderCard />
         </div>
 
         <p className="mt-10 text-center">

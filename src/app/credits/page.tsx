@@ -220,20 +220,52 @@ export default function CreditsPage() {
         </div>
       </section>
 
-      {/* Alternative CTA */}
+      {/* Alternative CTA — Pay per order */}
       <section className="py-20 bg-[var(--bg)]">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight gradient-text">Want to pay per order instead?</h2>
-          <p className="mt-3 text-[rgb(var(--fg-rgb)/55%)]">Work first, pay later. Choose your service and turnaround — we edit, then email you a secure payment link.</p>
-          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/contact"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm">
-              Order My Edits
-            </Link>
-            <Link href="/enterprise"
-              className="px-8 py-4 rounded-full glass-card border border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))] font-bold hover:border-purple-500/50 hover:text-purple-400 transition-all text-sm">
-              Enterprise Bulk Deal
-            </Link>
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="rounded-3xl border-2 border-dashed border-[rgb(var(--accent-500)/40%)] bg-[var(--bg-alt)] p-10 lg:p-14">
+            <div className="text-center">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-text))] text-sm font-bold mb-5 border border-[rgb(var(--accent-500)/20%)]">
+                🤝 No prepayment
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight gradient-text">
+                Want to pay per order instead?
+              </h2>
+              <p className="mt-4 text-lg text-[rgb(var(--fg-rgb)/55%)] leading-relaxed max-w-2xl mx-auto">
+                Work first, pay later. Choose your service and turnaround — we edit, then email you a secure payment link. No credits to buy, no commitment.
+              </p>
+            </div>
+
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-5">
+              {[
+                { icon: "🛠️", title: "We edit first", desc: "Send your images — our team starts right away. No card needed to begin." },
+                { icon: "💳", title: "Pay per order", desc: "Pay only for what you order. No credit packs or monthly fees." },
+                { icon: "📬", title: "Secure link after", desc: "Finished edits arrive with a secure payment link by email." },
+              ].map((f, i) => (
+                <motion.div key={f.title}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08 }}
+                  className="rounded-2xl border border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg)] p-6 text-center"
+                >
+                  <span className="text-3xl">{f.icon}</span>
+                  <h3 className="mt-3 font-bold text-[rgb(var(--fg-rgb))]">{f.title}</h3>
+                  <p className="mt-1.5 text-sm text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">{f.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link href="/contact"
+                className="inline-flex items-center gap-2 px-10 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm shadow-lg shadow-[rgb(var(--accent-500)/15%)]">
+                Order My Edits
+              </Link>
+              <Link href="/enterprise"
+                className="px-10 py-4 rounded-full glass-card border border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))] font-bold hover:border-purple-500/50 hover:text-purple-400 transition-all text-sm">
+                Enterprise Bulk Deal
+              </Link>
+            </div>
           </div>
         </div>
       </section>

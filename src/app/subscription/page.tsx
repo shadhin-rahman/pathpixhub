@@ -320,6 +320,24 @@ export default function SubscriptionPage() {
             <p className="mt-4 text-xs text-[rgb(var(--fg-rgb)/40%)]">
               🔒 You pay in your local currency — we receive payment in USD. Secured by Payoneer&apos;s global payment network. Visa • Mastercard • AMEX • PayPal • Bank transfer
             </p>
+
+            {/* Pay Per Order CTA */}
+            <div className="mt-8 rounded-2xl border-2 border-dashed border-[rgb(var(--accent-500)/40%)] bg-[rgb(var(--accent-500)/4%)] p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+              <div>
+                <p className="font-bold text-lg text-[rgb(var(--fg-rgb))]">Prefer to skip the prepaid plans?</p>
+                <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] mt-1">Pay Per Order — we edit first, you pay later. No credits, no monthly commitment.</p>
+              </div>
+              <div className="flex items-center gap-3 shrink-0">
+                <Link href="/credits"
+                  className="px-6 py-3 rounded-full glass-card border border-[rgb(var(--fg-rgb)/10%)] text-sm font-bold hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))] transition-all whitespace-nowrap">
+                  See credit packs
+                </Link>
+                <Link href="/contact"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] text-sm font-bold hover:bg-[rgb(var(--accent-400))] transition-all whitespace-nowrap">
+                  Order My Edits →
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
