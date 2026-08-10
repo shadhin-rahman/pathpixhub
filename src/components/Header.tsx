@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { services } from "@/data/services";
 import ThemeToggle from "./ThemeToggle";
+import AccountButton from "./AccountButton";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +35,7 @@ export default function Header() {
         </Link>
 
         <div className="hidden md:flex items-center gap-3 pr-4 md:pr-10">
+          <AccountButton />
           <ThemeToggle className={`w-11 h-11 rounded-full glass-card ${isLegalPage ? "text-white border-white/25 hover:border-white/50" : "text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))]"}`} />
           <Link
             href="/contact"
@@ -66,6 +68,7 @@ export default function Header() {
         </div>
 
         <div className="md:hidden flex items-center gap-1.5 pr-4">
+          <AccountButton compact />
           <ThemeToggle className={`w-8 h-8 rounded-full glass-card ${isLegalPage ? "text-white border-white/25" : "text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-text))]"}`} />
           <Link
             href="/contact"
@@ -208,6 +211,7 @@ export default function Header() {
                   { name: "Credits", href: "/credits" },
                   { name: "About", href: "/about" },
                   { name: "Contact", href: "/contact" },
+                  { name: "Client Account", href: "/login" },
                 ].map((item) => (
                   <Link
                     key={item.name}

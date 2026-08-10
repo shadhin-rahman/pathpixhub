@@ -138,6 +138,11 @@ export default function Footer() {
                   Free Trial
                 </Link>
               </li>
+              <li>
+                <Link href="/login" className="text-sm text-white/60 hover:text-[rgb(var(--accent-400))] transition-colors">
+                  Client Account
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
