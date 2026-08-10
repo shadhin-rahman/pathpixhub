@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient, supabaseConfigured } from "@/lib/supabase/client";
 import { Mail, Lock, ArrowRight, Loader2, AlertCircle, User as UserIcon, Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -45,8 +43,8 @@ export default function LoginPage() {
         setStatus("error");
         return;
       }
-      router.push("/account");
-      router.refresh();
+      // Full reload so the freshly-set session cookie reaches the server.
+      window.location.replace("/account");
     } else {
       const { data, error: signUpError } = await supabase.auth.signUp({
         email: email.trim(),
@@ -59,8 +57,7 @@ export default function LoginPage() {
         return;
       }
       if (data.session) {
-        router.push("/account");
-        router.refresh();
+        window.location.replace("/account");
       } else {
         setInfo(
           "Account created! Check your inbox for a confirmation email, then sign in."
