@@ -27,7 +27,7 @@ language sql
 stable
 as $$
   select coalesce(auth.jwt() ->> 'email', '') in (
-    'shadhin005rahman@gmail.com'
+    'pathpixhub@gmail.com'
   );
 $$;
 
@@ -55,7 +55,7 @@ begin
     new.id,
     coalesce(new.email, ''),
     coalesce(new.raw_user_meta_data ->> 'full_name', ''),
-    case when coalesce(new.email, '') in ('shadhin005rahman@gmail.com') then 'admin' else 'customer' end
+    case when coalesce(new.email, '') in ('pathpixhub@gmail.com') then 'admin' else 'customer' end
   );
   return new;
 end;

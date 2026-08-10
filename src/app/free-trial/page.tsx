@@ -36,7 +36,7 @@ const SERVICE_COLORS = [
 const STORAGE_KEY = "pathpixhub_free_trial_used";
 const STORAGE_EXPIRY_KEY = "pathpixhub_free_trial_expiry";
 
-const FOUNDER_EMAILS = ["shadhin005rahman@gmail.com"];
+const FOUNDER_EMAILS = ["pathpixhub@gmail.com"];
 
 function isFounderEmail(email: string): boolean {
   return FOUNDER_EMAILS.includes(email.toLowerCase().trim());
