@@ -177,6 +177,21 @@ export default function ContactForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
+
+    if (wantsQuote && paymentTiming === "now" && total > 0) {
+      const params = new URLSearchParams({
+        plan: "Custom Quote",
+        amount: total.toFixed(2),
+        desc: quoteSummary || "Photo editing quote",
+        name: name || "",
+        email: email || "",
+        images: String(imgCount),
+        payment_timing: "now",
+      });
+      window.location.href = `/payment?${params.toString()}`;
+      return;
+    }
+
     const data = new FormData(form);
     if (wantsQuote) {
       data.set("quote_details", quoteSummary || "");

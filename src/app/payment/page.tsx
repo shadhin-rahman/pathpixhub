@@ -30,6 +30,9 @@ export default function PaymentPage() {
   const [hasAmount, setHasAmount] = useState(false);
   const [currencyOpen, setCurrencyOpen] = useState(false);
   const currencyRef = useRef<HTMLDivElement>(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [paymentTiming, setPaymentTiming] = useState("");
 
   useEffect(() => {
     function onDocClick(e: MouseEvent | TouchEvent) {
@@ -50,6 +53,9 @@ export default function PaymentPage() {
     setPlan(p.get("plan") || "");
     setDesc(p.get("desc") || "");
     setImages(p.get("images") || "");
+    setName(p.get("name") || "");
+    setEmail(p.get("email") || "");
+    setPaymentTiming(p.get("payment_timing") || "");
     const amt = parseFloat(p.get("amount") || "");
     if (!Number.isNaN(amt) && amt > 0) {
       setAmount(amt);
@@ -75,6 +81,30 @@ export default function PaymentPage() {
   const stripeHref = STRIPE_ACTIVE && STRIPE_PAYMENT_LINK
     ? STRIPE_PAYMENT_LINK
     : null;
+
+  // Custom-quote ("Pay Now") orders must be submitted to us only when the
+  // customer actually starts payment — no dodging the checkout.
+  const [submitting, setSubmitting] = useState(false);
+
+  const submitOrderThen = async (href: string) => {
+    setSubmitting(true);
+    try {
+      if (paymentTiming === "now" && (name || email)) {
+        const fd = new FormData();
+        fd.set("_subject", "Pay Now Order — Payment Initiated (PathPixHub)");
+        if (name) fd.set("name", name);
+        if (email) fd.set("email", email);
+        fd.set("plan", plan || "Custom Quote");
+        if (desc) fd.set("quote_details", desc);
+        if (images) fd.set("image_links", images);
+        if (hasAmount) fd.set("amount", amount.toFixed(2));
+        fd.set("payment_timing", "now");
+        await fetch("/api/send", { method: "POST", body: fd, headers: { Accept: "application/json" } });
+      }
+    } catch { /* payment should proceed regardless */ }
+    setSubmitting(false);
+    window.open(href, "_blank", "noopener noreferrer");
+  };
 
   return (
     <div className="min-h-screen bg-[var(--bg)]">
@@ -221,7 +251,7 @@ export default function PaymentPage() {
                   <p className="mt-3 text-xs text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">
                     Prefer to pay right here? Enter your card details securely on Stripe&apos;s checkout — no account needed.
                   </p>
-                  <a href={stripeHref} target="_blank" rel="noopener noreferrer"
+                  <a href={stripeHref} target="_blank" rel="noopener noreferrer" onClick={(e) => { if (paymentTiming === "now") { e.preventDefault(); submitOrderThen(stripeHref); } }}
                     className="mt-4 w-full inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full border-2 border-[#635bff]/50 text-[#8a85ff] font-bold hover:bg-[#635bff]/10 hover:border-[#635bff] transition-all text-sm">
                     Pay by Card
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M5 6h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z" /></svg>
@@ -232,13 +262,14 @@ export default function PaymentPage() {
               {/* Pay Now */}
               <div className="mt-6">
                 {payNowHref ? (
-                  <a href={payNowHref} target="_blank" rel="noopener noreferrer"
+                  <a href={payNowHref} target="_blank" rel="noopener noreferrer" onClick={(e) => { if (paymentTiming === "now") { e.preventDefault(); submitOrderThen(payNowHref); } }}
                     className="w-full inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm shadow-lg shadow-[rgb(var(--accent-500)/25%)]">
-                    Pay Now — {hasAmount ? `${formatMoney(converted)} ${curr.code}` : "Secure Payment"}
+                    {submitting ? "Saving your order..." : `Pay Now — ${hasAmount ? `${formatMoney(converted)} ${curr.code}` : "Secure Payment"}`}
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                   </a>
                 ) : (
                   <a href={`mailto:${PAYONEER_EMAIL}?subject=${encodeURIComponent(plan ? `Payment for ${plan} plan` : "Payment for my order")}&body=${encodeURIComponent(hasAmount ? `I'd like to complete payment for my order (${formatMoney(converted)} ${curr.code}). Please send me the secure payment link.` : "I'd like to complete payment for my order. Please send me the secure payment link.")}`}
+                    onClick={() => { if (paymentTiming === "now") submitOrderThen(`mailto:${PAYONEER_EMAIL}?subject=${encodeURIComponent(plan ? `Payment for ${plan} plan` : "Payment for my order")}&body=${encodeURIComponent(hasAmount ? `I'd like to complete payment for my order (${formatMoney(converted)} ${curr.code}). Please send me the secure payment link.` : "I'd like to complete payment for my order. Please send me the secure payment link.")}`); }}
                     className="w-full inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm shadow-lg shadow-[rgb(var(--accent-500)/25%)]">
                     Request Secure Payment Link
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
