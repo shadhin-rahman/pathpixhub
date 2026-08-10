@@ -20,6 +20,7 @@ export type OrderStatus =
 export type Order = {
   id: string;
   user_id: string;
+  reference: string;
   title: string;
   description: string;
   service: string;

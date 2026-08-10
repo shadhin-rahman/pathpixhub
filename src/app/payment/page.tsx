@@ -33,6 +33,7 @@ export default function PaymentPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [paymentTiming, setPaymentTiming] = useState("");
+  const [orderRef, setOrderRef] = useState("");
 
   useEffect(() => {
     function onDocClick(e: MouseEvent | TouchEvent) {
@@ -56,6 +57,7 @@ export default function PaymentPage() {
     setName(p.get("name") || "");
     setEmail(p.get("email") || "");
     setPaymentTiming(p.get("payment_timing") || "");
+    setOrderRef(p.get("ref") || "");
     const amt = parseFloat(p.get("amount") || "");
     if (!Number.isNaN(amt) && amt > 0) {
       setAmount(amt);
@@ -99,6 +101,8 @@ export default function PaymentPage() {
         if (images) fd.set("image_links", images);
         if (hasAmount) fd.set("amount", amount.toFixed(2));
         fd.set("payment_timing", "now");
+        if (orderRef) fd.set("order_ref", orderRef);
+        if (plan) fd.set("order_title", plan);
         await fetch("/api/send", { method: "POST", body: fd, headers: { Accept: "application/json" } });
       }
     } catch { /* payment should proceed regardless */ }

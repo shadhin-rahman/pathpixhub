@@ -3,6 +3,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchCountryCode, isCountryBlocked, setBypassCode, isAdmin } from "@/lib/countryBlocker";
+import { generateOrderRef, isOrderRef } from "@/lib/orderRef";
 
 const VOLUME_DISCOUNT_THRESHOLD = 500;
 const VOLUME_DISCOUNT_RATE = 0.1;
@@ -172,11 +173,13 @@ export default function ContactForm() {
   const [message, setMessage] = useState("");
   const [submitStatus, setSubmitStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [submitError, setSubmitError] = useState("");
+  const [lastOrderRef, setLastOrderRef] = useState("");
   const [paymentTiming, setPaymentTiming] = useState<"now" | "7" | "15" | "monthly">("now");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
+    const orderRef = generateOrderRef();
 
     if (wantsQuote && paymentTiming === "now" && total > 0) {
       const params = new URLSearchParams({
@@ -187,12 +190,18 @@ export default function ContactForm() {
         email: email || "",
         images: String(imgCount),
         payment_timing: "now",
+        ref: orderRef,
       });
+      setLastOrderRef(orderRef);
       window.location.href = `/payment?${params.toString()}`;
       return;
     }
 
     const data = new FormData(form);
+    data.set("order_ref", orderRef);
+    data.set("order_title", quoteSummary.split("\n")[0]?.replace(/^- /, "") || "Photo editing request");
+    data.set("image_count", String(imgCount));
+    data.set("estimated_total", total > 0 ? total.toFixed(2) : "");
     if (wantsQuote) {
       data.set("quote_details", quoteSummary || "");
       data.set("turnaround", turnaroundOption?.label || "");
@@ -207,7 +216,16 @@ export default function ContactForm() {
         body: data,
         headers: { Accept: "application/json" },
       });
-      if (res.ok) setSubmitStatus("success");
+      if (res.ok) {
+        try {
+          const j = await res.json();
+          if (j?.order_ref && isOrderRef(j.order_ref)) setLastOrderRef(j.order_ref);
+          else setLastOrderRef(orderRef);
+        } catch {
+          setLastOrderRef(orderRef);
+        }
+        setSubmitStatus("success");
+      }
       else {
         let msg = "Could not send your request.";
         try {
@@ -923,6 +941,13 @@ export default function ContactForm() {
               <svg className="w-8 h-8 text-[rgb(137_243_54)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
             </div>
             <h3 className="text-3xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">{wantsQuote ? "Request Received!" : "Message Sent!"}</h3>
+            {lastOrderRef && (
+              <div className="mt-5 inline-flex flex-col items-center gap-1 px-5 py-3 rounded-2xl border border-[rgb(137_243_54_/_25%)] bg-[rgb(137_243_54_/_6%)]">
+                <span className="text-xs uppercase tracking-wider text-[rgb(var(--fg-rgb)/45%)]">Your order reference</span>
+                <span className="font-mono text-xl font-bold tracking-[0.08em] text-[rgb(137_243_54)]">{lastOrderRef}</span>
+                <span className="text-xs text-[rgb(var(--fg-rgb)/45%)]">Keep this number — mention it in any email for fast support.</span>
+              </div>
+            )}
             {wantsQuote && paymentTiming === "now" ? (
               <>
                 <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">

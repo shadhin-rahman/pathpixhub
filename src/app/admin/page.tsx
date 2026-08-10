@@ -170,6 +170,11 @@ export default async function AdminPage() {
                       <tr key={order.id} className="border-b border-[rgb(var(--fg-rgb)/5%)] last:border-0">
                         <td className="px-6 py-4">
                           <p className="font-bold">{order.title || order.service || "Order"}</p>
+                          {order.reference && (
+                            <p className="font-mono text-xs font-bold tracking-[0.08em] text-[rgb(var(--accent-text))] mt-0.5">
+                              {order.reference}
+                            </p>
+                          )}
                           <p className="text-xs text-[rgb(var(--fg-rgb)/50%)] max-w-[220px] truncate">{order.description}</p>
                         </td>
                         <td className="px-6 py-4">{order.image_count}</td>

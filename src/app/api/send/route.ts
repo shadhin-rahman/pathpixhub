@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { createClient, supabaseConfigured } from "@/lib/supabase/server";
+import { generateOrderRef, isOrderRef } from "@/lib/orderRef";
+import type { Order } from "@/lib/types";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -24,10 +27,6 @@ export async function POST(request: Request) {
   try {
     const data = await request.formData();
 
-    const subject = typeof data.get("_subject") === "string" && (data.get("_subject") as string).trim()
-      ? (data.get("_subject") as string).trim()
-      : "New Contact Form Message";
-
     const name = (data.get("name") as string) || "";
     const email = (data.get("email") as string) || "";
     const message = (data.get("message") as string) || "";
@@ -41,8 +40,19 @@ export async function POST(request: Request) {
     const fileFormat = (data.get("file_format") as string) || "";
     const imageLinks = (data.get("image_links") as string) || "";
     const paymentTiming = (data.get("payment_timing") as string) || "";
+    const imageCountRaw = (data.get("image_count") as string) || "";
+    const estimatedTotal = (data.get("estimated_total") as string) || "";
+
+    const isQuote = Boolean(quoteDetails || services || selectedServices);
+    let orderRef = (data.get("order_ref") as string) || "";
+    if (!isOrderRef(orderRef)) {
+      orderRef = generateOrderRef();
+    }
+
+    const subject = `New ${isQuote ? "Quote" : "Contact"} Request — ${orderRef}`;
 
     const lines: string[] = [];
+    lines.push(`Order/Quote reference: ${orderRef}`);
     if (name) lines.push(`Name: ${name}`);
     if (email) lines.push(`Email: ${email}`);
     if (company) lines.push(`Company: ${company}`);
@@ -52,6 +62,8 @@ export async function POST(request: Request) {
     if (imagePurpose) lines.push(`Image purpose: ${imagePurpose}`);
     if (turnaround) lines.push(`Turnaround: ${turnaround}`);
     if (fileFormat) lines.push(`File format: ${fileFormat}`);
+    if (imageCountRaw) lines.push(`Image count: ${imageCountRaw}`);
+    if (estimatedTotal) lines.push(`Estimated total: $${estimatedTotal}`);
     if (imageLinks) lines.push(`Image links:\n${imageLinks}`);
     if (paymentTiming) {
       const timingLabel = paymentTiming === "now" ? "Pay Now (immediately)" : paymentTiming === "7" ? "Within 7 days" : paymentTiming === "15" ? "Within 15 days" : "Monthly installments";
@@ -91,7 +103,42 @@ export async function POST(request: Request) {
       attachments: attachments.length > 0 ? attachments : undefined,
     });
 
-    return NextResponse.json({ ok: true });
+    // If a logged-in customer placed an order, save it so it appears in their
+    // /account dashboard.
+    let order: Partial<Order> | null = null;
+    if (supabaseConfigured()) {
+      const supabase = await createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        const title =
+          (data.get("order_title") as string) || (selectedServices || services || "Photo editing order");
+        const imageCount = Math.max(0, parseInt(imageCountRaw, 10) || 0);
+        const { data: inserted, error } = await supabase
+          .from("orders")
+          .insert({
+            user_id: user.id,
+            reference: orderRef,
+            title,
+            description: quoteDetails || message || "",
+            service: selectedServices || services || "",
+            image_count: imageCount,
+            credit_cost: 0,
+            status: "pending",
+          })
+          .select("*")
+          .single<Order>();
+
+        if (error) {
+          console.error("Order insert error:", error.message);
+        } else {
+          order = inserted;
+        }
+      }
+    }
+
+    return NextResponse.json({ ok: true, order_ref: orderRef, order_id: order?.id ?? null });
   } catch (err: unknown) {
     console.error("Mail send error:", err);
     const message = err instanceof Error ? err.message : "Unknown error";

@@ -19,6 +19,18 @@ as $$
   );
 $$;
 
+-- ---------- Founder emails (auto-promoted to admin) ----------
+-- Add your own email(s) here to get admin access automatically.
+create or replace function public.is_founder()
+returns boolean
+language sql
+stable
+as $$
+  select coalesce(auth.jwt() ->> 'email', '') in (
+    'shadhin005rahman@gmail.com'
+  );
+$$;
+
 -- ---------- profiles (one row per auth.users row) ----------
 create table if not exists public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
@@ -30,7 +42,7 @@ create table if not exists public.profiles (
   updated_at timestamptz not null default now()
 );
 
--- Auto-create a profile when a user signs up.
+-- Auto-create a profile when a user signs up (founders become admin).
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
@@ -38,11 +50,12 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, email, full_name)
+  insert into public.profiles (id, email, full_name, role)
   values (
     new.id,
     coalesce(new.email, ''),
-    coalesce(new.raw_user_meta_data ->> 'full_name', '')
+    coalesce(new.raw_user_meta_data ->> 'full_name', ''),
+    case when coalesce(new.email, '') in ('shadhin005rahman@gmail.com') then 'admin' else 'customer' end
   );
   return new;
 end;
@@ -53,10 +66,32 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
 
+-- Promote the current user to admin if they are a founder.
+-- Call this (e.g. after login) from the client: supabase.rpc('promote_founder')
+create or replace function public.promote_founder()
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if public.is_founder() then
+    update public.profiles
+    set role = 'admin',
+        updated_at = now()
+    where id = auth.uid();
+  end if;
+end;
+$$;
+
+revoke all on function public.promote_founder() from public;
+grant execute on function public.promote_founder() to authenticated;
+
 -- ---------- orders ----------
 create table if not exists public.orders (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users (id) on delete cascade,
+  reference text not null default '',
   title text not null default '',
   description text default '',
   service text default '',
@@ -67,6 +102,9 @@ create table if not exists public.orders (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+create unique index if not exists orders_reference_key on public.orders (reference)
+  where reference <> '';
 
 -- ---------- credit_transactions (ledger) ----------
 create table if not exists public.credit_transactions (
@@ -82,7 +120,8 @@ alter table public.profiles enable row level security;
 alter table public.orders enable row level security;
 alter table public.credit_transactions enable row level security;
 
--- profiles: a user can read/update their own row; admins can manage all.
+-- profiles: a user can read/update their OWN row, but may NOT change their
+-- role or credit balance (admin/founder changes happen via RPC functions).
 drop policy if exists "profiles_select_own" on public.profiles;
 create policy "profiles_select_own"
   on public.profiles for select
@@ -91,10 +130,20 @@ create policy "profiles_select_own"
 drop policy if exists "profiles_update_own" on public.profiles;
 create policy "profiles_update_own"
   on public.profiles for update
-  using (id = auth.uid() or public.is_admin())
-  with check (id = auth.uid() or public.is_admin());
+  using (id = auth.uid())
+  with check (
+    id = auth.uid()
+    and role = (select role from public.profiles where id = auth.uid())
+    and credits_balance = (select credits_balance from public.profiles where id = auth.uid())
+  );
 
--- orders: a user sees their own; admins see all.
+drop policy if exists "profiles_update_admin" on public.profiles;
+create policy "profiles_update_admin"
+  on public.profiles for update
+  using (public.is_admin())
+  with check (true);
+
+-- orders: a user sees and creates their own; admins see all and manage status.
 drop policy if exists "orders_select_own" on public.orders;
 create policy "orders_select_own"
   on public.orders for select

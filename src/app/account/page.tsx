@@ -48,6 +48,11 @@ export default async function AccountPage() {
     redirect("/login");
   }
 
+  // Auto-promote the founder (matches public.is_founder() in the migration).
+  try {
+    await supabase.rpc("promote_founder");
+  } catch { /* founder already promoted or not founder */ }
+
   const [{ data: profile }, { data: orders }, { data: transactions }] =
     await Promise.all([
       supabase
@@ -161,6 +166,11 @@ export default async function AccountPage() {
                   >
                     <div className="min-w-0">
                       <p className="font-bold truncate">{order.title || order.service || "Order"}</p>
+                      {order.reference && (
+                        <p className="font-mono text-xs font-bold tracking-[0.08em] text-[rgb(var(--accent-text))] mt-0.5">
+                          {order.reference}
+                        </p>
+                      )}
                       <p className="text-xs text-[rgb(var(--fg-rgb)/50%)] mt-0.5">
                         {formatDate(order.created_at)} · {order.image_count} image{order.image_count === 1 ? "" : "s"}
                         {order.credit_cost > 0 ? ` · ${order.credit_cost} credits` : ""}
