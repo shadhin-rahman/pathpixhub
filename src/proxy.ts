@@ -49,7 +49,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if ((pathname === "/login" || pathname === "/signup") && user) {
+  if ((pathname === "/login") && user) {
     const url = request.nextUrl.clone();
     url.pathname = "/account";
     url.search = "";
@@ -62,7 +62,6 @@ export async function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     "/login/:path*",
-    "/signup/:path*",
     "/account/:path*",
     "/admin/:path*",
     "/auth/:path*",

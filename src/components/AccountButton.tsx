@@ -39,8 +39,8 @@ export default function AccountButton({ compact = false }: { compact?: boolean }
       <Link
         href="/login"
         aria-label="Account"
-        className={`rounded-full glass-card inline-flex items-center justify-center ${
-          compact ? "w-9 h-9" : "w-11 h-11"
+        className={`rounded-full glass-card inline-flex items-center justify-center gap-2 ${
+          compact ? "px-3 py-2 text-xs" : "px-5 py-3 text-sm"
         } text-[rgb(var(--fg-rgb))]`}
       >
         <Loader2 className="w-4 h-4 animate-spin" />
@@ -52,12 +52,12 @@ export default function AccountButton({ compact = false }: { compact?: boolean }
     return (
       <Link
         href="/login"
-        aria-label="Sign in"
-        className={`rounded-full glass-card inline-flex items-center justify-center ${
-          compact ? "w-9 h-9" : "w-11 h-11"
-        } text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))] transition-all`}
+        className={`rounded-full inline-flex items-center justify-center gap-2 font-bold border transition-all ${
+          compact ? "px-3.5 py-2 text-xs" : "px-5 py-3 text-sm"
+        } glass-card text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))]`}
       >
         <User className="w-4 h-4" />
+        Login
       </Link>
     );
   }
@@ -68,12 +68,12 @@ export default function AccountButton({ compact = false }: { compact?: boolean }
   return (
     <Link
       href="/account"
-      aria-label="My account"
-      className={`rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] inline-flex items-center justify-center hover:bg-[rgb(var(--accent-400))] transition-all ${
-        compact ? "w-9 h-9" : "w-11 h-11"
+      className={`rounded-full inline-flex items-center justify-center gap-2 font-bold transition-all bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] ${
+        compact ? "px-3.5 py-2 text-xs" : "px-5 py-3 text-sm"
       }`}
     >
       <User className="w-4 h-4" />
+      Account
     </Link>
   );
 }
