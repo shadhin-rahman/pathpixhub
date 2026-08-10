@@ -65,15 +65,32 @@ export default function AccountButton({ compact = false }: { compact?: boolean }
   const isAccountPage = pathname?.startsWith("/account") || pathname?.startsWith("/admin");
   if (isAccountPage) return null;
 
+  const email = session.user.email ?? "";
+  const fullName = session.user.user_metadata?.full_name as string | undefined;
+  const displayName = (fullName && fullName.trim()) || email.split("@")[0] || "Account";
+  const initials = displayName
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase())
+    .join("");
+
   return (
     <Link
       href="/account"
+      title={email}
       className={`rounded-full inline-flex items-center justify-center gap-2 font-bold transition-all bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] ${
         compact ? "px-3.5 py-2 text-xs" : "px-5 py-3 text-sm"
       }`}
     >
-      <User className="w-4 h-4" />
-      Account
+      <span
+        className={`rounded-full bg-[rgb(var(--accent-contrast)/15%)] text-[rgb(var(--accent-contrast))] font-black flex items-center justify-center ${
+          compact ? "w-5 h-5 text-[9px]" : "w-6 h-6 text-[11px]"
+        }`}
+      >
+        {initials || <User className="w-3 h-3" />}
+      </span>
+      <span className="max-w-[10rem] truncate">{displayName}</span>
     </Link>
   );
 }

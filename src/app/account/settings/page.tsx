@@ -19,12 +19,16 @@ async function updateProfile(formData: FormData) {
 
   const fullName = (formData.get("full_name") as string) ?? "";
 
-  const { error } = await supabase
-    .from("profiles")
-    .update({ full_name: fullName })
-    .eq("id", user.id);
+  const [{ error: profileError }, { error: metaError }] = await Promise.all([
+    supabase
+      .from("profiles")
+      .update({ full_name: fullName })
+      .eq("id", user.id),
+    supabase.auth.updateUser({ data: { full_name: fullName } }),
+  ]);
 
-  if (error) throw new Error(error.message);
+  if (profileError) throw new Error(profileError.message);
+  if (metaError) throw new Error(metaError.message);
   revalidatePath("/account");
 }
 
