@@ -267,6 +267,12 @@ export default function SubscriptionPage() {
                 {tier.loyalty && (
                   <p className="text-[11px] font-bold text-amber-400 mb-3">🎁 {tier.loyalty}</p>
                 )}
+                {tier.name === "Enterprise" && (
+                  <Link href="/enterprise"
+                    className="mb-3 block text-center text-xs font-bold text-purple-400 hover:text-purple-300 hover:underline transition-all">
+                    See what &amp; how it works →
+                  </Link>
+                )}
                 <div className={`rounded-xl text-center py-3 font-bold text-sm ${tier.turnaroundColor || "bg-[rgb(var(--fg-rgb)/5%)] text-[rgb(var(--fg-rgb)/50%)]"} border`}>
                   ⚡ {tier.turnaroundLabel}
                 </div>
@@ -276,12 +282,6 @@ export default function SubscriptionPage() {
                   className="mt-4 block text-center py-3 rounded-xl font-bold text-sm transition-all bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] shadow-lg shadow-[rgb(var(--accent-500)/15%)]">
                   {tier.cta}
                 </Link>
-                {tier.name === "Enterprise" && (
-                  <Link href="/enterprise"
-                    className="mt-2 block text-center text-xs font-bold text-purple-400 hover:text-purple-300 hover:underline transition-all">
-                    See what &amp; how it works →
-                  </Link>
-                )}
               </motion.div>
               );
             })}

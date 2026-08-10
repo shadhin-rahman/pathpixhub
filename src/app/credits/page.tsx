@@ -150,7 +150,7 @@ export default function CreditsPage() {
                   ${b.per.toFixed(2)} / credit
                 </div>
                 <Link href={`/payment?plan=${encodeURIComponent("Credit Pack")}&amount=${b.price}&desc=${encodeURIComponent(`${b.credits.toLocaleString()} credits ($${b.paid.toLocaleString()} paid + ${b.free.toLocaleString()} bonus)`)}`}
-                  className={`mt-5 block text-center py-3 rounded-xl font-bold text-sm transition-all ${b.popular ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))]" : "border-2 border-[rgb(var(--fg-rgb)/15%)] text-[rgb(var(--fg-rgb)/70%)] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))]"}`}>
+                  className="mt-auto pt-5 block text-center py-3 rounded-xl font-bold text-sm transition-all bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] shadow-lg shadow-[rgb(var(--accent-500)/15%)]">
                   Buy ${b.price.toLocaleString()} pack
                 </Link>
               </motion.div>

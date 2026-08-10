@@ -96,18 +96,18 @@ export default function CreditPlans() {
                   </li>
                 ))}
               </ul>
+              {plan.name === "Enterprise" && (
+                <Link href="/enterprise"
+                  className="mb-3 text-center block text-xs font-bold text-purple-400 hover:text-purple-300 hover:underline transition-all">
+                  See what &amp; how it works →
+                </Link>
+              )}
               <Link href={plan.href}
                 target={plan.href.startsWith("http") ? "_blank" : undefined}
                 rel={plan.href.startsWith("http") ? "noopener noreferrer" : undefined}
                 className="mt-8 block text-center py-3.5 rounded-xl font-bold text-sm transition-all bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] shadow-lg shadow-[rgb(var(--accent-500)/15%)]">
                 {plan.cta}
               </Link>
-              {plan.name === "Enterprise" && (
-                <Link href="/enterprise"
-                  className="mt-2 text-center block text-xs font-bold text-purple-400 hover:text-purple-300 hover:underline transition-all">
-                  See what &amp; how it works →
-                </Link>
-              )}
             </motion.div>
           ))}
         </div>
