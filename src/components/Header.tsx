@@ -211,7 +211,6 @@ export default function Header() {
                   { name: "Credits", href: "/credits" },
                   { name: "About", href: "/about" },
                   { name: "Contact", href: "/contact" },
-                  { name: "Client Account", href: "/login" },
                 ].map((item) => (
                   <Link
                     key={item.name}
