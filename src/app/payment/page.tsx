@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { PAYONEER_ACTIVE, PAYONEER_PAYMENT_URL, PAYONEER_EMAIL, CURRENCIES, STRIPE_ACTIVE, STRIPE_PAYMENT_LINK } from "@/lib/payment";
@@ -29,13 +29,20 @@ export default function PaymentPage() {
   const [currency, setCurrency] = useState(0);
   const [hasAmount, setHasAmount] = useState(false);
   const [currencyOpen, setCurrencyOpen] = useState(false);
+  const currencyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function onDocClick() {
-      setCurrencyOpen(false);
+    function onDocClick(e: MouseEvent | TouchEvent) {
+      if (currencyRef.current && !currencyRef.current.contains(e.target as Node)) {
+        setCurrencyOpen(false);
+      }
     }
     document.addEventListener("click", onDocClick);
-    return () => document.removeEventListener("click", onDocClick);
+    document.addEventListener("touchstart", onDocClick);
+    return () => {
+      document.removeEventListener("click", onDocClick);
+      document.removeEventListener("touchstart", onDocClick);
+    };
   }, []);
 
   useEffect(() => {
@@ -149,8 +156,8 @@ export default function PaymentPage() {
                 <p className="text-xs uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3">
                   Choose your payment currency
                 </p>
-                <div className="relative">
-                  <button type="button" onClick={(e) => { e.stopPropagation(); setCurrencyOpen(!currencyOpen); }}
+                <div className="relative" ref={currencyRef}>
+                  <button type="button" onClick={() => setCurrencyOpen(!currencyOpen)}
                     className="w-full flex items-center justify-between gap-3 px-4 py-3.5 rounded-xl border-2 border-[rgb(var(--fg-rgb)/12%)] bg-[var(--bg-alt)] text-sm font-bold text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] transition-all">
                     <span className="flex items-center gap-2">
                       <svg className="w-5 h-5 text-[rgb(var(--accent-text))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0 2c2.21 0 4 1.79 4 4v5c0 .55-.45 1-1 1s-1-.45-1-1v-5c0-1.1-.9-2-2-2s-2 .9-2 2v5c0 .55-.45 1-1 1s-1-.45-1-1v-5c0-2.21 1.79-4 4-4z" /></svg>
@@ -161,7 +168,7 @@ export default function PaymentPage() {
                   {currencyOpen && (
                     <div className="absolute z-20 mt-2 w-full rounded-xl border-2 border-[rgb(var(--fg-rgb)/12%)] bg-[var(--bg)] shadow-2xl overflow-hidden">
                       {CURRENCIES.map((c, i) => (
-                        <button key={c.code} type="button" onClick={(e) => { e.stopPropagation(); setCurrency(i); setCurrencyOpen(false); }}
+                        <button key={c.code} type="button" onClick={() => { setCurrency(i); setCurrencyOpen(false); }}
                           className={`w-full flex items-center justify-between px-4 py-3 text-sm font-bold transition-colors ${currency === i ? "text-[rgb(var(--accent-text))] bg-[rgb(var(--accent-500)/8%)]" : "text-[rgb(var(--fg-rgb)/60%)] hover:bg-[rgb(var(--fg-rgb)/4%)]"}`}>
                           {c.label}
                           {currency === i && (

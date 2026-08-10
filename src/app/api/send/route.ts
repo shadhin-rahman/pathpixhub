@@ -40,6 +40,7 @@ export async function POST(request: Request) {
     const quoteDetails = (data.get("quote_details") as string) || "";
     const fileFormat = (data.get("file_format") as string) || "";
     const imageLinks = (data.get("image_links") as string) || "";
+    const paymentTiming = (data.get("payment_timing") as string) || "";
 
     const lines: string[] = [];
     if (name) lines.push(`Name: ${name}`);
@@ -52,6 +53,10 @@ export async function POST(request: Request) {
     if (turnaround) lines.push(`Turnaround: ${turnaround}`);
     if (fileFormat) lines.push(`File format: ${fileFormat}`);
     if (imageLinks) lines.push(`Image links:\n${imageLinks}`);
+    if (paymentTiming) {
+      const timingLabel = paymentTiming === "now" ? "Pay Now (immediately)" : paymentTiming === "7" ? "Within 7 days" : paymentTiming === "15" ? "Within 15 days" : "Monthly installments";
+      lines.push(`Payment timing: ${timingLabel}`);
+    }
     if (quoteDetails) {
       lines.push("");
       lines.push("=== QUOTE DETAILS ===");

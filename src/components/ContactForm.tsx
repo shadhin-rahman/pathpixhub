@@ -172,6 +172,7 @@ export default function ContactForm() {
   const [message, setMessage] = useState("");
   const [submitStatus, setSubmitStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [submitError, setSubmitError] = useState("");
+  const [paymentTiming, setPaymentTiming] = useState<"now" | "7" | "15" | "monthly">("now");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -182,6 +183,7 @@ export default function ContactForm() {
       data.set("turnaround", turnaroundOption?.label || "");
       data.set("file_format", selectedFileOpt?.label || "");
       data.set("image_links", imageLinks || "");
+      data.set("payment_timing", paymentTiming);
     }
     setSubmitStatus("sending");
     try {
@@ -753,6 +755,31 @@ export default function ContactForm() {
                     <input type="hidden" name="turnaround" value={turnaroundOption?.label} />
                     <input type="hidden" name="file_format" value={selectedFileOpt?.label} />
                     <input type="hidden" name="image_links" value={imageLinks} />
+
+                    <div>
+                      <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">When would you like to pay?</label>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        {([
+                          { id: "now", label: "Pay Now", desc: "Checkout immediately" },
+                          { id: "7", label: "In 7 Days", desc: "We email the link later" },
+                          { id: "15", label: "In 15 Days", desc: "We email the link later" },
+                          { id: "monthly", label: "Monthly", desc: "Split into monthly" },
+                        ] as const).map(opt => (
+                          <button key={opt.id} type="button" onClick={() => setPaymentTiming(opt.id)}
+                            className={`rounded-xl p-3 border text-center transition-all relative ${paymentTiming === opt.id ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/8%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/15%)]"}`}>
+                            {opt.id === "now" && <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-[rgb(var(--accent-500))] text-[9px] font-bold text-[rgb(var(--accent-contrast))]">Popular</span>}
+                            <p className="text-xs font-bold text-[rgb(var(--fg-rgb))]">{opt.label}</p>
+                            <p className="text-[10px] text-[rgb(var(--fg-rgb)/40%)] mt-0.5">{opt.desc}</p>
+                          </button>
+                        ))}
+                      </div>
+                      <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-2">
+                        {paymentTiming === "now"
+                          ? "You'll be taken to secure checkout right after submitting."
+                          : "Your quote is saved — we'll email your secure payment link on your chosen schedule. You can still pay now anytime."}
+                      </p>
+                    </div>
+
                     <div className="flex gap-3">
                       <button type="button" onClick={() => setStep(2)}
                         className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
@@ -881,13 +908,32 @@ export default function ContactForm() {
               <svg className="w-8 h-8 text-[rgb(137_243_54)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
             </div>
             <h3 className="text-3xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">{wantsQuote ? "Request Received!" : "Message Sent!"}</h3>
-            <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">
-              {wantsQuote ? (
-                <>Thank you for trusting us! We&apos;ve received your images and will start on your edits right away. Once your work is done, we&apos;ll email you your <span className="font-bold text-[rgb(137_243_54)]">secure payment link</span> — pay only when you&apos;re happy with the results.</>
-              ) : (
-                <>Thank you for reaching out! We&apos;ll get back to you within <span className="font-bold text-[rgb(137_243_54)]">45 minutes</span>.</>
-              )}
-            </p>
+            {wantsQuote && paymentTiming === "now" ? (
+              <>
+                <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">
+                  Thank you! Your quote is saved and your payment is ready. Complete secure checkout below to lock in your order.
+                </p>
+                <a href={`/payment?plan=${encodeURIComponent("Custom Quote")}&amount=${total.toFixed(2)}&desc=${encodeURIComponent("Photo editing quote — see details in your email")}`}
+                  className="mt-6 inline-flex items-center gap-2 px-10 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm shadow-lg shadow-[rgb(var(--accent-500)/25%)]">
+                  Proceed to Secure Payment — ${total.toFixed(2)}
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                </a>
+                <p className="mt-4 text-xs text-[rgb(var(--fg-rgb)/40%)]">Your request was also emailed to us — we&apos;ll start after payment.</p>
+              </>
+            ) : wantsQuote ? (
+              <>
+                <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">
+                  Thank you for trusting us! We&apos;ve received your quote request and will email your{" "}
+                  <span className="font-bold text-[rgb(137_243_54)]">
+                    {paymentTiming === "7" ? "secure payment link within 7 days" : paymentTiming === "15" ? "secure payment link within 15 days" : "monthly payment plan"}
+                  </span>
+                  . Pay when it suits you — your work starts once payment is confirmed.
+                </p>
+                <p className="mt-3 text-xs text-[rgb(var(--fg-rgb)/40%)]">Need to pay now after all? Just email us — we&apos;ll send the link right away.</p>
+              </>
+            ) : (
+              <p className="mt-4 text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">Thank you for reaching out! We&apos;ll get back to you within <span className="font-bold text-[rgb(137_243_54)]">45 minutes</span>.</p>
+            )}
             <button type="button" onClick={() => setSubmitStatus("idle")}
               className="mt-8 inline-flex items-center gap-2 px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-bold border border-[rgb(var(--fg-rgb)/10%)] hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm">
               Send Another Request
