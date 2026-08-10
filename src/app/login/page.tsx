@@ -188,6 +188,16 @@ export default function LoginPage() {
               {mode === "signup" && (
                 <p className="mt-1.5 text-xs text-[rgb(var(--fg-rgb)/45%)]">At least 6 characters.</p>
               )}
+              {mode === "signin" && (
+                <div className="mt-2 text-right">
+                  <Link
+                    href="/auth/forgot-password"
+                    className="text-sm font-semibold text-[rgb(var(--accent-text))] hover:underline"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+              )}
             </div>
 
             {error && (
