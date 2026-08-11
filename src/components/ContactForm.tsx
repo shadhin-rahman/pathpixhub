@@ -3,7 +3,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchCountryCode, isCountryBlocked, setBypassCode, isAdmin } from "@/lib/countryBlocker";
-import { generateOrderRef, isOrderRef } from "@/lib/orderRef";
+import { isOrderRef } from "@/lib/orderRef";
 
 const VOLUME_DISCOUNT_THRESHOLD = 500;
 const VOLUME_DISCOUNT_RATE = 0.1;
@@ -179,7 +179,7 @@ export default function ContactForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
-    const orderRef = generateOrderRef();
+    const orderRef = "";
 
     if (wantsQuote && paymentTiming === "now" && total > 0) {
       const params = new URLSearchParams({

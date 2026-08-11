@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { createClient, supabaseConfigured } from "@/lib/supabase/server";
-import { generateOrderRef, isOrderRef } from "@/lib/orderRef";
+import { formatOrderRef, isOrderRef } from "@/lib/orderRef";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Order } from "@/lib/types";
 
 export const runtime = "nodejs";
@@ -21,6 +22,17 @@ function buildTransporter() {
       pass: SMTP_PASS,
     },
   });
+}
+
+async function nextQuoteNumber(supabase?: SupabaseClient | null): Promise<number | null> {
+  try {
+    if (!supabase || !supabaseConfigured()) return null;
+    const { data, error } = await supabase.rpc("next_quote_no");
+    if (error || typeof data !== "number") return null;
+    return data;
+  } catch {
+    return null;
+  }
 }
 
 export async function POST(request: Request) {
@@ -44,10 +56,13 @@ export async function POST(request: Request) {
     const estimatedTotal = (data.get("estimated_total") as string) || "";
 
     const isQuote = Boolean(quoteDetails || services || selectedServices);
+    // The server is the single source of truth for the sequential quote number
+    // (Q1001, Q1002, …) so no two submissions ever collide.
     let orderRef = (data.get("order_ref") as string) || "";
-    if (!isOrderRef(orderRef)) {
-      orderRef = generateOrderRef();
-    }
+    const supabase = supabaseConfigured() ? await createClient() : null;
+    const nextNumber = await nextQuoteNumber(supabase);
+    if (nextNumber) orderRef = formatOrderRef(nextNumber);
+    else if (!isOrderRef(orderRef)) orderRef = "Q0";
 
     const subject = `New ${isQuote ? "Quote" : "Contact"} Request — ${orderRef}`;
 
@@ -106,8 +121,7 @@ export async function POST(request: Request) {
     // If a logged-in customer placed an order, save it so it appears in their
     // /account dashboard.
     let order: Partial<Order> | null = null;
-    if (supabaseConfigured()) {
-      const supabase = await createClient();
+    if (supabase) {
       const {
         data: { user },
       } = await supabase.auth.getUser();

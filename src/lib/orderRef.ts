@@ -1,26 +1,17 @@
-// Generates a short, human-readable order/quote reference like PPX-8F3K2A.
-// Used so customers can identify their quote/order by number.
+// Sequential order/quote reference like Q1001, Q1002…
+// The number comes from a Postgres sequence (public.quote_no_seq, start 1001)
+// via the next_quote_no() RPC, so no two customers ever get the same code.
 
-const ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no 0/O/1/I ambiguity
+export const ORDER_REF_PREFIX = "Q";
 
-function randomSegment(len: number): string {
-  let out = "";
-  const cryptoObj =
-    typeof crypto !== "undefined" ? crypto : (globalThis as { crypto?: Crypto }).crypto;
-  const values =
-    cryptoObj?.getRandomValues?.(new Uint8Array(len)) ??
-    Array.from({ length: len }, () => Math.floor(Math.random() * 256));
-
-  for (let i = 0; i < len; i++) {
-    out += ALPHABET[values[i] % ALPHABET.length];
-  }
-  return out;
-}
-
-export function generateOrderRef(): string {
-  return `PPX-${randomSegment(6)}`;
+export function formatOrderRef(num: number): string {
+  return `${ORDER_REF_PREFIX}${num}`;
 }
 
 export function isOrderRef(value: string): boolean {
-  return /^PPX-[A-HJ-NP-Z2-9]{6}$/.test(value.trim().toUpperCase());
+  const v = value.trim().toUpperCase();
+  return (
+    /^Q\d+$/.test(v) ||
+    /^PPX-[A-HJ-NP-Z2-9]{6}$/.test(v)
+  );
 }
