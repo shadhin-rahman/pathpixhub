@@ -8,52 +8,55 @@ import { isOrderRef } from "@/lib/orderRef";
 const VOLUME_DISCOUNT_THRESHOLD = 500;
 const VOLUME_DISCOUNT_RATE = 0.1;
 
-const COMPLEXITY_MULTIPLIERS: Record<number, number[]> = {
-  2: [0.7, 1.0],
-  3: [0.7, 1.0, 1.5],
-  4: [0.5, 0.7, 1.0, 1.5],
-  5: [0.5, 0.7, 1.0, 1.5, 2.0],
-  6: [0.5, 0.7, 1.0, 1.5, 2.0, 3.0],
-};
+type PriceTier = { id: string; label: string; price: number };
+type SubTypeDef = { id: string; label: string; price: number; type: "tier" | "none"; tiers?: PriceTier[] };
+type ServiceDef = { id: string; label: string; price?: number; type?: "tier" | "none" | "color-variant"; tiers?: PriceTier[]; subTypes?: SubTypeDef[] };
 
-type TierDef = { id: string; label: string; multiplier: number };
-type SubTypeDef = { id: string; label: string; basePrice: number; type: "complexity" | "tier" | "none"; complexityLevels?: number; tiers?: TierDef[] };
-type ServiceDef = { id: string; label: string; basePrice?: number; type?: "complexity" | "tier" | "none" | "color-variant"; complexityLevels?: number; tiers?: TierDef[]; subTypes?: SubTypeDef[] };
+const cp = (entries: [string, number][]): PriceTier[] =>
+  entries.map(([label, price]) => ({ id: `cat-${label}`, label: `Cat ${label}`, price }));
+
+const CLIPPING_PATH_TIERS = cp([
+  ["1", 0.39], ["1.5", 0.54], ["2", 0.69], ["2.25", 0.84], ["2.5", 0.99], ["2.75", 1.14],
+  ["3", 1.29], ["3.25", 1.72], ["3.5", 2.14], ["3.75", 2.57], ["4", 2.99], ["4.25", 3.87],
+  ["4.5", 4.74], ["4.75", 5.62], ["5", 6.49], ["5.5", 8.74], ["6", 10.99], ["7", 14.99],
+  ["8", 19.99], ["9", 29.99], ["10", 49.99],
+]);
+
+const MULTI_CLIPPING_PATH_TIERS = cp([
+  ["1", 1.19], ["2", 2.29], ["2.5", 4.39], ["3", 6.49], ["3.5", 8.74], ["4", 10.99],
+]);
+
+const IMAGE_MASKING_TIERS = cp([
+  ["1", 1.19], ["2", 1.69], ["2.5", 2.04], ["3", 2.39], ["3.25", 3.04], ["3.5", 3.69],
+  ["3.75", 4.34], ["4", 4.99], ["4.5", 6.99], ["5", 8.99],
+]);
+
+const NATURAL_SHADOW_TIERS = cp([["1", 0.69], ["2", 1.29], ["3", 2.99]]);
+const REFLECTION_SHADOW_TIERS = cp([["1", 0.69], ["2", 1.29], ["3", 2.99]]);
 
 const ALL_SERVICES: ServiceDef[] = [
-  { id: "clipping-path", label: "Clipping path", basePrice: 0.39, type: "complexity", complexityLevels: 6 },
-  { id: "multi-clipping-path", label: "Multi-clipping path", basePrice: 1.19, type: "complexity", complexityLevels: 4 },
-  { id: "image-masking", label: "Image masking", basePrice: 1.19, type: "complexity", complexityLevels: 5 },
-  { id: "background-removal", label: "Background removal", basePrice: 0.39, type: "none" },
+  { id: "clipping-path", label: "Clipping path", price: 0.39, type: "tier", tiers: CLIPPING_PATH_TIERS },
+  { id: "multi-clipping-path", label: "Multi-clipping path", price: 1.19, type: "tier", tiers: MULTI_CLIPPING_PATH_TIERS },
+  { id: "image-masking", label: "Image masking", price: 1.19, type: "tier", tiers: IMAGE_MASKING_TIERS },
+  { id: "background-removal", label: "Background removal", price: 0.39, type: "none" },
   { id: "shadow", label: "Shadow", subTypes: [
-    { id: "drop", label: "Drop shadow", basePrice: 0.25, type: "none" },
-    { id: "existing", label: "Existing shadow", basePrice: 0.25, type: "none" },
-    { id: "floating", label: "Floating shadow", basePrice: 0.28, type: "none" },
-    { id: "natural", label: "Natural shadow", basePrice: 0.25, type: "complexity", complexityLevels: 3 },
-    { id: "reflection", label: "Reflection shadow", basePrice: 0.30, type: "complexity", complexityLevels: 3 },
+    { id: "drop", label: "Drop shadow", price: 0.25, type: "none" },
+    { id: "existing", label: "Existing shadow", price: 0.69, type: "none" },
+    { id: "floating", label: "Floating shadow", price: 0.25, type: "none" },
+    { id: "natural", label: "Natural shadow", price: 0.69, type: "tier", tiers: NATURAL_SHADOW_TIERS },
+    { id: "reflection", label: "Reflection shadow", price: 0.69, type: "tier", tiers: REFLECTION_SHADOW_TIERS },
   ]},
   { id: "photo-retouching", label: "Photo retouching", subTypes: [
-    { id: "dust-spot-scratch", label: "Dust, spot and scratch removal", basePrice: 0.69, type: "tier", tiers: [
-      { id: "basic", label: "Basic retouching", multiplier: 0.8 },
-      { id: "advance", label: "Advance retouching", multiplier: 1.2 },
-    ]},
-    { id: "wrinkle-clothing", label: "Wrinkle on clothing", basePrice: 0.79, type: "tier", tiers: [
-      { id: "basic", label: "Basic retouching", multiplier: 1.0 },
-      { id: "advance", label: "Advance retouching", multiplier: 1.4 },
-    ]},
-    { id: "beauty-airbrushing", label: "Beauty airbrushing", basePrice: 0.89, type: "tier", tiers: [
-      { id: "basic", label: "Basic retouching", multiplier: 1.0 },
-      { id: "advance", label: "Advance retouching", multiplier: 1.5 },
-    ]},
-    { id: "camera-reflection", label: "Camera reflection removal", basePrice: 0.99, type: "tier", tiers: [
-      { id: "basic", label: "Basic retouching", multiplier: 1.0 },
-      { id: "advance", label: "Advance retouching", multiplier: 1.4 },
-    ]},
+    { id: "dust-spot-scratch", label: "Dust, spot and scratch removal", price: 0.69, type: "tier", tiers: cp([["1", 0.69], ["1.5", 1.59], ["2", 2.49]]) },
+    { id: "wrinkle-clothing", label: "Wrinkle on clothing", price: 0.99, type: "tier", tiers: cp([["1", 0.99], ["2", 1.79]]) },
+    { id: "beauty-airbrushing", label: "Beauty airbrushing", price: 0.99, type: "tier", tiers: cp([["1", 0.99], ["2", 1.79]]) },
+    { id: "camera-reflection", label: "Camera reflection removal", price: 0.79, type: "tier", tiers: cp([["1", 0.79], ["1.5", 1.89], ["2", 2.99]]) },
   ]},
-  { id: "symmetrical-edit", label: "Symmetrical edit", basePrice: 0.79, type: "none" },
-  { id: "ghost-mannequin", label: "Ghost mannequin", basePrice: 0.89, type: "complexity", complexityLevels: 2 },
-  { id: "color-change", label: "Color change", basePrice: 0.99, type: "color-variant" },
-  { id: "car-editing", label: "Car editing", basePrice: 2.99, type: "none" },
+  { id: "symmetrical-edit", label: "Symmetrical edit", price: 2.99, type: "none" },
+  { id: "ghost-mannequin", label: "Ghost mannequin", price: 0.89, type: "tier", tiers: cp([["1", 0.89], ["2", 1.79]]) },
+  { id: "color-change", label: "Color change", price: 0.99, type: "color-variant" },
+  { id: "additional-copy", label: "Additional copy", price: 0.20, type: "none" },
+  { id: "car-editing", label: "Car editing", price: 2.99, type: "none" },
 ];
 
 const TURNAROUND_OPTIONS = [
@@ -89,7 +92,6 @@ const FILE_OPTIONS = [
 
 type ServiceSelection = {
   subTypeId?: string;
-  complexity?: number;
   tier?: string;
   colorCodes?: string[];
 };
@@ -97,10 +99,9 @@ type ServiceSelection = {
 type ServiceInfo = {
   def: ServiceDef;
   subType?: SubTypeDef;
-  effectiveType: "complexity" | "tier" | "none" | "color-variant";
-  effectiveBasePrice: number;
-  effectiveComplexityLevels: number;
-  effectiveTiers: TierDef[];
+  effectiveType: "tier" | "none" | "color-variant";
+  effectivePrice: number;
+  effectiveTiers: PriceTier[];
 };
 
 const getSelKey = (svcId: string, subTypeId?: string) => (subTypeId ? `${svcId}:${subTypeId}` : svcId);
@@ -110,8 +111,8 @@ const getService = (selKey: string): ServiceInfo | undefined => {
     if (!svc.subTypes && svc.id === selKey) {
       const t = svc.type ?? "none";
       return {
-        def: svc, effectiveType: t, effectiveBasePrice: svc.basePrice ?? 0,
-        effectiveComplexityLevels: svc.complexityLevels ?? 6, effectiveTiers: svc.tiers ?? [],
+        def: svc, effectiveType: t, effectivePrice: svc.price ?? 0,
+        effectiveTiers: svc.tiers ?? [],
       };
     }
     if (svc.subTypes) {
@@ -119,8 +120,7 @@ const getService = (selKey: string): ServiceInfo | undefined => {
         if (`${svc.id}:${st.id}` === selKey) {
           return {
             def: svc, subType: st, effectiveType: st.type,
-            effectiveBasePrice: st.basePrice, effectiveComplexityLevels: st.complexityLevels ?? 6,
-            effectiveTiers: st.tiers ?? [],
+            effectivePrice: st.price, effectiveTiers: st.tiers ?? [],
           };
         }
       }
@@ -128,24 +128,16 @@ const getService = (selKey: string): ServiceInfo | undefined => {
   }
 };
 
-const getMultiplier = (info: ServiceInfo, sel: ServiceSelection): number => {
-  if (info.effectiveType === "complexity") {
-    const mults = COMPLEXITY_MULTIPLIERS[info.effectiveComplexityLevels] ?? COMPLEXITY_MULTIPLIERS[6];
-    return mults[(sel.complexity ?? 1) - 1] ?? 1.0;
-  }
+const getPricePerImage = (info: ServiceInfo, sel: ServiceSelection): number => {
   if (info.effectiveType === "tier") {
-    const t = info.effectiveTiers.find(t => t.id === (sel.tier ?? "basic"));
-    return t?.multiplier ?? 1.0;
+    const t = info.effectiveTiers.find(t => t.id === sel.tier);
+    return t?.price ?? info.effectivePrice;
   }
-  return 1.0;
+  return info.effectivePrice;
 };
-
-const getPricePerImage = (info: ServiceInfo, sel: ServiceSelection): number =>
-  info.effectiveBasePrice * getMultiplier(info, sel);
 
 const getDisplayLabel = (info: ServiceInfo, sel: ServiceSelection): string => {
   const base = info.subType?.label ?? info.def.label;
-  if (info.effectiveType === "complexity") return `${base} (C${sel.complexity})`;
   if (info.effectiveType === "tier") {
     const t = info.effectiveTiers.find(t => t.id === sel.tier);
     return `${base} — ${t?.label ?? ""}`;
@@ -264,8 +256,7 @@ export default function ContactForm() {
   };
 
   const getDefaultSelection = (info: ServiceInfo): ServiceSelection => {
-    if (info.effectiveType === "complexity") return { complexity: 1 };
-    if (info.effectiveType === "tier") return { tier: "basic" };
+    if (info.effectiveType === "tier") return { tier: info.effectiveTiers[0]?.id };
     if (info.effectiveType === "color-variant") return { colorCodes: [""] };
     return {};
   };
@@ -286,18 +277,14 @@ export default function ContactForm() {
     setExpandedSubType(subTypeId);
   };
 
-  const selectComplexity = (selKey: string, level: number) => {
+  const selectTier = (selKey: string, tierId: string) => {
     setSelections(prev => {
       const existing = prev[selKey];
-      if (existing?.complexity === level) {
+      if (existing?.tier === tierId) {
         const n = { ...prev }; delete n[selKey]; return n;
       }
-      return { ...prev, [selKey]: { ...existing ?? {}, complexity: level } };
+      return { ...prev, [selKey]: { ...existing ?? {}, tier: tierId } };
     });
-  };
-
-  const selectTier = (selKey: string, tierId: string) => {
-    setSelections(prev => ({ ...prev, [selKey]: { ...prev[selKey], tier: tierId } }));
   };
 
   const setColorCodes = (selKey: string, codes: string[]) => {
@@ -407,48 +394,23 @@ export default function ContactForm() {
       );
     }
 
-    if (info.effectiveType === "complexity") {
-      const mults = COMPLEXITY_MULTIPLIERS[info.effectiveComplexityLevels] ?? COMPLEXITY_MULTIPLIERS[6];
+    if (info.effectiveType === "tier") {
+      const tiers = info.effectiveTiers;
       return (
         <div>
           <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)] mb-3">
-            How complex are your images? Choose the average for this order.
+            Select the category for this order.
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(mults.length, 6)}, minmax(0, 1fr))` }} className="gap-2">
-            {mults.map((mult, i) => {
-              const level = i + 1;
-              const price = info.effectiveBasePrice * mult;
-              const isActive = sel?.complexity === level;
-              return (
-                <button key={level} type="button" onClick={() => selectComplexity(selKey, level)}
-                  className={`rounded-xl py-3.5 px-2 text-center border transition-all ${
-                    isActive ? "border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--fg-rgb)/15%)]"
-                  }`}>
-                  <p className={`text-sm font-semibold leading-tight ${isActive ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb))]"}`}>Complexity {level}</p>
-                  <p className="text-xs font-bold text-[rgb(var(--fg-rgb)/40%)] mt-1">${price.toFixed(2)}/img</p>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      );
-    }
-
-    if (info.effectiveType === "tier") {
-      return (
-        <div>
-          <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)] mb-3">Select the type.</p>
-          <div className="flex gap-2">
-            {info.effectiveTiers.map(t => {
-              const price = info.effectiveBasePrice * t.multiplier;
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(tiers.length, 6)}, minmax(0, 1fr))` }} className="gap-2">
+            {tiers.map(t => {
               const isActive = sel?.tier === t.id;
               return (
                 <button key={t.id} type="button" onClick={() => selectTier(selKey, t.id)}
-                  className={`flex-1 rounded-xl py-2.5 px-3 text-center border transition-all ${
+                  className={`rounded-xl py-3.5 px-2 text-center border transition-all ${
                     isActive ? "border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--fg-rgb)/15%)]"
                   }`}>
-                  <p className={`text-[11px] font-bold ${isActive ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb))]"}`}>{t.label}</p>
-                  <p className="text-[10px] font-bold text-[rgb(var(--fg-rgb)/40%)] mt-0.5">${price.toFixed(2)}/img</p>
+                  <p className={`text-sm font-semibold leading-tight ${isActive ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb))]"}`}>{t.label}</p>
+                  <p className="text-xs font-bold text-[rgb(var(--fg-rgb)/40%)] mt-1">${t.price.toFixed(2)}/img</p>
                 </button>
               );
             })}
@@ -465,16 +427,15 @@ export default function ContactForm() {
     const sel = selections[selKey];
     if (!info || !sel) return "";
     const ppi = getPricePerImage(info, sel);
-    if (info.effectiveType === "complexity") return `C${sel.complexity} — $${ppi.toFixed(2)}/img`;
     if (info.effectiveType === "tier") {
       const t = info.effectiveTiers.find(t => t.id === sel.tier);
       return `${t?.label ?? ""} — $${ppi.toFixed(2)}/img`;
     }
     if (info.effectiveType === "color-variant") {
       const count = sel.colorCodes?.filter(c => c.trim()).length ?? 0;
-      return `${count} variant(s) — $${info.effectiveBasePrice.toFixed(2)}/img`;
+      return `${count} variant(s) — $${info.effectivePrice.toFixed(2)}/img`;
     }
-    return `$${info.effectiveBasePrice.toFixed(2)}/img`;
+    return `$${info.effectivePrice.toFixed(2)}/img`;
   };
 
   const handleBypassSubmit = () => {
