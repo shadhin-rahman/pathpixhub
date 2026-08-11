@@ -770,23 +770,6 @@ export default function ContactForm() {
                     </div>
 
                     <div>
-                      <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Turnaround time</label>
-                      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-                        {TURNAROUND_OPTIONS.map(opt => (
-                          <button key={opt.id} type="button" onClick={() => setTurnaround(opt.id)}
-                            className={`rounded-xl p-3 border text-center transition-all relative ${turnaround === opt.id ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/8%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/15%)]"}`}>
-                            {opt.rush && <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-amber-500 text-[8px] font-bold text-black uppercase">Rush</span>}
-                            <p className="text-xs font-bold text-[rgb(var(--fg-rgb))]">{opt.label}</p>
-                            <p className="text-[10px] text-[rgb(var(--fg-rgb)/40%)]">{opt.desc}</p>
-                            <p className={`text-[10px] font-bold mt-0.5 ${opt.surcharge > 0 ? "text-amber-400" : opt.surcharge < 0 ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb)/30%)]"}`}>
-                              {opt.surcharge > 0 ? `+${opt.surcharge * 100}%` : opt.surcharge < 0 ? `${opt.surcharge * 100}%` : "Base price"}
-                            </p>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
                       <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Your image links (optional)</label>
                       <textarea value={imageLinks} onChange={e => setImageLinks(e.target.value)}
                         rows={3} placeholder="Paste your Dropbox, Google Drive, or WeTransfer links here...&#10;You can add multiple links, one per line."
@@ -894,8 +877,9 @@ export default function ContactForm() {
           {/* ===== RIGHT: Summary Panel ===== */}
           <div className="lg:sticky lg:top-28 h-fit">
             {wantsQuote ? (
-              <div className="glass-card rounded-[2rem] p-8 border-[rgb(var(--fg-rgb)/10%)]">
-                <h4 className="text-lg font-bold text-[rgb(var(--fg-rgb))]">Your Estimate</h4>
+              <>
+                <div className="glass-card rounded-[2rem] p-8 border-[rgb(var(--fg-rgb)/10%)]">
+                  <h4 className="text-lg font-bold text-[rgb(var(--fg-rgb))]">Your Estimate</h4>
                 {orderedKeys.length === 0 ? (
                   <p className="mt-6 text-sm text-[rgb(var(--fg-rgb)/40%)]">Select services to see your estimate.</p>
                 ) : (
@@ -946,6 +930,33 @@ export default function ContactForm() {
                   </div>
                 )}
               </div>
+
+              <div className="glass-card rounded-[2rem] p-8 border-[rgb(var(--fg-rgb)/10%)] mt-6">
+                <h4 className="text-lg font-bold text-[rgb(var(--fg-rgb))]">Turnaround time</h4>
+                <p className="mt-1 text-[11px] text-[rgb(var(--fg-rgb)/35%)]">Choose how fast you need your delivery. Faster turnaround affects the price.</p>
+                <div className="mt-5 space-y-2">
+                  {TURNAROUND_OPTIONS.map(opt => {
+                    const isActive = turnaround === opt.id;
+                    const pct = Math.round(opt.surcharge * 100);
+                    return (
+                      <button key={opt.id} type="button" onClick={() => setTurnaround(opt.id)}
+                        className={`w-full flex items-center justify-between gap-3 rounded-xl px-4 py-3.5 border text-left transition-all relative ${
+                          isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--accent-500)/50%)]"
+                        }`}>
+                        {opt.rush && <span className="absolute -top-2 right-3 px-1.5 py-0.5 rounded-full bg-amber-500 text-[8px] font-bold text-black uppercase">Rush</span>}
+                        <div className="min-w-0">
+                          <p className={`text-sm font-bold ${isActive ? "text-[rgb(var(--accent-contrast))]" : "text-[rgb(var(--fg-rgb))]"}`}>{opt.label}</p>
+                          <p className={`text-[10px] ${isActive ? "text-[rgb(var(--accent-contrast)/70%)]" : "text-[rgb(var(--fg-rgb)/40%)]"}`}>{opt.desc}</p>
+                        </div>
+                        <p className={`shrink-0 text-xs font-bold ${isActive ? "text-[rgb(var(--accent-contrast))]" : pct > 0 ? "text-amber-400" : pct < 0 ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb)/30%)]"}`}>
+                          {pct > 0 ? `+${pct}%` : pct < 0 ? `${pct}%` : "Base price"}
+                        </p>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              </>
             ) : (
               <div className="glass-card rounded-[2rem] p-8 border-[rgb(var(--fg-rgb)/10%)]">
                 <div className="flex items-center gap-3">
