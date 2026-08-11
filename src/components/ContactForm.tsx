@@ -407,10 +407,10 @@ export default function ContactForm() {
               return (
                 <button key={t.id} type="button" onClick={() => selectTier(selKey, t.id)}
                   className={`rounded-xl py-3.5 px-2 text-center border transition-all ${
-                    isActive ? "border-[rgb(var(--accent-500)/60%)] bg-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--fg-rgb)/15%)]"
+                    isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--accent-500)/50%)] hover:bg-[rgb(var(--accent-500)/5%)]"
                   }`}>
-                  <p className={`text-sm font-semibold leading-tight ${isActive ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb))]"}`}>{t.label}</p>
-                  <p className="text-xs font-bold text-[rgb(var(--fg-rgb)/40%)] mt-1">${t.price.toFixed(2)}/img</p>
+                  <p className={`text-sm font-semibold leading-tight ${isActive ? "text-[rgb(var(--accent-contrast))]" : "text-[rgb(var(--fg-rgb))]"}`}>{t.label}</p>
+                  <p className={`text-xs font-bold mt-1 ${isActive ? "text-[rgb(var(--accent-contrast)/70%)]" : "text-[rgb(var(--fg-rgb)/40%)]"}`}>${t.price.toFixed(2)}/img</p>
                 </button>
               );
             })}
