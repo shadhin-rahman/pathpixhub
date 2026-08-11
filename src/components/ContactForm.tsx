@@ -65,28 +65,38 @@ const TURNAROUND_OPTIONS = [
   { id: "96", label: "96 Hours+", desc: "Flexible", surcharge: -0.07 },
 ];
 
-const FILE_OPTIONS = [
-  { id: "psd-original-multi", label: "PSD — Original Background, Multiple Layer" },
-  { id: "psd-original-single", label: "PSD — Original Background, Single Layer" },
-  { id: "psd-white-multi", label: "PSD — White Background, Multiple Layer" },
-  { id: "psd-white-single", label: "PSD — White Background, Single Layer" },
-  { id: "psd-transparent-multi", label: "PSD — Transparent Background, Multiple Layer" },
-  { id: "psd-transparent-single", label: "PSD — Transparent Background, Single Layer" },
-  { id: "psd-mask-multi", label: "PSD — Layer Mask, Multiple Layer" },
-  { id: "psd-mask-single", label: "PSD — Layer Mask, Single Layer" },
-  { id: "tif-original-multi", label: "TIF — Original Background, Multiple Layer" },
-  { id: "tif-original-single", label: "TIF — Original Background, Single Layer" },
-  { id: "tif-white-multi", label: "TIF — White Background, Multiple Layer" },
-  { id: "tif-white-single", label: "TIF — White Background, Single Layer" },
-  { id: "tif-transparent-multi", label: "TIF — Transparent Background, Multiple Layer" },
-  { id: "tif-transparent-single", label: "TIF — Transparent Background, Single Layer" },
-  { id: "tif-mask-multi", label: "TIF — Layer Mask, Multiple Layer" },
-  { id: "tif-mask-single", label: "TIF — Layer Mask, Single Layer" },
-  { id: "jpg-white-single", label: "JPG — White Background, Single Layer" },
-  { id: "jpg-original-single", label: "JPG — Original Background, Single Layer" },
-  { id: "png-white-single", label: "PNG — White Background, Single Layer" },
-  { id: "png-transparent-single", label: "PNG — Transparent Background, Single Layer" },
-];
+const FILE_FORMATS = [
+  { id: "jpg", label: "JPG", backgrounds: ["original", "white"] },
+  { id: "png", label: "PNG", backgrounds: ["transparent", "white"] },
+  { id: "psd", label: "PSD", backgrounds: ["white", "transparent", "original", "mask"] },
+  { id: "tif", label: "TIF", backgrounds: ["white", "transparent", "original", "mask"] },
+] as const;
+
+type FileFormatId = (typeof FILE_FORMATS)[number]["id"];
+type FileBackground = "original" | "white" | "transparent" | "mask";
+type LayerStructure = "single" | "multiple";
+
+const BACKGROUND_LABELS: Record<FileBackground, string> = {
+  original: "Original Background",
+  white: "White Background",
+  transparent: "Transparent Background",
+  mask: "Layer Mask",
+};
+
+const FILE_FORMAT_LABELS: Record<FileFormatId, string> = {
+  jpg: "JPG",
+  png: "PNG",
+  psd: "PSD",
+  tif: "TIF",
+};
+
+const formatAllowsLayers = (fmt: FileFormatId): boolean => fmt === "psd" || fmt === "tif";
+
+const buildFileFormatLabel = (fmt: FileFormatId, bg: FileBackground, layer: LayerStructure, resizeW: string, resizeH: string): string => {
+  const base = `${FILE_FORMAT_LABELS[fmt]} — ${BACKGROUND_LABELS[bg]}, ${layer === "multiple" ? "Multiple Layer" : "Single Layer"}`;
+  const rw = parseInt(resizeW, 10), rh = parseInt(resizeH, 10);
+  return rw > 0 && rh > 0 ? `${base}, Resize: ${rw}x${rh} px` : base;
+};
 
 type ServiceSelection = {
   subTypeId?: string;
@@ -150,7 +160,12 @@ export default function ContactForm() {
   const [expandedSubType, setExpandedSubType] = useState<string | null>(null);
   const [totalImageCount, setTotalImageCount] = useState(1);
   const [turnaround, setTurnaround] = useState("24");
-  const [fileOption, setFileOption] = useState("psd-original-multi");
+  const [fileFormat, setFileFormat] = useState<FileFormatId>("psd");
+  const [fileBackground, setFileBackground] = useState<FileBackground>("original");
+  const [layerStructure, setLayerStructure] = useState<LayerStructure>("multiple");
+  const [wantResize, setWantResize] = useState<"yes" | "no">("no");
+  const [resizeWidth, setResizeWidth] = useState("");
+  const [resizeHeight, setResizeHeight] = useState("");
   const [step, setStep] = useState(1);
   const [countryCode, setCountryCode] = useState<string | null>(null);
   const [countryLoaded, setCountryLoaded] = useState(false);
@@ -195,7 +210,7 @@ export default function ContactForm() {
     if (wantsQuote) {
       data.set("quote_details", quoteSummary || "");
       data.set("turnaround", turnaroundOption?.label || "");
-      data.set("file_format", selectedFileOpt?.label || "");
+      data.set("file_format", fileFormatLabel);
       data.set("image_links", imageLinks || "");
       data.set("payment_timing", paymentTiming);
     }
@@ -316,7 +331,7 @@ export default function ContactForm() {
 
   const turnaroundOption = TURNAROUND_OPTIONS.find(t => t.id === turnaround);
   const turnaroundSurcharge = turnaroundOption?.surcharge ?? 0;
-  const selectedFileOpt = FILE_OPTIONS.find(f => f.id === fileOption);
+  const fileFormatLabel = buildFileFormatLabel(fileFormat, fileBackground, layerStructure, resizeWidth, resizeHeight);
   const imgCount = Math.max(1, totalImageCount);
 
   const { subtotal, discountApplies, discountAmount, turnaroundFee, total, orderedKeys } = useMemo(() => {
@@ -348,7 +363,7 @@ export default function ContactForm() {
     lines.push(`Total images: ${imgCount}`);
     if (discountApplies) lines.push(`Volume discount: -$${discountAmount.toFixed(2)}`);
     if (turnaroundSurcharge !== 0) lines.push(`Turnaround (${TURNAROUND_OPTIONS.find(t => t.id === turnaround)?.label ?? ""}): $${turnaroundFee >= 0 ? "+" : ""}${turnaroundFee.toFixed(2)}`);
-    lines.push(`File format: ${FILE_OPTIONS.find(f => f.id === fileOption)?.label ?? ""}`);
+    lines.push(`File format: ${fileFormatLabel}`);
     if (commentsText) lines.push(`Comments: ${commentsText}`);
     if (imageLinks.trim()) lines.push(`Image links:\n${imageLinks.trim()}`);
     lines.push(`Estimated total: $${total.toFixed(2)}`);
@@ -676,19 +691,82 @@ export default function ContactForm() {
                     </div>
 
                     <div>
-                      <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Preferred file format</label>
-                      <div className="relative">
-                        <select value={fileOption} onChange={e => setFileOption(e.target.value)}
-                          className="w-full px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)] appearance-none cursor-pointer">
-                          <optgroup label="PSD">{FILE_OPTIONS.filter(f => f.id.startsWith("psd-")).map(f => (<option key={f.id} value={f.id}>{f.label}</option>))}</optgroup>
-                          <optgroup label="TIF">{FILE_OPTIONS.filter(f => f.id.startsWith("tif-")).map(f => (<option key={f.id} value={f.id}>{f.label}</option>))}</optgroup>
-                          <optgroup label="JPG">{FILE_OPTIONS.filter(f => f.id.startsWith("jpg-")).map(f => (<option key={f.id} value={f.id}>{f.label}</option>))}</optgroup>
-                          <optgroup label="PNG">{FILE_OPTIONS.filter(f => f.id.startsWith("png-")).map(f => (<option key={f.id} value={f.id}>{f.label}</option>))}</optgroup>
-                        </select>
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[rgb(var(--fg-rgb)/30%)]">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                        </div>
+                      <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">File format</label>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        {FILE_FORMATS.map(fmt => {
+                          const isActive = fileFormat === fmt.id;
+                          return (
+                            <button key={fmt.id} type="button"
+                              onClick={() => {
+                                const validBg = FILE_FORMATS.find(f => f.id === fmt.id)!.backgrounds;
+                                setFileFormat(fmt.id);
+                                if (!validBg.some(bg => bg === fileBackground)) setFileBackground(validBg[0]);
+                                if (!formatAllowsLayers(fmt.id)) setLayerStructure("single");
+                              }}
+                              className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${
+                                isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"
+                              }`}>{FILE_FORMAT_LABELS[fmt.id]}</button>
+                          );
+                        })}
                       </div>
+
+                      <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {FILE_FORMATS.find(f => f.id === fileFormat)!.backgrounds.map(bg => {
+                          const isActive = fileBackground === bg;
+                          return (
+                            <button key={bg} type="button" onClick={() => setFileBackground(bg)}
+                              className={`rounded-xl py-3 px-3 text-center border font-semibold text-xs transition-all ${
+                                isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"
+                              }`}>{BACKGROUND_LABELS[bg]}</button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Layer structure</label>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button type="button"
+                          onClick={() => setLayerStructure("single")}
+                          className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${layerStructure === "single" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"}`}>
+                          Single layer
+                        </button>
+                        <button type="button"
+                          onClick={() => formatAllowsLayers(fileFormat) && setLayerStructure("multiple")}
+                          className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${layerStructure === "multiple" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : formatAllowsLayers(fileFormat) ? "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]" : "border-[rgb(var(--fg-rgb)/6%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"}`}>
+                          Multiple layer
+                        </button>
+                      </div>
+                      {!formatAllowsLayers(fileFormat) && (
+                        <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-1.5">{FILE_FORMAT_LABELS[fileFormat]} always uses a single layer.</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Do you need resizing?</label>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button type="button" onClick={() => setWantResize("yes")}
+                          className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${wantResize === "yes" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"}`}>Yes</button>
+                        <button type="button" onClick={() => setWantResize("no")}
+                          className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${wantResize === "no" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"}`}>No</button>
+                      </div>
+                      {wantResize === "yes" && (
+                        <div className="mt-3 flex items-end gap-3">
+                          <div className="flex-1">
+                            <label className="block text-[10px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/35%)] font-bold mb-1">Width (px)</label>
+                            <input type="number" min={1} value={resizeWidth} onChange={e => setResizeWidth(e.target.value)}
+                              placeholder="e.g. 1920"
+                              className="w-full px-4 py-3 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
+                          </div>
+                          <span className="text-[rgb(var(--fg-rgb)/30%)] pb-3.5">×</span>
+                          <div className="flex-1">
+                            <label className="block text-[10px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/35%)] font-bold mb-1">Height (px)</label>
+                            <input type="number" min={1} value={resizeHeight} onChange={e => setResizeHeight(e.target.value)}
+                              placeholder="e.g. 1080"
+                              className="w-full px-4 py-3 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     <div>
@@ -745,7 +823,7 @@ export default function ContactForm() {
                     </div>
                     <input type="hidden" name="quote_details" value={quoteSummary} />
                     <input type="hidden" name="turnaround" value={turnaroundOption?.label} />
-                    <input type="hidden" name="file_format" value={selectedFileOpt?.label} />
+                    <input type="hidden" name="file_format" value={fileFormatLabel} />
                     <input type="hidden" name="image_links" value={imageLinks} />
 
                     <div>
