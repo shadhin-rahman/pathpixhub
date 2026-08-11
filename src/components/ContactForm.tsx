@@ -92,10 +92,20 @@ const FILE_FORMAT_LABELS: Record<FileFormatId, string> = {
 
 const formatAllowsLayers = (fmt: FileFormatId): boolean => fmt === "psd" || fmt === "tif";
 
-const buildFileFormatLabel = (fmt: FileFormatId, bg: FileBackground, layer: LayerStructure, resizeW: string, resizeH: string): string => {
-  const base = `${FILE_FORMAT_LABELS[fmt]} — ${BACKGROUND_LABELS[bg]}, ${layer === "multiple" ? "Multiple Layer" : "Single Layer"}`;
+const FILE_FORMAT_OPTION_LIST: { fmt: FileFormatId; bg: FileBackground }[] = [
+  { fmt: "psd", bg: "white" }, { fmt: "psd", bg: "transparent" }, { fmt: "psd", bg: "original" }, { fmt: "psd", bg: "mask" },
+  { fmt: "tif", bg: "white" }, { fmt: "tif", bg: "transparent" }, { fmt: "tif", bg: "original" }, { fmt: "tif", bg: "mask" },
+  { fmt: "jpg", bg: "original" }, { fmt: "jpg", bg: "white" },
+  { fmt: "png", bg: "transparent" }, { fmt: "png", bg: "white" },
+];
+
+const buildFileFormatLabel = (fmt: FileFormatId | null, bg: FileBackground | null, layer: LayerStructure | null, resizeW: string, resizeH: string): string => {
+  if (!fmt || !bg) return "Not selected";
+  const base = `${FILE_FORMAT_LABELS[fmt]} — ${BACKGROUND_LABELS[bg]}`;
+  const layerPart = layer ? `, ${layer === "multiple" ? "Multiple Layer" : "Single Layer"}` : "";
   const rw = parseInt(resizeW, 10), rh = parseInt(resizeH, 10);
-  return rw > 0 && rh > 0 ? `${base}, Resize: ${rw}x${rh} px` : base;
+  const resizePart = rw > 0 && rh > 0 ? `, Resize: ${rw}x${rh} px` : "";
+  return `${base}${layerPart}${resizePart}`;
 };
 
 type ServiceSelection = {
@@ -160,9 +170,10 @@ export default function ContactForm() {
   const [expandedSubType, setExpandedSubType] = useState<string | null>(null);
   const [totalImageCount, setTotalImageCount] = useState(1);
   const [turnaround, setTurnaround] = useState("24");
-  const [fileFormat, setFileFormat] = useState<FileFormatId>("psd");
-  const [fileBackground, setFileBackground] = useState<FileBackground>("original");
-  const [layerStructure, setLayerStructure] = useState<LayerStructure>("multiple");
+  const [fileFormat, setFileFormat] = useState<FileFormatId | null>(null);
+  const [fileBackground, setFileBackground] = useState<FileBackground | null>(null);
+  const [layerStructure, setLayerStructure] = useState<LayerStructure | null>(null);
+  const [fileBoxOpen, setFileBoxOpen] = useState(false);
   const [wantResize, setWantResize] = useState<"yes" | "no">("no");
   const [resizeWidth, setResizeWidth] = useState("");
   const [resizeHeight, setResizeHeight] = useState("");
@@ -691,36 +702,61 @@ export default function ContactForm() {
                     </div>
 
                     <div>
-                      <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">File format</label>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                        {FILE_FORMATS.map(fmt => {
-                          const isActive = fileFormat === fmt.id;
-                          return (
-                            <button key={fmt.id} type="button"
-                              onClick={() => {
-                                const validBg = FILE_FORMATS.find(f => f.id === fmt.id)!.backgrounds;
-                                setFileFormat(fmt.id);
-                                if (!validBg.some(bg => bg === fileBackground)) setFileBackground(validBg[0]);
-                                if (!formatAllowsLayers(fmt.id)) setLayerStructure("single");
-                              }}
-                              className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${
-                                isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"
-                              }`}>{FILE_FORMAT_LABELS[fmt.id]}</button>
-                          );
-                        })}
-                      </div>
+                      <button type="button" onClick={() => setFileBoxOpen(!fileBoxOpen)}
+                        className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-left transition-colors hover:border-[rgb(var(--accent-500)/40%)]">
+                        <span className="flex items-center gap-2 min-w-0">
+                          <span className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold shrink-0">File format</span>
+                          <span className={`truncate font-semibold ${fileFormat ? "text-[rgb(var(--fg-rgb))]" : "text-[rgb(var(--fg-rgb)/30%)]"} ${fileFormat ? "" : "text-xs"}`}>
+                            {fileFormat ? buildFileFormatLabel(fileFormat, fileBackground, layerStructure, resizeWidth, resizeHeight) : "Select a file format and background"}
+                          </span>
+                        </span>
+                        <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform shrink-0 ${fileBoxOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                      </button>
 
-                      <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {FILE_FORMATS.find(f => f.id === fileFormat)!.backgrounds.map(bg => {
-                          const isActive = fileBackground === bg;
-                          return (
-                            <button key={bg} type="button" onClick={() => setFileBackground(bg)}
-                              className={`rounded-xl py-3 px-3 text-center border font-semibold text-xs transition-all ${
-                                isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"
-                              }`}>{BACKGROUND_LABELS[bg]}</button>
-                          );
-                        })}
-                      </div>
+                      {fileBoxOpen && (
+                        <div className="mt-2 rounded-xl border border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] overflow-hidden">
+                          <div className="p-2.5 border-b border-[rgb(var(--fg-rgb)/8%)]">
+                            <p className="text-[10px] uppercase tracking-wider text-[rgb(var(--accent-text))] font-bold px-2 mb-1.5">PSD & TIF</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                              {FILE_FORMAT_OPTION_LIST.filter(o => o.fmt === "psd" || o.fmt === "tif").map(o => {
+                                const isActive = fileFormat === o.fmt && fileBackground === o.bg;
+                                return (
+                                  <button key={`${o.fmt}-${o.bg}`} type="button"
+                                    onClick={() => { setFileFormat(o.fmt); setFileBackground(o.bg); if (!formatAllowsLayers(o.fmt)) setLayerStructure("single"); }}
+                                    className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-semibold border transition-all ${
+                                      isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"
+                                    }`}>
+                                    <span className={`w-3.5 h-3.5 rounded-full border-2 grid place-items-center shrink-0 ${isActive ? "border-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/25%)]"}`}>
+                                      {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-contrast))]" />}
+                                    </span>
+                                    {FILE_FORMAT_LABELS[o.fmt]} — {BACKGROUND_LABELS[o.bg]}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                          <div className="p-2.5">
+                            <p className="text-[10px] uppercase tracking-wider text-[rgb(var(--accent-text))] font-bold px-2 mb-1.5">JPG & PNG</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                              {FILE_FORMAT_OPTION_LIST.filter(o => o.fmt === "jpg" || o.fmt === "png").map(o => {
+                                const isActive = fileFormat === o.fmt && fileBackground === o.bg;
+                                return (
+                                  <button key={`${o.fmt}-${o.bg}`} type="button"
+                                    onClick={() => { setFileFormat(o.fmt); setFileBackground(o.bg); if (!formatAllowsLayers(o.fmt)) setLayerStructure("single"); }}
+                                    className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-semibold border transition-all ${
+                                      isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"
+                                    }`}>
+                                    <span className={`w-3.5 h-3.5 rounded-full border-2 grid place-items-center shrink-0 ${isActive ? "border-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/25%)]"}`}>
+                                      {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-contrast))]" />}
+                                    </span>
+                                    {FILE_FORMAT_LABELS[o.fmt]} — {BACKGROUND_LABELS[o.bg]}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     <div>
@@ -732,12 +768,12 @@ export default function ContactForm() {
                           Single layer
                         </button>
                         <button type="button"
-                          onClick={() => formatAllowsLayers(fileFormat) && setLayerStructure("multiple")}
-                          className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${layerStructure === "multiple" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : formatAllowsLayers(fileFormat) ? "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]" : "border-[rgb(var(--fg-rgb)/6%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"}`}>
+                          onClick={() => fileFormat && formatAllowsLayers(fileFormat) && setLayerStructure("multiple")}
+                          className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${layerStructure === "multiple" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : fileFormat && formatAllowsLayers(fileFormat) ? "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]" : "border-[rgb(var(--fg-rgb)/6%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"}`}>
                           Multiple layer
                         </button>
                       </div>
-                      {!formatAllowsLayers(fileFormat) && (
+                      {fileFormat && !formatAllowsLayers(fileFormat) && (
                         <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-1.5">{FILE_FORMAT_LABELS[fileFormat]} always uses a single layer.</p>
                       )}
                     </div>
