@@ -58,11 +58,11 @@ const ALL_SERVICES: ServiceDef[] = [
 ];
 
 const TURNAROUND_OPTIONS = [
-  { id: "6", label: "6-8 Hours", desc: "Flash Sale Rush", surcharge: 0.15, rush: true },
-  { id: "12", label: "12 Hours", desc: "Fast delivery", surcharge: 0.02 },
+  { id: "6", label: "6 Hours", desc: "Flash Sale Rush", surcharge: 0.5, rush: true },
+  { id: "12", label: "12 Hours", desc: "Fast delivery", surcharge: 0.14 },
   { id: "24", label: "24 Hours", desc: "Standard", surcharge: 0 },
-  { id: "48", label: "48 Hours", desc: "Relaxed", surcharge: -0.01 },
-  { id: "96", label: "96 Hours+", desc: "Flexible", surcharge: -0.02 },
+  { id: "48", label: "48 Hours", desc: "Relaxed", surcharge: -0.04 },
+  { id: "96", label: "96 Hours+", desc: "Flexible", surcharge: -0.07 },
 ];
 
 const FILE_OPTIONS = [
