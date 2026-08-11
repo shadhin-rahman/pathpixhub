@@ -31,12 +31,17 @@ const IMAGE_MASKING_TIERS = cp([
 
 const NATURAL_SHADOW_TIERS = cp([["1", 0.69], ["2", 1.29], ["3", 2.99]]);
 const REFLECTION_SHADOW_TIERS = cp([["1", 0.69], ["2", 1.29], ["3", 2.99]]);
+const ADDITIONAL_COPY_PRICE = 0.20;
 
 const ALL_SERVICES: ServiceDef[] = [
-  { id: "clipping-path", label: "Clipping path", price: 0.39, type: "tier", tiers: CLIPPING_PATH_TIERS },
-  { id: "multi-clipping-path", label: "Multi-clipping path", price: 1.19, type: "tier", tiers: MULTI_CLIPPING_PATH_TIERS },
-  { id: "image-masking", label: "Image masking", price: 1.19, type: "tier", tiers: IMAGE_MASKING_TIERS },
-  { id: "background-removal", label: "Background removal", price: 0.39, type: "none" },
+  { id: "path-creation", label: "Path creation", subTypes: [
+    { id: "clipping-path", label: "Clipping path", price: 0.39, type: "tier", tiers: CLIPPING_PATH_TIERS },
+    { id: "multi-clipping-path", label: "Multi-clipping path", price: 1.19, type: "tier", tiers: MULTI_CLIPPING_PATH_TIERS },
+  ]},
+  { id: "masking-bg-removal", label: "Image masking & background removal", subTypes: [
+    { id: "image-masking", label: "Image masking", price: 1.19, type: "tier", tiers: IMAGE_MASKING_TIERS },
+    { id: "background-removal", label: "Background removal", price: 0.39, type: "none" },
+  ]},
   { id: "shadow", label: "Shadow", subTypes: [
     { id: "drop", label: "Drop shadow", price: 0.25, type: "none" },
     { id: "existing", label: "Existing shadow", price: 0.69, type: "none" },
@@ -53,7 +58,6 @@ const ALL_SERVICES: ServiceDef[] = [
   { id: "symmetrical-edit", label: "Symmetrical edit", price: 2.99, type: "none" },
   { id: "ghost-mannequin", label: "Ghost mannequin", price: 0.89, type: "tier", tiers: cp([["1", 0.89], ["2", 1.79]]) },
   { id: "color-change", label: "Color change", price: 0.99, type: "color-variant" },
-  { id: "additional-copy", label: "Additional copy", price: 0.20, type: "none" },
   { id: "car-editing", label: "Car editing", price: 2.99, type: "none" },
 ];
 
@@ -177,6 +181,8 @@ export default function ContactForm() {
   const [wantResize, setWantResize] = useState<"yes" | "no">("no");
   const [resizeWidth, setResizeWidth] = useState("");
   const [resizeHeight, setResizeHeight] = useState("");
+  const [wantAdditionalCopy, setWantAdditionalCopy] = useState(false);
+  const [additionalCopyFormat, setAdditionalCopyFormat] = useState<FileFormatId | "">("");
   const [step, setStep] = useState(1);
   const [countryCode, setCountryCode] = useState<string | null>(null);
   const [countryLoaded, setCountryLoaded] = useState(false);
@@ -352,6 +358,8 @@ export default function ContactForm() {
       if (!info) continue;
       sub += getPricePerImage(info, sel) * imgCount;
     }
+    const additionalCopyCost = wantAdditionalCopy ? ADDITIONAL_COPY_PRICE * imgCount : 0;
+    sub += additionalCopyCost;
     const applies = imgCount >= VOLUME_DISCOUNT_THRESHOLD;
     const discount = applies ? sub * VOLUME_DISCOUNT_RATE : 0;
     const base = sub - discount;
@@ -360,7 +368,7 @@ export default function ContactForm() {
       subtotal: sub, discountApplies: applies, discountAmount: discount,
       turnaroundFee: fee, total: base + fee, orderedKeys: Object.keys(selections),
     };
-  }, [selections, imgCount, turnaroundSurcharge]);
+  }, [selections, imgCount, turnaroundSurcharge, wantAdditionalCopy]);
 
   const quoteSummary = (() => {
     if (orderedKeys.length === 0) return "";
@@ -375,6 +383,9 @@ export default function ContactForm() {
     if (discountApplies) lines.push(`Volume discount: -$${discountAmount.toFixed(2)}`);
     if (turnaroundSurcharge !== 0) lines.push(`Turnaround (${TURNAROUND_OPTIONS.find(t => t.id === turnaround)?.label ?? ""}): $${turnaroundFee >= 0 ? "+" : ""}${turnaroundFee.toFixed(2)}`);
     lines.push(`File format: ${fileFormatLabel}`);
+    if (wantAdditionalCopy) {
+      lines.push(`Additional copy: $${ADDITIONAL_COPY_PRICE.toFixed(2)}/img${additionalCopyFormat ? ` (${FILE_FORMAT_LABELS[additionalCopyFormat]})` : ""}`);
+    }
     if (commentsText) lines.push(`Comments: ${commentsText}`);
     if (imageLinks.trim()) lines.push(`Image links:\n${imageLinks.trim()}`);
     lines.push(`Estimated total: $${total.toFixed(2)}`);
@@ -603,7 +614,9 @@ export default function ContactForm() {
                                   ) : (
                                     <>
                                       <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)]">
-                                        {svc.id === "shadow" ? "Select the type of shadow you want." :
+                                        {svc.id === "path-creation" ? "Select the type of path creation you need." :
+                                         svc.id === "masking-bg-removal" ? "Select the type of image editing you need." :
+                                         svc.id === "shadow" ? "Select the type of shadow you want." :
                                          svc.id === "photo-retouching" ? "Select one or more types of photo retouching." : "Select a service type."}
                                       </p>
                                       <div className="space-y-2">
@@ -806,6 +819,34 @@ export default function ContactForm() {
                     </div>
 
                     <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <button type="button" onClick={() => { setWantAdditionalCopy(!wantAdditionalCopy); if (wantAdditionalCopy) setAdditionalCopyFormat(""); }}
+                          className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${wantAdditionalCopy ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]" : "border-[rgb(var(--fg-rgb)/20%)] hover:border-[rgb(var(--accent-500)/50%)]"}`}>
+                          {wantAdditionalCopy && <svg className="w-3 h-3 text-[rgb(var(--accent-contrast))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                        </button>
+                        <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold cursor-pointer">Additional copy</label>
+                        <span className="text-[10px] text-[rgb(var(--fg-rgb)/35%)]">(${ADDITIONAL_COPY_PRICE.toFixed(2)}/img) — optional</span>
+                      </div>
+                      {wantAdditionalCopy && (
+                        <div className="mt-3">
+                          <label className="block text-[10px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/35%)] font-bold mb-1.5">Which format do you need the additional copy in?</label>
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                            {FILE_FORMATS.map(fmt => {
+                              const isActive = additionalCopyFormat === fmt.id;
+                              return (
+                                <button key={fmt.id} type="button" onClick={() => setAdditionalCopyFormat(fmt.id)}
+                                  className={`rounded-xl py-2.5 text-center border font-bold text-xs transition-all ${
+                                    isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"
+                                  }`}>{FILE_FORMAT_LABELS[fmt.id]}</button>
+                              );
+                            })}
+                          </div>
+                          <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-1.5">Choose a format only if you need the edited images in an extra file format.</p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
                       <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Your image links (optional)</label>
                       <textarea value={imageLinks} onChange={e => setImageLinks(e.target.value)}
                         rows={3} placeholder="Paste your Dropbox, Google Drive, or WeTransfer links here...&#10;You can add multiple links, one per line."
@@ -843,6 +884,7 @@ export default function ContactForm() {
                     <input type="hidden" name="quote_details" value={quoteSummary} />
                     <input type="hidden" name="turnaround" value={turnaroundOption?.label} />
                     <input type="hidden" name="file_format" value={fileFormatLabel} />
+                    <input type="hidden" name="additional_copy" value={wantAdditionalCopy ? `Yes${additionalCopyFormat ? ` (${FILE_FORMAT_LABELS[additionalCopyFormat]})` : ""}` : "No"} />
                     <input type="hidden" name="image_links" value={imageLinks} />
 
                     <div>
