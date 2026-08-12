@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchCountryCode, isCountryBlocked, setBypassCode, isAdmin } from "@/lib/countryBlocker";
 import { isOrderRef } from "@/lib/orderRef";
+import { createClient as createSupabaseClient, supabaseConfigured } from "@/lib/supabase/client";
 
 const VOLUME_DISCOUNT_THRESHOLD = 500;
 const VOLUME_DISCOUNT_RATE = 0.1;
@@ -194,6 +195,9 @@ export default function ContactForm() {
   const [bypassError, setBypassError] = useState(false);
   const [commentsText, setCommentsText] = useState("");
   const [imageLinks, setImageLinks] = useState("");
+  const [colorRefFiles, setColorRefFiles] = useState<File[]>([]);
+  const [colorRefLinks, setColorRefLinks] = useState("");
+  const [colorRefUploading, setColorRefUploading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -235,7 +239,31 @@ export default function ContactForm() {
       data.set("image_links", imageLinks || "");
       data.set("payment_timing", paymentTiming);
     }
+    if (colorRefFiles.length > 0) {
+      for (const file of colorRefFiles) data.append("images", file);
+    }
+    if (colorRefLinks.trim()) {
+      data.set("color_reference_links", colorRefLinks.trim());
+    }
     setSubmitStatus("sending");
+    if (colorRefFiles.length > 0 && supabaseConfigured()) {
+      setColorRefUploading(true);
+      try {
+        const sb = createSupabaseClient();
+        const folder = `supporting/${Date.now()}`;
+        for (const file of colorRefFiles) {
+          const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+          const path = `${folder}/${crypto.randomUUID()}.${ext}`;
+          await sb.storage.from("client-uploads").upload(path, file, {
+            contentType: file.type || "image/jpeg",
+            cacheControl: "3600",
+          });
+        }
+      } catch {
+        // storage upload failed — files are still attached to the email
+      }
+      setColorRefUploading(false);
+    }
     try {
       const res = await fetch("/api/send", {
         method: "POST",
@@ -405,6 +433,8 @@ export default function ContactForm() {
       lines.push(`Additional copy: $${ADDITIONAL_COPY_PRICE.toFixed(2)}/img (${additionalCopyFormat ? buildFileFormatLabel(additionalCopyFormat, additionalCopyBackground, additionalCopyLayer, "", "") : "format not chosen"})`);
     }
     if (hasExistingClippingPath) lines.push(`Existing clipping path: Yes (client supplies already-clipped images)`);
+    if (colorRefFiles.length > 0) lines.push(`Color reference images: ${colorRefFiles.length} attached image(s)`);
+    if (colorRefLinks.trim()) lines.push(`Color reference links: ${colorRefLinks.trim()}`);
     if (commentsText) lines.push(`Comments: ${commentsText}`);
     if (imageLinks.trim()) lines.push(`Image links:\n${imageLinks.trim()}`);
     lines.push(`Estimated total: $${total.toFixed(2)}`);
@@ -423,27 +453,88 @@ export default function ContactForm() {
     if (info.effectiveType === "color-variant") {
       const codes = sel?.colorCodes ?? [""];
       return (
-        <div className="space-y-2">
-          <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)]">
-            For each color variant, provide a color code or approximate name. If you have swatch files or color reference images, simply note them here.
-          </p>
-          {codes.map((code, idx) => (
-            <div key={idx} className="flex items-center gap-2">
-              <span className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/40%)] shrink-0 w-24">Color Variant {idx + 1}</span>
-              <input type="text" value={code}
-                onChange={e => { const next = [...codes]; next[idx] = e.target.value; setColorCodes(selKey, next); }}
-                placeholder="Color code or name (e.g. #FF5733, Royal Blue)"
-                className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-xs text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
-              {codes.length > 1 && (
-                <button type="button" onClick={() => removeColorVariant(selKey, idx)}
-                  className="w-6 h-6 rounded flex items-center justify-center text-[rgb(var(--fg-rgb)/30%)] hover:text-red-400 transition-colors">
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <p className="text-[12px] font-medium text-[rgb(var(--fg-rgb)/40%)]">
+              For each color variant, provide a color code or approximate name. If you have swatch files or color reference images, simply note them here.
+            </p>
+            {codes.map((code, idx) => (
+              <div key={idx} className="flex items-center gap-2">
+                <span className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/40%)] shrink-0 w-24">Color Variant {idx + 1}</span>
+                <input type="text" value={code}
+                  onChange={e => { const next = [...codes]; next[idx] = e.target.value; setColorCodes(selKey, next); }}
+                  placeholder="Color code or name (e.g. #FF5733, Royal Blue)"
+                  className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-xs text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)]" />
+                {codes.length > 1 && (
+                  <button type="button" onClick={() => removeColorVariant(selKey, idx)}
+                    className="w-6 h-6 rounded flex items-center justify-center text-[rgb(var(--fg-rgb)/30%)] hover:text-red-400 transition-colors">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                  </button>
+                )}
+              </div>
+            ))}
+            <button type="button" onClick={() => addColorVariant(selKey)}
+              className="text-[11px] font-bold text-[rgb(var(--accent-text))] hover:text-[rgb(var(--accent-text))] transition-colors">+ Add another variant</button>
+          </div>
+
+          <div className="border-t border-[rgb(var(--fg-rgb)/8%)] pt-3">
+            <p className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/70%)] mb-2">Color reference images <span className="text-[rgb(var(--fg-rgb)/35%)] font-medium">(optional — helps us match your exact shades)</span></p>
+            <div className="space-y-3">
+              <div className="flex flex-row gap-3">
+                <label
+                  onDragOver={e => e.preventDefault()}
+                  onDrop={e => {
+                    e.preventDefault();
+                    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith("image/"));
+                    setColorRefFiles(prev => [...prev, ...files].slice(0, 10));
+                  }}
+                  className="flex-1 flex flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-[rgb(var(--fg-rgb)/15%)] bg-[var(--bg-subtle)] px-4 py-5 cursor-pointer hover:border-[rgb(var(--accent-500)/50%)] transition-all text-center">
+                  <svg className="w-6 h-6 text-[rgb(var(--fg-rgb)/35%)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                  <span className="text-[11px] font-bold text-[rgb(var(--fg-rgb)/60%)] leading-tight">Drag & drop small reference<br />images (up to 5 MB each)</span>
+                  <span className="text-[10px] text-[rgb(var(--fg-rgb)/35%)]">or click to browse</span>
+                  <input type="file" accept="image/*" multiple className="hidden"
+                    onChange={e => {
+                      const files = Array.from(e.target.files ?? []).filter(f => f.type.startsWith("image/"));
+                      setColorRefFiles(prev => [...prev, ...files].slice(0, 10));
+                      e.target.value = "";
+                    }} />
+                </label>
+                <div className="flex-1 flex flex-col">
+                  <p className="text-[10px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/35%)] font-bold mb-1.5">Heavy example or folder link</p>
+                  <textarea value={colorRefLinks} onChange={e => setColorRefLinks(e.target.value)} rows={4}
+                    placeholder="Dropbox / Google Drive / WeTransfer link, or image URLs for large examples..."
+                    className="w-full flex-1 px-3 py-2.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-xs text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)] resize-none" />
+                </div>
+              </div>
+
+              {colorRefFiles.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {colorRefFiles.map((file, idx) => (
+                    <div key={idx} className="relative">
+                      <img src={URL.createObjectURL(file)} alt={file.name}
+                        className="w-14 h-14 rounded-lg object-cover border border-[rgb(var(--fg-rgb)/10%)]" />
+                      <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[rgb(var(--fg-rgb)/80%)] text-[rgb(var(--bg-base))] text-[11px] leading-5 text-center cursor-pointer"
+                        onClick={() => setColorRefFiles(prev => prev.filter((_, i) => i !== idx))}>×</span>
+                    </div>
+                  ))}
+                  <span className="self-center text-[10px] text-[rgb(var(--fg-rgb)/40%)]">{colorRefFiles.length}/10 files — {colorRefFiles.reduce((n, f) => n + f.size, 0) / (1024 * 1024) >= 25 ? "large total size" : `${(colorRefFiles.reduce((n, f) => n + f.size, 0) / (1024 * 1024)).toFixed(1)} MB`}, emailed to us on submit</span>
+                </div>
               )}
             </div>
-          ))}
-          <button type="button" onClick={() => addColorVariant(selKey)}
-            className="text-[11px] font-bold text-[rgb(var(--accent-text))] hover:text-[rgb(var(--accent-text))] transition-colors">+ Add another variant</button>
+          </div>
+
+          <div className="border-t border-[rgb(var(--fg-rgb)/8%)] pt-3">
+            <label className="flex items-start gap-2.5 cursor-pointer">
+              <input type="checkbox" checked={hasExistingClippingPath} onChange={e => setHasExistingClippingPath(e.target.checked)}
+                className="w-4 h-4 mt-0.5 rounded accent-[rgb(var(--accent-600))]" />
+              <span className="text-[11px] font-semibold text-[rgb(var(--fg-rgb)/80%)] leading-snug">My images already have a clipping path — so I don't need a clipping or masking service, just color change on my pre-cut images.</span>
+            </label>
+            {hasExistingClippingPath && (
+              <p className="mt-2 rounded-lg bg-[rgb(var(--accent-500)/10%)] border border-[rgb(var(--accent-500)/30%)] px-3 py-2 text-[11px] font-semibold text-[rgb(var(--accent-text))]">
+                Confirmed: your images already have a clipping path. Only color change will be billed — no clipping/masking service added.
+              </p>
+            )}
+          </div>
         </div>
       );
     }
@@ -703,12 +794,7 @@ export default function ContactForm() {
                         {colorNeedsPathService && (
                           <div className="mt-5 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3">
                             <p className="text-[12px] font-bold text-amber-400">Color change needs a base service</p>
-                            <p className="text-[11px] text-[rgb(var(--fg-rgb)/60%)] mt-1">To change colors, you must also select Clipping path, Multi-clipping path, or Image masking for the same images.</p>
-                            <label className="flex items-center gap-2.5 mt-3 cursor-pointer">
-                              <input type="checkbox" checked={hasExistingClippingPath} onChange={e => setHasExistingClippingPath(e.target.checked)}
-                                className="w-4 h-4 rounded accent-[rgb(var(--accent-600))]" />
-                              <span className="text-[11px] font-semibold text-[rgb(var(--fg-rgb)/80%)]">My images already have a clipping path</span>
-                            </label>
+                            <p className="text-[11px] text-[rgb(var(--fg-rgb)/60%)] mt-1">Select Clipping path, Multi-clipping path, or Image masking — or open the color change service and confirm your images already have a clipping path.</p>
                           </div>
                         )}
                         <button type="button" onClick={() => setStep(2)} disabled={colorNeedsPathService}
@@ -1005,7 +1091,7 @@ export default function ContactForm() {
                         className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
                       <button type="submit" disabled={submitStatus === "sending" || submitStatus === "success" || colorNeedsPathService}
                         className={`flex-1 py-3.5 rounded-xl text-sm font-bold transition-all disabled:hover:scale-100 ${colorNeedsPathService ? "bg-[rgb(var(--fg-rgb)/8%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed" : "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] hover:scale-[1.01] disabled:opacity-60"}`}>
-                        {submitStatus === "sending" ? "Sending..." : "Submit Quote Request"}
+                        {submitStatus === "sending" || colorRefUploading ? (colorRefUploading ? "Uploading reference images..." : "Sending...") : "Submit Quote Request"}
                       </button>
                     </div>
                     {colorNeedsPathService && (

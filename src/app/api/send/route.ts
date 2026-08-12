@@ -51,6 +51,7 @@ export async function POST(request: Request) {
     const quoteDetails = (data.get("quote_details") as string) || "";
     const fileFormat = (data.get("file_format") as string) || "";
     const existingClipping = (data.get("existing_clipping") as string) || "";
+    const colorReferenceLinks = (data.get("color_reference_links") as string) || "";
     const imageLinks = (data.get("image_links") as string) || "";
     const paymentTiming = (data.get("payment_timing") as string) || "";
     const imageCountRaw = (data.get("image_count") as string) || "";
@@ -79,6 +80,7 @@ export async function POST(request: Request) {
     if (turnaround) lines.push(`Turnaround: ${turnaround}`);
     if (fileFormat) lines.push(`File format: ${fileFormat}`);
     if (existingClipping) lines.push(`Existing clipping path: ${existingClipping}`);
+    if (colorReferenceLinks) lines.push(`Color reference links: ${colorReferenceLinks}`);
     if (imageCountRaw) lines.push(`Image count: ${imageCountRaw}`);
     if (estimatedTotal) lines.push(`Estimated total: $${estimatedTotal}`);
     if (imageLinks) lines.push(`Image links:\n${imageLinks}`);
@@ -108,6 +110,9 @@ export async function POST(request: Request) {
         contentType: file.type || "image/jpeg",
         content: Buffer.from(await file.arrayBuffer()),
       });
+    }
+    if (attachments.length > 0) {
+      lines.push(`Attachments: ${attachments.length} file(s) — also saved in Supabase Storage under the "client-uploads" bucket / "supporting" folder (if upload succeeded).`);
     }
 
     const transporter = buildTransporter();
