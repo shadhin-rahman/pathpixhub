@@ -18,7 +18,7 @@ create policy "client_uploads_supporting_insert_anon"
   to anon, authenticated
   with check (
     bucket_id = 'client-uploads'
-    and storage.foldername(name)[1] = 'supporting'
+    and (storage.foldername(name))[1] = 'supporting'
   );
 
 -- Allow authenticated users (including admins) to READ them back.
@@ -28,7 +28,7 @@ create policy "client_uploads_supporting_select"
   to anon, authenticated
   using (
     bucket_id = 'client-uploads'
-    and storage.foldername(name)[1] = 'supporting'
+    and (storage.foldername(name))[1] = 'supporting'
   );
 
 -- Allow uploaders (and admins) to update/delete their own supporting files.
@@ -38,7 +38,7 @@ create policy "client_uploads_supporting_update_own"
   to anon, authenticated
   using (
     bucket_id = 'client-uploads'
-    and storage.foldername(name)[1] = 'supporting'
+    and (storage.foldername(name))[1] = 'supporting'
   );
 
 drop policy if exists "client_uploads_supporting_delete_own" on storage.objects;
@@ -47,5 +47,5 @@ create policy "client_uploads_supporting_delete_own"
   to anon, authenticated
   using (
     bucket_id = 'client-uploads'
-    and storage.foldername(name)[1] = 'supporting'
+    and (storage.foldername(name))[1] = 'supporting'
   );
