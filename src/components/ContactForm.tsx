@@ -174,9 +174,9 @@ export default function ContactForm() {
   const [expandedSubType, setExpandedSubType] = useState<string | null>(null);
   const [totalImageCount, setTotalImageCount] = useState(1);
   const [turnaround, setTurnaround] = useState("24");
-  const [fileFormat, setFileFormat] = useState<FileFormatId | null>(null);
-  const [fileBackground, setFileBackground] = useState<FileBackground | null>(null);
-  const [layerStructure, setLayerStructure] = useState<LayerStructure | null>(null);
+  const [fileFormat, setFileFormat] = useState<FileFormatId | null>("psd");
+  const [fileBackground, setFileBackground] = useState<FileBackground | null>("white");
+  const [layerStructure, setLayerStructure] = useState<LayerStructure | null>("multiple");
   const [fileBoxOpen, setFileBoxOpen] = useState(false);
   const [wantResize, setWantResize] = useState<"yes" | "no">("no");
   const [resizeWidth, setResizeWidth] = useState("");
