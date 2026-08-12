@@ -68,18 +68,34 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isProtectedPage = pathname.startsWith("/account") || pathname.startsWith("/admin");
 
+  const authCookieNames = request.cookies
+    .getAll()
+    .filter(
+      (cookie) => cookie.name.startsWith("sb-") && cookie.name.includes("-auth-token")
+    )
+    .map((cookie) => cookie.name);
+
+  // Diagnostic + prevent CDN caching of any session Set-Cookie on auth routes.
+  const debugHeader = `cookies=${authCookieNames.join(",") || "none"};session=${session ? "true" : "false"}`;
+  response.headers.set("x-auth-debug", debugHeader);
+  response.headers.set("Cache-Control", "private, no-store, must-revalidate");
+
   if (isProtectedPage && !session) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("next", pathname);
-    return withSessionCookies(response, NextResponse.redirect(url));
+    const redirect = withSessionCookies(response, NextResponse.redirect(url));
+    redirect.headers.set("x-auth-debug", debugHeader);
+    return redirect;
   }
 
   if ((pathname === "/login") && session) {
     const url = request.nextUrl.clone();
     url.pathname = "/account";
     url.search = "";
-    return withSessionCookies(response, NextResponse.redirect(url));
+    const redirect = withSessionCookies(response, NextResponse.redirect(url));
+    redirect.headers.set("x-auth-debug", debugHeader);
+    return redirect;
   }
 
   return response;
