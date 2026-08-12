@@ -50,6 +50,7 @@ export async function POST(request: Request) {
     const turnaround = (data.get("turnaround") as string) || "";
     const quoteDetails = (data.get("quote_details") as string) || "";
     const fileFormat = (data.get("file_format") as string) || "";
+    const existingClipping = (data.get("existing_clipping") as string) || "";
     const imageLinks = (data.get("image_links") as string) || "";
     const paymentTiming = (data.get("payment_timing") as string) || "";
     const imageCountRaw = (data.get("image_count") as string) || "";
@@ -77,6 +78,7 @@ export async function POST(request: Request) {
     if (imagePurpose) lines.push(`Image purpose: ${imagePurpose}`);
     if (turnaround) lines.push(`Turnaround: ${turnaround}`);
     if (fileFormat) lines.push(`File format: ${fileFormat}`);
+    if (existingClipping) lines.push(`Existing clipping path: ${existingClipping}`);
     if (imageCountRaw) lines.push(`Image count: ${imageCountRaw}`);
     if (estimatedTotal) lines.push(`Estimated total: $${estimatedTotal}`);
     if (imageLinks) lines.push(`Image links:\n${imageLinks}`);

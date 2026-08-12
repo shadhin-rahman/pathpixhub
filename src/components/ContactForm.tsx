@@ -170,6 +170,7 @@ const getDisplayLabel = (info: ServiceInfo, sel: ServiceSelection): string => {
 export default function ContactForm() {
   const [wantsQuote, setWantsQuote] = useState(true);
   const [selections, setSelections] = useState<Record<string, ServiceSelection>>({});
+  const [hasExistingClippingPath, setHasExistingClippingPath] = useState(false);
   const [expandedSvc, setExpandedSvc] = useState<string | null>(null);
   const [expandedSubType, setExpandedSubType] = useState<string | null>(null);
   const [totalImageCount, setTotalImageCount] = useState(1);
@@ -299,6 +300,7 @@ export default function ContactForm() {
     const info = getService(selKey);
     if (!info) return;
     setSelections(prev => ({ ...prev, [selKey]: getDefaultSelection(info) }));
+    if (isPathOrMaskingKey(selKey)) setHasExistingClippingPath(false);
   };
 
   const handleSubTypeClick = (svcId: string, subTypeId: string) => {
@@ -308,6 +310,7 @@ export default function ContactForm() {
     if (!info) return;
     setSelections(prev => ({ ...prev, [selKey]: getDefaultSelection(info) }));
     setExpandedSubType(subTypeId);
+    if (isPathOrMaskingKey(selKey)) setHasExistingClippingPath(false);
   };
 
   const selectTier = (selKey: string, tierId: string) => {
@@ -354,6 +357,18 @@ export default function ContactForm() {
   const fileFormatLabel = buildFileFormatLabel(fileFormat, fileBackground, layerStructure, resizeWidth, resizeHeight);
   const imgCount = Math.max(1, totalImageCount);
 
+  const hasColorChange = hasSelection("color-change");
+  const isPathOrMaskingKey = (key: string) =>
+    key === "path-creation:clipping-path" ||
+    key === "path-creation:multi-clipping-path" ||
+    key === "masking-bg-removal:image-masking";
+  const hasPathOrMaskingService = [
+    "path-creation:clipping-path",
+    "path-creation:multi-clipping-path",
+    "masking-bg-removal:image-masking",
+  ].some(k => hasSelection(k));
+  const colorNeedsPathService = hasColorChange && !hasPathOrMaskingService && !hasExistingClippingPath;
+
   const { subtotal, discountApplies, discountAmount, turnaroundFee, total, orderedKeys } = useMemo(() => {
     let sub = 0;
     for (const [key, sel] of Object.entries(selections)) {
@@ -389,6 +404,7 @@ export default function ContactForm() {
     if (wantAdditionalCopy) {
       lines.push(`Additional copy: $${ADDITIONAL_COPY_PRICE.toFixed(2)}/img (${additionalCopyFormat ? buildFileFormatLabel(additionalCopyFormat, additionalCopyBackground, additionalCopyLayer, "", "") : "format not chosen"})`);
     }
+    if (hasExistingClippingPath) lines.push(`Existing clipping path: Yes (client supplies already-clipped images)`);
     if (commentsText) lines.push(`Comments: ${commentsText}`);
     if (imageLinks.trim()) lines.push(`Image links:\n${imageLinks.trim()}`);
     lines.push(`Estimated total: $${total.toFixed(2)}`);
@@ -683,10 +699,23 @@ export default function ContactForm() {
                     })}
 
                     {orderedKeys.length > 0 && (
-                      <button type="button" onClick={() => setStep(2)}
-                        className="w-full mt-5 py-3.5 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] transition-all">
-                        CONTINUE →
-                      </button>
+                      <>
+                        {colorNeedsPathService && (
+                          <div className="mt-5 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3">
+                            <p className="text-[12px] font-bold text-amber-400">Color change needs a base service</p>
+                            <p className="text-[11px] text-[rgb(var(--fg-rgb)/60%)] mt-1">To change colors, you must also select Clipping path, Multi-clipping path, or Image masking for the same images.</p>
+                            <label className="flex items-center gap-2.5 mt-3 cursor-pointer">
+                              <input type="checkbox" checked={hasExistingClippingPath} onChange={e => setHasExistingClippingPath(e.target.checked)}
+                                className="w-4 h-4 rounded accent-[rgb(var(--accent-600))]" />
+                              <span className="text-[11px] font-semibold text-[rgb(var(--fg-rgb)/80%)]">My images already have a clipping path</span>
+                            </label>
+                          </div>
+                        )}
+                        <button type="button" onClick={() => setStep(2)} disabled={colorNeedsPathService}
+                          className={`w-full mt-5 py-3.5 rounded-xl font-bold text-sm transition-all ${colorNeedsPathService ? "bg-[rgb(var(--fg-rgb)/8%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed" : "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))]"}`}>
+                          CONTINUE →
+                        </button>
+                      </>
                     )}
                   </div>
                 )}
@@ -923,8 +952,8 @@ export default function ContactForm() {
                     <div className="flex gap-3">
                       <button type="button" onClick={() => setStep(1)}
                         className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
-                      <button type="button" onClick={() => setStep(3)}
-                        className="flex-1 py-3 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] transition-all">CONTINUE →</button>
+                      <button type="button" onClick={() => setStep(3)} disabled={colorNeedsPathService}
+                        className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all ${colorNeedsPathService ? "bg-[rgb(var(--fg-rgb)/8%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed" : "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))]"}`}>CONTINUE →</button>
                     </div>
                   </div>
                 )}
@@ -944,6 +973,7 @@ export default function ContactForm() {
                     <input type="hidden" name="turnaround" value={turnaroundOption?.label} />
                     <input type="hidden" name="file_format" value={fileFormatLabel} />
                     <input type="hidden" name="additional_copy" value={wantAdditionalCopy ? `Yes${additionalCopyFormat ? ` (${buildFileFormatLabel(additionalCopyFormat, additionalCopyBackground, additionalCopyLayer, "", "")})` : ""}` : "No"} />
+                    <input type="hidden" name="existing_clipping" value={hasExistingClippingPath ? "Yes - images already have a clipping path" : "No"} />
                     <input type="hidden" name="image_links" value={imageLinks} />
 
                     <div>
@@ -973,11 +1003,14 @@ export default function ContactForm() {
                     <div className="flex gap-3">
                       <button type="button" onClick={() => setStep(2)}
                         className="px-6 py-3 rounded-xl border border-[rgb(var(--fg-rgb)/15%)] text-sm font-bold text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--fg-rgb)/30%)] transition-all">← Back</button>
-                      <button type="submit" disabled={submitStatus === "sending" || submitStatus === "success"}
-                        className="flex-1 py-3.5 rounded-xl bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] hover:scale-[1.01] transition-all disabled:opacity-60 disabled:hover:scale-100">
+                      <button type="submit" disabled={submitStatus === "sending" || submitStatus === "success" || colorNeedsPathService}
+                        className={`flex-1 py-3.5 rounded-xl text-sm font-bold transition-all disabled:hover:scale-100 ${colorNeedsPathService ? "bg-[rgb(var(--fg-rgb)/8%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed" : "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] hover:scale-[1.01] disabled:opacity-60"}`}>
                         {submitStatus === "sending" ? "Sending..." : "Submit Quote Request"}
                       </button>
                     </div>
+                    {colorNeedsPathService && (
+                      <p className="text-[11px] font-bold text-amber-400 text-center">Go back and add Clipping path, Multi-clipping path, or Image masking — it is required for color change.</p>
+                    )}
                     <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] text-center">We respond within 45 minutes.</p>
                   </div>
                 )}
