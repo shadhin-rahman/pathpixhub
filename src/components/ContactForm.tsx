@@ -525,7 +525,14 @@ export default function ContactForm() {
 
           <div className="border-t border-[rgb(var(--fg-rgb)/8%)] pt-3">
             <label className="flex items-start gap-2.5 cursor-pointer">
-              <input type="checkbox" checked={hasExistingClippingPath} onChange={e => setHasExistingClippingPath(e.target.checked)}
+              <input type="checkbox" checked={hasExistingClippingPath} onChange={e => {
+                const checked = e.target.checked;
+                setHasExistingClippingPath(checked);
+                if (checked && !hasSelection("color-change")) {
+                  const colorChangeInfo = getService("color-change");
+                  if (colorChangeInfo) setSelections(prev => ({ ...prev, "color-change": getDefaultSelection(colorChangeInfo) }));
+                }
+              }}
                 className="w-4 h-4 mt-0.5 rounded accent-[rgb(var(--accent-600))]" />
               <span className="text-[11px] font-semibold text-[rgb(var(--fg-rgb)/80%)] leading-snug">My images already have a clipping path — so I don't need a clipping or masking service, just color change on my pre-cut images.</span>
             </label>
