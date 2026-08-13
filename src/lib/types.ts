@@ -13,6 +13,7 @@ export type Profile = {
 export type OrderStatus =
   | "pending"
   | "in_progress"
+  | "revision_requested"
   | "completed"
   | "delivered"
   | "cancelled";
@@ -27,6 +28,7 @@ export type Order = {
   image_count: number;
   credit_cost: number;
   status: OrderStatus;
+  revision_note: string;
   created_at: string;
   updated_at: string;
 };

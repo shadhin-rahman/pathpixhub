@@ -3,13 +3,24 @@ import { redirect } from "next/navigation";
 import { createClient, supabaseConfigured } from "@/lib/supabase/server";
 import type { Profile } from "@/lib/types";
 import { CreditCard, Package, History, LogOut, Settings } from "lucide-react";
+import RevisionButton from "./revision-button";
 
 const STATUS_STYLES: Record<string, string> = {
   pending: "bg-amber-500/10 text-amber-500 border-amber-500/20",
   in_progress: "bg-blue-500/10 text-blue-500 border-blue-500/20",
+  revision_requested: "bg-violet-500/10 text-violet-500 border-violet-500/20",
   completed: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
   delivered: "bg-[rgb(var(--accent-500)/15%)] text-[rgb(var(--accent-text))] border-[rgb(var(--accent-500)/25%)]",
   cancelled: "bg-red-500/10 text-red-500 border-red-500/20",
+};
+
+const STATUS_LABELS: Record<string, string> = {
+  pending: "Pending",
+  in_progress: "In Progress",
+  revision_requested: "Revision Requested",
+  completed: "Completed",
+  delivered: "Delivered",
+  cancelled: "Cancelled",
 };
 
 function formatDate(iso: string) {
@@ -164,25 +175,37 @@ export default async function AccountPage() {
                 {orders.map((order) => (
                   <li
                     key={order.id}
-                    className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/5%)]"
+                    className="p-4 rounded-2xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/5%)]"
                   >
-                    <div className="min-w-0">
-                      <p className="font-bold truncate">{order.title || order.service || "Order"}</p>
-                      {order.reference && (
-                        <p className="font-mono text-xs font-bold tracking-[0.08em] text-[rgb(var(--accent-text))] mt-0.5">
-                          {order.reference}
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="min-w-0">
+                        <p className="font-bold truncate">{order.title || order.service || "Order"}</p>
+                        {order.reference && (
+                          <p className="font-mono text-xs font-bold tracking-[0.08em] text-[rgb(var(--accent-text))] mt-0.5">
+                            {order.reference}
+                          </p>
+                        )}
+                        <p className="text-xs text-[rgb(var(--fg-rgb)/50%)] mt-0.5">
+                          {formatDate(order.created_at)} · {order.image_count} image{order.image_count === 1 ? "" : "s"}
+                          {order.credit_cost > 0 ? ` · ${order.credit_cost} credits` : ""}
                         </p>
-                      )}
-                      <p className="text-xs text-[rgb(var(--fg-rgb)/50%)] mt-0.5">
-                        {formatDate(order.created_at)} · {order.image_count} image{order.image_count === 1 ? "" : "s"}
-                        {order.credit_cost > 0 ? ` · ${order.credit_cost} credits` : ""}
-                      </p>
+                      </div>
+                      <span
+                        className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-bold border ${STATUS_STYLES[order.status] || STATUS_STYLES.pending}`}
+                      >
+                        {STATUS_LABELS[order.status] || order.status.replace("_", " ")}
+                      </span>
                     </div>
-                    <span
-                      className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-bold border capitalize ${STATUS_STYLES[order.status] || STATUS_STYLES.pending}`}
-                    >
-                      {order.status.replace("_", " ")}
-                    </span>
+                    {order.status === "revision_requested" && order.revision_note && (
+                      <p className="mt-2.5 text-xs text-violet-500 border-l-2 border-violet-500/40 pl-3">
+                        <span className="font-bold">Revision request:</span> {order.revision_note}
+                      </p>
+                    )}
+                    {(order.status === "completed" || order.status === "delivered") && (
+                      <div className="mt-3 flex justify-end">
+                        <RevisionButton orderId={order.id} />
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>
