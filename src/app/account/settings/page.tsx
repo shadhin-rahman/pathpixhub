@@ -14,8 +14,8 @@ function formatDate(iso: string) {
 export default async function SettingsPage() {
   if (!supabaseConfigured()) {
     return (
-      <section className="pt-40 pb-28 mesh-gradient min-h-screen">
-        <div className="max-w-3xl mx-auto px-6">
+      <section className="pb-4">
+        <div className="max-w-3xl">
           <div className="glass-card rounded-3xl p-10 text-center">
             <h1 className="text-3xl font-bold gradient-text">Account settings</h1>
             <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)]">
@@ -45,7 +45,7 @@ export default async function SettingsPage() {
   const name = p?.full_name || user.email?.split("@")[0] || "Client";
 
   return (
-    <section className="pt-40 pb-28 mesh-gradient min-h-screen">
+    <section className="pb-4">
       <AccountSettings
         name={name}
         email={user.email ?? ""}
