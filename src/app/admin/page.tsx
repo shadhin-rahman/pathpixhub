@@ -3,7 +3,6 @@ import { createClient, supabaseConfigured } from "@/lib/supabase/server";
 import type { Profile } from "@/lib/types";
 import { adjustCredits, updateOrderStatus } from "./actions";
 import { ShieldCheck, Users, Package, History, LogOut } from "lucide-react";
-import Link from "next/link";
 
 const STATUS_STYLES: Record<string, string> = {
   pending: "bg-amber-500/10 text-amber-500 border-amber-500/20",
@@ -65,13 +64,15 @@ export default async function AdminPage() {
               Manage clients &amp; credits
             </h1>
           </div>
-          <Link
-            href="/auth/signout"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full glass-card border border-[rgb(var(--fg-rgb)/10%)] text-sm font-bold hover:border-red-500/50 hover:text-red-400 transition-all self-start"
-          >
-            <LogOut className="w-4 h-4" />
-            Sign out
-          </Link>
+          <form action="/auth/signout" method="post" className="inline-flex self-start">
+            <button
+              type="submit"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full glass-card border border-[rgb(var(--fg-rgb)/10%)] text-sm font-bold hover:border-red-500/50 hover:text-red-400 transition-all cursor-pointer"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign out
+            </button>
+          </form>
         </div>
 
         {/* Customers */}

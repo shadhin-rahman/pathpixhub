@@ -98,13 +98,15 @@ export default async function AccountPage() {
                 Admin Panel
               </Link>
             )}
-            <Link
-              href="/auth/signout"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full glass-card border border-[rgb(var(--fg-rgb)/10%)] text-sm font-bold hover:border-red-500/50 hover:text-red-400 transition-all"
-            >
-              <LogOut className="w-4 h-4" />
-              Sign out
-            </Link>
+            <form action="/auth/signout" method="post" className="inline-flex">
+              <button
+                type="submit"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full glass-card border border-[rgb(var(--fg-rgb)/10%)] text-sm font-bold hover:border-red-500/50 hover:text-red-400 transition-all cursor-pointer"
+              >
+                <LogOut className="w-4 h-4" />
+                Sign out
+              </button>
+            </form>
           </div>
         </div>
 
