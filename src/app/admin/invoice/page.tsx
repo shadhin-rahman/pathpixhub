@@ -139,9 +139,9 @@ export default async function InvoicePage({
                     <td className="py-2.5 pr-3 whitespace-nowrap">{formatDate(o.created_at)}</td>
                     <td className="py-2.5 pr-3">
                       <p className="font-bold">{o.title || o.service || "Order"}</p>
-                      {o.reference && (
+                      {(o.order_reference || o.reference) && (
                         <p className="font-mono text-[10px] tracking-[0.08em] text-[rgb(var(--fg-rgb)/45%)]">
-                          {o.reference}
+                          {o.order_reference || o.reference}
                         </p>
                       )}
                     </td>

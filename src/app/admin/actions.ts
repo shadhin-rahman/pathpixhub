@@ -60,3 +60,20 @@ export async function updateOrderStatus(formData: FormData) {
   if (error) throw new Error(error.message);
   revalidatePath("/admin");
 }
+
+export async function approveQuote(formData: FormData) {
+  const supabase = await requireAdmin();
+  const orderId = formData.get("order_id") as string;
+  const raw = parseInt(formData.get("credit_cost") as string, 10);
+
+  if (!orderId) return;
+  const creditCost = Number.isFinite(raw) && raw >= 0 ? raw : 0;
+
+  const { error } = await supabase
+    .from("orders")
+    .update({ status: "quoted", credit_cost: creditCost })
+    .eq("id", orderId);
+
+  if (error) throw new Error(error.message);
+  revalidatePath("/admin");
+}

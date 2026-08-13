@@ -26,3 +26,22 @@ export async function requestRevision(formData: FormData) {
   revalidatePath("/account");
   revalidatePath("/admin");
 }
+
+export async function confirmQuote(orderId: string): Promise<{ ok: boolean; error?: string; orderRef?: string }> {
+  if (!supabaseConfigured()) return { ok: false, error: "Account system not configured." };
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "Please sign in first." };
+
+  const { data, error } = await supabase.rpc("confirm_quote", { p_order_id: orderId });
+  if (error) return { ok: false, error: error.message };
+
+  revalidatePath("/account");
+  revalidatePath("/account/quotes");
+  revalidatePath("/account/orders");
+  revalidatePath("/account/billing");
+  return { ok: true, orderRef: (data as string) || undefined };
+}

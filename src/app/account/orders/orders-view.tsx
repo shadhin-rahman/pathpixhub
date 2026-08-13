@@ -74,9 +74,9 @@ export default function OrdersView({ orders }: { orders: Order[] }) {
               <div className="flex items-center justify-between gap-4">
                 <div className="min-w-0">
                   <p className="font-bold truncate">{order.title || order.service || "Order"}</p>
-                  {order.reference && (
+                  {order.order_reference && (
                     <p className="font-mono text-xs font-bold tracking-[0.08em] text-[rgb(var(--accent-text))] mt-0.5">
-                      {order.reference}
+                      {order.order_reference}
                     </p>
                   )}
                   <p className="text-xs text-[rgb(var(--fg-rgb)/50%)] mt-0.5">

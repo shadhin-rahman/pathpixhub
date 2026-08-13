@@ -12,6 +12,7 @@ export type Profile = {
 
 export type OrderStatus =
   | "pending"
+  | "quoted"
   | "in_progress"
   | "revision_requested"
   | "completed"
@@ -22,11 +23,13 @@ export type Order = {
   id: string;
   user_id: string;
   reference: string;
+  order_reference: string;
   title: string;
   description: string;
   service: string;
   image_count: number;
   credit_cost: number;
+  kind: "quote" | "order";
   status: OrderStatus;
   revision_note: string;
   created_at: string;

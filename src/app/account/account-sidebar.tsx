@@ -15,8 +15,8 @@ import {
 } from "lucide-react";
 
 const NAV = [
+  { href: "/contact", label: "New order", icon: PlusCircle, highlighted: true },
   { href: "/account", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { href: "/contact", label: "New order", icon: PlusCircle },
   { href: "/account/orders", label: "Orders", icon: Package },
   { href: "/account/quotes", label: "Quotes", icon: FileText },
   { href: "/credits", label: "Path credits", icon: Coins },
@@ -30,6 +30,18 @@ function NavItems({ role, pathname }: { role: string; pathname: string }) {
       {NAV.map((n) => {
         const active = n.exact ? pathname === n.href : pathname.startsWith(n.href);
         const Icon = n.icon;
+        if (n.highlighted) {
+          return (
+            <Link
+              key={n.href}
+              href={n.href}
+              className="inline-flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-bold transition-all whitespace-nowrap bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] shadow-lg shadow-[rgb(var(--accent-500)/20%)]"
+            >
+              <Icon className="w-4 h-4 shrink-0" />
+              {n.label}
+            </Link>
+          );
+        }
         return (
           <Link
             key={n.href}

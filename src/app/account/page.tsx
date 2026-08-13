@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient, supabaseConfigured } from "@/lib/supabase/server";
 import type { Profile, Order } from "@/lib/types";
-import { Coins, ImageIcon, Package, Clock3, Plus, ArrowRight, Inbox } from "lucide-react";
+import { Coins, ImageIcon, Package, Clock3, Plus, ArrowRight, Inbox, FileText } from "lucide-react";
 import { STATUS_STYLES, STATUS_LABELS, formatDate } from "@/lib/order-status";
 import RevisionButton from "./revision-button";
 
@@ -40,8 +40,10 @@ export default async function AccountPage() {
 
   const p = profile as Profile | null;
   const list = (orders ?? []) as Order[];
-  const imagesEdited = list.reduce((s, o) => s + (o.image_count || 0), 0);
-  const inProgress = list.filter((o) =>
+  const confirmed = list.filter((o) => o.kind === "order");
+  const quotes = list.filter((o) => o.kind === "quote");
+  const imagesEdited = confirmed.reduce((s, o) => s + (o.image_count || 0), 0);
+  const inProgress = confirmed.filter((o) =>
     ["pending", "in_progress", "revision_requested"].includes(o.status),
   ).length;
 
@@ -77,8 +79,11 @@ export default async function AccountPage() {
         </div>
         <div className="glass-card rounded-3xl p-6">
           <Package className="w-5 h-5 text-[rgb(var(--accent-text))]" />
-          <p className="mt-4 text-3xl font-black">{list.length}</p>
-          <p className="mt-1 text-xs text-[rgb(var(--fg-rgb)/50%)]">total orders</p>
+          <p className="mt-4 text-3xl font-black">{confirmed.length}</p>
+          <p className="mt-1 text-xs text-[rgb(var(--fg-rgb)/50%)]">
+            {confirmed.length === 1 ? "order" : "orders"}
+            {quotes.length > 0 ? ` · ${quotes.length} quote${quotes.length === 1 ? "" : "s"}` : ""}
+          </p>
         </div>
         <div className="glass-card rounded-3xl p-6">
           <Clock3 className="w-5 h-5 text-[rgb(var(--accent-text))]" />
@@ -127,21 +132,29 @@ export default async function AccountPage() {
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
                     <p className="font-bold truncate">{order.title || order.service || "Order"}</p>
-                    {order.reference && (
+                    {order.kind === "order" && order.order_reference && (
                       <p className="font-mono text-xs font-bold tracking-[0.08em] text-[rgb(var(--accent-text))] mt-0.5">
-                        {order.reference}
+                        {order.order_reference}
                       </p>
                     )}
                     <p className="text-xs text-[rgb(var(--fg-rgb)/50%)] mt-0.5">
+                      {order.kind === "quote" && order.reference ? `${order.reference} · Quote · ` : ""}
                       {formatDate(order.created_at)} · {order.image_count} image{order.image_count === 1 ? "" : "s"}
                       {order.credit_cost > 0 ? ` · ${order.credit_cost} credits` : ""}
                     </p>
                   </div>
-                  <span
-                    className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-bold border ${STATUS_STYLES[order.status] || STATUS_STYLES.pending}`}
-                  >
-                    {STATUS_LABELS[order.status] || order.status.replace("_", " ")}
-                  </span>
+                  {order.kind === "quote" ? (
+                    <span className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-text))] border-[rgb(var(--accent-500)/25%)]">
+                      <FileText className="w-3 h-3" />
+                      Quote
+                    </span>
+                  ) : (
+                    <span
+                      className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-bold border ${STATUS_STYLES[order.status] || STATUS_STYLES.pending}`}
+                    >
+                      {STATUS_LABELS[order.status] || order.status.replace("_", " ")}
+                    </span>
+                  )}
                 </div>
                 {order.status === "revision_requested" && order.revision_note && (
                   <p className="mt-2.5 text-xs text-violet-500 border-l-2 border-violet-500/40 pl-3">

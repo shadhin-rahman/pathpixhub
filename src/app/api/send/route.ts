@@ -141,6 +141,8 @@ export async function POST(request: Request) {
           .insert({
             user_id: user.id,
             reference: orderRef,
+            kind: "quote",
+            order_reference: "",
             title,
             description: quoteDetails || message || "",
             service: selectedServices || services || "",

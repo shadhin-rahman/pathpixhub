@@ -12,11 +12,12 @@ import {
   Search,
   FileText,
 } from "lucide-react";
-import { adjustCredits, updateOrderStatus } from "./actions";
+import { adjustCredits, updateOrderStatus, approveQuote } from "./actions";
 import type { Profile, Order, CreditTransaction } from "@/lib/types";
 
 const STATUS_STYLES: Record<string, string> = {
   pending: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+  quoted: "bg-teal-500/10 text-teal-500 border-teal-500/20",
   in_progress: "bg-blue-500/10 text-blue-500 border-blue-500/20",
   revision_requested: "bg-violet-500/10 text-violet-500 border-violet-500/20",
   completed: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
@@ -26,6 +27,7 @@ const STATUS_STYLES: Record<string, string> = {
 
 const STATUS_LABELS: Record<string, string> = {
   pending: "Under Review",
+  quoted: "Quoted",
   in_progress: "In Progress",
   revision_requested: "Revision",
   completed: "Completed",
@@ -33,7 +35,7 @@ const STATUS_LABELS: Record<string, string> = {
   cancelled: "Cancelled",
 };
 
-const ORDER_STATUSES = ["pending", "in_progress", "revision_requested", "completed", "delivered", "cancelled"];
+const ORDER_STATUSES = ["pending", "quoted", "in_progress", "revision_requested", "completed", "delivered", "cancelled"];
 
 const RANGES = [
   { value: 0, label: "All" },
@@ -299,9 +301,14 @@ export default function AdminPanel({
                                   >
                                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
                                       <p className="font-bold text-sm">{order.title || order.service || "Order"}</p>
-                                      {order.reference && (
+                                      {order.kind === "order" && order.order_reference && (
                                         <span className="font-mono text-xs font-bold tracking-[0.08em] text-[rgb(var(--accent-text))]">
-                                          {order.reference}
+                                          {order.order_reference}
+                                        </span>
+                                      )}
+                                      {order.kind === "quote" && order.reference && (
+                                        <span className="font-mono text-xs font-bold tracking-[0.08em] text-teal-500">
+                                          {order.reference} · quote
                                         </span>
                                       )}
                                       <span
@@ -365,9 +372,14 @@ export default function AdminPanel({
                     <tr key={order.id} className="border-b border-[rgb(var(--fg-rgb)/5%)] last:border-0">
                       <td className="px-6 py-4">
                         <p className="font-bold">{order.title || order.service || "Order"}</p>
-                        {order.reference && (
+                        {order.kind === "order" && order.order_reference && (
                           <p className="font-mono text-xs font-bold tracking-[0.08em] text-[rgb(var(--accent-text))] mt-0.5">
-                            {order.reference}
+                            {order.order_reference}
+                          </p>
+                        )}
+                        {order.kind === "quote" && order.reference && (
+                          <p className="font-mono text-xs font-bold tracking-[0.08em] text-teal-500 mt-0.5">
+                            {order.reference} · quote
                           </p>
                         )}
                         <p className="text-xs text-[rgb(var(--fg-rgb)/50%)] max-w-[220px] truncate">{order.description}</p>
@@ -380,21 +392,59 @@ export default function AdminPanel({
                       <td className="px-6 py-4">{order.image_count}</td>
                       <td className="px-6 py-4 font-bold">{order.credit_cost}</td>
                       <td className="px-6 py-4">
-                        <form action={updateOrderStatus} className="flex items-center gap-2">
-                          <input type="hidden" name="order_id" value={order.id} />
-                          <select
-                            name="status"
-                            defaultValue={order.status}
-                            onChange={(e) => e.target.form?.requestSubmit()}
-                            className={`px-3 py-1.5 rounded-full text-xs font-bold border cursor-pointer outline-none ${STATUS_STYLES[order.status] || STATUS_STYLES.pending}`}
-                          >
-                            {ORDER_STATUSES.map((s) => (
-                              <option key={s} value={s} className="bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))]">
-                                {STATUS_LABELS[s] || s.replace("_", " ")}
-                              </option>
-                            ))}
-                          </select>
-                        </form>
+                        {order.kind === "quote" ? (
+                          <div className="flex flex-col gap-1.5 items-start">
+                            <form action={approveQuote} className="flex items-center gap-1.5">
+                              <input type="hidden" name="order_id" value={order.id} />
+                              <input
+                                type="number"
+                                name="credit_cost"
+                                defaultValue={order.credit_cost || 0}
+                                min={0}
+                                title="Final price in credits"
+                                className="w-20 px-2 py-1.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] outline-none focus:border-[rgb(var(--accent-500)/60%)] transition-colors text-xs"
+                              />
+                              <button
+                                type="submit"
+                                disabled={order.status === "quoted"}
+                                className="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-teal-500 text-white hover:opacity-90 transition-all disabled:opacity-50 shrink-0"
+                              >
+                                {order.status === "quoted" ? "Approved" : "Approve"}
+                              </button>
+                            </form>
+                            <form action={updateOrderStatus} className="flex items-center gap-2">
+                              <input type="hidden" name="order_id" value={order.id} />
+                              <select
+                                name="status"
+                                defaultValue={order.status}
+                                onChange={(e) => e.target.form?.requestSubmit()}
+                                className={`px-3 py-1.5 rounded-full text-xs font-bold border cursor-pointer outline-none ${STATUS_STYLES[order.status] || STATUS_STYLES.pending}`}
+                              >
+                                {ORDER_STATUSES.map((s) => (
+                                  <option key={s} value={s} className="bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))]">
+                                    {STATUS_LABELS[s] || s.replace("_", " ")}
+                                  </option>
+                                ))}
+                              </select>
+                            </form>
+                          </div>
+                        ) : (
+                          <form action={updateOrderStatus} className="flex items-center gap-2">
+                            <input type="hidden" name="order_id" value={order.id} />
+                            <select
+                              name="status"
+                              defaultValue={order.status}
+                              onChange={(e) => e.target.form?.requestSubmit()}
+                              className={`px-3 py-1.5 rounded-full text-xs font-bold border cursor-pointer outline-none ${STATUS_STYLES[order.status] || STATUS_STYLES.pending}`}
+                            >
+                              {ORDER_STATUSES.map((s) => (
+                                <option key={s} value={s} className="bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))]">
+                                  {STATUS_LABELS[s] || s.replace("_", " ")}
+                                </option>
+                              ))}
+                            </select>
+                          </form>
+                        )}
                       </td>
                       <td className="px-6 py-4 text-[rgb(var(--fg-rgb)/55%)]">{formatDate(order.created_at)}</td>
                     </tr>
