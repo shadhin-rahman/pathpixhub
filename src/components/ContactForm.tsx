@@ -703,14 +703,26 @@ export default function ContactForm() {
                           className={`rounded-2xl border transition-all overflow-hidden ${hasAnySelection ? "border-[rgb(var(--accent-500)/40%)] bg-[rgb(var(--accent-500)/2%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)]"}`}>
                           <div className="flex items-center gap-3 px-5 py-4 cursor-pointer select-none"
                             onClick={() => {
-                              if (!svc.subTypes && svc.type === "none") handleSelect(svc.id);
-                              else toggleExpand(svc.id);
+                              if (!svc.subTypes && svc.type === "none") {
+                                handleSelect(svc.id);
+                              } else if (!svc.subTypes && svc.type === "color-variant") {
+                                if (hasSelection(svc.id)) {
+                                  removeSelection(svc.id);
+                                  setHasExistingClippingPath(false);
+                                  setExpandedSvc(null);
+                                } else {
+                                  handleSelect(svc.id);
+                                  setExpandedSvc(svc.id);
+                                }
+                              } else {
+                                toggleExpand(svc.id);
+                              }
                             }}>
                             <div className="flex-1">
                               <p className="font-semibold text-sm text-[rgb(var(--fg-rgb))]">{svc.label}</p>
                               {summaryLine && <p className="text-[10px] text-[rgb(var(--accent-text))] mt-0.5 font-medium">{summaryLine}</p>}
                             </div>
-                            {(!svc.subTypes && svc.type === "none") ? (
+                            {(!svc.subTypes && (svc.type === "none" || svc.type === "color-variant")) ? (
                               <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${hasAnySelection ? "bg-[rgb(var(--accent-500))] border-[rgb(var(--accent-500))]" : "border-[rgb(var(--fg-rgb)/20%)]"}`}>
                                 {hasAnySelection && <svg className="w-3 h-3 text-[rgb(var(--accent-contrast))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
                               </div>
