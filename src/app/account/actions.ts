@@ -1,30 +1,42 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient, supabaseConfigured } from "@/lib/supabase/server";
 
-export async function requestRevision(formData: FormData) {
-  if (!supabaseConfigured()) return;
+export async function requestRevision(
+  orderId: string,
+  note: string,
+  links: string[],
+): Promise<{ ok: boolean; error?: string }> {
+  if (!supabaseConfigured()) return { ok: false, error: "Account system not configured." };
 
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  if (!user) return { ok: false, error: "Please sign in first." };
 
-  const orderId = formData.get("order_id") as string;
-  const note = (formData.get("note") as string) || "";
-  if (!orderId) return;
+  const cleanLinks = (links || [])
+    .map((l) => l.trim())
+    .filter((l) => /^https?:\/\//i.test(l));
+
+  const parts = [note.trim()];
+  if (cleanLinks.length > 0) {
+    parts.push("", "Reference links:");
+    parts.push(...cleanLinks.map((l) => `- ${l}`));
+  }
+  const fullNote = parts.join("\n").trim() || "No details provided";
 
   const { error } = await supabase.rpc("request_revision", {
     p_order_id: orderId,
-    p_note: note,
+    p_note: fullNote,
   });
-  if (error) throw new Error(error.message);
+  if (error) return { ok: false, error: error.message };
 
   revalidatePath("/account");
+  revalidatePath("/account/orders");
   revalidatePath("/admin");
+  return { ok: true };
 }
 
 export async function confirmQuote(orderId: string): Promise<{ ok: boolean; error?: string; orderRef?: string }> {

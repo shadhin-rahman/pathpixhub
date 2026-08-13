@@ -163,7 +163,7 @@ export default async function AccountPage() {
                 )}
                 {(order.status === "completed" || order.status === "delivered") && (
                   <div className="mt-3 flex justify-end">
-                    <RevisionButton orderId={order.id} />
+                    <RevisionButton orderId={order.id} reference={order.order_reference || order.reference} />
                   </div>
                 )}
               </li>
