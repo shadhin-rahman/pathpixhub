@@ -3,17 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-
-const BUNDLES = [
-  { price: 25, paid: 25, free: 1, credits: 26, per: 0.96 },
-  { price: 50, paid: 50, free: 4, credits: 54, per: 0.93 },
-  { price: 100, paid: 100, free: 13, credits: 113, per: 0.88 },
-  { price: 250, paid: 250, free: 40, credits: 290, per: 0.86, popular: true },
-  { price: 500, paid: 500, free: 100, credits: 600, per: 0.83 },
-  { price: 1000, paid: 1000, free: 250, credits: 1250, per: 0.8 },
-  { price: 2500, paid: 2500, free: 700, credits: 3200, per: 0.78 },
-  { price: 5000, paid: 5000, free: 1550, credits: 6550, per: 0.76 },
-];
+import CreditBundleSelector from "@/components/CreditBundleSelector";
 
 const FAQS = [
   {
@@ -124,38 +114,7 @@ export default function CreditsPage() {
             <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)]">Pick a bigger pack and we&apos;ll top you up with bonus credits. <span className="font-bold text-[rgb(var(--fg-rgb))]">1 credit = $1</span> toward your orders.</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {BUNDLES.map((b, i) => (
-              <motion.div key={b.price}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                className={`relative rounded-3xl border-2 p-6 flex flex-col bg-[var(--bg)] transition-all hover:-translate-y-1 hover:shadow-xl ${b.popular ? "border-[rgb(var(--accent-500)/60%)] shadow-lg shadow-[rgb(var(--accent-500)/10%)]" : "border-[rgb(var(--fg-rgb)/8%)]"}`}
-              >
-                {b.popular && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-bold px-3 py-1 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow">
-                    Most Popular
-                  </span>
-                )}
-                <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-extrabold text-[rgb(var(--fg-rgb))]">${b.price.toLocaleString()}</span>
-                  <span className="text-sm text-[rgb(var(--fg-rgb)/40%)] font-semibold">→</span>
-                  <span className="text-3xl font-extrabold text-[rgb(var(--accent-text))]">{b.credits.toLocaleString()} credits</span>
-                </div>
-                <p className="mt-2 text-xs text-[rgb(var(--fg-rgb)/50%)]">
-                  <span className="font-bold text-[rgb(var(--fg-rgb)/75%)]">${b.paid.toLocaleString()} paid</span> + <span className="font-bold text-[rgb(var(--accent-text))]">{b.free.toLocaleString()} free</span>
-                </p>
-                <div className="mt-4 rounded-xl text-center py-2 text-sm font-bold border bg-[rgb(var(--fg-rgb)/4%)] border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb)/70%)]">
-                  ${b.per.toFixed(2)} / credit
-                </div>
-                <Link href={`/payment?plan=${encodeURIComponent("Credit Pack")}&amount=${b.price}&desc=${encodeURIComponent(`${b.credits.toLocaleString()} credits ($${b.paid.toLocaleString()} paid + ${b.free.toLocaleString()} bonus)`)}`}
-                  className="mt-auto pt-5 block text-center py-3 rounded-xl font-bold text-sm transition-all bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] shadow-lg shadow-[rgb(var(--accent-500)/15%)]">
-                  Buy ${b.price.toLocaleString()} pack
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+          <CreditBundleSelector />
 
           <p className="mt-8 text-center text-xs text-[rgb(var(--fg-rgb)/45%)]">
             Prefer a monthly credit plan instead? See{" "}

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
 import { createClient, supabaseConfigured } from "@/lib/supabase/server";
+import { buildTransporter } from "@/lib/mail";
 import { formatOrderRef, isOrderRef } from "@/lib/orderRef";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Order } from "@/lib/types";
@@ -10,19 +10,6 @@ export const dynamic = "force-dynamic";
 
 const TO_EMAIL = process.env.TO_EMAIL || "pathpixhub@gmail.com";
 const SMTP_USER = process.env.SMTP_USER || "pathpixhub@gmail.com";
-const SMTP_PASS = process.env.SMTP_PASS || "";
-
-function buildTransporter() {
-  return nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: SMTP_USER,
-      pass: SMTP_PASS,
-    },
-  });
-}
 
 async function nextQuoteNumber(supabase?: SupabaseClient | null): Promise<number | null> {
   try {

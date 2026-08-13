@@ -97,16 +97,30 @@ const FILE_FORMAT_LABELS: Record<FileFormatId, string> = {
 
 const formatAllowsLayers = (fmt: FileFormatId): boolean => fmt === "psd" || fmt === "tif";
 
-const FILE_FORMAT_OPTION_LIST: { fmt: FileFormatId; bg: FileBackground }[] = [
-  { fmt: "psd", bg: "white" }, { fmt: "psd", bg: "transparent" }, { fmt: "psd", bg: "original" }, { fmt: "psd", bg: "mask" },
-  { fmt: "tif", bg: "white" }, { fmt: "tif", bg: "transparent" }, { fmt: "tif", bg: "original" }, { fmt: "tif", bg: "mask" },
-  { fmt: "jpg", bg: "original" }, { fmt: "jpg", bg: "white" },
-  { fmt: "png", bg: "transparent" }, { fmt: "png", bg: "white" },
-];
+const FORMAT_BACKGROUNDS: Record<FileFormatId, FileBackground[]> = {
+  jpg: ["white", "original"],
+  png: ["white", "transparent"],
+  psd: ["white", "transparent", "original", "mask"],
+  tif: ["white", "transparent", "original", "mask"],
+};
 
-const buildFileFormatLabel = (fmt: FileFormatId | null, bg: FileBackground | null, layer: LayerStructure | null, resizeW: string, resizeH: string): string => {
-  if (!fmt || !bg) return "Not selected";
-  const base = `${FILE_FORMAT_LABELS[fmt]} — ${BACKGROUND_LABELS[bg]}`;
+const ALL_BACKGROUNDS: FileBackground[] = ["white", "transparent", "original", "mask"];
+
+const allowedBackgroundsFor = (formats: FileFormatId[]): FileBackground[] =>
+  ALL_BACKGROUNDS.filter((bg) => formats.every((f) => FORMAT_BACKGROUNDS[f].includes(bg)));
+
+const layersAllowedFor = (formats: FileFormatId[]): boolean =>
+  formats.length === 1 && formatAllowsLayers(formats[0]);
+
+const buildFileFormatLabel = (
+  formats: FileFormatId[],
+  bg: FileBackground | null,
+  layer: LayerStructure | null,
+  resizeW: string,
+  resizeH: string,
+): string => {
+  if (!formats || formats.length === 0 || !bg) return "Not selected";
+  const base = `${formats.map((f) => FILE_FORMAT_LABELS[f]).join(", ")} — ${BACKGROUND_LABELS[bg]}`;
   const layerPart = layer ? `, ${layer === "multiple" ? "Multiple Layer" : "Single Layer"}` : "";
   const rw = parseInt(resizeW, 10), rh = parseInt(resizeH, 10);
   const resizePart = rw > 0 && rh > 0 ? `, Resize: ${rw}x${rh} px` : "";
@@ -176,10 +190,11 @@ export default function ContactForm() {
   const [expandedSubType, setExpandedSubType] = useState<string | null>(null);
   const [totalImageCount, setTotalImageCount] = useState(1);
   const [turnaround, setTurnaround] = useState("24");
-  const [fileFormat, setFileFormat] = useState<FileFormatId | null>("psd");
+  const [fileFormats, setFileFormats] = useState<FileFormatId[]>(["psd"]);
   const [fileBackground, setFileBackground] = useState<FileBackground | null>("white");
   const [layerStructure, setLayerStructure] = useState<LayerStructure | null>("multiple");
-  const [fileBoxOpen, setFileBoxOpen] = useState(false);
+  const [formatBoxOpen, setFormatBoxOpen] = useState(false);
+  const [backgroundBoxOpen, setBackgroundBoxOpen] = useState(false);
   const [wantResize, setWantResize] = useState<"yes" | "no">("no");
   const [resizeWidth, setResizeWidth] = useState("");
   const [resizeHeight, setResizeHeight] = useState("");
@@ -187,7 +202,8 @@ export default function ContactForm() {
   const [additionalCopyFormat, setAdditionalCopyFormat] = useState<FileFormatId | null>(null);
   const [additionalCopyBackground, setAdditionalCopyBackground] = useState<FileBackground | null>(null);
   const [additionalCopyLayer, setAdditionalCopyLayer] = useState<LayerStructure | null>(null);
-  const [additionalCopyBoxOpen, setAdditionalCopyBoxOpen] = useState(false);
+  const [additionalCopyFormatOpen, setAdditionalCopyFormatOpen] = useState(false);
+  const [additionalCopyBackgroundOpen, setAdditionalCopyBackgroundOpen] = useState(false);
   const [step, setStep] = useState(1);
   const [countryCode, setCountryCode] = useState<string | null>(null);
   const [countryLoaded, setCountryLoaded] = useState(false);
@@ -205,6 +221,25 @@ export default function ContactForm() {
   const [submitError, setSubmitError] = useState("");
   const [lastOrderRef, setLastOrderRef] = useState("");
   const [paymentTiming, setPaymentTiming] = useState<"now" | "7" | "15" | "monthly">("now");
+
+  const toggleFormat = (fmt: FileFormatId) => {
+    const prev = fileFormats;
+    const next = prev.includes(fmt) ? prev.filter((f) => f !== fmt) : [...prev, fmt];
+    if (next.length === 0) return;
+    setFileFormats(next);
+    const allowed = allowedBackgroundsFor(next);
+    if (fileBackground && !allowed.includes(fileBackground)) setFileBackground(allowed[0]);
+    if (next.length > 1 || !formatAllowsLayers(next[0])) setLayerStructure("single");
+  };
+
+  const chooseAdditionalFormat = (fmt: FileFormatId) => {
+    setAdditionalCopyFormat(fmt);
+    const allowed = allowedBackgroundsFor([fmt]);
+    if (additionalCopyBackground && !allowed.includes(additionalCopyBackground)) {
+      setAdditionalCopyBackground(allowed[0]);
+    }
+    if (!formatAllowsLayers(fmt)) setAdditionalCopyLayer("single");
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -382,7 +417,7 @@ export default function ContactForm() {
 
   const turnaroundOption = TURNAROUND_OPTIONS.find(t => t.id === turnaround);
   const turnaroundSurcharge = turnaroundOption?.surcharge ?? 0;
-  const fileFormatLabel = buildFileFormatLabel(fileFormat, fileBackground, layerStructure, resizeWidth, resizeHeight);
+  const fileFormatLabel = buildFileFormatLabel(fileFormats, fileBackground, layerStructure, resizeWidth, resizeHeight);
   const imgCount = Math.max(1, totalImageCount);
 
   const hasColorChange = hasSelection("color-change");
@@ -430,7 +465,7 @@ export default function ContactForm() {
     if (turnaroundSurcharge !== 0) lines.push(`Turnaround (${TURNAROUND_OPTIONS.find(t => t.id === turnaround)?.label ?? ""}): $${turnaroundFee >= 0 ? "+" : ""}${turnaroundFee.toFixed(2)}`);
     lines.push(`File format: ${fileFormatLabel}`);
     if (wantAdditionalCopy) {
-      lines.push(`Additional copy: $${ADDITIONAL_COPY_PRICE.toFixed(2)}/img (${additionalCopyFormat ? buildFileFormatLabel(additionalCopyFormat, additionalCopyBackground, additionalCopyLayer, "", "") : "format not chosen"})`);
+      lines.push(`Additional copy: $${ADDITIONAL_COPY_PRICE.toFixed(2)}/img (${additionalCopyFormat ? buildFileFormatLabel([additionalCopyFormat], additionalCopyBackground, additionalCopyLayer, "", "") : "format not chosen"})`);
     }
     if (hasExistingClippingPath) lines.push(`Existing clipping path: Yes (client supplies already-clipped images)`);
     if (colorRefFiles.length > 0) lines.push(`Color reference images: ${colorRefFiles.length} attached image(s)`);
@@ -852,58 +887,83 @@ export default function ContactForm() {
                     </div>
 
                     <div>
-                      <button type="button" onClick={() => setFileBoxOpen(!fileBoxOpen)}
+                      <button type="button" onClick={() => setFormatBoxOpen(!formatBoxOpen)}
                         className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-left transition-colors hover:border-[rgb(var(--accent-500)/40%)]">
                         <span className="flex items-center gap-2 min-w-0">
                           <span className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold shrink-0">File format</span>
-                          <span className={`truncate font-semibold ${fileFormat ? "text-[rgb(var(--fg-rgb))]" : "text-[rgb(var(--fg-rgb)/30%)]"} ${fileFormat ? "" : "text-xs"}`}>
-                            {fileFormat ? buildFileFormatLabel(fileFormat, fileBackground, layerStructure, resizeWidth, resizeHeight) : "Select a file format and background"}
+                          <span className="truncate font-semibold text-[rgb(var(--fg-rgb))]">
+                            {fileFormats.map((f) => FILE_FORMAT_LABELS[f]).join(", ")}
                           </span>
                         </span>
-                        <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform shrink-0 ${fileBoxOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                        <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform shrink-0 ${formatBoxOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                       </button>
 
-                      {fileBoxOpen && (
+                      {formatBoxOpen && (
                         <div className="mt-2 rounded-xl border border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] overflow-hidden">
-                          <div className="p-2.5 border-b border-[rgb(var(--fg-rgb)/8%)]">
-                            <p className="text-[10px] uppercase tracking-wider text-[rgb(var(--accent-text))] font-bold px-2 mb-1.5">PSD & TIF</p>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                              {FILE_FORMAT_OPTION_LIST.filter(o => o.fmt === "psd" || o.fmt === "tif").map(o => {
-                                const isActive = fileFormat === o.fmt && fileBackground === o.bg;
-                                return (
-                                  <button key={`${o.fmt}-${o.bg}`} type="button"
-                                    onClick={() => { setFileFormat(o.fmt); setFileBackground(o.bg); if (!formatAllowsLayers(o.fmt)) setLayerStructure("single"); }}
-                                    className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-semibold border transition-all ${
-                                      isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"
-                                    }`}>
-                                    <span className={`w-3.5 h-3.5 rounded-full border-2 grid place-items-center shrink-0 ${isActive ? "border-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/25%)]"}`}>
-                                      {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-contrast))]" />}
-                                    </span>
-                                    {FILE_FORMAT_LABELS[o.fmt]} — {BACKGROUND_LABELS[o.bg]}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          </div>
                           <div className="p-2.5">
-                            <p className="text-[10px] uppercase tracking-wider text-[rgb(var(--accent-text))] font-bold px-2 mb-1.5">JPG & PNG</p>
+                            <p className="text-[10px] uppercase tracking-wider text-[rgb(var(--accent-text))] font-bold px-2 mb-1.5">Choose one or more formats</p>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                              {FILE_FORMAT_OPTION_LIST.filter(o => o.fmt === "jpg" || o.fmt === "png").map(o => {
-                                const isActive = fileFormat === o.fmt && fileBackground === o.bg;
+                              {(Object.keys(FILE_FORMAT_LABELS) as FileFormatId[]).map((fmt) => {
+                                const isActive = fileFormats.includes(fmt);
                                 return (
-                                  <button key={`${o.fmt}-${o.bg}`} type="button"
-                                    onClick={() => { setFileFormat(o.fmt); setFileBackground(o.bg); if (!formatAllowsLayers(o.fmt)) setLayerStructure("single"); }}
+                                  <button key={fmt} type="button"
+                                    onClick={() => toggleFormat(fmt)}
                                     className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-semibold border transition-all ${
                                       isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"
                                     }`}>
                                     <span className={`w-3.5 h-3.5 rounded-full border-2 grid place-items-center shrink-0 ${isActive ? "border-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/25%)]"}`}>
                                       {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-contrast))]" />}
                                     </span>
-                                    {FILE_FORMAT_LABELS[o.fmt]} — {BACKGROUND_LABELS[o.bg]}
+                                    {FILE_FORMAT_LABELS[fmt]}
                                   </button>
                                 );
                               })}
                             </div>
+                            <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] px-2 mt-1.5">You can select multiple formats. Background options below update automatically.</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      <button type="button" onClick={() => setBackgroundBoxOpen(!backgroundBoxOpen)}
+                        className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-left transition-colors hover:border-[rgb(var(--accent-500)/40%)]">
+                        <span className="flex items-center gap-2 min-w-0">
+                          <span className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold shrink-0">Background</span>
+                          <span className={`truncate font-semibold ${fileBackground ? "text-[rgb(var(--fg-rgb))]" : "text-[rgb(var(--fg-rgb)/30%)]"}`}>
+                            {fileBackground ? BACKGROUND_LABELS[fileBackground] : "Select a background"}
+                          </span>
+                        </span>
+                        <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform shrink-0 ${backgroundBoxOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                      </button>
+
+                      {backgroundBoxOpen && (
+                        <div className="mt-2 rounded-xl border border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] overflow-hidden">
+                          <div className="p-2.5 grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                            {(() => {
+                              const onlyPng = fileFormats.length === 1 && fileFormats[0] === "png";
+                              const allowed = allowedBackgroundsFor(fileFormats);
+                              const opts = onlyPng
+                                ? ALL_BACKGROUNDS.map((bg) => ({ bg, enabled: allowed.includes(bg) }))
+                                : allowed.map((bg) => ({ bg, enabled: true }));
+                              return opts.map(({ bg, enabled }) => {
+                                const isActive = fileBackground === bg;
+                                return (
+                                  <button key={bg} type="button" disabled={!enabled}
+                                    onClick={() => setFileBackground(bg)}
+                                    className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-semibold border transition-all ${
+                                      isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]"
+                                      : !enabled ? "border-[rgb(var(--fg-rgb)/6%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"
+                                      : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"
+                                    }`}>
+                                    <span className={`w-3.5 h-3.5 rounded-full border-2 grid place-items-center shrink-0 ${isActive ? "border-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/25%)]"}`}>
+                                      {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-contrast))]" />}
+                                    </span>
+                                    {BACKGROUND_LABELS[bg]}
+                                  </button>
+                                );
+                              });
+                            })()}
                           </div>
                         </div>
                       )}
@@ -918,14 +978,16 @@ export default function ContactForm() {
                           Single layer
                         </button>
                         <button type="button"
-                          onClick={() => fileFormat && formatAllowsLayers(fileFormat) && setLayerStructure("multiple")}
-                          className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${layerStructure === "multiple" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : fileFormat && formatAllowsLayers(fileFormat) ? "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]" : "border-[rgb(var(--fg-rgb)/6%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"}`}>
+                          onClick={() => layersAllowedFor(fileFormats) && setLayerStructure("multiple")}
+                          className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${layerStructure === "multiple" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : layersAllowedFor(fileFormats) ? "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]" : "border-[rgb(var(--fg-rgb)/6%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"}`}>
                           Multiple layer
                         </button>
                       </div>
-                      {fileFormat && !formatAllowsLayers(fileFormat) && (
-                        <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-1.5">{FILE_FORMAT_LABELS[fileFormat]} always uses a single layer.</p>
-                      )}
+                      {fileFormats.length > 1 ? (
+                        <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-1.5">Multiple formats are delivered as single layer.</p>
+                      ) : !formatAllowsLayers(fileFormats[0]) ? (
+                        <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-1.5">{FILE_FORMAT_LABELS[fileFormats[0]]} always uses a single layer.</p>
+                      ) : null}
                     </div>
 
                     <div>
@@ -965,76 +1027,99 @@ export default function ContactForm() {
                         <span className="text-[10px] text-[rgb(var(--fg-rgb)/35%)]">(${ADDITIONAL_COPY_PRICE.toFixed(2)}/img) — optional</span>
                       </div>
                       {wantAdditionalCopy && (
-                        <div className="mt-3">
-                          <button type="button" onClick={() => setAdditionalCopyBoxOpen(!additionalCopyBoxOpen)}
-                            className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-left transition-colors hover:border-[rgb(var(--accent-500)/40%)]">
-                            <span className="flex items-center gap-2 min-w-0">
-                              <span className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold shrink-0">Additional copy format</span>
-                              <span className={`truncate font-semibold ${additionalCopyFormat ? "text-[rgb(var(--fg-rgb))]" : "text-[rgb(var(--fg-rgb)/30%)] text-xs"}`}>
-                                {additionalCopyFormat ? buildFileFormatLabel(additionalCopyFormat, additionalCopyBackground, additionalCopyLayer, "", "") : "Select file format and background"}
+                        <div className="mt-3 space-y-3">
+                          <div>
+                            <button type="button" onClick={() => setAdditionalCopyFormatOpen(!additionalCopyFormatOpen)}
+                              className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-left transition-colors hover:border-[rgb(var(--accent-500)/40%)]">
+                              <span className="flex items-center gap-2 min-w-0">
+                                <span className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold shrink-0">Additional copy format</span>
+                                <span className={`truncate font-semibold ${additionalCopyFormat ? "text-[rgb(var(--fg-rgb))]" : "text-[rgb(var(--fg-rgb)/30%)] text-xs"}`}>
+                                  {additionalCopyFormat ? FILE_FORMAT_LABELS[additionalCopyFormat] : "Select a format"}
+                                </span>
                               </span>
-                            </span>
-                            <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform shrink-0 ${additionalCopyBoxOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                          </button>
+                              <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform shrink-0 ${additionalCopyFormatOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                            </button>
+                            {additionalCopyFormatOpen && (
+                              <div className="mt-2 rounded-xl border border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] overflow-hidden">
+                                <div className="p-2.5 grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                                  {(Object.keys(FILE_FORMAT_LABELS) as FileFormatId[]).map((fmt) => {
+                                    const isActive = additionalCopyFormat === fmt;
+                                    return (
+                                      <button key={fmt} type="button"
+                                        onClick={() => chooseAdditionalFormat(fmt)}
+                                        className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-semibold border transition-all ${
+                                          isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"
+                                        }`}>
+                                        <span className={`w-3.5 h-3.5 rounded-full border-2 grid place-items-center shrink-0 ${isActive ? "border-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/25%)]"}`}>
+                                          {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-contrast))]" />}
+                                        </span>
+                                        {FILE_FORMAT_LABELS[fmt]}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
+                          </div>
 
-                          {additionalCopyBoxOpen && (
-                            <div className="mt-2 rounded-xl border border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] overflow-hidden">
-                              <div className="p-2.5 border-b border-[rgb(var(--fg-rgb)/8%)]">
-                                <p className="text-[10px] uppercase tracking-wider text-[rgb(var(--accent-text))] font-bold px-2 mb-1.5">PSD & TIF</p>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                                  {FILE_FORMAT_OPTION_LIST.filter(o => o.fmt === "psd" || o.fmt === "tif").map(o => {
-                                    const isActive = additionalCopyFormat === o.fmt && additionalCopyBackground === o.bg;
-                                    return (
-                                      <button key={`${o.fmt}-${o.bg}`} type="button"
-                                        onClick={() => { setAdditionalCopyFormat(o.fmt); setAdditionalCopyBackground(o.bg); if (!formatAllowsLayers(o.fmt)) setAdditionalCopyLayer("single"); }}
-                                        className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-semibold border transition-all ${
-                                          isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"
-                                        }`}>
-                                        <span className={`w-3.5 h-3.5 rounded-full border-2 grid place-items-center shrink-0 ${isActive ? "border-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/25%)]"}`}>
-                                          {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-contrast))]" />}
-                                        </span>
-                                        {FILE_FORMAT_LABELS[o.fmt]} — {BACKGROUND_LABELS[o.bg]}
-                                      </button>
-                                    );
-                                  })}
+                          <div>
+                            <button type="button" onClick={() => setAdditionalCopyBackgroundOpen(!additionalCopyBackgroundOpen)}
+                              className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-left transition-colors hover:border-[rgb(var(--accent-500)/40%)]">
+                              <span className="flex items-center gap-2 min-w-0">
+                                <span className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold shrink-0">Background</span>
+                                <span className={`truncate font-semibold ${additionalCopyBackground ? "text-[rgb(var(--fg-rgb))]" : "text-[rgb(var(--fg-rgb)/30%)] text-xs"}`}>
+                                  {additionalCopyBackground ? BACKGROUND_LABELS[additionalCopyBackground] : "Select a background"}
+                                </span>
+                              </span>
+                              <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform shrink-0 ${additionalCopyBackgroundOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                            </button>
+                            {additionalCopyBackgroundOpen && (
+                              <div className="mt-2 rounded-xl border border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] overflow-hidden">
+                                <div className="p-2.5 grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                                  {(() => {
+                                    const formats = additionalCopyFormat ? [additionalCopyFormat] : [];
+                                    const onlyPng = additionalCopyFormat === "png";
+                                    const allowed = allowedBackgroundsFor(formats);
+                                    const opts = onlyPng
+                                      ? ALL_BACKGROUNDS.map((bg) => ({ bg, enabled: allowed.includes(bg) }))
+                                      : allowed.map((bg) => ({ bg, enabled: true }));
+                                    return opts.map(({ bg, enabled }) => {
+                                      const isActive = additionalCopyBackground === bg;
+                                      return (
+                                        <button key={bg} type="button" disabled={!enabled}
+                                          onClick={() => setAdditionalCopyBackground(bg)}
+                                          className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-semibold border transition-all ${
+                                            isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]"
+                                            : !enabled ? "border-[rgb(var(--fg-rgb)/6%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"
+                                            : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"
+                                          }`}>
+                                          <span className={`w-3.5 h-3.5 rounded-full border-2 grid place-items-center shrink-0 ${isActive ? "border-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/25%)]"}`}>
+                                            {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-contrast))]" />}
+                                          </span>
+                                          {BACKGROUND_LABELS[bg]}
+                                        </button>
+                                      );
+                                    });
+                                  })()}
                                 </div>
                               </div>
-                              <div className="p-2.5 border-b border-[rgb(var(--fg-rgb)/8%)]">
-                                <p className="text-[10px] uppercase tracking-wider text-[rgb(var(--accent-text))] font-bold px-2 mb-1.5">JPG & PNG</p>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                                  {FILE_FORMAT_OPTION_LIST.filter(o => o.fmt === "jpg" || o.fmt === "png").map(o => {
-                                    const isActive = additionalCopyFormat === o.fmt && additionalCopyBackground === o.bg;
-                                    return (
-                                      <button key={`${o.fmt}-${o.bg}`} type="button"
-                                        onClick={() => { setAdditionalCopyFormat(o.fmt); setAdditionalCopyBackground(o.bg); if (!formatAllowsLayers(o.fmt)) setAdditionalCopyLayer("single"); }}
-                                        className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-semibold border transition-all ${
-                                          isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"
-                                        }`}>
-                                        <span className={`w-3.5 h-3.5 rounded-full border-2 grid place-items-center shrink-0 ${isActive ? "border-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/25%)]"}`}>
-                                          {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-contrast))]" />}
-                                        </span>
-                                        {FILE_FORMAT_LABELS[o.fmt]} — {BACKGROUND_LABELS[o.bg]}
-                                      </button>
-                                    );
-                                  })}
-                                </div>
-                              </div>
-                              <div className="p-3">
-                                <p className="text-[10px] uppercase tracking-wider text-[rgb(var(--accent-text))] font-bold mb-2">Layer structure</p>
-                                <div className="grid grid-cols-2 gap-2">
-                                  <button type="button" onClick={() => setAdditionalCopyLayer("single")}
-                                    className={`rounded-lg py-2.5 text-center border font-bold text-xs transition-all ${additionalCopyLayer === "single" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"}`}>
-                                    Single layer
-                                  </button>
-                                  <button type="button"
-                                    onClick={() => additionalCopyFormat && formatAllowsLayers(additionalCopyFormat) && setAdditionalCopyLayer("multiple")}
-                                    className={`rounded-lg py-2.5 text-center border font-bold text-xs transition-all ${additionalCopyLayer === "multiple" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : additionalCopyFormat && formatAllowsLayers(additionalCopyFormat) ? "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]" : "border-[rgb(var(--fg-rgb)/6%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"}`}>
-                                    Multiple layer
-                                  </button>
-                                </div>
-                              </div>
+                            )}
+                          </div>
+
+                          <div>
+                            <p className="text-[10px] uppercase tracking-wider text-[rgb(var(--accent-text))] font-bold mb-2">Layer structure</p>
+                            <div className="grid grid-cols-2 gap-2">
+                              <button type="button" onClick={() => setAdditionalCopyLayer("single")}
+                                className={`rounded-lg py-2.5 text-center border font-bold text-xs transition-all ${additionalCopyLayer === "single" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"}`}>
+                                Single layer
+                              </button>
+                              <button type="button"
+                                onClick={() => additionalCopyFormat && formatAllowsLayers(additionalCopyFormat) && setAdditionalCopyLayer("multiple")}
+                                className={`rounded-lg py-2.5 text-center border font-bold text-xs transition-all ${additionalCopyLayer === "multiple" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : additionalCopyFormat && formatAllowsLayers(additionalCopyFormat) ? "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]" : "border-[rgb(var(--fg-rgb)/6%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"}`}>
+                                Multiple layer
+                              </button>
                             </div>
-                          )}
+                          </div>
                         </div>
                       )}
                     </div>
@@ -1077,7 +1162,7 @@ export default function ContactForm() {
                     <input type="hidden" name="quote_details" value={quoteSummary} />
                     <input type="hidden" name="turnaround" value={turnaroundOption?.label} />
                     <input type="hidden" name="file_format" value={fileFormatLabel} />
-                    <input type="hidden" name="additional_copy" value={wantAdditionalCopy ? `Yes${additionalCopyFormat ? ` (${buildFileFormatLabel(additionalCopyFormat, additionalCopyBackground, additionalCopyLayer, "", "")})` : ""}` : "No"} />
+                    <input type="hidden" name="additional_copy" value={wantAdditionalCopy ? `Yes${additionalCopyFormat ? ` (${buildFileFormatLabel([additionalCopyFormat], additionalCopyBackground, additionalCopyLayer, "", "")})` : ""}` : "No"} />
                     <input type="hidden" name="existing_clipping" value={hasExistingClippingPath ? "Yes - images already have a clipping path" : "No"} />
                     <input type="hidden" name="image_links" value={imageLinks} />
 

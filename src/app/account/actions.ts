@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient, supabaseConfigured } from "@/lib/supabase/server";
+import { sendAdminMail } from "@/lib/mail";
 
 export async function requestRevision(
   orderId: string,
@@ -32,6 +33,33 @@ export async function requestRevision(
     p_note: fullNote,
   });
   if (error) return { ok: false, error: error.message };
+
+  try {
+    const { data: orderRow } = await supabase
+      .from("orders")
+      .select("reference, order_reference, title, user_id")
+      .eq("id", orderId)
+      .maybeSingle<{ reference: string; order_reference: string; title: string | null; user_id: string }>();
+
+    let customerEmail = "";
+    if (orderRow?.user_id) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("email")
+        .eq("id", orderRow.user_id)
+        .maybeSingle<{ email: string }>();
+      customerEmail = profile?.email ?? "";
+    }
+
+    const ref = orderRow?.order_reference || orderRow?.reference || orderId;
+    await sendAdminMail(
+      `Revision Requested — ${ref}`,
+      `A customer has requested a revision.\n\nOrder: ${ref}${orderRow?.title ? ` — ${orderRow.title}` : ""}\n\nRevision note:\n${fullNote}${customerEmail ? `\n\nCustomer email: ${customerEmail}` : ""}`,
+      customerEmail || undefined,
+    );
+  } catch (err: unknown) {
+    console.error("Revision email failed:", err instanceof Error ? err.message : err);
+  }
 
   revalidatePath("/account");
   revalidatePath("/account/orders");

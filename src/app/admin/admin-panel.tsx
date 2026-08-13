@@ -11,6 +11,8 @@ import {
   ChevronRight,
   Search,
   FileText,
+  CalendarClock,
+  Check,
 } from "lucide-react";
 import { adjustCredits, updateOrderStatus, approveQuote } from "./actions";
 import type { Profile, Order, CreditTransaction } from "@/lib/types";
@@ -80,6 +82,7 @@ export default function AdminPanel({
   const [expandedUser, setExpandedUser] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [rangeDays, setRangeDays] = useState(0);
+  const [rangeOpen, setRangeOpen] = useState(false);
 
   const q = query.trim().toLowerCase();
   const cutoffMs = useMemo(() => {
@@ -152,21 +155,31 @@ export default function AdminPanel({
               className="w-full pl-10 pr-4 py-3 rounded-2xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] outline-none focus:border-[rgb(var(--accent-500)/60%)] transition-colors text-sm"
             />
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {RANGES.map((r) => (
-              <button
-                key={r.value}
-                type="button"
-                onClick={() => setRangeDays(r.value)}
-                className={`px-4 py-2 rounded-full text-xs font-bold border transition-all cursor-pointer ${
-                  rangeDays === r.value
-                    ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] border-[rgb(var(--accent-500))]"
-                    : "bg-[var(--bg-subtle)] border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--accent-500)/50%)]"
-                }`}
-              >
-                {r.label}
-              </button>
-            ))}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setRangeOpen(!rangeOpen)}
+              className="inline-flex items-center gap-2 px-4 py-3 rounded-full border bg-[var(--bg-subtle)] border-[rgb(var(--fg-rgb)/10%)] text-sm font-bold text-[rgb(var(--fg-rgb))] transition-colors hover:border-[rgb(var(--accent-500)/50%)] cursor-pointer"
+            >
+              <CalendarClock className="w-4 h-4 text-[rgb(var(--fg-rgb)/40%)]" />
+              {RANGES.find((r) => r.value === rangeDays)?.label}
+              <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform ${rangeOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+            </button>
+            {rangeOpen && (
+              <div className="absolute right-0 top-full mt-2 min-w-[200px] rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/10%)] overflow-hidden z-30 py-1.5">
+                {RANGES.map((r) => (
+                  <button
+                    key={r.value}
+                    type="button"
+                    onClick={() => { setRangeDays(r.value); setRangeOpen(false); }}
+                    className={`w-full flex items-center justify-between px-4 py-2.5 text-sm font-bold transition-colors cursor-pointer ${rangeDays === r.value ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb)/70%)] hover:bg-[rgb(var(--fg-rgb)/5%)]"}`}
+                  >
+                    {r.label}
+                    {rangeDays === r.value && <Check className="w-4 h-4" />}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
         <p className="mt-3 text-sm text-[rgb(var(--fg-rgb)/60%)]">
