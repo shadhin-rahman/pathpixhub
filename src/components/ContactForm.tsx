@@ -911,8 +911,8 @@ export default function ContactForm() {
                                     className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-semibold border transition-all ${
                                       isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"
                                     }`}>
-                                    <span className={`w-3.5 h-3.5 rounded-full border-2 grid place-items-center shrink-0 ${isActive ? "border-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/25%)]"}`}>
-                                      {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-contrast))]" />}
+                                    <span className={`w-4 h-4 rounded-md border-2 grid place-items-center shrink-0 ${isActive ? "bg-[rgb(var(--accent-contrast))] border-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/30%)]"}`}>
+                                      {isActive && <svg className="w-3 h-3 text-[rgb(var(--accent-600))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
                                     </span>
                                     {FILE_FORMAT_LABELS[fmt]}
                                   </button>
@@ -971,20 +971,22 @@ export default function ContactForm() {
 
                     <div>
                       <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Layer structure</label>
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className={`grid gap-2 ${fileFormats.length > 1 ? "grid-cols-1" : "grid-cols-2"}`}>
                         <button type="button"
                           onClick={() => setLayerStructure("single")}
                           className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${layerStructure === "single" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"}`}>
                           Single layer
                         </button>
-                        <button type="button"
-                          onClick={() => layersAllowedFor(fileFormats) && setLayerStructure("multiple")}
-                          className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${layerStructure === "multiple" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : layersAllowedFor(fileFormats) ? "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]" : "border-[rgb(var(--fg-rgb)/6%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"}`}>
-                          Multiple layer
-                        </button>
+                        {fileFormats.length <= 1 && (
+                          <button type="button"
+                            onClick={() => layersAllowedFor(fileFormats) && setLayerStructure("multiple")}
+                            className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${layerStructure === "multiple" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : layersAllowedFor(fileFormats) ? "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]" : "border-[rgb(var(--fg-rgb)/6%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"}`}>
+                            Multiple layer
+                          </button>
+                        )}
                       </div>
                       {fileFormats.length > 1 ? (
-                        <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-1.5">Multiple formats are delivered as single layer.</p>
+                        <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-1.5">Multiple formats are delivered as single layer — select multiple layer only works with a single PSD/TIF format.</p>
                       ) : !formatAllowsLayers(fileFormats[0]) ? (
                         <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-1.5">{FILE_FORMAT_LABELS[fileFormats[0]]} always uses a single layer.</p>
                       ) : null}

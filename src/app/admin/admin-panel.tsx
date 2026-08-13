@@ -13,6 +13,7 @@ import {
   FileText,
   CalendarClock,
   Check,
+  X,
 } from "lucide-react";
 import { adjustCredits, updateOrderStatus, approveQuote } from "./actions";
 import type { Profile, Order, CreditTransaction } from "@/lib/types";
@@ -83,6 +84,14 @@ export default function AdminPanel({
   const [query, setQuery] = useState("");
   const [rangeDays, setRangeDays] = useState(0);
   const [rangeOpen, setRangeOpen] = useState(false);
+  const [monthValue, setMonthValue] = useState<string | null>(null);
+
+  const monthStr = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+  const now = new Date();
+  const thisMonthStr = monthStr(now);
+  const lastMonthD = new Date(now);
+  lastMonthD.setMonth(lastMonthD.getMonth() - 1);
+  const lastMonthStr = monthStr(lastMonthD);
 
   const q = query.trim().toLowerCase();
   const cutoffMs = useMemo(() => {
@@ -90,6 +99,27 @@ export default function AdminPanel({
     const iso = rangeStartIso(rangeDays);
     return iso ? new Date(iso).getTime() : 0;
   }, [rangeDays]);
+
+  const monthStartMs = useMemo(() => {
+    if (!monthValue) return 0;
+    const d = new Date(`${monthValue}-01T00:00:00`);
+    return isNaN(d.getTime()) ? 0 : d.getTime();
+  }, [monthValue]);
+
+  const monthEndMs = useMemo(() => {
+    if (!monthValue) return 0;
+    const d = new Date(`${monthValue}-01T00:00:00`);
+    if (isNaN(d.getTime())) return 0;
+    d.setMonth(d.getMonth() + 1);
+    return d.getTime();
+  }, [monthValue]);
+
+  const startMs = monthValue ? monthStartMs : cutoffMs;
+  const endMs = monthValue ? monthEndMs : 0;
+
+  const filterLabel = monthValue
+    ? new Date(`${monthValue}-01T00:00:00`).toLocaleDateString("en-US", { month: "long", year: "numeric" })
+    : RANGES.find((r) => r.value === rangeDays)?.label ?? "All time";
 
   const visibleProfiles = useMemo(
     () =>
@@ -106,12 +136,15 @@ export default function AdminPanel({
 
   const inRangeOrders = useMemo(
     () =>
-      orders.filter(
-        (o) =>
+      orders.filter((o) => {
+        const ts = new Date(o.created_at).getTime();
+        return (
           customerMask.has(o.user_id) &&
-          (cutoffMs === 0 || new Date(o.created_at).getTime() >= cutoffMs),
-      ),
-    [orders, customerMask, cutoffMs],
+          (startMs === 0 || ts >= startMs) &&
+          (endMs === 0 || ts < endMs)
+        );
+      }),
+    [orders, customerMask, startMs, endMs],
   );
 
   const billTotal = useMemo(
@@ -143,7 +176,7 @@ export default function AdminPanel({
       </div>
 
       {/* Filters for billing */}
-      <div className="glass-card rounded-3xl p-4 mb-10">
+      <div className="glass-card rounded-3xl p-4 mb-10 relative z-10">
         <div className="flex flex-col lg:flex-row lg:items-center gap-4">
           <div className="relative flex-1 min-w-[220px]">
             <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[rgb(var(--fg-rgb)/40%)]" />
@@ -162,22 +195,60 @@ export default function AdminPanel({
               className="inline-flex items-center gap-2 px-4 py-3 rounded-full border bg-[var(--bg-subtle)] border-[rgb(var(--fg-rgb)/10%)] text-sm font-bold text-[rgb(var(--fg-rgb))] transition-colors hover:border-[rgb(var(--accent-500)/50%)] cursor-pointer"
             >
               <CalendarClock className="w-4 h-4 text-[rgb(var(--fg-rgb)/40%)]" />
-              {RANGES.find((r) => r.value === rangeDays)?.label}
+              {filterLabel}
               <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform ${rangeOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
             </button>
             {rangeOpen && (
-              <div className="absolute right-0 top-full mt-2 min-w-[200px] rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/10%)] overflow-hidden z-30 py-1.5">
+              <div className="absolute right-0 top-full mt-2 min-w-[240px] rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/10%)] overflow-hidden z-30 py-1.5">
                 {RANGES.map((r) => (
                   <button
                     key={r.value}
                     type="button"
-                    onClick={() => { setRangeDays(r.value); setRangeOpen(false); }}
-                    className={`w-full flex items-center justify-between px-4 py-2.5 text-sm font-bold transition-colors cursor-pointer ${rangeDays === r.value ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb)/70%)] hover:bg-[rgb(var(--fg-rgb)/5%)]"}`}
+                    onClick={() => { setRangeDays(r.value); setMonthValue(null); setRangeOpen(false); }}
+                    className={`w-full flex items-center justify-between px-4 py-2.5 text-sm font-bold transition-colors cursor-pointer ${!monthValue && rangeDays === r.value ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb)/70%)] hover:bg-[rgb(var(--fg-rgb)/5%)]"}`}
                   >
                     {r.label}
-                    {rangeDays === r.value && <Check className="w-4 h-4" />}
+                    {!monthValue && rangeDays === r.value && <Check className="w-4 h-4" />}
                   </button>
                 ))}
+                <div className="border-t border-[rgb(var(--fg-rgb)/8%)] mt-1.5 pt-1.5">
+                  <p className="px-4 py-1 text-[10px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold">View a month</p>
+                  <button
+                    type="button"
+                    onClick={() => { setMonthValue(thisMonthStr); setRangeDays(0); setRangeOpen(false); }}
+                    className={`w-full flex items-center justify-between px-4 py-2.5 text-sm font-bold transition-colors cursor-pointer ${monthValue === thisMonthStr ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb)/70%)] hover:bg-[rgb(var(--fg-rgb)/5%)]"}`}
+                  >
+                    This month
+                    {monthValue === thisMonthStr && <Check className="w-4 h-4" />}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setMonthValue(lastMonthStr); setRangeDays(0); setRangeOpen(false); }}
+                    className={`w-full flex items-center justify-between px-4 py-2.5 text-sm font-bold transition-colors cursor-pointer ${monthValue === lastMonthStr ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb)/70%)] hover:bg-[rgb(var(--fg-rgb)/5%)]"}`}
+                  >
+                    Last month
+                    {monthValue === lastMonthStr && <Check className="w-4 h-4" />}
+                  </button>
+                  <div className="px-4 py-2.5">
+                    <input
+                      type="month"
+                      value={monthValue ?? ""}
+                      onChange={(e) => { setMonthValue(e.target.value || null); setRangeDays(0); setRangeOpen(false); }}
+                      className="w-full px-3 py-2 rounded-xl text-sm font-semibold bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/12%)] text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/60%)] transition-colors [color-scheme:dark]"
+                    />
+                    <p className="mt-1.5 text-[10px] text-[rgb(var(--fg-rgb)/40%)]">Pick any month with the calendar icon.</p>
+                  </div>
+                  {monthValue && (
+                    <button
+                      type="button"
+                      onClick={() => { setMonthValue(null); setRangeOpen(false); }}
+                      className="w-full flex items-center justify-between px-4 py-2.5 text-sm font-bold transition-colors cursor-pointer text-red-400 hover:bg-[rgb(var(--fg-rgb)/5%)]"
+                    >
+                      Clear month filter
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -187,6 +258,7 @@ export default function AdminPanel({
           <span className="font-bold text-[rgb(var(--accent-text))]">{visibleProfiles.length}</span> of{" "}
           {profiles.length} customers · <span className="font-bold">{inRangeOrders.length}</span> orders · Bill
           total (non‑cancelled): <span className="font-black text-[rgb(var(--accent-text))]">{billTotal.toLocaleString()}</span> credits
+          {monthValue && <span className="text-[rgb(var(--accent-text))]"> · Month: {filterLabel}</span>}
         </p>
       </div>
 
