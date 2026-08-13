@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { BadgeCheck, Coins, Zap } from "lucide-react";
+import { BadgeCheck, Sparkles, Coins, Zap } from "lucide-react";
 import CreditSlider, { CREDIT_BUNDLES, savingPct } from "./CreditSlider";
 
 export default function CreditBundleSelector() {
   const [selected, setSelected] = useState(CREDIT_BUNDLES.find((b) => b.popular)?.price ?? 250);
   const [mode, setMode] = useState<"once" | "subscribe">("once");
   const [frequency, setFrequency] = useState<"monthly" | "yearly">("monthly");
+  const [view, setView] = useState<"packs" | "buy">("packs");
 
   const bundle = CREDIT_BUNDLES.find((b) => b.price === selected) ?? CREDIT_BUNDLES[0];
 
@@ -34,7 +35,88 @@ export default function CreditBundleSelector() {
 
           {/* Amount selector */}
           <div className="mt-6">
-            <CreditSlider value={selected} onChange={setSelected} />
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <p className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold">
+                Select Path credit bundle amount
+              </p>
+              <div className="inline-flex rounded-full border border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] p-1">
+                <button
+                  type="button"
+                  onClick={() => setView("packs")}
+                  className={`px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                    view === "packs"
+                      ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow"
+                      : "text-[rgb(var(--fg-rgb)/60%)] hover:text-[rgb(var(--fg-rgb))]"
+                  }`}
+                >
+                  Credit packs
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setView("buy")}
+                  className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                    view === "buy"
+                      ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow"
+                      : "text-[rgb(var(--fg-rgb)/60%)] hover:text-[rgb(var(--fg-rgb))]"
+                  }`}
+                >
+                  <Zap className="w-3 h-3" />
+                  Buy credits
+                </button>
+              </div>
+            </div>
+
+            {view === "packs" ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                {CREDIT_BUNDLES.map((b) => {
+                  const active = selected === b.price;
+                  const save = savingPct(b.per);
+                  return (
+                    <button
+                      key={b.price}
+                      type="button"
+                      onClick={() => setSelected(b.price)}
+                      className={`relative rounded-2xl border-2 px-4 py-4 text-left transition-all cursor-pointer ${
+                        active
+                          ? "border-[rgb(var(--accent-500))] bg-[rgb(var(--accent-500)/10%)] shadow-lg shadow-[rgb(var(--accent-500)/15%)]"
+                          : "border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--accent-500)/40%)]"
+                      }`}
+                    >
+                      {b.popular && (
+                        <span className="absolute -top-2.5 right-3 text-[9px] font-bold px-2 py-0.5 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]">
+                          Popular
+                        </span>
+                      )}
+                      <span className={`text-lg font-extrabold ${active ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb))]"}`}>
+                        ${b.price.toLocaleString()}
+                      </span>
+                      <span className="block mt-1 text-[11px] font-semibold text-[rgb(var(--fg-rgb)/55%)]">
+                        {b.credits.toLocaleString()} credits
+                      </span>
+                      <span className="block mt-1.5 inline-flex items-center gap-1 text-[10px] font-bold text-emerald-500">
+                        <Sparkles className="w-3 h-3" />
+                        Save {save}%
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="rounded-2xl border-2 border-[rgb(var(--accent-500)/20%)] bg-[rgb(var(--accent-500)/4%)] p-5 sm:p-6">
+                <CreditSlider
+                  value={selected}
+                  onChange={setSelected}
+                  subtitle={`${bundle.credits.toLocaleString()} credits for $${bundle.price.toLocaleString()} — paid on purchase.`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setView("packs")}
+                  className="mt-4 text-xs font-bold text-[rgb(var(--accent-text))] hover:underline"
+                >
+                  ← Back to credit packs
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Buy once / Subscribe */}
