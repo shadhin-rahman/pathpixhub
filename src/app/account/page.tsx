@@ -5,6 +5,7 @@ import type { Profile, Order } from "@/lib/types";
 import { Coins, ImageIcon, Package, Clock3, Plus, ArrowRight, Inbox, FileText } from "lucide-react";
 import { STATUS_STYLES, STATUS_LABELS, formatDate } from "@/lib/order-status";
 import RevisionButton from "./revision-button";
+import BuyCreditsCard from "@/components/BuyCreditsCard";
 
 export default async function AccountPage() {
   if (!supabaseConfigured()) {
@@ -91,6 +92,9 @@ export default async function AccountPage() {
           <p className="mt-1 text-xs text-[rgb(var(--fg-rgb)/50%)]">in progress</p>
         </div>
       </div>
+
+      {/* Top up with the credit slider */}
+      <BuyCreditsCard balance={p?.credits_balance ?? 0} />
 
       {/* Recent orders */}
       <div className="glass-card rounded-3xl p-6 sm:p-8">

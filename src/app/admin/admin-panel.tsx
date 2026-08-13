@@ -16,6 +16,7 @@ import {
   X,
 } from "lucide-react";
 import { adjustCredits, updateOrderStatus, approveQuote } from "./actions";
+import AdminCreditTopup from "@/components/AdminCreditTopup";
 import type { Profile, Order, CreditTransaction } from "@/lib/types";
 
 const STATUS_STYLES: Record<string, string> = {
@@ -261,6 +262,9 @@ export default function AdminPanel({
           {monthValue && <span className="text-[rgb(var(--accent-text))]"> · Month: {filterLabel}</span>}
         </p>
       </div>
+
+      {/* Quick credit top-up */}
+      <AdminCreditTopup profiles={profiles} />
 
       {/* Customers */}
       <div className="mb-12">

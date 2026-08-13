@@ -2,27 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { BadgeCheck, Sparkles, Coins, Zap } from "lucide-react";
-
-const BUNDLES = [
-  { price: 25, paid: 25, free: 1, credits: 26, per: 0.96 },
-  { price: 50, paid: 50, free: 4, credits: 54, per: 0.93 },
-  { price: 100, paid: 100, free: 13, credits: 113, per: 0.88 },
-  { price: 250, paid: 250, free: 40, credits: 290, per: 0.86, popular: true },
-  { price: 500, paid: 500, free: 100, credits: 600, per: 0.83 },
-  { price: 1000, paid: 1000, free: 250, credits: 1250, per: 0.8 },
-  { price: 2500, paid: 2500, free: 700, credits: 3200, per: 0.78 },
-  { price: 5000, paid: 5000, free: 1550, credits: 6550, per: 0.76 },
-];
-
-const savingPct = (per: number) => Math.round((1 - per) * 100);
+import { BadgeCheck, Coins, Zap } from "lucide-react";
+import CreditSlider, { CREDIT_BUNDLES, savingPct } from "./CreditSlider";
 
 export default function CreditBundleSelector() {
-  const [selected, setSelected] = useState(BUNDLES.find((b) => b.popular)?.price ?? 250);
+  const [selected, setSelected] = useState(CREDIT_BUNDLES.find((b) => b.popular)?.price ?? 250);
   const [mode, setMode] = useState<"once" | "subscribe">("once");
   const [frequency, setFrequency] = useState<"monthly" | "yearly">("monthly");
 
-  const bundle = BUNDLES.find((b) => b.price === selected) ?? BUNDLES[0];
+  const bundle = CREDIT_BUNDLES.find((b) => b.price === selected) ?? CREDIT_BUNDLES[0];
 
   const payHref = `/payment?plan=${encodeURIComponent("Credit Pack")}&amount=${bundle.price}&desc=${encodeURIComponent(
     `${bundle.credits.toLocaleString()} credits ($${bundle.paid.toLocaleString()} paid + ${bundle.free.toLocaleString()} bonus)`,
@@ -46,43 +34,7 @@ export default function CreditBundleSelector() {
 
           {/* Amount selector */}
           <div className="mt-6">
-            <p className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3">
-              Select Path credit bundle amount
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-              {BUNDLES.map((b) => {
-                const active = selected === b.price;
-                const save = savingPct(b.per);
-                return (
-                  <button
-                    key={b.price}
-                    type="button"
-                    onClick={() => setSelected(b.price)}
-                    className={`relative rounded-2xl border-2 px-4 py-4 text-left transition-all cursor-pointer ${
-                      active
-                        ? "border-[rgb(var(--accent-500))] bg-[rgb(var(--accent-500)/10%)] shadow-lg shadow-[rgb(var(--accent-500)/15%)]"
-                        : "border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--accent-500)/40%)]"
-                    }`}
-                  >
-                    {b.popular && (
-                      <span className="absolute -top-2.5 right-3 text-[9px] font-bold px-2 py-0.5 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]">
-                        Popular
-                      </span>
-                    )}
-                    <span className={`text-lg font-extrabold ${active ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb))]"}`}>
-                      ${b.price.toLocaleString()}
-                    </span>
-                    <span className="block mt-1 text-[11px] font-semibold text-[rgb(var(--fg-rgb)/55%)]">
-                      {b.credits.toLocaleString()} credits
-                    </span>
-                    <span className="block mt-1.5 inline-flex items-center gap-1 text-[10px] font-bold text-emerald-500">
-                      <Sparkles className="w-3 h-3" />
-                      Save {save}%
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+            <CreditSlider value={selected} onChange={setSelected} />
           </div>
 
           {/* Buy once / Subscribe */}
