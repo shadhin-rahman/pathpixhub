@@ -81,7 +81,7 @@ export default function CreditBundleSelector() {
             </div>
 
             {view === "packs" ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+              <div className="space-y-4">
                 {CREDIT_BUNDLES.map((b) => {
                   const active = selected === b.price;
                   const save = savingPct(b.per);
@@ -90,27 +90,39 @@ export default function CreditBundleSelector() {
                       key={b.price}
                       type="button"
                       onClick={() => setSelected(b.price)}
-                      className={`relative rounded-2xl border-2 px-4 py-4 text-left transition-all cursor-pointer ${
+                      className={`relative w-full rounded-2xl border-2 px-5 py-5 sm:px-7 sm:py-6 text-left transition-all cursor-pointer ${
                         active
                           ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] shadow-lg shadow-[rgb(var(--accent-500)/30%)]"
                           : "border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--accent-500)/40%)]"
                       }`}
                     >
                       {b.popular && (
-                        <span className={`absolute -top-2.5 right-3 text-[9px] font-bold px-2 py-0.5 rounded-full ${active ? "bg-[rgb(var(--accent-contrast))] text-[rgb(var(--accent-500))]" : "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]"}`}>
+                        <span className={`absolute -top-2.5 right-5 text-[10px] font-bold px-2.5 py-1 rounded-full ${active ? "bg-[rgb(var(--accent-contrast))] text-[rgb(var(--accent-500))]" : "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]"}`}>
                           Popular
                         </span>
                       )}
-                      <span className={`text-lg font-extrabold ${active ? "text-[rgb(var(--accent-contrast))]" : "text-[rgb(var(--fg-rgb))]"}`}>
-                        ${b.price.toLocaleString()}
-                      </span>
-                      <span className={`block mt-1 text-[11px] font-semibold ${active ? "text-[rgb(var(--accent-contrast)/75%)]" : "text-[rgb(var(--fg-rgb)/55%)]"}`}>
-                        {b.credits.toLocaleString()} credits
-                      </span>
-                      <span className={`block mt-1.5 inline-flex items-center gap-1 text-[10px] font-bold ${active ? "text-[rgb(var(--accent-contrast)/70%)]" : "text-emerald-500"}`}>
-                        <Sparkles className="w-3 h-3" />
-                        Save {save}%
-                      </span>
+
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pr-2">
+                        <span className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${active ? "text-[rgb(var(--accent-contrast))]" : "text-[rgb(var(--fg-rgb))]"}`}>
+                          ${b.price.toLocaleString()}
+                        </span>
+                        <span className={`text-2xl sm:text-3xl font-bold ${active ? "text-[rgb(var(--accent-contrast)/70%)]" : "text-[rgb(var(--fg-rgb)/35%)]"}`}>→</span>
+                        <span className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${active ? "text-[rgb(var(--accent-contrast))]" : "text-[rgb(var(--fg-rgb))]"}`}>
+                          {b.credits.toLocaleString()} credits
+                        </span>
+                      </div>
+
+                      <p className={`mt-2 text-sm sm:text-base font-semibold ${active ? "text-[rgb(var(--accent-contrast)/80%)]" : "text-[rgb(var(--fg-rgb)/60%)]"}`}>
+                        <span className="font-bold">{b.paid.toLocaleString()} paid</span> +{" "}
+                        <span className="font-bold">{b.free.toLocaleString()} free</span>
+                        <span className="mx-2 opacity-60">·</span>
+                        ${b.per.toFixed(2)} / credit
+                        <span className={`mx-2 opacity-60 ${active ? "text-[rgb(var(--accent-contrast)/80%)]" : "text-emerald-500"}`}>·</span>
+                        <span className={`inline-flex items-center gap-1 font-bold ${active ? "text-[rgb(var(--accent-contrast))]" : "text-emerald-500"}`}>
+                          <Sparkles className="w-3.5 h-3.5" />
+                          Save {save}%
+                        </span>
+                      </p>
                     </button>
                   );
                 })}
