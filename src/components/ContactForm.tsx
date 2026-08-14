@@ -1176,14 +1176,23 @@ export default function ContactForm() {
                           { id: "7", label: "In 7 Days", desc: "We email the link later" },
                           { id: "15", label: "In 15 Days", desc: "We email the link later" },
                           { id: "monthly", label: "Monthly", desc: "Split into monthly" },
-                        ] as const).map(opt => (
-                          <button key={opt.id} type="button" onClick={() => setPaymentTiming(opt.id)}
-                            className={`rounded-xl p-3 border text-center transition-all relative ${paymentTiming === opt.id ? "border-[rgb(var(--accent-500)/50%)] bg-[rgb(var(--accent-500)/8%)]" : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/15%)]"}`}>
-                            {opt.id === "now" && <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-[rgb(var(--accent-500))] text-[9px] font-bold text-[rgb(var(--accent-contrast))]">Popular</span>}
-                            <p className="text-xs font-bold text-[rgb(var(--fg-rgb))]">{opt.label}</p>
-                            <p className="text-[10px] text-[rgb(var(--fg-rgb)/40%)] mt-0.5">{opt.desc}</p>
-                          </button>
-                        ))}
+                        ] as const).map(opt => {
+                          const isActive = paymentTiming === opt.id;
+                          return (
+                            <button key={opt.id} type="button" onClick={() => setPaymentTiming(opt.id)}
+                              className={`rounded-xl p-3 border text-center transition-all relative ${
+                                isActive
+                                  ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]"
+                                  : "border-[rgb(var(--fg-rgb)/8%)] hover:border-[rgb(var(--fg-rgb)/15%)]"
+                              }`}>
+                              {opt.id === "now" && (
+                                <span className={`absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full text-[9px] font-bold ${isActive ? "bg-[rgb(var(--accent-contrast))] text-[rgb(var(--accent-500))]" : "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]"}`}>Popular</span>
+                              )}
+                              <p className={`text-xs font-bold ${isActive ? "text-[rgb(var(--accent-contrast))]" : "text-[rgb(var(--fg-rgb))]"}`}>{opt.label}</p>
+                              <p className={`text-[10px] mt-0.5 ${isActive ? "text-[rgb(var(--accent-contrast)/70%)]" : "text-[rgb(var(--fg-rgb)/40%)]"}`}>{opt.desc}</p>
+                            </button>
+                          );
+                        })}
                       </div>
                       <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-2">
                         {paymentTiming === "now"

@@ -8,8 +8,22 @@ import CreditSlider, { CREDIT_BUNDLES, savingPct } from "./CreditSlider";
 export default function CreditBundleSelector() {
   const [selected, setSelected] = useState(CREDIT_BUNDLES.find((b) => b.popular)?.price ?? 250);
   const [mode, setMode] = useState<"once" | "subscribe">("once");
-  const [frequency, setFrequency] = useState<"monthly" | "yearly">("monthly");
+  const [frequency, setFrequency] = useState<"weekly" | "monthly" | "quarterly" | "yearly">("monthly");
   const [view, setView] = useState<"packs" | "buy">("packs");
+
+  const FREQUENCIES: { id: "weekly" | "monthly" | "quarterly" | "yearly"; label: string; badge?: string }[] = [
+    { id: "weekly", label: "Weekly" },
+    { id: "monthly", label: "Monthly" },
+    { id: "quarterly", label: "3 Months" },
+    { id: "yearly", label: "Yearly", badge: "2 months free" },
+  ];
+
+  const FREQUENCY_FOOTER: Record<typeof frequency, string> = {
+    weekly: "Billed every week",
+    monthly: "Billed monthly",
+    quarterly: "Billed every 3 months",
+    yearly: "Billed yearly",
+  };
 
   const bundle = CREDIT_BUNDLES.find((b) => b.price === selected) ?? CREDIT_BUNDLES[0];
 
@@ -78,22 +92,22 @@ export default function CreditBundleSelector() {
                       onClick={() => setSelected(b.price)}
                       className={`relative rounded-2xl border-2 px-4 py-4 text-left transition-all cursor-pointer ${
                         active
-                          ? "border-[rgb(var(--accent-500))] bg-[rgb(var(--accent-500)/10%)] shadow-lg shadow-[rgb(var(--accent-500)/15%)]"
+                          ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] shadow-lg shadow-[rgb(var(--accent-500)/30%)]"
                           : "border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--accent-500)/40%)]"
                       }`}
                     >
                       {b.popular && (
-                        <span className="absolute -top-2.5 right-3 text-[9px] font-bold px-2 py-0.5 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]">
+                        <span className={`absolute -top-2.5 right-3 text-[9px] font-bold px-2 py-0.5 rounded-full ${active ? "bg-[rgb(var(--accent-contrast))] text-[rgb(var(--accent-500))]" : "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]"}`}>
                           Popular
                         </span>
                       )}
-                      <span className={`text-lg font-extrabold ${active ? "text-[rgb(var(--accent-text))]" : "text-[rgb(var(--fg-rgb))]"}`}>
+                      <span className={`text-lg font-extrabold ${active ? "text-[rgb(var(--accent-contrast))]" : "text-[rgb(var(--fg-rgb))]"}`}>
                         ${b.price.toLocaleString()}
                       </span>
-                      <span className="block mt-1 text-[11px] font-semibold text-[rgb(var(--fg-rgb)/55%)]">
+                      <span className={`block mt-1 text-[11px] font-semibold ${active ? "text-[rgb(var(--accent-contrast)/75%)]" : "text-[rgb(var(--fg-rgb)/55%)]"}`}>
                         {b.credits.toLocaleString()} credits
                       </span>
-                      <span className="block mt-1.5 inline-flex items-center gap-1 text-[10px] font-bold text-emerald-500">
+                      <span className={`block mt-1.5 inline-flex items-center gap-1 text-[10px] font-bold ${active ? "text-[rgb(var(--accent-contrast)/70%)]" : "text-emerald-500"}`}>
                         <Sparkles className="w-3 h-3" />
                         Save {save}%
                       </span>
@@ -151,33 +165,29 @@ export default function CreditBundleSelector() {
                 <p className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-3">
                   Choose billing frequency
                 </p>
-                <div className="inline-flex rounded-full border border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] p-1">
-                  <button
-                    type="button"
-                    onClick={() => setFrequency("monthly")}
-                    className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all cursor-pointer ${
-                      frequency === "monthly"
-                        ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow"
-                        : "text-[rgb(var(--fg-rgb)/60%)] hover:text-[rgb(var(--fg-rgb))]"
-                    }`}
-                  >
-                    Monthly
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFrequency("yearly")}
-                    className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all cursor-pointer ${
-                      frequency === "yearly"
-                        ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow"
-                        : "text-[rgb(var(--fg-rgb)/60%)] hover:text-[rgb(var(--fg-rgb))]"
-                    }`}
-                  >
-                    Yearly
-                    <span className="ml-1.5 text-[10px] font-bold text-emerald-500">2 months free</span>
-                  </button>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {FREQUENCIES.map((f) => (
+                    <button
+                      key={f.id}
+                      type="button"
+                      onClick={() => setFrequency(f.id)}
+                      className={`relative rounded-xl px-3 py-3 text-sm font-bold transition-all cursor-pointer ${
+                        frequency === f.id
+                          ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)] border border-[rgb(var(--accent-600))]"
+                          : "border border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb)/65%)] hover:border-[rgb(var(--accent-500)/40%)] hover:text-[rgb(var(--fg-rgb))]"
+                      }`}
+                    >
+                      {f.label}
+                      {f.badge && (
+                        <span className={`block mt-1 text-[10px] font-bold ${frequency === f.id ? "text-[rgb(var(--accent-contrast)/75%)]" : "text-emerald-500"}`}>
+                          {f.badge}
+                        </span>
+                      )}
+                    </button>
+                  ))}
                 </div>
                 <p className="mt-3 text-xs text-[rgb(var(--fg-rgb)/50%)]">
-                  Monthly credit plans come with Standard / Pro / Enterprise tiers — including bonus credits every billing cycle.
+                  Weekly, monthly, 3-month or yearly credit plans come with Standard / Pro / Enterprise tiers — including bonus credits every billing cycle.
                 </p>
               </div>
             )}
@@ -234,7 +244,7 @@ export default function CreditBundleSelector() {
             <p className="mt-4 text-center text-[11px] text-[rgb(var(--fg-rgb)/45%)]">
               {mode === "once"
                 ? "One-time purchase — credits added to your balance instantly."
-                : `${frequency === "monthly" ? "Billed monthly" : "Billed yearly"} — cancel anytime.`}
+                : `${FREQUENCY_FOOTER[frequency]} — cancel anytime.`}
             </p>
           </div>
         </div>

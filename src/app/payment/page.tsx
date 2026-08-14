@@ -112,19 +112,20 @@ export default function PaymentPage() {
 
   return (
     <div className="min-h-screen bg-[var(--bg)]">
-      <section className="pt-36 pb-16 mesh-gradient">
-        <div className="max-w-6xl mx-auto px-6">
+      <section className="pt-36 pb-16 relative overflow-hidden" style={{ background: "linear-gradient(120deg, #081526 0%, #081526 52%, #12311f 78%, rgb(137 243 54 / 0.22) 100%)" }}>
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(900px 500px at 85% -10%, rgb(137 243 54 / 0.14), transparent 60%), radial-gradient(700px 400px at 0% 110%, rgb(16 185 129 / 0.14), transparent 60%)" }} />
+        <div className="relative max-w-6xl mx-auto px-6">
           <div className="flex items-center justify-center gap-2 mb-5">
-            <span className="w-9 h-9 rounded-full bg-[rgb(var(--accent-500)/12%)] flex items-center justify-center border border-[rgb(var(--accent-500)/20%)]">
+            <span className="w-9 h-9 rounded-full bg-[rgb(var(--accent-500)/15%)] flex items-center justify-center border border-[rgb(var(--accent-500)/30%)]">
               <svg className="w-5 h-5 text-[rgb(var(--accent-text))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
             </span>
             <span className="text-sm font-bold text-[rgb(var(--accent-text))] uppercase tracking-wider">Secure Checkout</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight gradient-text text-center leading-[1.1]">
+          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight gradient-text text-center leading-[1.08]">
             Complete your payment
           </h1>
-          <p className="mt-4 text-lg text-[rgb(var(--fg-rgb)/60%)] text-center max-w-2xl mx-auto leading-relaxed">
-            Pay in your local currency — we receive your payment in USD. Global payments powered by Payoneer.
+          <p className="mt-5 text-lg sm:text-xl text-[rgb(var(--fg-rgb)/65%)] text-center max-w-2xl mx-auto leading-relaxed">
+            Pay in your local currency — we receive your payment in USD. Global payments powered by Payoneer &amp; Stripe.
           </p>
         </div>
       </section>
@@ -142,9 +143,9 @@ export default function PaymentPage() {
           <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-8 items-start">
 
             {/* Order Summary */}
-            <div className="rounded-3xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg)] p-8">
+            <div className="rounded-3xl border-2 border-[rgb(var(--fg-rgb)/8%)] p-8 sm:p-9 shadow-xl" style={{ background: "linear-gradient(160deg, #081526 0%, #0c1f33 100%)" }}>
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-xl">🧾</span>
+                <span className="w-10 h-10 rounded-xl bg-[rgb(var(--accent-500)/12%)] border border-[rgb(var(--accent-500)/25%)] flex items-center justify-center text-xl">🧾</span>
                 <h2 className="text-xl font-bold text-[rgb(var(--fg-rgb))]">Order Summary</h2>
               </div>
 
@@ -217,10 +218,10 @@ export default function PaymentPage() {
             </div>
 
             {/* Payment Method */}
-            <div className="rounded-3xl border-2 border-[rgb(var(--accent-500)/25%)] bg-[var(--bg)] p-8 shadow-xl shadow-[rgb(var(--accent-500)/8%)]">
+            <div className="rounded-3xl border-2 border-[rgb(var(--accent-500)/35%)] p-8 sm:p-9 shadow-xl shadow-[rgb(var(--accent-500)/12%)]" style={{ background: "linear-gradient(160deg, rgb(137 243 54 / 0.14) 0%, rgb(137 243 54 / 0.03) 45%, transparent 100%)" }}>
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-[rgb(var(--fg-rgb))]">Payment Method</h2>
-                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-text))] border border-[rgb(var(--accent-500)/25%)]">Recommended</span>
+                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[rgb(var(--accent-500)/15%)] text-[rgb(var(--accent-text))] border border-[rgb(var(--accent-500)/30%)]">Recommended</span>
               </div>
 
               {/* Payoneer card */}

@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { Coins, Minus, Plus } from "lucide-react";
 
 export const CREDIT_BUNDLES = [
-  { price: 25, paid: 25, free: 1, credits: 26, per: 0.96 },
   { price: 50, paid: 50, free: 4, credits: 54, per: 0.93 },
   { price: 100, paid: 100, free: 13, credits: 113, per: 0.88 },
   { price: 250, paid: 250, free: 40, credits: 290, per: 0.86, popular: true },
@@ -12,6 +11,7 @@ export const CREDIT_BUNDLES = [
   { price: 1000, paid: 1000, free: 250, credits: 1250, per: 0.8 },
   { price: 2500, paid: 2500, free: 700, credits: 3200, per: 0.78 },
   { price: 5000, paid: 5000, free: 1550, credits: 6550, per: 0.76 },
+  { price: 10000, paid: 10000, free: 3500, credits: 13500, per: 0.74 },
 ];
 
 export const savingPct = (per: number) => Math.round((1 - per) * 100);
