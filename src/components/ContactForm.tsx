@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchCountryCode, isCountryBlocked, setBypassCode, isAdmin } from "@/lib/countryBlocker";
 import { isOrderRef } from "@/lib/orderRef";
@@ -195,6 +195,8 @@ export default function ContactForm() {
   const [layerStructure, setLayerStructure] = useState<LayerStructure | null>("multiple");
   const [formatBoxOpen, setFormatBoxOpen] = useState(false);
   const [backgroundBoxOpen, setBackgroundBoxOpen] = useState(false);
+  const [layerBoxOpen, setLayerBoxOpen] = useState(false);
+  const detailsRef = useRef<HTMLDivElement>(null);
   const [wantResize, setWantResize] = useState<"yes" | "no">("no");
   const [resizeWidth, setResizeWidth] = useState("");
   const [resizeHeight, setResizeHeight] = useState("");
@@ -204,6 +206,7 @@ export default function ContactForm() {
   const [additionalCopyLayer, setAdditionalCopyLayer] = useState<LayerStructure | null>(null);
   const [additionalCopyFormatOpen, setAdditionalCopyFormatOpen] = useState(false);
   const [additionalCopyBackgroundOpen, setAdditionalCopyBackgroundOpen] = useState(false);
+  const [additionalCopyLayerOpen, setAdditionalCopyLayerOpen] = useState(false);
   const [step, setStep] = useState(1);
   const [countryCode, setCountryCode] = useState<string | null>(null);
   const [countryLoaded, setCountryLoaded] = useState(false);
@@ -342,6 +345,40 @@ export default function ContactForm() {
       setCountryLoaded(true);
     });
   }, []);
+
+  const closeAllDropdowns = () => {
+    setFormatBoxOpen(false);
+    setBackgroundBoxOpen(false);
+    setLayerBoxOpen(false);
+    setAdditionalCopyFormatOpen(false);
+    setAdditionalCopyBackgroundOpen(false);
+    setAdditionalCopyLayerOpen(false);
+  };
+
+  useEffect(() => {
+    function onDocMouseDown(e: MouseEvent) {
+      if (detailsRef.current && !detailsRef.current.contains(e.target as Node)) closeAllDropdowns();
+    }
+    document.addEventListener("mousedown", onDocMouseDown);
+    return () => document.removeEventListener("mousedown", onDocMouseDown);
+  }, []);
+
+  const dropRow = (
+    active: boolean,
+    enabled: boolean,
+    label: string,
+    onClick: () => void,
+  ) => (
+    <button key={label} type="button" disabled={!enabled} onClick={onClick}
+      className={`w-full flex items-center justify-between gap-3 px-4 py-2.5 text-sm font-bold transition-colors cursor-pointer ${active ? "text-[rgb(var(--accent-text))]" : !enabled ? "text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed" : "text-[rgb(var(--fg-rgb)/70%)] hover:bg-[rgb(var(--fg-rgb)/5%)]"}`}>
+      {label}
+      {active && (
+        <svg className="w-4 h-4 text-[rgb(var(--accent-text))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+      )}
+    </button>
+  );
+
+  const dropdownOpenClass = (open: boolean): string => `w-full flex items-center justify-between px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-left transition-colors hover:border-[rgb(var(--accent-500)/40%)] ${open ? "border-[rgb(var(--accent-500)/50%)]" : ""}`;
 
   const blocked = countryLoaded && countryCode !== null && isCountryBlocked(countryCode) && !isAdmin();
 
@@ -862,7 +899,7 @@ export default function ContactForm() {
 
                 {/* ===== STEP 2: DETAILS & PREFERENCES ===== */}
                 {step === 2 && (
-                  <div className="space-y-6">
+                  <div className="space-y-6 relative z-10" ref={detailsRef}>
                     <div>
                       <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Add comments</label>
                       <textarea value={commentsText} onChange={e => setCommentsText(e.target.value)}
@@ -886,48 +923,31 @@ export default function ContactForm() {
                       </div>
                     </div>
 
-                    <div>
-                      <button type="button" onClick={() => setFormatBoxOpen(!formatBoxOpen)}
-                        className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-left transition-colors hover:border-[rgb(var(--accent-500)/40%)]">
+                    <div className="relative">
+                      <button type="button" onClick={() => { setFormatBoxOpen(!formatBoxOpen); setBackgroundBoxOpen(false); setLayerBoxOpen(false); setAdditionalCopyFormatOpen(false); setAdditionalCopyBackgroundOpen(false); setAdditionalCopyLayerOpen(false); }}
+                        className={dropdownOpenClass(formatBoxOpen)}>
                         <span className="flex items-center gap-2 min-w-0">
                           <span className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold shrink-0">File format</span>
-                          <span className="truncate font-semibold text-[rgb(var(--fg-rgb))]">
-                            {fileFormats.map((f) => FILE_FORMAT_LABELS[f]).join(", ")}
+                          <span className={`truncate font-semibold ${fileFormats.length ? "text-[rgb(var(--fg-rgb))]" : "text-[rgb(var(--fg-rgb)/30%)]"}`}>
+                            {fileFormats.length ? fileFormats.map((f) => FILE_FORMAT_LABELS[f]).join(", ") : "Select a format"}
                           </span>
                         </span>
                         <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform shrink-0 ${formatBoxOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                       </button>
 
                       {formatBoxOpen && (
-                        <div className="mt-2 rounded-xl border border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] overflow-hidden">
-                          <div className="p-2.5">
-                            <p className="text-[10px] uppercase tracking-wider text-[rgb(var(--accent-text))] font-bold px-2 mb-1.5">Choose one or more formats</p>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                              {(Object.keys(FILE_FORMAT_LABELS) as FileFormatId[]).map((fmt) => {
-                                const isActive = fileFormats.includes(fmt);
-                                return (
-                                  <button key={fmt} type="button"
-                                    onClick={() => toggleFormat(fmt)}
-                                    className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-semibold border transition-all ${
-                                      isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"
-                                    }`}>
-                                    <span className={`w-4 h-4 rounded-md border-2 grid place-items-center shrink-0 ${isActive ? "bg-[rgb(var(--accent-contrast))] border-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/30%)]"}`}>
-                                      {isActive && <svg className="w-3 h-3 text-[rgb(var(--accent-600))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
-                                    </span>
-                                    {FILE_FORMAT_LABELS[fmt]}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                            <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] px-2 mt-1.5">You can select multiple formats. Background options below update automatically.</p>
-                          </div>
+                        <div className="absolute left-0 right-0 top-full mt-2 rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/10%)] overflow-hidden z-30 py-1.5">
+                          {(Object.keys(FILE_FORMAT_LABELS) as FileFormatId[]).map((fmt) =>
+                            dropRow(fileFormats.includes(fmt), true, FILE_FORMAT_LABELS[fmt], () => toggleFormat(fmt))
+                          )}
+                          <p className="px-4 py-1.5 text-[10px] text-[rgb(var(--fg-rgb)/35%)]">Select one or more. Background options below update automatically.</p>
                         </div>
                       )}
                     </div>
 
-                    <div>
-                      <button type="button" onClick={() => setBackgroundBoxOpen(!backgroundBoxOpen)}
-                        className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-left transition-colors hover:border-[rgb(var(--accent-500)/40%)]">
+                    <div className="relative">
+                      <button type="button" onClick={() => { setBackgroundBoxOpen(!backgroundBoxOpen); setFormatBoxOpen(false); setLayerBoxOpen(false); setAdditionalCopyFormatOpen(false); setAdditionalCopyBackgroundOpen(false); setAdditionalCopyLayerOpen(false); }}
+                        className={dropdownOpenClass(backgroundBoxOpen)}>
                         <span className="flex items-center gap-2 min-w-0">
                           <span className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold shrink-0">Background</span>
                           <span className={`truncate font-semibold ${fileBackground ? "text-[rgb(var(--fg-rgb))]" : "text-[rgb(var(--fg-rgb)/30%)]"}`}>
@@ -938,58 +958,46 @@ export default function ContactForm() {
                       </button>
 
                       {backgroundBoxOpen && (
-                        <div className="mt-2 rounded-xl border border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] overflow-hidden">
-                          <div className="p-2.5 grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                            {(() => {
-                              const onlyPng = fileFormats.length === 1 && fileFormats[0] === "png";
-                              const allowed = allowedBackgroundsFor(fileFormats);
-                              const opts = onlyPng
-                                ? ALL_BACKGROUNDS.map((bg) => ({ bg, enabled: allowed.includes(bg) }))
-                                : allowed.map((bg) => ({ bg, enabled: true }));
-                              return opts.map(({ bg, enabled }) => {
-                                const isActive = fileBackground === bg;
-                                return (
-                                  <button key={bg} type="button" disabled={!enabled}
-                                    onClick={() => setFileBackground(bg)}
-                                    className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-semibold border transition-all ${
-                                      isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]"
-                                      : !enabled ? "border-[rgb(var(--fg-rgb)/6%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"
-                                      : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"
-                                    }`}>
-                                    <span className={`w-3.5 h-3.5 rounded-full border-2 grid place-items-center shrink-0 ${isActive ? "border-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/25%)]"}`}>
-                                      {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-contrast))]" />}
-                                    </span>
-                                    {BACKGROUND_LABELS[bg]}
-                                  </button>
-                                );
-                              });
-                            })()}
-                          </div>
+                        <div className="absolute left-0 right-0 top-full mt-2 rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/10%)] overflow-hidden z-30 py-1.5">
+                          {(() => {
+                            const onlyPng = fileFormats.length === 1 && fileFormats[0] === "png";
+                            const allowed = allowedBackgroundsFor(fileFormats);
+                            const opts = onlyPng
+                              ? ALL_BACKGROUNDS.map((bg) => ({ bg, enabled: allowed.includes(bg) }))
+                              : allowed.map((bg) => ({ bg, enabled: true }));
+                            return opts.map(({ bg, enabled }) =>
+                              dropRow(fileBackground === bg, enabled, BACKGROUND_LABELS[bg], () => { setFileBackground(bg); setBackgroundBoxOpen(false); })
+                            );
+                          })()}
                         </div>
                       )}
                     </div>
 
-                    <div>
-                      <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Layer structure</label>
-                      <div className={`grid gap-2 ${fileFormats.length > 1 ? "grid-cols-1" : "grid-cols-2"}`}>
-                        <button type="button"
-                          onClick={() => setLayerStructure("single")}
-                          className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${layerStructure === "single" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"}`}>
-                          Single layer
-                        </button>
-                        {fileFormats.length <= 1 && (
-                          <button type="button"
-                            onClick={() => layersAllowedFor(fileFormats) && setLayerStructure("multiple")}
-                            className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${layerStructure === "multiple" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : layersAllowedFor(fileFormats) ? "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]" : "border-[rgb(var(--fg-rgb)/6%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"}`}>
-                            Multiple layer
-                          </button>
-                        )}
-                      </div>
-                      {fileFormats.length > 1 ? (
-                        <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-1.5">Multiple formats are delivered as single layer — select multiple layer only works with a single PSD/TIF format.</p>
-                      ) : !formatAllowsLayers(fileFormats[0]) ? (
-                        <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-1.5">{FILE_FORMAT_LABELS[fileFormats[0]]} always uses a single layer.</p>
-                      ) : null}
+                    <div className="relative">
+                      <button type="button" onClick={() => { setLayerBoxOpen(!layerBoxOpen); setFormatBoxOpen(false); setBackgroundBoxOpen(false); setAdditionalCopyFormatOpen(false); setAdditionalCopyBackgroundOpen(false); setAdditionalCopyLayerOpen(false); }}
+                        className={dropdownOpenClass(layerBoxOpen)}>
+                        <span className="flex items-center gap-2 min-w-0">
+                          <span className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold shrink-0">Layer structure</span>
+                          <span className="truncate font-semibold text-[rgb(var(--fg-rgb))]">
+                            {layerStructure === "multiple" ? "Multiple layer" : "Single layer"}
+                          </span>
+                        </span>
+                        <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform shrink-0 ${layerBoxOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                      </button>
+
+                      {layerBoxOpen && (
+                        <div className="absolute left-0 right-0 top-full mt-2 rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/10%)] overflow-hidden z-30 py-1.5">
+                          {dropRow(layerStructure === "single", true, "Single layer", () => { setLayerStructure("single"); setLayerBoxOpen(false); })}
+                          {dropRow(layerStructure === "multiple", layersAllowedFor(fileFormats), "Multiple layer", () => { if (layersAllowedFor(fileFormats)) { setLayerStructure("multiple"); setLayerBoxOpen(false); } })}
+                        </div>
+                      )}
+                      <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-1.5">
+                        {fileFormats.length > 1
+                          ? "Multiple formats are delivered as single layer — select multiple layer only works with a single PSD/TIF format."
+                          : !formatAllowsLayers(fileFormats[0])
+                            ? `${FILE_FORMAT_LABELS[fileFormats[0]]} always uses a single layer.`
+                            : "Choose a single layer or keep editable layers (PSD/TIF only)."}
+                      </p>
                     </div>
 
                     <div>
@@ -1030,9 +1038,9 @@ export default function ContactForm() {
                       </div>
                       {wantAdditionalCopy && (
                         <div className="mt-3 space-y-3">
-                          <div>
-                            <button type="button" onClick={() => setAdditionalCopyFormatOpen(!additionalCopyFormatOpen)}
-                              className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-left transition-colors hover:border-[rgb(var(--accent-500)/40%)]">
+                          <div className="relative">
+                            <button type="button" onClick={() => { setAdditionalCopyFormatOpen(!additionalCopyFormatOpen); setFormatBoxOpen(false); setBackgroundBoxOpen(false); setLayerBoxOpen(false); setAdditionalCopyBackgroundOpen(false); setAdditionalCopyLayerOpen(false); }}
+                              className={dropdownOpenClass(additionalCopyFormatOpen)}>
                               <span className="flex items-center gap-2 min-w-0">
                                 <span className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold shrink-0">Additional copy format</span>
                                 <span className={`truncate font-semibold ${additionalCopyFormat ? "text-[rgb(var(--fg-rgb))]" : "text-[rgb(var(--fg-rgb)/30%)] text-xs"}`}>
@@ -1042,31 +1050,17 @@ export default function ContactForm() {
                               <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform shrink-0 ${additionalCopyFormatOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                             </button>
                             {additionalCopyFormatOpen && (
-                              <div className="mt-2 rounded-xl border border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] overflow-hidden">
-                                <div className="p-2.5 grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                                  {(Object.keys(FILE_FORMAT_LABELS) as FileFormatId[]).map((fmt) => {
-                                    const isActive = additionalCopyFormat === fmt;
-                                    return (
-                                      <button key={fmt} type="button"
-                                        onClick={() => chooseAdditionalFormat(fmt)}
-                                        className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-semibold border transition-all ${
-                                          isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"
-                                        }`}>
-                                        <span className={`w-3.5 h-3.5 rounded-full border-2 grid place-items-center shrink-0 ${isActive ? "border-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/25%)]"}`}>
-                                          {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-contrast))]" />}
-                                        </span>
-                                        {FILE_FORMAT_LABELS[fmt]}
-                                      </button>
-                                    );
-                                  })}
-                                </div>
+                              <div className="absolute left-0 right-0 top-full mt-2 rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/10%)] overflow-hidden z-30 py-1.5">
+                                {(Object.keys(FILE_FORMAT_LABELS) as FileFormatId[]).map((fmt) =>
+                                  dropRow(additionalCopyFormat === fmt, true, FILE_FORMAT_LABELS[fmt], () => { chooseAdditionalFormat(fmt); setAdditionalCopyFormatOpen(false); })
+                                )}
                               </div>
                             )}
                           </div>
 
-                          <div>
-                            <button type="button" onClick={() => setAdditionalCopyBackgroundOpen(!additionalCopyBackgroundOpen)}
-                              className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm text-left transition-colors hover:border-[rgb(var(--accent-500)/40%)]">
+                          <div className="relative">
+                            <button type="button" onClick={() => { setAdditionalCopyBackgroundOpen(!additionalCopyBackgroundOpen); setFormatBoxOpen(false); setBackgroundBoxOpen(false); setLayerBoxOpen(false); setAdditionalCopyFormatOpen(false); setAdditionalCopyLayerOpen(false); }}
+                              className={dropdownOpenClass(additionalCopyBackgroundOpen)}>
                               <span className="flex items-center gap-2 min-w-0">
                                 <span className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold shrink-0">Background</span>
                                 <span className={`truncate font-semibold ${additionalCopyBackground ? "text-[rgb(var(--fg-rgb))]" : "text-[rgb(var(--fg-rgb)/30%)] text-xs"}`}>
@@ -1076,51 +1070,39 @@ export default function ContactForm() {
                               <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform shrink-0 ${additionalCopyBackgroundOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                             </button>
                             {additionalCopyBackgroundOpen && (
-                              <div className="mt-2 rounded-xl border border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] overflow-hidden">
-                                <div className="p-2.5 grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                                  {(() => {
-                                    const formats = additionalCopyFormat ? [additionalCopyFormat] : [];
-                                    const onlyPng = additionalCopyFormat === "png";
-                                    const allowed = allowedBackgroundsFor(formats);
-                                    const opts = onlyPng
-                                      ? ALL_BACKGROUNDS.map((bg) => ({ bg, enabled: allowed.includes(bg) }))
-                                      : allowed.map((bg) => ({ bg, enabled: true }));
-                                    return opts.map(({ bg, enabled }) => {
-                                      const isActive = additionalCopyBackground === bg;
-                                      return (
-                                        <button key={bg} type="button" disabled={!enabled}
-                                          onClick={() => setAdditionalCopyBackground(bg)}
-                                          className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-semibold border transition-all ${
-                                            isActive ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]"
-                                            : !enabled ? "border-[rgb(var(--fg-rgb)/6%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"
-                                            : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"
-                                          }`}>
-                                          <span className={`w-3.5 h-3.5 rounded-full border-2 grid place-items-center shrink-0 ${isActive ? "border-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/25%)]"}`}>
-                                            {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-contrast))]" />}
-                                          </span>
-                                          {BACKGROUND_LABELS[bg]}
-                                        </button>
-                                      );
-                                    });
-                                  })()}
-                                </div>
+                              <div className="absolute left-0 right-0 top-full mt-2 rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/10%)] overflow-hidden z-30 py-1.5">
+                                {(() => {
+                                  const formats = additionalCopyFormat ? [additionalCopyFormat] : [];
+                                  const onlyPng = additionalCopyFormat === "png";
+                                  const allowed = allowedBackgroundsFor(formats);
+                                  const opts = onlyPng
+                                    ? ALL_BACKGROUNDS.map((bg) => ({ bg, enabled: allowed.includes(bg) }))
+                                    : allowed.map((bg) => ({ bg, enabled: true }));
+                                  return opts.map(({ bg, enabled }) =>
+                                    dropRow(additionalCopyBackground === bg, enabled, BACKGROUND_LABELS[bg], () => { setAdditionalCopyBackground(bg); setAdditionalCopyBackgroundOpen(false); })
+                                  );
+                                })()}
                               </div>
                             )}
                           </div>
 
-                          <div>
-                            <p className="text-[10px] uppercase tracking-wider text-[rgb(var(--accent-text))] font-bold mb-2">Layer structure</p>
-                            <div className="grid grid-cols-2 gap-2">
-                              <button type="button" onClick={() => setAdditionalCopyLayer("single")}
-                                className={`rounded-lg py-2.5 text-center border font-bold text-xs transition-all ${additionalCopyLayer === "single" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]"}`}>
-                                Single layer
-                              </button>
-                              <button type="button"
-                                onClick={() => additionalCopyFormat && formatAllowsLayers(additionalCopyFormat) && setAdditionalCopyLayer("multiple")}
-                                className={`rounded-lg py-2.5 text-center border font-bold text-xs transition-all ${additionalCopyLayer === "multiple" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]" : additionalCopyFormat && formatAllowsLayers(additionalCopyFormat) ? "border-[rgb(var(--fg-rgb)/8%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/40%)]" : "border-[rgb(var(--fg-rgb)/6%)] bg-[rgb(var(--fg-rgb)/2%)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"}`}>
-                                Multiple layer
-                              </button>
-                            </div>
+                          <div className="relative">
+                            <button type="button" onClick={() => { setAdditionalCopyLayerOpen(!additionalCopyLayerOpen); setFormatBoxOpen(false); setBackgroundBoxOpen(false); setLayerBoxOpen(false); setAdditionalCopyFormatOpen(false); setAdditionalCopyBackgroundOpen(false); }}
+                              className={dropdownOpenClass(additionalCopyLayerOpen)}>
+                              <span className="flex items-center gap-2 min-w-0">
+                                <span className="text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold shrink-0">Layer structure</span>
+                                <span className="truncate font-semibold text-[rgb(var(--fg-rgb))]">
+                                  {additionalCopyLayer === "multiple" ? "Multiple layer" : "Single layer"}
+                                </span>
+                              </span>
+                              <svg className={`w-4 h-4 text-[rgb(var(--fg-rgb)/30%)] transition-transform shrink-0 ${additionalCopyLayerOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                            </button>
+                            {additionalCopyLayerOpen && (
+                              <div className="absolute left-0 right-0 top-full mt-2 rounded-2xl glass-card border border-[rgb(var(--fg-rgb)/10%)] overflow-hidden z-30 py-1.5">
+                                {dropRow(additionalCopyLayer === "single", true, "Single layer", () => { setAdditionalCopyLayer("single"); setAdditionalCopyLayerOpen(false); })}
+                                {dropRow(additionalCopyLayer === "multiple", !!additionalCopyFormat && formatAllowsLayers(additionalCopyFormat), "Multiple layer", () => { if (additionalCopyFormat && formatAllowsLayers(additionalCopyFormat)) { setAdditionalCopyLayer("multiple"); setAdditionalCopyLayerOpen(false); } })}
+                              </div>
+                            )}
                           </div>
                         </div>
                       )}
