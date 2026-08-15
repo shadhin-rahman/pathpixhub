@@ -75,7 +75,7 @@ export default function CreditsPage() {
                 className="relative rounded-3xl border-2 border-[rgb(var(--accent-500)/25%)] bg-[var(--bg-alt)] p-3 shadow-[0_30px_80px_rgb(var(--accent-500)/20%)]"
               >
                 <Image
-                  src="/images/credits-hero.jfif"
+                  src="/images/credits-hero.jpg"
                   alt="Path credits illustration"
                   width={1376}
                   height={768}
