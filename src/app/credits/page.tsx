@@ -42,26 +42,38 @@ export default function CreditsPage() {
       {/* Hero */}
       <section className="pt-40 pb-20 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-text))] text-sm font-bold mb-6 border border-[rgb(var(--accent-500)/15%)]">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              PathPixHub Credits
-            </span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight gradient-text leading-[1.1]">
-              Save time &amp; money with credits
-            </h1>
-            <p className="mt-5 text-lg text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-2xl mx-auto">
-              Regular customer or big batch coming up? Buy credits once and get the lowest price per edit — with bonus credits the more you buy.
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a href="#bundles"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm">
-                Buy credits
-              </a>
-              <a href="#faq"
-                className="px-8 py-4 rounded-full glass-card border border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))] font-bold hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))] transition-all text-sm">
-                How it works
-              </a>
+          <div className="grid lg:grid-cols-2 items-center gap-12">
+            <div className="text-center lg:text-left max-w-2xl lg:max-w-none">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-text))] text-sm font-bold mb-6 border border-[rgb(var(--accent-500)/15%)]">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                PathPixHub Credits
+              </span>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight gradient-text leading-[1.1]">
+                Save time &amp; money with credits
+              </h1>
+              <p className="mt-5 text-lg text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-2xl lg:mx-0 mx-auto">
+                Regular customer or big batch coming up? Buy credits once and get the lowest price per edit — with bonus credits the more you buy.
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row items-center lg:justify-start justify-center gap-4">
+                <a href="#bundles"
+                  className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm">
+                  Buy credits
+                </a>
+                <a href="#faq"
+                  className="px-8 py-4 rounded-full glass-card border border-[rgb(var(--fg-rgb)/10%)] text-[rgb(var(--fg-rgb))] font-bold hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))] transition-all text-sm">
+                  How it works
+                </a>
+              </div>
+            </div>
+            <div className="relative hidden lg:block justify-self-center">
+              <motion.img
+                src="/images/credits-illustration.svg"
+                alt="Path credits illustration"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.15 }}
+                className="w-[420px] h-[420px] object-contain drop-shadow-[0_25px_60px_rgb(var(--accent-500)/35%)]"
+              />
             </div>
           </div>
         </div>
