@@ -12,6 +12,7 @@ export const CREDIT_BUNDLES = [
   { price: 2500, paid: 2500, free: 700, credits: 3200, per: 0.78 },
   { price: 5000, paid: 5000, free: 1550, credits: 6550, per: 0.76 },
   { price: 10000, paid: 10000, free: 3500, credits: 13500, per: 0.74 },
+  { price: 20000, paid: 20000, free: 8000, credits: 28000, per: 0.71 },
 ];
 
 export const savingPct = (per: number) => Math.round((1 - per) * 100);
