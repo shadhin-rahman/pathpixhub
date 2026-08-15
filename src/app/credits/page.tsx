@@ -67,7 +67,7 @@ export default function CreditsPage() {
             </div>
             <div className="relative hidden lg:block justify-self-center">
               <motion.img
-                src="/images/credits-illustration.svg"
+                src="/images/credits-hero.jfif"
                 alt="Path credits illustration"
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
