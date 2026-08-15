@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
+import { Coins } from "lucide-react";
 import CreditBundleSelector from "@/components/CreditBundleSelector";
 
 const FAQS = [
@@ -66,14 +68,24 @@ export default function CreditsPage() {
               </div>
             </div>
             <div className="relative hidden lg:block justify-self-center">
-              <motion.img
-                src="/images/credits-hero.jfif"
-                alt="Path credits illustration"
+              <motion.div
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.15 }}
-                className="w-[420px] h-[420px] object-contain drop-shadow-[0_25px_60px_rgb(var(--accent-500)/35%)]"
-              />
+                className="relative rounded-3xl border-2 border-[rgb(var(--accent-500)/25%)] bg-[var(--bg-alt)] p-3 shadow-[0_30px_80px_rgb(var(--accent-500)/20%)]"
+              >
+                <Image
+                  src="/images/credits-hero.jfif"
+                  alt="Path credits illustration"
+                  width={1376}
+                  height={768}
+                  className="w-[520px] h-auto rounded-2xl object-cover"
+                />
+                <div className="mt-3 flex items-center justify-center gap-2 text-xs font-bold text-[rgb(var(--accent-text))]">
+                  <Coins className="w-4 h-4" />
+                  Credits make every order faster
+                </div>
+              </motion.div>
             </div>
           </div>
         </div>
