@@ -72,6 +72,12 @@ function todayEndIso() {
   return d.toISOString();
 }
 
+function oneYearAgoIso(): string {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() - 1);
+  return d.toISOString();
+}
+
 export default function AdminPanel({
   profiles,
   orders,
@@ -292,9 +298,9 @@ export default function AdminPanel({
                   const fromIso =
                     rangeDays > 0
                       ? rangeStartIso(rangeDays)!
-                      : customerOrders.length
-                        ? customerOrders.map((o) => o.created_at).sort()[0]
-                        : new Date(Date.now() - 365 * 86400000).toISOString();
+: customerOrders.length
+                          ? customerOrders.map((o) => o.created_at).sort()[0]
+                          : oneYearAgoIso();
                   const invoiceUrl = `/admin/invoice?user_id=${encodeURIComponent(profile.id)}&from=${encodeURIComponent(
                     fromIso,
                   )}&to=${encodeURIComponent(todayEndIso())}`;

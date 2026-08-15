@@ -1,6 +1,8 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import Image from "next/image";
+
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchCountryCode, isCountryBlocked, setBypassCode, isAdmin } from "@/lib/countryBlocker";
 import { isOrderRef } from "@/lib/orderRef";
@@ -235,7 +237,7 @@ export default function ContactForm() {
         ref: orderRef,
       });
       setLastOrderRef(orderRef);
-      window.location.href = `/payment?${params.toString()}`;
+      window.location.assign(`/payment?${params.toString()}`);
       return;
     }
 
@@ -262,7 +264,7 @@ export default function ContactForm() {
       setColorRefUploading(true);
       try {
         const sb = createSupabaseClient();
-        const folder = `supporting/${Date.now()}`;
+        const folder = `supporting/${crypto.randomUUID()}`;
         for (const file of colorRefFiles) {
           const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
           const path = `${folder}/${crypto.randomUUID()}.${ext}`;
@@ -409,24 +411,21 @@ export default function ContactForm() {
   ].some(k => hasSelection(k));
   const colorNeedsPathService = hasColorChange && !hasPathOrMaskingService && !hasExistingClippingPath;
 
-  const { subtotal, discountApplies, discountAmount, turnaroundFee, total, orderedKeys } = useMemo(() => {
-    let sub = 0;
-    for (const [key, sel] of Object.entries(selections)) {
-      const info = getService(key);
-      if (!info) continue;
-      sub += getPricePerImage(info, sel) * imgCount;
-    }
-    const additionalCopyCost = wantAdditionalCopy ? ADDITIONAL_COPY_PRICE * imgCount : 0;
-    sub += additionalCopyCost;
-    const applies = imgCount >= VOLUME_DISCOUNT_THRESHOLD;
-    const discount = applies ? sub * VOLUME_DISCOUNT_RATE : 0;
-    const base = sub - discount;
-    const fee = base * turnaroundSurcharge;
-    return {
-      subtotal: sub, discountApplies: applies, discountAmount: discount,
-      turnaroundFee: fee, total: base + fee, orderedKeys: Object.keys(selections),
-    };
-  }, [selections, imgCount, turnaroundSurcharge, wantAdditionalCopy]);
+  const orderedKeys = Object.keys(selections);
+  let sub = 0;
+  for (const [key, sel] of Object.entries(selections)) {
+    const info = getService(key);
+    if (!info) continue;
+    sub += getPricePerImage(info, sel) * imgCount;
+  }
+  const additionalCopyCost = wantAdditionalCopy ? ADDITIONAL_COPY_PRICE * imgCount : 0;
+  sub += additionalCopyCost;
+  const discountApplies = imgCount >= VOLUME_DISCOUNT_THRESHOLD;
+  const discountAmount = discountApplies ? sub * VOLUME_DISCOUNT_RATE : 0;
+  const base = sub - discountAmount;
+  const turnaroundFee = base * turnaroundSurcharge;
+  const subtotal = sub;
+  const total = base + turnaroundFee;
 
   const quoteSummary = (() => {
     if (orderedKeys.length === 0) return "";
@@ -523,7 +522,7 @@ export default function ContactForm() {
                 <div className="flex flex-wrap gap-2">
                   {colorRefFiles.map((file, idx) => (
                     <div key={idx} className="relative">
-                      <img src={URL.createObjectURL(file)} alt={file.name}
+                      <Image src={URL.createObjectURL(file)} alt={file.name} width={56} height={56} unoptimized
                         className="w-14 h-14 rounded-lg object-cover border border-[rgb(var(--fg-rgb)/10%)]" />
                       <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[rgb(var(--fg-rgb)/80%)] text-[rgb(var(--bg-base))] text-[11px] leading-5 text-center cursor-pointer"
                         onClick={() => setColorRefFiles(prev => prev.filter((_, i) => i !== idx))}>×</span>
@@ -546,7 +545,7 @@ export default function ContactForm() {
                 }
               }}
                 className="w-4 h-4 mt-0.5 rounded accent-[rgb(var(--accent-600))]" />
-              <span className="text-[11px] font-semibold text-[rgb(var(--fg-rgb)/80%)] leading-snug">My images already have a clipping path — so I don't need a clipping or masking service, just color change on my pre-cut images.</span>
+              <span className="text-[11px] font-semibold text-[rgb(var(--fg-rgb)/80%)] leading-snug">My images already have a clipping path — so I don&apos;t need a clipping or masking service, just color change on my pre-cut images.</span>
             </label>
             {hasExistingClippingPath && (
               <p className="mt-2 rounded-lg bg-[rgb(var(--accent-500)/10%)] border border-[rgb(var(--accent-500)/30%)] px-3 py-2 text-[11px] font-semibold text-[rgb(var(--accent-text))]">

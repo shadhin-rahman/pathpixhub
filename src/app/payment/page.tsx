@@ -7,7 +7,6 @@ import { PAYONEER_ACTIVE, PAYONEER_PAYMENT_URL, PAYONEER_EMAIL, CURRENCIES, STRI
 
 const CARD_BRANDS = ["VISA", "Mastercard", "AMEX", "Discover", "PayPal", "UnionPay"];
 
-const NAVY = "#081526";
 const INK = "#0b1624";
 const GREEN = "rgb(137 243 54)";
 
@@ -59,22 +58,25 @@ export default function PaymentPage() {
   }, []);
 
   useEffect(() => {
-    const p = new URLSearchParams(window.location.search);
-    setPlan(p.get("plan") || "");
-    setDesc(p.get("desc") || "");
-    setImages(p.get("images") || "");
-    setName(p.get("name") || "");
-    setEmail(p.get("email") || "");
-    setPaymentTiming(p.get("payment_timing") || "");
-    setOrderRef(p.get("ref") || "");
-    const amt = parseFloat(p.get("amount") || "");
-    if (!Number.isNaN(amt) && amt > 0) {
-      setAmount(amt);
-      setHasAmount(true);
-    }
-    const cur = CURRENCIES.findIndex((c) => c.code === (p.get("currency") || "").toUpperCase());
-    if (cur >= 0) setCurrency(cur);
-    setLoaded(true);
+    const t = setTimeout(() => {
+      const p = new URLSearchParams(window.location.search);
+      setPlan(p.get("plan") || "");
+      setDesc(p.get("desc") || "");
+      setImages(p.get("images") || "");
+      setName(p.get("name") || "");
+      setEmail(p.get("email") || "");
+      setPaymentTiming(p.get("payment_timing") || "");
+      setOrderRef(p.get("ref") || "");
+      const amt = parseFloat(p.get("amount") || "");
+      if (!Number.isNaN(amt) && amt > 0) {
+        setAmount(amt);
+        setHasAmount(true);
+      }
+      const cur = CURRENCIES.findIndex((c) => c.code === (p.get("currency") || "").toUpperCase());
+      if (cur >= 0) setCurrency(cur);
+      setLoaded(true);
+    }, 0);
+    return () => clearTimeout(t);
   }, []);
 
   const curr = CURRENCIES[currency];

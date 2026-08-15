@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { PAYONEER_PAYME_URL, WHATSAPP_LINK } from "@/lib/payment";
+import { PAYONEER_PAYME_URL } from "@/lib/payment";
 
 const TIERS = [
   {

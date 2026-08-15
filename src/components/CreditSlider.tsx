@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Coins, Minus, Plus } from "lucide-react";
 
 export const CREDIT_BUNDLES = [
@@ -39,14 +39,14 @@ export default function CreditSlider({
   const [dragging, setDragging] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  const setFromClientX = (clientX: number) => {
+  const setFromClientX = useCallback((clientX: number) => {
     const el = trackRef.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
     const frac = Math.min(1, Math.max(0, (clientX - r.left) / r.width));
     const i = Math.round(frac * (CREDIT_BUNDLES.length - 1));
     onChange(CREDIT_BUNDLES[i].price);
-  };
+  }, [onChange]);
 
   useEffect(() => {
     if (!dragging) return;
@@ -58,7 +58,7 @@ export default function CreditSlider({
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerup", up);
     };
-  }, [dragging]);
+  }, [dragging, setFromClientX]);
 
   const step = (dir: number) => {
     const i = Math.max(0, Math.min(CREDIT_BUNDLES.length - 1, idx + dir));

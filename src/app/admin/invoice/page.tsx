@@ -12,6 +12,12 @@ function formatDate(iso: string) {
   });
 }
 
+function tomorrowIso(): string {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  return d.toISOString();
+}
+
 export default async function InvoicePage({
   searchParams,
 }: {
@@ -45,7 +51,7 @@ export default async function InvoicePage({
   if (!profile) redirect("/admin");
 
   const from = params.from ? new Date(params.from) : new Date(0);
-  const to = params.to ? new Date(params.to) : new Date(Date.now() + 86400000);
+  const to = params.to ? new Date(params.to) : new Date(tomorrowIso());
 
   const { data: orders } = await supabase
     .from("orders")
