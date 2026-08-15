@@ -81,7 +81,7 @@ export default function CreditBundleSelector() {
             </div>
 
             {view === "packs" ? (
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                 {CREDIT_BUNDLES.map((b) => {
                   const active = selected === b.price;
                   const save = savingPct(b.per);
@@ -90,10 +90,10 @@ export default function CreditBundleSelector() {
                       key={b.price}
                       type="button"
                       onClick={() => setSelected(b.price)}
-                      className={`relative w-full rounded-2xl border-2 px-5 py-5 sm:px-7 sm:py-6 text-left transition-all cursor-pointer ${
+                      className={`relative rounded-2xl border-2 px-6 py-7 sm:px-8 sm:py-9 text-center transition-all cursor-pointer ${
                         active
                           ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] shadow-lg shadow-[rgb(var(--accent-500)/30%)]"
-                          : "border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--accent-500)/40%)]"
+                          : "border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] hover:border-[rgb(var(--accent-500)/40%)] hover:-translate-y-0.5"
                       }`}
                     >
                       {b.popular && (
@@ -102,26 +102,38 @@ export default function CreditBundleSelector() {
                         </span>
                       )}
 
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pr-2">
-                        <span className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${active ? "text-[rgb(var(--accent-contrast))]" : "text-[rgb(var(--fg-rgb))]"}`}>
+                      <span className={`mx-auto w-12 h-12 rounded-2xl grid place-items-center border ${active ? "bg-[rgb(var(--accent-contrast)/15%)] border-[rgb(var(--accent-contrast)/25%)] text-[rgb(var(--accent-contrast))]" : "bg-[rgb(var(--accent-500)/10%)] border-[rgb(var(--accent-500)/20%)] text-[rgb(var(--accent-text))]"}`}>
+                        <Coins className="w-6 h-6" />
+                      </span>
+
+                      <div className={`mt-4 flex flex-wrap items-baseline justify-center gap-x-2 gap-y-1 ${active ? "text-[rgb(var(--accent-contrast))]" : "text-[rgb(var(--fg-rgb))]"}`}>
+                        <span className="text-2xl sm:text-3xl font-extrabold tracking-tight">
                           ${b.price.toLocaleString()}
                         </span>
                         <span className={`text-2xl sm:text-3xl font-bold ${active ? "text-[rgb(var(--accent-contrast)/70%)]" : "text-[rgb(var(--fg-rgb)/35%)]"}`}>→</span>
-                        <span className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${active ? "text-[rgb(var(--accent-contrast))]" : "text-[rgb(var(--fg-rgb))]"}`}>
-                          {b.credits.toLocaleString()} credits
+                        <span className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                          {b.credits.toLocaleString()}
+                        </span>
+                        <span className={`text-sm font-bold uppercase tracking-wide ${active ? "text-[rgb(var(--accent-contrast)/70%)]" : "text-[rgb(var(--fg-rgb)/45%)]"}`}>
+                          credits
                         </span>
                       </div>
 
-                      <p className={`mt-2 text-sm sm:text-base font-semibold ${active ? "text-[rgb(var(--accent-contrast)/80%)]" : "text-[rgb(var(--fg-rgb)/60%)]"}`}>
-                        <span className="font-bold">{b.paid.toLocaleString()} paid</span> +{" "}
+                      <span className={`mt-5 inline-flex flex-wrap items-center justify-center gap-x-2 rounded-xl border px-4 py-2.5 text-sm font-semibold ${
+                        active
+                          ? "border-[rgb(var(--accent-contrast)/25%)] bg-[rgb(var(--accent-contrast)/10%)] text-[rgb(var(--accent-contrast))]"
+                          : "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                      }`}>
+                        <span className="font-bold">{b.paid.toLocaleString()} paid</span>
+                        <span className="opacity-70">+</span>
                         <span className="font-bold">{b.free.toLocaleString()} free</span>
-                        <span className="mx-2 opacity-60">·</span>
-                        ${b.per.toFixed(2)} / credit
-                        <span className={`mx-2 opacity-60 ${active ? "text-[rgb(var(--accent-contrast)/80%)]" : "text-emerald-500"}`}>·</span>
-                        <span className={`inline-flex items-center gap-1 font-bold ${active ? "text-[rgb(var(--accent-contrast))]" : "text-emerald-500"}`}>
-                          <Sparkles className="w-3.5 h-3.5" />
-                          Save {save}%
-                        </span>
+                        <span className="opacity-50">·</span>
+                        <span>${b.per.toFixed(2)} / credit</span>
+                      </span>
+
+                      <p className={`mt-4 inline-flex items-center gap-1.5 text-xs font-bold ${active ? "text-[rgb(var(--accent-contrast)/85%)]" : "text-emerald-500"}`}>
+                        <Sparkles className="w-3.5 h-3.5" />
+                        Save {save}% on this pack
                       </p>
                     </button>
                   );
