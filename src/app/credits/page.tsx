@@ -42,7 +42,7 @@ export default function CreditsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="pt-40 pb-20 mesh-gradient">
+      <section className="pt-36 pb-10 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 items-center gap-12">
             <div className="text-center lg:text-left max-w-2xl lg:max-w-none">
@@ -88,53 +88,38 @@ export default function CreditsPage() {
               </motion.div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Trust strip */}
-      <section className="border-b border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-alt)]">
-        <div className="max-w-7xl mx-auto px-6 py-6 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[rgb(var(--fg-rgb)/8%)] text-center">
-          {[
-            { icon: "💵", t: "From $0.76 per image", d: "with our biggest packs" },
-            { icon: "⚡", t: "Turnaround from 6 hours", d: "standard & express options" },
-            { icon: "✅", t: "Quality guaranteed", d: "unlimited revisions until perfect" },
-          ].map((x) => (
-            <div key={x.t} className="py-4 px-4">
-              <p className="text-sm font-bold text-[rgb(var(--fg-rgb))]"><span className="mr-1.5">{x.icon}</span>{x.t}</p>
-              <p className="text-xs text-[rgb(var(--fg-rgb)/50%)] mt-1">{x.d}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Benefits */}
-      <section className="py-20 lg:py-24 bg-[var(--bg)]">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { icon: "⏱️", title: "Save time", desc: "Pay once, then fly through checkout on every future order without touching your card again." },
-            { icon: "💰", title: "Save money", desc: "Credits give you the lowest price per edit. The more you buy, the more you save." },
-            { icon: "🤝", title: "Bonus credits", desc: "Every bigger pack is topped up with free bonus credits — 4 to 1,550 free credits on top." },
-          ].map((b, i) => (
-            <motion.div key={b.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08 }}
-              className="rounded-2xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-alt)] p-6 hover:border-[rgb(var(--accent-500)/30%)] transition-all"
-            >
-              <span className="text-3xl">{b.icon}</span>
-              <h3 className="mt-4 text-lg font-bold text-[rgb(var(--fg-rgb))]">{b.title}</h3>
-              <p className="mt-2 text-sm text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">{b.desc}</p>
-            </motion.div>
-          ))}
+          {/* Hero benefits */}
+          <div className="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-5">
+            {[
+              { icon: "⏱️", title: "Save time", desc: "Pay once, then fly through checkout on every future order without touching your card again." },
+              { icon: "💰", title: "Save money", desc: "Credits give you the lowest price per edit. The more you buy, the more you save." },
+              { icon: "🤝", title: "Bonus credits", desc: "Every bigger pack is topped up with free bonus credits — up to 8,000 free credits on top." },
+            ].map((b, i) => (
+              <motion.div key={b.title}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+                className="rounded-2xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-alt)] p-6 flex items-start gap-4"
+              >
+                <span className="text-2xl">{b.icon}</span>
+                <div>
+                  <h3 className="font-bold text-[rgb(var(--fg-rgb))]">{b.title}</h3>
+                  <p className="mt-1 text-sm text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">{b.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Bundles */}
-      <section id="bundles" className="py-20 lg:py-24 bg-[var(--bg-alt)]">
+      <section id="bundles" className="py-16 lg:py-20 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight gradient-text">Buy more, get more</h2>
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <span className="text-xs uppercase tracking-[0.3em] font-bold text-[rgb(var(--fg-rgb)/40%)]">Credit bundles</span>
+            <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight gradient-text">Buy more, get more</h2>
             <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)]">Pick a bigger pack and we&apos;ll top you up with bonus credits. <span className="font-bold text-[rgb(var(--fg-rgb))]">1 credit = $1</span> toward your orders.</p>
           </div>
 
