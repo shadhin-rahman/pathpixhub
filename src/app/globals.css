@@ -8,12 +8,12 @@
   --glass-bg: rgba(255, 255, 255, 0.04);
   --glass-border: rgba(255, 255, 255, 0.08);
   --logo-filter: brightness(0) invert(1);
-  --accent-300: 201 168 140;
-  --accent-400: 168 124 92;
-  --accent-500: 139 90 60;
-  --accent-600: 107 65 40;
-  --accent-text: 198 150 116;
-  --accent-contrast: 255 255 255;
+  --accent-300: 63 63 70;
+  --accent-400: 161 161 170;
+  --accent-500: 250 250 250;
+  --accent-600: 212 212 216;
+  --accent-text: 250 250 250;
+  --accent-contrast: 9 9 11;
   color-scheme: dark;
 }
 
@@ -25,11 +25,11 @@
   --glass-bg: rgba(0, 0, 0, 0.03);
   --glass-border: rgba(0, 0, 0, 0.08);
   --logo-filter: none;
-  --accent-300: 201 168 140;
-  --accent-400: 168 124 92;
-  --accent-500: 139 90 60;
-  --accent-600: 107 65 40;
-  --accent-text: 139 90 60;
+  --accent-300: 244 244 245;
+  --accent-400: 113 113 122;
+  --accent-500: 9 9 11;
+  --accent-600: 39 39 42;
+  --accent-text: 9 9 11;
   --accent-contrast: 255 255 255;
   color-scheme: light;
 }
@@ -110,10 +110,7 @@
   }
 
   .premium-blur {
-    position: absolute;
-    pointer-events: none;
-    background: radial-gradient(circle at center, rgb(var(--accent-500) / 15%), transparent 70%);
-    animation: float 14s ease-in-out infinite;
+    display: none;
   }
 
   @keyframes float {
@@ -195,18 +192,12 @@
   }
 
   .mesh-gradient {
-    background:
-      radial-gradient(at 0% 0%, rgb(var(--accent-500) / 8%) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgb(var(--accent-500) / 5%) 0px, transparent 50%),
-      linear-gradient(to bottom, var(--bg), var(--bg-alt));
+    background: linear-gradient(to bottom, var(--bg), var(--bg-alt));
     transition: background-color 0.3s ease;
   }
 
   .brand-cta {
-    background:
-      radial-gradient(900px 500px at 85% -10%, rgb(var(--accent-500) / 12%), transparent 60%),
-      radial-gradient(700px 400px at 0% 110%, rgb(var(--accent-500) / 8%), transparent 60%),
-      linear-gradient(to bottom, #0a0a0a, #111111);
+    background: linear-gradient(to bottom, #0a0a0a, #111111);
   }
   .brand-cta .gradient-text {
     background-image: linear-gradient(to bottom right, #ffffff, rgb(255 255 255 / 45%));

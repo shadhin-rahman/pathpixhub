@@ -51,7 +51,7 @@ export default function Home() {
         <motion.div className="absolute inset-0 flex items-center justify-center" style={{ opacity: heroOpacity, y: heroY }}>
           <div className="text-center px-6 max-w-5xl">
             <motion.div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-card text-xs font-bold text-[rgb(var(--accent-300))] tracking-[0.2em] uppercase mb-8 border-[rgb(var(--accent-500)/30%)]" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}>
-              <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))] animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))]" />
               Professional Photo Editing
             </motion.div>
             <motion.h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.9] text-white" initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}>
@@ -88,7 +88,7 @@ export default function Home() {
             <div key={i} className="flex items-center gap-16">
               {["24/7 Customer Support", "12hr Fast Turnaround", "From $0.39 / Image", "100% Satisfaction", "Free Trial Available"].map((text) => (
                 <span key={text} className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-[#8e96a0] whitespace-nowrap tracking-wider uppercase">
-                  <span className="w-1 h-1 rounded-full bg-[#8B5A3C]" />
+                  <span className="w-1 h-1 rounded-full bg-[#141311]" />
                   {text}
                 </span>
               ))}
@@ -102,7 +102,7 @@ export default function Home() {
         <div className="relative w-full max-w-5xl mx-auto px-6 py-24 sm:py-32 text-center">
           <TextReveal>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-[rgb(var(--accent-text))] text-sm font-medium mb-6">
-              <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))] animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))]" />
               Professional Photo Editing Services
             </div>
           </TextReveal>
