@@ -988,6 +988,7 @@ export default function ContactForm() {
                       </div>
                       {wantAdditionalCopy && (
                         <div className="mt-3 space-y-3">
+                          <div className="grid grid-cols-2 gap-3">
                           <div>
                             <label className="block text-[10px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/35%)] font-bold mb-1.5">Return file format</label>
                             <div className="relative">
@@ -1023,6 +1024,7 @@ export default function ContactForm() {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                               </svg>
                             </div>
+                          </div>
                           </div>
 
                           <div>
