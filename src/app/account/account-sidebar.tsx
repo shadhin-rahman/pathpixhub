@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import SidebarPromoCarousel from "./sidebar-promo-carousel";
 import {
   LayoutDashboard,
   PlusCircle,
@@ -77,33 +78,39 @@ export default function AccountSidebar({ role }: { role: string }) {
     <>
       {/* Desktop sidebar */}
       <aside className="hidden lg:block">
-        <div className="sticky top-8 flex flex-col gap-1 glass-card rounded-3xl p-4">
+        <div className="sticky top-8 flex flex-col gap-4">
+          <div className="flex flex-col gap-1 glass-card rounded-3xl p-4">
+            <NavItems role={role} pathname={pathname} />
+            <form action="/auth/signout" method="post" className="mt-2 border-t border-[rgb(var(--fg-rgb)/10%)] pt-3">
+              <button
+                type="submit"
+                className="w-full inline-flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-bold transition-all text-[rgb(var(--fg-rgb)/60%)] hover:text-red-400 hover:bg-red-500/5 cursor-pointer"
+              >
+                <LogOut className="w-4 h-4 shrink-0" />
+                Sign out
+              </button>
+            </form>
+          </div>
+          <SidebarPromoCarousel />
+        </div>
+      </aside>
+
+      {/* Mobile top nav */}
+      <div className="lg:hidden flex flex-col gap-4">
+        <nav className="flex items-center gap-2 overflow-x-auto pb-2 -mx-6 px-6">
           <NavItems role={role} pathname={pathname} />
-          <form action="/auth/signout" method="post" className="mt-2 border-t border-[rgb(var(--fg-rgb)/10%)] pt-3">
+          <form action="/auth/signout" method="post" className="shrink-0">
             <button
               type="submit"
-              className="w-full inline-flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-bold transition-all text-[rgb(var(--fg-rgb)/60%)] hover:text-red-400 hover:bg-red-500/5 cursor-pointer"
+              className="inline-flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-bold transition-all text-[rgb(var(--fg-rgb)/60%)] hover:text-red-400 hover:bg-red-500/5 whitespace-nowrap cursor-pointer"
             >
               <LogOut className="w-4 h-4 shrink-0" />
               Sign out
             </button>
           </form>
-        </div>
-      </aside>
-
-      {/* Mobile top nav */}
-      <nav className="lg:hidden flex items-center gap-2 overflow-x-auto pb-2 -mx-6 px-6">
-        <NavItems role={role} pathname={pathname} />
-        <form action="/auth/signout" method="post" className="shrink-0">
-          <button
-            type="submit"
-            className="inline-flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-bold transition-all text-[rgb(var(--fg-rgb)/60%)] hover:text-red-400 hover:bg-red-500/5 whitespace-nowrap cursor-pointer"
-          >
-            <LogOut className="w-4 h-4 shrink-0" />
-            Sign out
-          </button>
-        </form>
-      </nav>
+        </nav>
+        <SidebarPromoCarousel />
+      </div>
     </>
   );
 }
