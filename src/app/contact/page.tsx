@@ -1,6 +1,6 @@
-"use client";
 
 import Image from "next/image";
+import { Suspense } from "react";
 import ContactForm from "@/components/ContactForm";
 import CreditBanner from "@/components/CreditBanner";
 
@@ -38,7 +38,9 @@ export default function ContactPage() {
 
       <section className="py-20 lg:py-28 bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-6">
-          <ContactForm />
+          <Suspense fallback={null}>
+            <ContactForm />
+          </Suspense>
         </div>
       </section>
 
