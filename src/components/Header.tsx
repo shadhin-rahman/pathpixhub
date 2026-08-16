@@ -35,8 +35,8 @@ export default function Header() {
         </Link>
 
         <div className="hidden md:flex items-center gap-3 pr-4 md:pr-10">
-          <AccountButton />
           <ThemeToggle className={`w-11 h-11 rounded-full glass-card ${isLegalPage ? "text-white border-white/25 hover:border-white/50" : "text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))]"}`} />
+          <AccountButton />
           <Link
             href="/contact"
             className="px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-black hover:bg-[rgb(var(--accent-400))] transition-all duration-300 text-xs uppercase tracking-[0.4em] whitespace-nowrap"
@@ -68,8 +68,8 @@ export default function Header() {
         </div>
 
         <div className="md:hidden flex items-center gap-1.5 pr-4">
-          <AccountButton compact />
           <ThemeToggle className={`w-8 h-8 rounded-full glass-card ${isLegalPage ? "text-white border-white/25" : "text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-text))]"}`} />
+          <AccountButton compact />
           <Link
             href="/contact"
             className="px-3 py-2.5 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-black hover:bg-[rgb(var(--accent-400))] transition-all duration-300 text-[10px] uppercase tracking-[0.2em] whitespace-nowrap"
