@@ -3,6 +3,7 @@
 import Image from "next/image";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchCountryCode, isCountryBlocked, setBypassCode, isAdmin } from "@/lib/countryBlocker";
 import { isOrderRef } from "@/lib/orderRef";
@@ -72,28 +73,41 @@ const TURNAROUND_OPTIONS = [
   { id: "96", label: "96 Hours+", desc: "Flexible", surcharge: -0.07 },
 ];
 
-type FileFormatId = "jpg" | "png";
-type FileBackground = "original" | "white" | "transparent" | "mask";
+type FileFormatId = "jpg" | "png" | "psd" | "tif";
+type FileBackground = "original" | "white" | "transparent" | "custom" | "mask";
 type LayerStructure = "single" | "multiple";
 
 const BACKGROUND_LABELS: Record<FileBackground, string> = {
   original: "Original Background",
   white: "White Background",
   transparent: "Transparent Background",
+  custom: "Custom Background",
   mask: "Layer Mask",
 };
 
 const FILE_FORMAT_LABELS: Record<FileFormatId, string> = {
   jpg: "JPG",
   png: "PNG",
+  psd: "PSD",
+  tif: "TIF",
 };
 
+// JPG: original / white / custom background, single layer only.
+// PNG: transparent / white / custom background, single layer only.
+// PSD & TIF: every background option, plus a choice of single or multiple layer.
 const FORMAT_BACKGROUNDS: Record<FileFormatId, FileBackground[]> = {
-  jpg: ["white", "original"],
-  png: ["white", "transparent"],
+  jpg: ["original", "white", "custom"],
+  png: ["transparent", "white", "custom"],
+  psd: ["original", "white", "transparent", "mask"],
+  tif: ["original", "white", "transparent", "mask"],
 };
 
-const ALL_BACKGROUNDS: FileBackground[] = ["white", "transparent", "original", "mask"];
+// Formats that support choosing between single and multiple layer output.
+const MULTI_LAYER_FORMATS: FileFormatId[] = ["psd", "tif"];
+const supportsMultipleLayer = (formats: FileFormatId[]): boolean =>
+  formats.length > 0 && formats.every((f) => MULTI_LAYER_FORMATS.includes(f));
+
+const ALL_BACKGROUNDS: FileBackground[] = ["original", "white", "transparent", "custom", "mask"];
 
 const allowedBackgroundsFor = (formats: FileFormatId[]): FileBackground[] =>
   ALL_BACKGROUNDS.filter((bg) => formats.every((f) => FORMAT_BACKGROUNDS[f].includes(bg)));
@@ -169,7 +183,28 @@ const getDisplayLabel = (info: ServiceInfo, sel: ServiceSelection): string => {
 };
 
 export default function ContactForm() {
-  const [wantsQuote, setWantsQuote] = useState(true);
+  // Linking to /contact?tab=question (e.g. from the header's "Contact" menu
+  // item) opens the simple "Just have a question" form instead of the
+  // multi-step quote builder, so people who just want to reach out aren't
+  // asked to configure services first.
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+  const [wantsQuote, setWantsQuote] = useState(tabParam !== "question");
+
+  // The useState initializer above only runs once, on first mount. If
+  // someone is already on /contact (say, on the "Build a Quote" tab) and
+  // clicks the header's "Contact" menu link again, Next.js updates the URL
+  // but does NOT remount this component (same route, just a new query
+  // string) — so without the check below the tab would silently stay
+  // wherever it already was instead of switching to "Just have a question".
+  // This re-derives it during render whenever the tab param itself changes
+  // (the React-recommended way to reset state on a prop change, instead of
+  // an effect that would cause an extra render).
+  const [lastTabParam, setLastTabParam] = useState(tabParam);
+  if (tabParam !== lastTabParam) {
+    setLastTabParam(tabParam);
+    setWantsQuote(tabParam !== "question");
+  }
   const [selections, setSelections] = useState<Record<string, ServiceSelection>>({});
   const [hasExistingClippingPath, setHasExistingClippingPath] = useState(false);
   const [expandedSvc, setExpandedSvc] = useState<string | null>(null);
@@ -207,17 +242,18 @@ export default function ContactForm() {
   const selectFormat = (fmt: FileFormatId) => {
     setFileFormats([fmt]);
     const allowed = allowedBackgroundsFor([fmt]);
-    if (fileBackground && !allowed.includes(fileBackground)) setFileBackground(allowed[0]);
-    setLayerStructure("single");
+    if (!fileBackground || !allowed.includes(fileBackground)) setFileBackground(allowed[0]);
+    if (!supportsMultipleLayer([fmt])) setLayerStructure("single");
   };
 
   const chooseAdditionalFormat = (fmt: FileFormatId) => {
     setAdditionalCopyFormat(fmt);
     const allowed = allowedBackgroundsFor([fmt]);
-    if (additionalCopyBackground && !allowed.includes(additionalCopyBackground)) {
+    if (!additionalCopyBackground || !allowed.includes(additionalCopyBackground)) {
       setAdditionalCopyBackground(allowed[0]);
     }
-    setAdditionalCopyLayer("single");
+    if (!supportsMultipleLayer([fmt])) setAdditionalCopyLayer("single");
+    else if (!additionalCopyLayer) setAdditionalCopyLayer("single");
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -863,38 +899,53 @@ export default function ContactForm() {
                     </div>
 
                     <div>
-                      <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">File format</label>
-                      <div className="grid grid-cols-2 gap-2">
-                        {(Object.keys(FILE_FORMAT_LABELS) as FileFormatId[]).map((fmt) => (
-                          <button key={fmt} type="button" onClick={() => selectFormat(fmt)}
-                            className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${fileFormats.includes(fmt) ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"}`}>
-                            {FILE_FORMAT_LABELS[fmt]}
-                          </button>
-                        ))}
+                      <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Return file format</label>
+                      <div className="relative">
+                        <select
+                          value={fileFormats[0] ?? ""}
+                          onChange={(e) => selectFormat(e.target.value as FileFormatId)}
+                          className="w-full appearance-none px-4 py-3.5 pr-10 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm font-semibold text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)] cursor-pointer">
+                          {(Object.keys(FILE_FORMAT_LABELS) as FileFormatId[]).map((fmt) => (
+                            <option key={fmt} value={fmt}>{FILE_FORMAT_LABELS[fmt]}</option>
+                          ))}
+                        </select>
+                        <svg className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[rgb(var(--fg-rgb)/40%)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Background</label>
-                      <div className="grid grid-cols-2 gap-2">
-                        {allowedBackgroundsFor(fileFormats).map((bg) => (
-                          <button key={bg} type="button" onClick={() => setFileBackground(bg)}
-                            className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${fileBackground === bg ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"}`}>
-                            {BACKGROUND_LABELS[bg]}
-                          </button>
-                        ))}
+                      <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Background option</label>
+                      <div className="relative">
+                        <select
+                          value={fileBackground ?? ""}
+                          onChange={(e) => setFileBackground(e.target.value as FileBackground)}
+                          className="w-full appearance-none px-4 py-3.5 pr-10 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm font-semibold text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)] cursor-pointer">
+                          {allowedBackgroundsFor(fileFormats).map((bg) => (
+                            <option key={bg} value={bg}>{BACKGROUND_LABELS[bg]}</option>
+                          ))}
+                        </select>
+                        <svg className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[rgb(var(--fg-rgb)/40%)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Layer structure</label>
+                      <label className="block text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold mb-2">Layer option</label>
                       <div className="grid grid-cols-2 gap-2">
                         <button type="button" onClick={() => setLayerStructure("single")}
                           className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${layerStructure === "single" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"}`}>Single layer</button>
-                        <button type="button" disabled
-                          className="rounded-xl py-3 text-center border font-bold text-sm transition-all border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed">Multiple layer</button>
+                        <button type="button" disabled={!supportsMultipleLayer(fileFormats)}
+                          onClick={() => setLayerStructure("multiple")}
+                          className={supportsMultipleLayer(fileFormats)
+                            ? `rounded-xl py-3 text-center border font-bold text-sm transition-all ${layerStructure === "multiple" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"}`
+                            : "rounded-xl py-3 text-center border font-bold text-sm transition-all border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"}>Multiple layer</button>
                       </div>
-                      <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-1.5">{FILE_FORMAT_LABELS[fileFormats[0]]} always uses a single layer.</p>
+                      {!supportsMultipleLayer(fileFormats) && (
+                        <p className="text-[11px] text-[rgb(var(--fg-rgb)/35%)] mt-1.5">{FILE_FORMAT_LABELS[fileFormats[0]]} always uses a single layer. Switch to PSD or TIF for multiple layers.</p>
+                      )}
                     </div>
 
                     <div>
@@ -936,36 +987,52 @@ export default function ContactForm() {
                       {wantAdditionalCopy && (
                         <div className="mt-3 space-y-3">
                           <div>
-                            <label className="block text-[10px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/35%)] font-bold mb-1.5">Additional copy format</label>
-                            <div className="grid grid-cols-2 gap-2">
-                              {(Object.keys(FILE_FORMAT_LABELS) as FileFormatId[]).map((fmt) => (
-                                <button key={fmt} type="button" onClick={() => chooseAdditionalFormat(fmt)}
-                                  className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${additionalCopyFormat === fmt ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"}`}>
-                                  {FILE_FORMAT_LABELS[fmt]}
-                                </button>
-                              ))}
+                            <label className="block text-[10px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/35%)] font-bold mb-1.5">Return file format</label>
+                            <div className="relative">
+                              <select
+                                value={additionalCopyFormat ?? ""}
+                                onChange={(e) => chooseAdditionalFormat(e.target.value as FileFormatId)}
+                                className="w-full appearance-none px-4 py-3.5 pr-10 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm font-semibold text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)] cursor-pointer">
+                                <option value="" disabled>Select</option>
+                                {(Object.keys(FILE_FORMAT_LABELS) as FileFormatId[]).map((fmt) => (
+                                  <option key={fmt} value={fmt}>{FILE_FORMAT_LABELS[fmt]}</option>
+                                ))}
+                              </select>
+                              <svg className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[rgb(var(--fg-rgb)/40%)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                              </svg>
                             </div>
                           </div>
 
                           <div>
-                            <label className="block text-[10px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/35%)] font-bold mb-1.5">Background</label>
-                            <div className="grid grid-cols-2 gap-2">
-                              {(additionalCopyFormat ? allowedBackgroundsFor([additionalCopyFormat]) : []).map((bg) => (
-                                <button key={bg} type="button" onClick={() => setAdditionalCopyBackground(bg)}
-                                  className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${additionalCopyBackground === bg ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"}`}>
-                                  {BACKGROUND_LABELS[bg]}
-                                </button>
-                              ))}
+                            <label className="block text-[10px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/35%)] font-bold mb-1.5">Background option</label>
+                            <div className="relative">
+                              <select
+                                value={additionalCopyBackground ?? ""}
+                                onChange={(e) => setAdditionalCopyBackground(e.target.value as FileBackground)}
+                                disabled={!additionalCopyFormat}
+                                className="w-full appearance-none px-4 py-3.5 pr-10 rounded-xl bg-[var(--bg-subtle)] border border-[rgb(var(--fg-rgb)/10%)] text-sm font-semibold text-[rgb(var(--fg-rgb))] outline-none focus:border-[rgb(var(--accent-500)/50%)] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+                                <option value="" disabled>Select</option>
+                                {(additionalCopyFormat ? allowedBackgroundsFor([additionalCopyFormat]) : []).map((bg) => (
+                                  <option key={bg} value={bg}>{BACKGROUND_LABELS[bg]}</option>
+                                ))}
+                              </select>
+                              <svg className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[rgb(var(--fg-rgb)/40%)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                              </svg>
                             </div>
                           </div>
 
                           <div>
-                            <label className="block text-[10px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/35%)] font-bold mb-1.5">Layer structure</label>
+                            <label className="block text-[10px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/35%)] font-bold mb-1.5">Layer option</label>
                             <div className="grid grid-cols-2 gap-2">
                               <button type="button" onClick={() => setAdditionalCopyLayer("single")}
                                 className={`rounded-xl py-3 text-center border font-bold text-sm transition-all ${additionalCopyLayer === "single" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"}`}>Single layer</button>
-                              <button type="button" disabled
-                                className="rounded-xl py-3 text-center border font-bold text-sm transition-all border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed">Multiple layer</button>
+                              <button type="button" disabled={!additionalCopyFormat || !supportsMultipleLayer([additionalCopyFormat])}
+                                onClick={() => setAdditionalCopyLayer("multiple")}
+                                className={additionalCopyFormat && supportsMultipleLayer([additionalCopyFormat])
+                                  ? `rounded-xl py-3 text-center border font-bold text-sm transition-all ${additionalCopyLayer === "multiple" ? "border-[rgb(var(--accent-600))] bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow-lg shadow-[rgb(var(--accent-500)/25%)]" : "border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)]"}`
+                                  : "rounded-xl py-3 text-center border font-bold text-sm transition-all border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)] text-[rgb(var(--fg-rgb)/25%)] cursor-not-allowed"}>Multiple layer</button>
                             </div>
                           </div>
                         </div>
