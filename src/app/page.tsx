@@ -99,38 +99,23 @@ export default function Home() {
 
       <section className="relative overflow-hidden mesh-gradient">
         <div className="premium-blur w-[500px] h-[500px] top-[-20%] right-[-10%]" />
-        <div className="relative w-full max-w-7xl mx-auto px-6 py-20 sm:py-28">
-          <div className="max-w-2xl">
-            <TextReveal>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-[rgb(var(--accent-text))] text-sm font-medium mb-6">
-                <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))] animate-pulse" />
-                Professional Photo Editing Services
-              </div>
-            </TextReveal>
-            <TextReveal>
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.95] text-[rgb(var(--fg-rgb))]">
-                Transform Your Photos<br /><span className="text-[rgb(var(--accent-text))]">with Precision</span>
-              </h1>
-            </TextReveal>
-            <TextReveal>
-              <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/70%)] leading-relaxed max-w-lg">
-                From flawless clipping paths to high-end retouching — pixel-perfect results with fast turnaround for e-commerce, fashion, and advertising.
-              </p>
-            </TextReveal>
-            <TextReveal>
-              <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
-                <MagneticButton strength={0.12}>
-                  <Link href="/free-trial" className="group px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm inline-flex items-center gap-2">
-                    Start Free Trial
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                  </Link>
-                </MagneticButton>
-                <MagneticButton strength={0.12}>
-                  <Link href="/services" className="px-8 py-4 rounded-full glass-card text-[rgb(var(--fg-rgb))] font-semibold hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm">View Services</Link>
-                </MagneticButton>
-              </div>
-            </TextReveal>
-          </div>
+        <div className="relative w-full max-w-5xl mx-auto px-6 py-24 sm:py-32 text-center">
+          <TextReveal>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-[rgb(var(--accent-text))] text-sm font-medium mb-6">
+              <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))] animate-pulse" />
+              Professional Photo Editing Services
+            </div>
+          </TextReveal>
+          <TextReveal>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter leading-[0.95] text-[rgb(var(--fg-rgb))]">
+              Transform Your Photos <span className="text-[rgb(var(--accent-text))]">with Precision</span>
+            </h1>
+          </TextReveal>
+          <TextReveal>
+            <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/70%)] leading-relaxed max-w-2xl mx-auto">
+              From flawless clipping paths to high-end retouching — pixel-perfect results with fast turnaround for e-commerce, fashion, and advertising.
+            </p>
+          </TextReveal>
         </div>
       </section>
 
