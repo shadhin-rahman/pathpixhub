@@ -154,23 +154,20 @@ export default function BeforeAfterSlider({
           />
         </motion.div>
 
-        {/* Modern handle */}
+        {/* Divider line + handle */}
         <motion.div
-          className="absolute z-30 top-1/2 cursor-grab active:cursor-grabbing"
-          style={{ left: sweepPercent, x: "-50%", y: "-50%" }}
+          className="absolute z-30 top-0 bottom-0 cursor-ew-resize"
+          style={{ left: sweepPercent, x: "-50%" }}
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
         >
+          <div className="w-[3px] h-full bg-[rgb(var(--accent-500))] shadow-[0_0_14px_rgb(var(--accent-500)/60%)]" />
           <motion.div
             animate={isDragging ? { scale: 1.15 } : { scale: 1 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-shadow duration-300 ${
-              isDragging
-                ? "bg-white shadow-[0_4px_24px_rgba(0,0,0,0.35)]"
-                : "bg-white/95 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[0_4px_28px_rgba(0,0,0,0.35)]"
-            }`}
+            className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] border-2 border-white shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-shadow duration-300 group-hover:shadow-[0_4px_28px_rgba(0,0,0,0.4)]"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-gray-800">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-[rgb(var(--accent-contrast))]">
               <path d="M8.5 7L4 11.5L8.5 16" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M15.5 16L20 11.5L15.5 7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
               <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" opacity="0.4"/>
