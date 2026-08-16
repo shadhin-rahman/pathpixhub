@@ -8,7 +8,7 @@ import { PAYONEER_ACTIVE, PAYONEER_PAYMENT_URL, PAYONEER_EMAIL, CURRENCIES, STRI
 const CARD_BRANDS = ["VISA", "Mastercard", "AMEX", "Discover", "PayPal", "UnionPay"];
 
 const INK = "#0b1624";
-const ACCENT = "rgb(139 90 60)";
+const ACCENT = "rgb(161 161 170)";
 
 const TRUST_POINTS = [
   "256-bit SSL encrypted checkout",
@@ -138,11 +138,11 @@ export default function PaymentPage() {
             className="relative flex items-center justify-center px-6 py-16 sm:px-12 lg:px-14 lg:py-20 overflow-hidden"
             style={{
               background:
-                "radial-gradient(750px 420px at 92% -12%, rgb(139 90 60 / 0.14), transparent 60%), radial-gradient(650px 420px at -8% 112%, rgb(198 150 116 / 0.12), transparent 60%), #081526",
+                "radial-gradient(750px 420px at 92% -12%, rgb(161 161 170 / 0.14), transparent 60%), radial-gradient(650px 420px at -8% 112%, rgb(161 161 170 / 0.12), transparent 60%), #081526",
             }}
           >
             <div className="relative w-full max-w-xl">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-7" style={{ background: "rgb(139 90 60 / 0.12)", borderColor: "rgb(139 90 60 / 0.3)" }}>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-7" style={{ background: "rgb(161 161 170 / 0.12)", borderColor: "rgb(161 161 170 / 0.3)" }}>
                 <svg className="w-4 h-4" fill="none" stroke={ACCENT} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                 <span className="text-xs font-bold tracking-widest uppercase" style={{ color: ACCENT }}>Secure Checkout</span>
               </div>
@@ -161,7 +161,7 @@ export default function PaymentPage() {
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.08 }}
                     className="flex items-start gap-4">
-                    <span className="w-10 h-10 shrink-0 rounded-xl border flex items-center justify-center text-lg" style={{ background: "rgb(139 90 60 / 0.12)", borderColor: "rgb(139 90 60 / 0.25)" }}>
+                    <span className="w-10 h-10 shrink-0 rounded-xl border flex items-center justify-center text-lg" style={{ background: "rgb(161 161 170 / 0.12)", borderColor: "rgb(161 161 170 / 0.25)" }}>
                       {s.icon}
                     </span>
                     <div>
@@ -184,7 +184,7 @@ export default function PaymentPage() {
               <Link href="/contact"
                 className="mt-10 inline-flex items-center gap-2 px-6 py-3.5 rounded-full font-bold text-sm transition-all"
                 style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.16)", color: "#ffffff" }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgb(139 90 60 / 0.6)"; e.currentTarget.style.background = "rgba(255,255,255,0.1)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgb(161 161 170 / 0.6)"; e.currentTarget.style.background = "rgba(255,255,255,0.1)"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.16)"; e.currentTarget.style.background = "rgba(255,255,255,0.06)"; }}>
                 Need help? Contact our team
               </Link>
@@ -197,7 +197,7 @@ export default function PaymentPage() {
               {/* Order Summary */}
               <div className="rounded-3xl border-2 p-8 sm:p-9 bg-white shadow-2xl" style={{ borderColor: "rgba(11, 22, 36, 0.1)", boxShadow: "0 30px 60px -25px rgba(8, 21, 38, 0.25)" }}>
                 <div className="flex items-center gap-3 mb-6">
-                  <span className="w-10 h-10 rounded-xl flex items-center justify-center text-xl" style={{ background: "rgb(139 90 60 / 0.16)", border: "1px solid rgb(139 90 60 / 0.45)" }}>🧾</span>
+                  <span className="w-10 h-10 rounded-xl flex items-center justify-center text-xl" style={{ background: "rgb(161 161 170 / 0.16)", border: "1px solid rgb(161 161 170 / 0.45)" }}>🧾</span>
                   <h2 className="text-xl font-bold" style={{ color: INK }}>Order Summary</h2>
                 </div>
 
@@ -246,7 +246,7 @@ export default function PaymentPage() {
                   <div className="relative" ref={currencyRef}>
                     <button type="button" onClick={() => setCurrencyOpen(!currencyOpen)}
                       className="w-full flex items-center justify-between gap-3 px-4 py-3.5 rounded-xl border-2 text-sm font-bold transition-all"
-                      style={{ borderColor: currencyOpen ? "rgb(139 90 60 / 0.6)" : "rgba(11, 22, 36, 0.14)", background: "#ffffff", color: INK }}>
+                      style={{ borderColor: currencyOpen ? "rgb(161 161 170 / 0.6)" : "rgba(11, 22, 36, 0.14)", background: "#ffffff", color: INK }}>
                       <span className="flex items-center gap-2">
                         <svg className="w-5 h-5" fill="none" stroke={ACCENT} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0 2c2.21 0 4 1.79 4 4v5c0 .55-.45 1-1 1s-1-.45-1-1v-5c0-1.1-.9-2-2-2s-2 .9-2 2v5c0 .55-.45 1-1 1s-1-.45-1-1v-5c0-2.21 1.79-4 4-4z" /></svg>
                         {curr.label}
@@ -258,10 +258,10 @@ export default function PaymentPage() {
                         {CURRENCIES.map((c, i) => (
                           <button key={c.code} type="button" onClick={() => { setCurrency(i); setCurrencyOpen(false); }}
                             className="w-full flex items-center justify-between px-4 py-3 text-sm font-bold transition-colors"
-                            style={{ color: currency === i ? "#6b4128" : INK_MUTED, background: currency === i ? "rgb(139 90 60 / 0.12)" : "#ffffff" }}>
+                            style={{ color: currency === i ? "rgb(9 9 11)" : INK_MUTED, background: currency === i ? "rgb(161 161 170 / 0.12)" : "#ffffff" }}>
                             {c.label}
                             {currency === i && (
-                              <svg className="w-4 h-4" fill="none" stroke="#6b4128" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                              <svg className="w-4 h-4" fill="none" stroke="rgb(9 9 11)" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
                             )}
                           </button>
                         ))}
@@ -272,10 +272,10 @@ export default function PaymentPage() {
               </div>
 
               {/* Payment Method */}
-              <div className="rounded-3xl border-2 p-8 sm:p-9 bg-white" style={{ borderColor: "rgb(139 90 60 / 0.45)", background: "linear-gradient(160deg, rgb(139 90 60 / 0.14) 0%, rgb(139 90 60 / 0.04) 55%, #ffffff 100%)" }}>
+              <div className="rounded-3xl border-2 p-8 sm:p-9 bg-white" style={{ borderColor: "rgb(161 161 170 / 0.45)", background: "linear-gradient(160deg, rgb(161 161 170 / 0.14) 0%, rgb(161 161 170 / 0.04) 55%, #ffffff 100%)" }}>
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-bold" style={{ color: INK }}>Payment Method</h2>
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full border" style={{ background: "rgb(139 90 60 / 0.18)", color: "#6b4128", borderColor: "rgb(139 90 60 / 0.45)" }}>Recommended</span>
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full border" style={{ background: "rgb(161 161 170 / 0.18)", color: "rgb(9 9 11)", borderColor: "rgb(161 161 170 / 0.45)" }}>Recommended</span>
                 </div>
 
                 {/* Payoneer card */}
@@ -324,7 +324,7 @@ export default function PaymentPage() {
                   {payNowHref ? (
                     <a href={payNowHref} target="_blank" rel="noopener noreferrer" onClick={(e) => { if (paymentTiming === "now") { e.preventDefault(); submitOrderThen(payNowHref); } }}
                       className="w-full inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold transition-all text-sm shadow-lg"
-                      style={{ boxShadow: "0 20px 45px -20px rgb(139 90 60 / 0.65)" }}>
+                      style={{ boxShadow: "0 20px 45px -20px rgba(9, 9, 11, 0.35)" }}>
                       {submitting ? "Saving your order..." : `Pay Now — ${hasAmount ? `${formatMoney(converted)} ${curr.code}` : "Secure Payment"}`}
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                     </a>
@@ -332,7 +332,7 @@ export default function PaymentPage() {
                     <a href={`mailto:${PAYONEER_EMAIL}?subject=${encodeURIComponent(plan ? `Payment for ${plan} plan` : "Payment for my order")}&body=${encodeURIComponent(hasAmount ? `I'd like to complete payment for my order (${formatMoney(converted)} ${curr.code}). Please send me the secure payment link.` : "I'd like to complete payment for my order. Please send me the secure payment link.")}`}
                       onClick={() => { if (paymentTiming === "now") submitOrderThen(`mailto:${PAYONEER_EMAIL}?subject=${encodeURIComponent(plan ? `Payment for ${plan} plan` : "Payment for my order")}&body=${encodeURIComponent(hasAmount ? `I'd like to complete payment for my order (${formatMoney(converted)} ${curr.code}). Please send me the secure payment link.` : "I'd like to complete payment for my order. Please send me the secure payment link.")}`); }}
                       className="w-full inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold transition-all text-sm shadow-lg"
-                      style={{ boxShadow: "0 20px 45px -20px rgb(139 90 60 / 0.65)" }}>
+                      style={{ boxShadow: "0 20px 45px -20px rgba(9, 9, 11, 0.35)" }}>
                       Request Secure Payment Link
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                     </a>

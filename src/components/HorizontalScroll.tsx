@@ -33,7 +33,7 @@ export function ScrollProgressBar({ className = "" }: ScrollProgressBarProps) {
 
   return (
     <motion.div
-      className={`fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[rgb(var(--accent-500))] via-[rgb(var(--accent-400))] to-[rgb(var(--accent-300))] origin-left z-[9999] ${className}`}
+      className={`fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[rgb(var(--accent-500))] via-[rgb(var(--accent-400))] to-[rgb(var(--accent-400))] origin-left z-[9999] ${className}`}
       style={{ scaleX: scrollYProgress }}
     />
   );

@@ -237,7 +237,7 @@ export default function FreeTrialPage() {
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 pt-16 pb-20">
           <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgb(var(--accent-500)/20%)] text-[rgb(var(--accent-300))] text-sm font-bold mb-6 backdrop-blur-sm border border-[rgb(var(--accent-500)/20%)]">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgb(var(--accent-500)/20%)] text-[rgb(var(--accent-400))] text-sm font-bold mb-6 backdrop-blur-sm border border-white/20">
               <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))] animate-pulse" />
               Free Trial
             </span>
