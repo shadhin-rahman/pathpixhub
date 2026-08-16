@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-const EMAIL = "pathpixhub@gmail.com";
+const EMAIL = "info@pathpixhub.com";
 
 const GMAIL_COMPOSE = `https://mail.google.com/mail/?view=cm&fs=1&to=${EMAIL}`;
 

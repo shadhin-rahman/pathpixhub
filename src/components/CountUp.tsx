@@ -6,22 +6,23 @@ interface Props {
   end: number;
   suffix?: string;
   label: string;
+  decimals?: number;
 }
 
-export default function CountUp({ end, suffix = "", label }: Props) {
+export default function CountUp({ end, suffix = "", label, decimals = 0 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState("0");
 
   useEffect(() => {
     if (!isInView) return;
     const controls = animate(0, end, {
       duration: 2,
       ease: [0.22, 1, 0.36, 1],
-      onUpdate: (val) => setCount(Math.round(val)),
+      onUpdate: (val) => setCount(val.toFixed(decimals)),
     });
     return () => controls.stop();
-  }, [isInView, end]);
+  }, [isInView, end, decimals]);
 
   return (
     <div ref={ref} className="glass-card rounded-xl p-5">

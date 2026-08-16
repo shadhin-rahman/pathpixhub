@@ -581,7 +581,7 @@ export default function FreeTrialPage() {
                         )}
                         {submitStatus === "error" && (
                           <p className="text-xs text-red-400 text-center bg-red-400/10 border border-red-400/30 rounded-xl px-4 py-3">
-                            {submitError} Please try again or email us at <a href="mailto:pathpixhub@gmail.com" className="underline">pathpixhub@gmail.com</a>.
+                            {submitError} Please try again or email us at <a href="mailto:info@pathpixhub.com" className="underline">info@pathpixhub.com</a>.
                           </p>
                         )}
                         <p className="text-xs text-[rgb(var(--fg-rgb)/30%)] text-center">We&apos;ll edit your images and respond within 6-8 hours.</p>

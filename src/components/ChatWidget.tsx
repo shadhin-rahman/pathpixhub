@@ -78,7 +78,7 @@ export default function ChatWidget() {
               ) : (
                 <p className="text-xs text-[rgb(var(--fg-rgb)/50%)] leading-relaxed">
                   Live chat coming soon. Please{" "}
-                  <a href="mailto:pathpixhub@gmail.com" className="text-[rgb(var(--accent-text))] underline">
+                  <a href="mailto:info@pathpixhub.com" className="text-[rgb(var(--accent-text))] underline">
                     email us
                   </a>{" "}
                   or use the contact form.

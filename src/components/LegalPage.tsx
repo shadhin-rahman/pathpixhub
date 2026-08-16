@@ -30,18 +30,18 @@ export default function LegalPage({
         <div className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(900px 500px at 85% -10%, rgba(16, 185, 129, 0.10), transparent 60%), radial-gradient(700px 400px at 0% 110%, rgba(30, 64, 175, 0.25), transparent 60%)",
+              "radial-gradient(900px 500px at 85% -10%, rgba(255, 255, 255, 0.05), transparent 60%), radial-gradient(700px 400px at 0% 110%, rgba(255, 255, 255, 0.03), transparent 60%)",
           }}
         />
         <div className="relative max-w-5xl mx-4 md:mx-10 px-0">
           <div className="flex items-center gap-3 mb-6">
-            <span className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold">Legal</span>
+            <span className="text-xs uppercase font-mono tracking-[0.4em] text-white/70 font-bold">Legal</span>
             <span className="text-xs uppercase font-mono tracking-[0.2em] text-white/40 font-bold">Effective {effectiveDate}</span>
           </div>
           <h1 className="logo-text uppercase text-6xl md:text-7xl lg:text-9xl font-extrabold tracking-tight text-white leading-[0.95] text-balance text-left">
             {title}
           </h1>
-          <div className="mt-6 w-24 h-1 rounded-full bg-[rgb(var(--accent-500))]" />
+          <div className="mt-6 w-24 h-1 rounded-full bg-white" />
           <p className="mt-8 text-lg text-white/60 leading-relaxed">
             {intro}
           </p>
@@ -121,7 +121,7 @@ export default function LegalPage({
               {contactIntro ?? "Email our legal team and we will get back to you."}
             </p>
             <a
-              href="mailto:pathpixhub@gmail.com"
+              href="mailto:info@pathpixhub.com"
               className="mt-5 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold text-sm hover:bg-[rgb(var(--accent-400))] transition-all"
             >
               Email Legal Team

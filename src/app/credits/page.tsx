@@ -22,7 +22,7 @@ const FAQS = [
   },
   {
     q: "How can I check my credit balance?",
-    a: "Email us at pathpixhub@gmail.com any time and we'll reply with your current balance and order history instantly.",
+    a: "Email us at info@pathpixhub.com any time and we'll reply with your current balance and order history instantly.",
   },
   {
     q: "Can I get a bigger discount for regular bulk edits?",

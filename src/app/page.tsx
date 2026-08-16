@@ -50,34 +50,33 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70" />
         <motion.div className="absolute inset-0 flex items-center justify-center" style={{ opacity: heroOpacity, y: heroY }}>
           <div className="text-center px-6 max-w-5xl">
-            <motion.div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-card text-xs font-bold text-[rgb(var(--accent-300))] tracking-[0.2em] uppercase mb-8 border-[rgb(var(--accent-500)/30%)]" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}>
+            <motion.div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-card text-xs font-bold text-[rgb(var(--accent-400))] tracking-[0.2em] uppercase mb-8 border-white/20" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}>
               <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))]" />
               Professional Photo Editing
             </motion.div>
             <motion.h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.9] text-white" initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}>
-              Pixel Perfect<br /><span className="text-[rgb(var(--accent-500))]">Results</span>
+              Pixel Perfect<br /><span className="text-[rgb(var(--accent-400))]">Results</span>
             </motion.h1>
             <motion.p className="mt-6 text-lg sm:text-xl text-white/70 max-w-lg mx-auto" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.8 }}>
-              Expert photo editing for e-commerce, fashion &amp; advertising.
+              High-volume post-production and smart photo editing for global e-commerce brands.
             </motion.p>
             <motion.div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1 }}>
               <MagneticButton strength={0.15}>
-                <Link href="/free-trial" className="group px-10 py-5 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm inline-flex items-center gap-3">
+                <Link href="/free-trial" className="group px-10 py-5 rounded-full bg-white text-zinc-900 font-bold hover:bg-zinc-200 transition-all text-sm inline-flex items-center gap-3">
                   Start Free Trial
                   <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </Link>
               </MagneticButton>
               <MagneticButton strength={0.15}>
                 <Link href="/services" className="px-10 py-5 rounded-full glass-card text-white font-semibold hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm">
-                  View Services
+                  Explore Services
                 </Link>
               </MagneticButton>
             </motion.div>
           </div>
         </motion.div>
         <div className="absolute bottom-6 left-6 z-10 flex flex-wrap gap-3">
-          <span className="px-4 py-2 rounded-full glass-card text-xs font-bold text-[rgb(var(--accent-500))] tracking-wider uppercase border-[rgb(var(--accent-500)/30%)]">From $0.39 / Image</span>
-          <span className="px-4 py-2 rounded-full glass-card text-xs font-bold text-[rgb(var(--accent-text))] tracking-wider uppercase border-[rgb(var(--accent-500)/30%)]">12hr Turnaround</span>
+          <span className="px-4 py-2 rounded-full glass-card text-xs font-bold text-[rgb(var(--accent-400))] tracking-wider uppercase border-white/20">12hr Turnaround</span>
         </div>
         <ScrollIndicator />
       </motion.section>
@@ -219,10 +218,10 @@ export default function Home() {
               </TextReveal>
               <TextReveal>
                 <div className="mt-8 grid grid-cols-2 gap-4">
-                  <CountUp end={200} suffix="+" label="Projects" />
-                  <CountUp end={12} suffix="hr" label="Turnaround" />
-                  <CountUp end={100} suffix="%" label="Satisfaction" />
-                  <CountUp end={50} suffix="+" label="Clients" />
+                  <CountUp end={500} suffix="k+" label="Images Edited" />
+                  <CountUp end={12} suffix="hr" label="Guaranteed SLA" />
+                  <CountUp end={99.8} suffix="%" label="Client Satisfaction" decimals={1} />
+                  <CountUp end={200} suffix="+" label="Global Brands" />
                 </div>
               </TextReveal>
             </div>

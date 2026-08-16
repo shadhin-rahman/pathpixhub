@@ -175,7 +175,7 @@ export default async function InvoicePage({
 
           <p className="text-xs text-[rgb(var(--fg-rgb)/40%)] mt-8 leading-relaxed">
             Thank you for your business. Please make payment within the agreed terms. For any questions about this
-            invoice, contact us at pathpixhub@gmail.com.
+            invoice, contact us at info@pathpixhub.com.
           </p>
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import EmailModal from "@/components/EmailModal";
@@ -24,7 +24,7 @@ export default function Footer() {
       <div className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(900px 500px at 85% -10%, rgba(16, 185, 129, 0.10), transparent 60%), radial-gradient(700px 400px at 0% 110%, rgba(30, 64, 175, 0.25), transparent 60%)",
+            "radial-gradient(900px 500px at 85% -10%, rgba(255, 255, 255, 0.05), transparent 60%), radial-gradient(700px 400px at 0% 110%, rgba(255, 255, 255, 0.03), transparent 60%)",
         }}
       />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgb(var(--accent-500)/50%)] to-transparent" />
@@ -41,11 +41,7 @@ export default function Footer() {
               <div className="flex items-center gap-2.5 text-sm text-white/70">
                 <Mail className="w-4 h-4 text-[rgb(var(--accent-400))]" />
                 <button type="button" onClick={() => setEmailOpen(true)}
-                  className="hover:text-[rgb(var(--accent-400))] transition-colors underline underline-offset-2">pathpixhub@gmail.com</button>
-              </div>
-              <div className="flex items-center gap-2.5 text-sm text-white/70">
-                <Phone className="w-4 h-4 text-[rgb(var(--accent-400))]" />
-                <span>+880 0000 000 000</span>
+                  className="hover:text-[rgb(var(--accent-400))] transition-colors underline underline-offset-2">info@pathpixhub.com</button>
               </div>
               <div className="flex items-center gap-2.5 text-sm text-white/70">
                 <MapPin className="w-4 h-4 text-[rgb(var(--accent-400))]" />
