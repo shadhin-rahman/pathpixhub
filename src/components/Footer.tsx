@@ -105,7 +105,6 @@ export default function Footer() {
                 { name: "About", href: "/about" },
                 { name: "Portfolio", href: "/portfolio" },
                 { name: "Pricing", href: "/pricing" },
-                { name: "Contact", href: "/contact" },
               ].map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="text-sm text-white/60 hover:text-[rgb(var(--accent-400))] transition-colors">
@@ -113,6 +112,12 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link href="/contact"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] text-sm font-bold hover:bg-[rgb(var(--accent-400))] transition-all">
+                  Just have a question?
+                </Link>
+              </li>
             </ul>
           </div>
 
