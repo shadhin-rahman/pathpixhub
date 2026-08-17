@@ -75,14 +75,14 @@ export default function CreditPlans() {
         </div>
 
         {/* Billing toggle */}
-        <div className="flex justify-center mb-14">
-          <div className="inline-flex items-center gap-1 rounded-full border border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] p-1">
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex rounded-full border border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] p-1">
             {(["monthly", "annual"] as const).map((mode) => (
               <button
                 key={mode}
                 type="button"
                 onClick={() => setBilling(mode)}
-                className={`inline-flex items-center gap-2 px-5 sm:px-7 py-3 rounded-full text-sm font-bold transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
                   billing === mode
                     ? "bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] shadow"
                     : "text-[rgb(var(--fg-rgb)/55%)] hover:text-[rgb(var(--fg-rgb))]"
