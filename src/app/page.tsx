@@ -11,6 +11,7 @@ import StaggerReveal, { StaggerItem } from "@/components/StaggerReveal";
 import ScrollIndicator from "@/components/ScrollIndicator";
 import CountUp from "@/components/CountUp";
 import TextReveal from "@/components/TextReveal";
+import ImageScaleScroll from "@/components/ImageScaleScroll";
 import MagneticButton from "@/components/MagneticButton";
 import { ScrollProgressBar } from "@/components/HorizontalScroll";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
@@ -121,7 +122,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col lg:flex-row items-stretch gap-6">
             <div className="w-full lg:w-1/3 shrink-0 flex flex-col justify-center">
-              <TextReveal><h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">From Our Studio</h2></TextReveal>
+              <TextReveal><h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">From Ready Images</h2></TextReveal>
               <TextReveal><h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text pb-2">Every Product, Every Angle</h3></TextReveal>
               <TextReveal>
                 <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-lg">
@@ -136,19 +137,24 @@ export default function Home() {
                 </div>
               </TextReveal>
             </div>
-            <div className="w-full lg:w-2/3 grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 items-stretch">
-              {[
-                { src: "/images/hero-slider/bicycle.jpg", alt: "Bicycle product photo editing" },
-                { src: "/images/hero-slider/car-editing-1.jpg", alt: "Car photo editing" },
-                { src: "/images/hero-slider/ecommerce-product.jpg", alt: "E-commerce product photo editing" },
-                { src: "/images/hero-slider/background.jpg", alt: "Background removal" },
-                { src: "/images/hero-slider/Beauty retouching.jpg", alt: "Beauty retouching" },
-                { src: "/images/hero-slider/Skin Retouch.jpg", alt: "Skin retouching" },
-              ].map((slide) => (
-                <div key={slide.src} className="relative aspect-[4/3] rounded-2xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] group">
-                  <Image src={slide.src} alt={slide.alt} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="(max-width: 768px) 50vw, 22vw" />
+            <div className="w-full lg:w-2/3 flex items-stretch">
+              <ImageScaleScroll scaleFrom={0.9} scaleTo={1} className="w-full rounded-3xl">
+                <div className="relative w-full rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]" style={{ aspectRatio: "1600 / 700", maxHeight: "50rem", minHeight: "10rem" }}>
+                  {[
+                    { src: "/images/hero-slider/bicycle.jpg", alt: "bicycle photo editing", delay: "0s" },
+                    { src: "/images/hero-slider/car-editing-1.jpg", alt: "car photo editing", delay: "-8s" },
+                    { src: "/images/hero-slider/ecommerce-product.jpg", alt: "ecommerce product photo editing", delay: "-16s" },
+                    { src: "/images/hero-slider/background.jpg", alt: "background removal", delay: "-24s" },
+                    { src: "/images/hero-slider/Beauty retouching.jpg", alt: "beauty retouching", delay: "-32s" },
+                    { src: "/images/hero-slider/Blank poster.jpg", alt: "blank poster", delay: "-40s" },
+                    { src: "/images/hero-slider/Skin Retouch.jpg", alt: "skin retouch", delay: "-48s" },
+                  ].map((slide) => (
+                    <div key={slide.src} className="absolute inset-0 flex items-center justify-center" style={{ animation: "hero-fade-7 56s ease-in-out infinite", animationDelay: slide.delay }}>
+                      <Image src={slide.src} alt={slide.alt} fill className="object-cover mobile-object-contain" sizes="66vw" />
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </ImageScaleScroll>
             </div>
           </div>
         </div>
