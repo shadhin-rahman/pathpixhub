@@ -11,7 +11,6 @@ import StaggerReveal, { StaggerItem } from "@/components/StaggerReveal";
 import ScrollIndicator from "@/components/ScrollIndicator";
 import CountUp from "@/components/CountUp";
 import TextReveal from "@/components/TextReveal";
-import ImageScaleScroll from "@/components/ImageScaleScroll";
 import MagneticButton from "@/components/MagneticButton";
 import { ScrollProgressBar } from "@/components/HorizontalScroll";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
@@ -137,24 +136,19 @@ export default function Home() {
                 </div>
               </TextReveal>
             </div>
-            <div className="w-full lg:w-2/3 flex items-stretch">
-              <ImageScaleScroll scaleFrom={0.9} scaleTo={1} className="w-full rounded-3xl">
-                <div className="relative w-full rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]" style={{ aspectRatio: "1600 / 700", maxHeight: "50rem", minHeight: "10rem" }}>
-                  {[
-                    { src: "/images/hero-slider/bicycle.jpg", alt: "bicycle photo editing", delay: "0s" },
-                    { src: "/images/hero-slider/car-editing-1.jpg", alt: "car photo editing", delay: "-8s" },
-                    { src: "/images/hero-slider/ecommerce-product.jpg", alt: "ecommerce product photo editing", delay: "-16s" },
-                    { src: "/images/hero-slider/background.jpg", alt: "background removal", delay: "-24s" },
-                    { src: "/images/hero-slider/Beauty retouching.jpg", alt: "beauty retouching", delay: "-32s" },
-                    { src: "/images/hero-slider/Blank poster.jpg", alt: "blank poster", delay: "-40s" },
-                    { src: "/images/hero-slider/Skin Retouch.jpg", alt: "skin retouch", delay: "-48s" },
-                  ].map((slide) => (
-                    <div key={slide.src} className="absolute inset-0 flex items-center justify-center" style={{ animation: "hero-fade-7 56s ease-in-out infinite", animationDelay: slide.delay }}>
-                      <Image src={slide.src} alt={slide.alt} fill className="object-cover mobile-object-contain" sizes="66vw" />
-                    </div>
-                  ))}
+            <div className="w-full lg:w-2/3 grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 items-stretch">
+              {[
+                { src: "/images/hero-slider/bicycle.jpg", alt: "Bicycle product photo editing" },
+                { src: "/images/hero-slider/car-editing-1.jpg", alt: "Car photo editing" },
+                { src: "/images/hero-slider/ecommerce-product.jpg", alt: "E-commerce product photo editing" },
+                { src: "/images/hero-slider/background.jpg", alt: "Background removal" },
+                { src: "/images/hero-slider/Beauty retouching.jpg", alt: "Beauty retouching" },
+                { src: "/images/hero-slider/Skin Retouch.jpg", alt: "Skin retouching" },
+              ].map((slide) => (
+                <div key={slide.src} className="relative aspect-[4/3] rounded-2xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)] group">
+                  <Image src={slide.src} alt={slide.alt} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="(max-width: 768px) 50vw, 22vw" />
                 </div>
-              </ImageScaleScroll>
+              ))}
             </div>
           </div>
         </div>
