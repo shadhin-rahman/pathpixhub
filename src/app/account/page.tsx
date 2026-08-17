@@ -13,17 +13,12 @@ export default async function AccountPage() {
   }
 
   const supabase = await createClient();
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/login");
-  }
-
-  try {
-    await supabase.rpc("promote_founder");
-  } catch { /* founder already promoted or not founder */ }
+  if (!user) redirect("/login");
 
   const [{ data: profile }, { data: orders }] = await Promise.all([
     supabase

@@ -11,21 +11,27 @@ export default async function AccountLayout({
   if (!supabaseConfigured()) redirect("/login");
 
   const supabase = await createClient();
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) redirect("/login");
 
-  try {
-    await supabase.rpc("promote_founder");
-  } catch { /* founder already promoted or not founder */ }
+  const founderPromise = (async () => {
+    try {
+      await supabase.rpc("promote_founder");
+    } catch { /* founder already promoted or not founder */ }
+  })();
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single<Profile>();
+  const [{ data: profile }] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .single<Profile>(),
+    founderPromise,
+  ]);
 
   const role = profile?.role ?? "customer";
 
