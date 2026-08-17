@@ -105,7 +105,7 @@ export default function Footer() {
                 { name: "About", href: "/about" },
                 { name: "Portfolio", href: "/portfolio" },
                 { name: "Pricing", href: "/pricing" },
-                { name: "Help", href: "/contact" },
+                { name: "Help", href: "/contact?tab=question" },
               ].map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="text-sm text-white/60 hover:text-[rgb(var(--accent-400))] transition-colors">
