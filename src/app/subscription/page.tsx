@@ -33,8 +33,8 @@ const TIERS = [
     name: "Standard",
     badge: "Best Entry",
     badgeColor: "bg-orange-500/10 text-orange-400 border border-orange-500/20",
-    monthlyPrice: 7.9,
-    yearlyPrice: 79,
+    monthlyPrice: 50,
+    yearlyPrice: 480,
     perImage: 0,
     desc: "12h fast delivery for growing sellers",
     turnaround: "12h",
@@ -56,8 +56,8 @@ const TIERS = [
     name: "Pro",
     badge: "Most Popular",
     badgeColor: "bg-blue-500/10 text-blue-400 border border-blue-500/20",
-    monthlyPrice: 19.9,
-    yearlyPrice: 199,
+    monthlyPrice: 99,
+    yearlyPrice: 950,
     perImage: 0,
     desc: "Ultra fast 6h delivery for growing studios",
     turnaround: "6h",
@@ -81,7 +81,7 @@ const TIERS = [
     badge: "VIP Enterprise",
     badgeColor: "bg-purple-500/10 text-purple-400 border border-purple-500/20",
     monthlyPrice: 499,
-    yearlyPrice: 4999,
+    yearlyPrice: 4790,
     perImage: 0,
     desc: "Full white-glove VIP management for large brands",
     turnaround: "45m",
@@ -122,7 +122,7 @@ const FAQ_ITEMS = [
   { q: "How does the loyalty program work?", a: "6 consecutive months = 10% lifetime discount. Bonus credits on every top-up. Refer friends for free months!" },
   { q: "Can I cancel anytime?", a: "Yes, cancel anytime with no penalties. Access continues until billing period ends." },
   { q: "Can I pause my subscription?", a: "Of course! Pause manually or auto-pause after 1 inactive billing cycle. Monthly fee drops to $4/mo and all specs are saved. No reactivation fee!" },
-  { q: "How much do I save with annual billing?", a: "Save 20% with annual! Standard $79/yr, Pro $199/yr, Enterprise $4,999/yr. Price locked 12 months." },
+  { q: "How much do I save with annual billing?", a: "Save 20% with annual! Standard $480/yr, Pro $950/yr, Enterprise $4,790/yr. Price locked 12 months." },
 ];
 
 export default function SubscriptionPage() {
@@ -153,7 +153,7 @@ export default function SubscriptionPage() {
 
   const recommended = getRecommendedPlan();
   const recommendedNames = ["Free", "Standard", "Pro", "Enterprise"];
-  const recommendedPrices = [0, 7.9, 19.9, 499];
+  const recommendedPrices = [0, 50, 99, 499];
   const recommendedDescs = [
     "24h standard delivery",
     "12h fast delivery, 5 priority tickets",
@@ -163,10 +163,10 @@ export default function SubscriptionPage() {
 
   const getTierHref = (tier: (typeof TIERS)[number]): string => {
     if (tier.name === "Standard") {
-      return `/payment?plan=Standard&amount=${annual ? 79 : 7.9}&desc=${encodeURIComponent("Standard credit plan")}`;
+      return `/payment?plan=Standard&amount=${annual ? 480 : 50}&desc=${encodeURIComponent("Standard credit plan")}`;
     }
     if (tier.name === "Pro") {
-      return PAYONEER_PAYME_URL || `/payment?plan=Pro&amount=${annual ? 199 : 19.9}&desc=${encodeURIComponent("Pro credit plan")}`;
+      return PAYONEER_PAYME_URL || `/payment?plan=Pro&amount=${annual ? 950 : 99}&desc=${encodeURIComponent("Pro credit plan")}`;
     }
     if (tier.name === "Enterprise") {
       return "/enterprise";
@@ -454,8 +454,8 @@ export default function SubscriptionPage() {
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0">
             {[
               { icon: "🆓", name: "Free", price: "$0", desc: "Pay-as-you-go 24h delivery", color: "border-[rgb(var(--fg-rgb)/8%)]" },
-              { icon: "🔥", name: "Standard", price: "$7.9/mo", desc: "12h fast delivery, 5 priority tickets", color: "border-orange-500/30" },
-              { icon: "⭐", name: "Pro", price: "$19.9/mo", desc: "6h ultra fast + unlimited revisions", color: "border-[rgb(var(--accent-500)/50%)]" },
+              { icon: "🔥", name: "Standard", price: "$50/mo", desc: "12h fast delivery, 5 priority tickets", color: "border-orange-500/30" },
+              { icon: "⭐", name: "Pro", price: "$99/mo", desc: "6h ultra fast + unlimited revisions", color: "border-[rgb(var(--accent-500)/50%)]" },
               { icon: "👑", name: "Enterprise", price: "$499/mo", desc: "45min VIP SLA + dedicated team", color: "border-purple-500/30" },
             ].map((step, si) => (
               <div key={si} className="flex items-center">
