@@ -160,7 +160,7 @@ export default function CreditPlans() {
                   <button
                     type="button"
                     onClick={() => setModalOpen(true)}
-                    className="inline-block px-6 py-3 rounded-xl font-bold text-sm transition-all border-2 border-[rgb(var(--accent-500)/35%)] text-[rgb(var(--accent-text))] hover:border-[rgb(var(--accent-500))] hover:bg-[rgb(var(--accent-500)/10%)] cursor-pointer"
+                    className="inline-block px-6 py-3 rounded-xl font-bold text-sm transition-all bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] shadow-lg shadow-[rgb(var(--accent-500)/15%)] cursor-pointer"
                   >
                     Subscribe
                   </button>
@@ -169,7 +169,7 @@ export default function CreditPlans() {
                 <td className="py-5 px-4 text-center">
                   <Link
                     href="/enterprise"
-                    className="inline-block px-6 py-3 rounded-xl font-bold text-sm transition-all border-2 border-[rgb(var(--accent-500)/35%)] text-[rgb(var(--accent-text))] hover:border-[rgb(var(--accent-500))] hover:bg-[rgb(var(--accent-500)/10%)]"
+                    className="inline-block px-6 py-3 rounded-xl font-bold text-sm transition-all bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] shadow-lg shadow-[rgb(var(--accent-500)/15%)]"
                   >
                     Contact sales
                   </Link>
