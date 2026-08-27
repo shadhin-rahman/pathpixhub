@@ -158,6 +158,81 @@ export default function CreditsPage() {
         </div>
       </section>
 
+      {/* Quick Plan Comparison */}
+      <section className="py-20 bg-[var(--bg)]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgb(var(--accent-500)/10%)] text-[rgb(var(--accent-text))] text-sm font-bold mb-4 border border-[rgb(var(--accent-500)/15%)]">
+              Quick Plan Comparison
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight gradient-text">
+              Plans at a glance
+            </h2>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b-2 border-[rgb(var(--fg-rgb)/10%)]">
+                  <th className="text-left py-4 px-4 font-bold text-[rgb(var(--fg-rgb)/70%)]">Feature</th>
+                  <th className="py-4 px-4 font-bold text-[rgb(var(--fg-rgb)/90%)]">
+                    <div>Standard</div>
+                    <div className="text-sm font-bold text-[rgb(var(--accent-text))]">Pay As You Go</div>
+                  </th>
+                  <th className="py-4 px-4 font-bold text-[rgb(var(--fg-rgb)/90%)]">
+                    <div>Pro</div>
+                    <div className="text-sm font-bold text-[rgb(var(--accent-text))]">Path Credits Subscription</div>
+                  </th>
+                  <th className="py-4 px-4 font-bold text-[rgb(var(--fg-rgb)/90%)]">
+                    <div>Enterprise</div>
+                    <div className="text-sm font-bold text-[rgb(var(--accent-text))]">$499/month</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { label: "Next Morning Turnaround", values: [false, true, true] },
+                  { label: "Discount on credits", values: ["0%", "35%", "Custom"] },
+                  { label: "Image editing price", values: ["Variable", "Variable", "Flat"] },
+                  { label: "Dedicated Account Manager", values: [false, false, true] },
+                  { label: "Dedicated Editing Team", values: [false, true, true] },
+                  { label: "Monthly billing by invoice", values: [false, false, true] },
+                  { label: "Minimum order fee", values: ["$2.5", false, false] },
+                ].map((row) => (
+                  <tr key={row.label} className="border-b border-[rgb(var(--fg-rgb)/5%)]">
+                    <td className="py-3.5 px-4 text-[rgb(var(--fg-rgb)/70%)]">{row.label}</td>
+                    {row.values.map((val, i) => {
+                      if (val === true) {
+                        return (
+                          <td key={i} className="py-3.5 px-4 text-center">
+                            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500 text-white">
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </span>
+                          </td>
+                        );
+                      }
+                      if (val === false) {
+                        return (
+                          <td key={i} className="py-3.5 px-4 text-center text-[rgb(var(--fg-rgb)/20%)] font-bold">
+                            —
+                          </td>
+                        );
+                      }
+                      return (
+                        <td key={i} className="py-3.5 px-4 text-center font-bold text-[rgb(var(--fg-rgb)/80%)]">
+                          {val}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section id="faq" className="py-20 lg:py-24 bg-[var(--bg-alt)]">
         <div className="max-w-3xl mx-auto px-6">
