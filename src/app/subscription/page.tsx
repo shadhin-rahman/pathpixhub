@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { PAYONEER_PAYME_URL } from "@/lib/payment";
+import { CREDIT_BUNDLES } from "@/components/CreditSlider";
+import CreditPurchaseModal from "@/components/CreditPurchaseModal";
 
 const TIERS = [
   {
@@ -136,6 +137,9 @@ export default function SubscriptionPage() {
   const [volume, setVolume] = useState(0);
   const [speed, setSpeed] = useState(0);
   const [support, setSupport] = useState(0);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const defaultBundle = CREDIT_BUNDLES.find((b) => b.popular) ?? CREDIT_BUNDLES[0];
 
   const curr = CURRENCIES[currency];
 
@@ -167,10 +171,7 @@ export default function SubscriptionPage() {
 
   const getTierHref = (tier: (typeof TIERS)[number]): string => {
     if (tier.name === "Standard") {
-      return `/payment?plan=Standard&amount=${annual ? 480 : 50}&desc=${encodeURIComponent("Standard credit plan")}`;
-    }
-    if (tier.name === "Pro") {
-      return PAYONEER_PAYME_URL || `/payment?plan=Pro&amount=${annual ? 950 : 99}&desc=${encodeURIComponent("Pro credit plan")}`;
+      return "/credits";
     }
     if (tier.name === "Enterprise") {
       return "/enterprise";
@@ -288,12 +289,22 @@ export default function SubscriptionPage() {
                 <div className={`rounded-xl text-center py-3 font-bold text-sm ${tier.turnaroundColor || "bg-[rgb(var(--fg-rgb)/5%)] text-[rgb(var(--fg-rgb)/50%)]"} border`}>
                   ⚡ {tier.turnaroundLabel}
                 </div>
-                <Link href={getTierHref(tier)}
-                  target={getTierHref(tier).startsWith("http") ? "_blank" : undefined}
-                  rel={getTierHref(tier).startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="mt-4 block text-center py-3 rounded-xl font-bold text-sm transition-all bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] shadow-lg shadow-[rgb(var(--accent-500)/15%)]">
-                  {tier.cta}
-                </Link>
+                {tier.name === "Pro" ? (
+                  <button
+                    type="button"
+                    onClick={() => setModalOpen(true)}
+                    className="mt-4 block w-full text-center py-3 rounded-xl font-bold text-sm transition-all bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] shadow-lg shadow-[rgb(var(--accent-500)/15%)] cursor-pointer"
+                  >
+                    {tier.cta}
+                  </button>
+                ) : (
+                  <Link href={getTierHref(tier)}
+                    target={getTierHref(tier).startsWith("http") ? "_blank" : undefined}
+                    rel={getTierHref(tier).startsWith("http") ? "noopener noreferrer" : undefined}
+                    className="mt-4 block text-center py-3 rounded-xl font-bold text-sm transition-all bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] shadow-lg shadow-[rgb(var(--accent-500)/15%)]">
+                    {tier.cta}
+                  </Link>
+                )}
               </motion.div>
               );
             })}
@@ -771,6 +782,12 @@ export default function SubscriptionPage() {
           </div>
         </div>
       </section>
+
+      <CreditPurchaseModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        bundle={defaultBundle}
+      />
     </>
   );
 }
