@@ -2,13 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { CREDIT_BUNDLES } from "./CreditSlider";
+import CreditPurchaseModal from "./CreditPurchaseModal";
 
 const PLANS = [
   {
     name: "Standard",
     monthly: 50,
     annual: 480,
-    cta: "Subscribe",
+    cta: "Buy Credits",
     href: "/payment?plan=Standard&amount=50",
     kind: "payment" as const,
   },
@@ -17,8 +19,8 @@ const PLANS = [
     monthly: 99,
     annual: 950,
     cta: "Subscribe",
-    href: "/payment?plan=Pro&amount=99",
-    kind: "payment" as const,
+    href: "",
+    kind: "modal" as const,
   },
   {
     name: "Enterprise",
@@ -69,7 +71,10 @@ function Cell({ value }: { value: CellValue }) {
 
 export default function CreditPlans() {
   const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
+  const [modalOpen, setModalOpen] = useState(false);
   const isAnnual = billing === "annual";
+
+  const defaultBundle = CREDIT_BUNDLES.find((b) => b.popular) ?? CREDIT_BUNDLES[0];
 
   return (
     <section className="py-28 lg:py-36 bg-[var(--bg)]">
@@ -145,26 +150,27 @@ export default function CreditPlans() {
               {/* CTA row */}
               <tr>
                 <td className="py-5 px-4" />
-                {PLANS.map((plan) => {
-                  const href =
-                    plan.kind === "payment"
-                      ? `${plan.href}&desc=${encodeURIComponent(plan.name + " credit plan")}`
-                      : plan.href;
-                  const annualParam =
-                    plan.kind === "payment" && isAnnual
-                      ? `${href}&annual=true`
-                      : href;
-                  return (
-                    <td key={plan.name} className="py-5 px-4 text-center">
-                      <Link
-                        href={annualParam}
-                        className="inline-block px-6 py-3 rounded-xl font-bold text-sm transition-all bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] shadow-lg shadow-[rgb(var(--accent-500)/15%)]"
-                      >
-                        {plan.cta}
-                      </Link>
-                    </td>
-                  );
-                })}
+                {/* Standard: no button */}
+                <td className="py-5 px-4 text-center" />
+                {/* Pro: opens modal */}
+                <td className="py-5 px-4 text-center">
+                  <button
+                    type="button"
+                    onClick={() => setModalOpen(true)}
+                    className="inline-block px-6 py-3 rounded-xl font-bold text-sm transition-all bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] shadow-lg shadow-[rgb(var(--accent-500)/15%)] cursor-pointer"
+                  >
+                    Subscribe
+                  </button>
+                </td>
+                {/* Enterprise: contact sales */}
+                <td className="py-5 px-4 text-center">
+                  <Link
+                    href="/enterprise"
+                    className="inline-block px-6 py-3 rounded-xl font-bold text-sm transition-all border-2 border-[rgb(var(--accent-500)/35%)] text-[rgb(var(--accent-text))] hover:border-[rgb(var(--accent-500))] hover:bg-[rgb(var(--accent-500)/10%)]"
+                  >
+                    Contact sales
+                  </Link>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -180,6 +186,13 @@ export default function CreditPlans() {
           </Link>
         </p>
       </div>
+
+      {/* Credit purchase popup */}
+      <CreditPurchaseModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        bundle={defaultBundle}
+      />
     </section>
   );
 }
