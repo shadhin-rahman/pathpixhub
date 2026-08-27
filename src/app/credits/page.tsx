@@ -30,12 +30,6 @@ const FAQS = [
   },
 ];
 
-const STEPS = [
-  { num: "1", icon: "🛒", title: "Buy a credit pack", desc: "Choose a pack below. Bigger packs include bonus free credits on top." },
-  { num: "2", icon: "📧", title: "Send us your images", desc: "Submit your order through our contact form — tell us the service, quantity and turnaround." },
-  { num: "3", icon: "✅", title: "We edit & deduct credits", desc: "We edit your images first, then deduct the credits from your balance. No card at every step." },
-];
-
 export default function CreditsPage() {
   const [open, setOpen] = useState<number | null>(0);
 
@@ -132,32 +126,6 @@ export default function CreditsPage() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="py-20 lg:py-24 bg-[var(--bg)]">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <span className="text-xs uppercase tracking-[0.3em] font-bold text-[rgb(var(--fg-rgb)/40%)]">How it works</span>
-            <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight gradient-text">Credits in 3 simple steps</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {STEPS.map((s, i) => (
-              <motion.div key={s.num}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="relative rounded-2xl border-2 border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-alt)] p-6"
-              >
-                <span className="absolute top-5 right-6 text-5xl font-extrabold text-[rgb(var(--fg-rgb)/6%)]">{s.num}</span>
-                <span className="text-3xl">{s.icon}</span>
-                <h3 className="mt-4 font-bold text-[rgb(var(--fg-rgb))]">{s.title}</h3>
-                <p className="mt-2 text-sm text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">{s.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Quick Plan Comparison */}
       <section className="py-20 bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-6">
@@ -229,6 +197,39 @@ export default function CreditsPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="py-20 lg:py-24 bg-[var(--bg-alt)]">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <span className="text-xs uppercase tracking-[0.3em] font-bold text-[rgb(var(--fg-rgb)/40%)]">How it works</span>
+            <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight gradient-text">Credits in 3 simple steps</h2>
+          </div>
+          <div className="rounded-3xl bg-[var(--bg)] p-8 md:p-12 space-y-10">
+            {[
+              { num: "1", color: "bg-rose-100 text-rose-500", title: "Buy a credit pack", desc: "Choose a pack below. Bigger packs include bonus free credits on top." },
+              { num: "2", color: "bg-blue-100 text-blue-500", title: "Send us your images", desc: "Submit your order through our contact form — tell us the service, quantity and turnaround." },
+              { num: "3", color: "bg-amber-100 text-amber-500", title: "We edit & deduct credits", desc: "We edit your images first, then deduct the credits from your balance. No card at every step." },
+            ].map((step, i) => (
+              <motion.div key={step.num}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="flex items-start gap-5"
+              >
+                <span className={`shrink-0 w-12 h-12 rounded-full ${step.color} flex items-center justify-center text-lg font-extrabold`}>
+                  {step.num}
+                </span>
+                <div>
+                  <h3 className="text-lg font-bold text-[rgb(var(--fg-rgb))]">{step.title}</h3>
+                  <p className="mt-1.5 text-sm text-[rgb(var(--fg-rgb)/55%)] leading-relaxed">{step.desc}</p>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
