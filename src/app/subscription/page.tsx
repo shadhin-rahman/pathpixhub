@@ -13,6 +13,7 @@ const TIERS = [
     monthlyPrice: 0,
     yearlyPrice: 0,
     perImage: 1.45,
+    priceLabel: "",
     desc: "Pay-as-you-go for occasional edits",
     turnaround: "24h",
     turnaroundLabel: "24-Hour Delivery",
@@ -33,9 +34,10 @@ const TIERS = [
     name: "Standard",
     badge: "Best Entry",
     badgeColor: "bg-orange-500/10 text-orange-400 border border-orange-500/20",
-    monthlyPrice: 50,
-    yearlyPrice: 480,
+    monthlyPrice: 0,
+    yearlyPrice: 0,
     perImage: 0,
+    priceLabel: "Pay As You Go",
     desc: "12h fast delivery for growing sellers",
     turnaround: "12h",
     turnaroundLabel: "12-Hour Fast",
@@ -56,9 +58,10 @@ const TIERS = [
     name: "Pro",
     badge: "Most Popular",
     badgeColor: "bg-blue-500/10 text-blue-400 border border-blue-500/20",
-    monthlyPrice: 99,
-    yearlyPrice: 950,
+    monthlyPrice: 0,
+    yearlyPrice: 0,
     perImage: 0,
+    priceLabel: "Path Credits Subscription",
     desc: "Ultra fast 6h delivery for growing studios",
     turnaround: "6h",
     turnaroundLabel: "6-Hour Express",
@@ -83,6 +86,7 @@ const TIERS = [
     monthlyPrice: 499,
     yearlyPrice: 4790,
     perImage: 0,
+    priceLabel: "$499/month",
     desc: "Full white-glove VIP management for large brands",
     turnaround: "45m",
     turnaroundLabel: "45-Min VIP",
@@ -238,11 +242,19 @@ export default function SubscriptionPage() {
                   </span>
                 )}
                 <h3 className="text-xl font-bold text-[rgb(var(--fg-rgb))]">{tier.name}</h3>
-                <div className="mt-3 flex items-baseline gap-1">
-                  <span className="text-4xl font-extrabold text-[rgb(var(--fg-rgb))]">
-                    {tier.monthlyPrice === 0 ? formatPrice(0) : annual ? formatPrice(tier.yearlyPrice) : formatPrice(tier.monthlyPrice)}
-                  </span>
-                  <span className="text-sm text-[rgb(var(--fg-rgb)/40%)] font-semibold">/{annual ? "yr" : "mo"}</span>
+                <div className="mt-3">
+                  {tier.priceLabel ? (
+                    <span className="text-lg font-extrabold text-[rgb(var(--fg-rgb))]">
+                      {tier.priceLabel}
+                    </span>
+                  ) : (
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-4xl font-extrabold text-[rgb(var(--fg-rgb))]">
+                        {tier.monthlyPrice === 0 ? formatPrice(0) : annual ? formatPrice(tier.yearlyPrice) : formatPrice(tier.monthlyPrice)}
+                      </span>
+                      <span className="text-sm text-[rgb(var(--fg-rgb)/40%)] font-semibold">/{annual ? "yr" : "mo"}</span>
+                    </div>
+                  )}
                 </div>
                 {savings && (
                   <p className="text-xs text-[rgb(var(--accent-text))] font-bold mt-1">{formatPrice(savings.total)} savings ({formatPrice(savings.perMonth)}/mo)</p>
