@@ -35,6 +35,7 @@ const PLANS = [
 type CellValue = string | boolean;
 
 const FEATURES: { label: string; values: CellValue[] }[] = [
+  { label: "Next Morning Turnaround", values: [false, true, true] },
   { label: "Discount on credits", values: ["0%", "35%", "Custom"] },
   { label: "Image editing price", values: ["Variable", "Variable", "Flat"] },
   { label: "Dedicated Account Manager", values: [false, false, true] },
@@ -131,9 +132,11 @@ export default function CreditPlans() {
                 {PLANS.map((plan) => (
                   <th key={plan.name} className="py-4 px-4 font-bold text-[rgb(var(--fg-rgb)/90%)]">
                     <div>{plan.name}</div>
-                    <div className="text-sm font-bold text-[rgb(var(--accent-text))]">
-                      ${isAnnual ? Math.round(plan.annual / 12) : plan.monthly}/mo
-                    </div>
+                    {plan.kind === "sales" && (
+                      <div className="text-sm font-bold text-[rgb(var(--accent-text))]">
+                        ${isAnnual ? Math.round(plan.annual / 12) : plan.monthly}/mo
+                      </div>
+                    )}
                   </th>
                 ))}
               </tr>
