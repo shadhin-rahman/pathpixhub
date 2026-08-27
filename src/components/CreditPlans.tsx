@@ -8,6 +8,7 @@ import CreditPurchaseModal from "./CreditPurchaseModal";
 const PLANS = [
   {
     name: "Standard",
+    tagline: "Pay As You Go",
     monthly: 50,
     annual: 480,
     cta: "Buy Credits",
@@ -16,6 +17,7 @@ const PLANS = [
   },
   {
     name: "Pro",
+    tagline: "Path Credits Subscription",
     monthly: 99,
     annual: 950,
     cta: "Subscribe",
@@ -24,6 +26,7 @@ const PLANS = [
   },
   {
     name: "Enterprise",
+    tagline: "$499/month",
     monthly: 499,
     annual: 4790,
     cta: "Contact sales",
@@ -73,7 +76,6 @@ function Cell({ value }: { value: CellValue }) {
 export default function CreditPlans() {
   const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
   const [modalOpen, setModalOpen] = useState(false);
-  const isAnnual = billing === "annual";
 
   const defaultBundle = CREDIT_BUNDLES.find((b) => b.popular) ?? CREDIT_BUNDLES[0];
 
@@ -132,11 +134,9 @@ export default function CreditPlans() {
                 {PLANS.map((plan) => (
                   <th key={plan.name} className="py-4 px-4 font-bold text-[rgb(var(--fg-rgb)/90%)]">
                     <div>{plan.name}</div>
-                    {plan.kind === "sales" && (
-                      <div className="text-sm font-bold text-[rgb(var(--accent-text))]">
-                        ${isAnnual ? Math.round(plan.annual / 12) : plan.monthly}/mo
-                      </div>
-                    )}
+                    <div className="text-sm font-bold text-[rgb(var(--accent-text))]">
+                      {plan.tagline}
+                    </div>
                   </th>
                 ))}
               </tr>
