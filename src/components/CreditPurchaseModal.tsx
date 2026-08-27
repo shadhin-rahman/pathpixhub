@@ -170,12 +170,12 @@ export default function CreditPurchaseModal({
                 </Link>
               ) : (
                 <Link
-                  href="/subscription"
+                  href={`/payment?plan=${encodeURIComponent("Credit Subscription")}&amount=${bundle.price}&desc=${encodeURIComponent(`${bundle.credits.toLocaleString()} credits — ${frequency} billing`)}&frequency=${frequency}`}
                   onClick={onClose}
                   className="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] hover:scale-[1.02] transition-all text-sm shadow-lg shadow-[rgb(var(--accent-500)/25%)]"
                 >
                   <BadgeCheck className="w-4 h-4" />
-                  View subscription plans
+                  Subscribe — ${bundle.price.toLocaleString()}/{frequency}
                 </Link>
               )}
             </div>
