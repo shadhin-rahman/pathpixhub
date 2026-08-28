@@ -20,7 +20,7 @@ const NAV = [
   { href: "/account", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/account/orders", label: "Orders", icon: Package },
   { href: "/account/quotes", label: "Quotes", icon: FileText },
-  { href: "/credits", label: "Path credits", icon: Coins },
+  { href: "/account/credits", label: "Path credits", icon: Coins },
   { href: "/account/billing", label: "Billing", icon: Receipt },
   { href: "/account/settings", label: "Settings", icon: Settings },
 ];
