@@ -42,9 +42,9 @@ export default function AccountCreditsPage() {
       </div>
 
       {/* Row 1: Credit bundles + Recent transactions */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 mb-6">
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-6 mb-6">
         {/* Credit bundles — main */}
-        <div className="glass-card rounded-3xl p-6 sm:p-8">
+        <div className="glass-card rounded-3xl p-6 sm:p-8 min-w-0">
           <h2 className="text-xl font-bold mb-1">Path credit bundles</h2>
           <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] mb-6">How much do you want to spend?</p>
 
@@ -134,9 +134,9 @@ export default function AccountCreditsPage() {
       </div>
 
       {/* Row 2: Compare plans + FAQs */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-6">
         {/* Compare plans — main */}
-        <div className="glass-card rounded-3xl p-6 sm:p-8">
+        <div className="glass-card rounded-3xl p-6 sm:p-8 min-w-0">
           <h2 className="text-xl font-bold mb-1">Compare plans</h2>
           <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] mb-6">See what&apos;s included in each Path plan.</p>
           <div className="overflow-x-auto">

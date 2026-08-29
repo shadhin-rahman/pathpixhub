@@ -37,7 +37,7 @@ export default async function AccountLayout({
 
   return (
     <section className="pt-36 lg:pt-40 pb-28 mesh-gradient min-h-screen">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-[1400px] mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6 lg:gap-10 items-start">
           <AccountSidebar role={role} />
           <div className="min-w-0">{children}</div>

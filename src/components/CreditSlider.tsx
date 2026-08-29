@@ -68,15 +68,15 @@ export default function CreditSlider({
   const pct = (idx / (CREDIT_BUNDLES.length - 1)) * 100;
 
   return (
-    <div>
+    <div className="min-w-0">
       {/* Value readout */}
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
+      <div className="grid grid-cols-[1fr_auto] items-end gap-6">
+        <div className="min-w-0">
           <p className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-[rgb(var(--fg-rgb)/40%)] font-bold">
             <Coins className="w-3.5 h-3.5 text-[rgb(var(--accent-text))]" />
             {title}
           </p>
-          <p className="mt-2 text-3xl sm:text-4xl font-black text-[rgb(var(--fg-rgb))] tracking-tight">
+          <p className="mt-2 text-3xl sm:text-4xl font-black text-[rgb(var(--fg-rgb))] tracking-tight whitespace-nowrap">
             {bundle.credits.toLocaleString()}{" "}
             <span className="text-xl font-bold text-[rgb(var(--fg-rgb)/55%)]">credits</span>
           </p>
@@ -91,7 +91,7 @@ export default function CreditSlider({
             </p>
           )}
         </div>
-        <p className="text-3xl sm:text-4xl font-black text-[rgb(var(--accent-text))] tracking-tight">
+        <p className="text-3xl sm:text-4xl font-black text-[rgb(var(--accent-text))] tracking-tight whitespace-nowrap">
           ${bundle.price.toLocaleString()}
         </p>
       </div>
