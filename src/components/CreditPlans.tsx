@@ -126,15 +126,16 @@ export default function CreditPlans() {
         </div>
 
         {/* Comparison table */}
+        <div className="rounded-2xl border border-[rgb(var(--fg-rgb)/8%)] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b-2 border-[rgb(var(--fg-rgb)/10%)]">
-                <th className="text-left py-4 px-4 font-bold text-[rgb(var(--fg-rgb)/70%)]">Feature</th>
+              <tr className="bg-[rgb(var(--fg-rgb))]">
+                <th className="text-left py-6 px-6 font-bold text-base" style={{ color: 'var(--bg)', opacity: 0.5 }}>Feature</th>
                 {PLANS.map((plan) => (
-                  <th key={plan.name} className="py-4 px-4 font-bold text-[rgb(var(--fg-rgb)/90%)]">
+                  <th key={plan.name} className="py-6 px-6 font-bold text-lg" style={{ color: 'var(--bg)' }}>
                     <div>{plan.name}</div>
-                    <div className="text-sm font-bold text-[rgb(var(--accent-text))]">
+                    <div className="text-sm font-bold" style={{ color: 'var(--bg)', opacity: 0.7 }}>
                       {plan.tagline}
                     </div>
                   </th>
@@ -177,6 +178,7 @@ export default function CreditPlans() {
               </tr>
             </tbody>
           </table>
+        </div>
         </div>
 
         <p className="mt-12 text-center">
