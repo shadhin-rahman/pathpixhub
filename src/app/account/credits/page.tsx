@@ -136,63 +136,63 @@ export default function AccountCreditsPage() {
       {/* Row 2: Compare plans + FAQs */}
       <div className="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-6">
         {/* Compare plans — main */}
-        <div className="rounded-3xl p-6 sm:p-8 min-w-0 bg-[#0a0a0a] border border-white/5">
-          <h2 className="text-xl font-bold mb-1 text-white">Compare plans</h2>
-          <p className="text-sm text-white/50 mb-6">See what&apos;s included in each Path plan.</p>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b-2 border-white/10">
-                  <th className="text-left py-4 px-4 font-bold text-white/60"></th>
-                  <th className="py-4 px-4 font-bold text-white">
-                    <div className="text-[10px] text-[rgb(var(--accent-text))] font-bold mb-1">ACTIVE PLAN</div>
-                    <div>Standard</div>
-                    <div className="text-xs font-bold text-[rgb(var(--accent-text))]">Pay As You Go</div>
-                  </th>
-                  <th className="py-4 px-4 font-bold text-white">
-                    <div>Pro</div>
-                    <div className="text-xs font-bold text-[rgb(var(--accent-text))]">Path Credits Subscription</div>
-                  </th>
-                  <th className="py-4 px-4 font-bold text-white">
-                    <div>Enterprise</div>
-                    <div className="text-xs font-bold text-[rgb(var(--accent-text))]">$499/month</div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  { label: "Next Morning Turnaround", values: [false, true, true] },
-                  { label: "Discount on credits", values: ["0%", "35%", "Custom"] },
-                  { label: "Image editing price", values: ["Variable", "Variable", "Flat"] },
-                  { label: "Dedicated Account Manager", values: [false, false, true] },
-                  { label: "Dedicated Editing Team", values: [false, true, true] },
-                  { label: "Monthly billing by invoice", values: [false, false, true] },
-                  { label: "Minimum order fee", values: ["$2.5", false, false] },
-                ].map((row) => (
-                  <tr key={row.label} className="border-b border-white/5">
-                    <td className="py-3.5 px-4 text-white/60">{row.label}</td>
-                    {row.values.map((val, i) => {
-                      if (val === true) {
-                        return (
-                          <td key={i} className="py-3.5 px-4 text-center">
-                            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]">
-                              <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                              </svg>
-                            </span>
-                          </td>
-                        );
-                      }
-                      if (val === false) {
-                        return <td key={i} className="py-3.5 px-4 text-center text-white/20 font-bold">—</td>;
-                      }
-                      return <td key={i} className="py-3.5 px-4 text-center font-bold text-white/80">{val}</td>;
-                    })}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        <div className="rounded-3xl min-w-0 border border-black/5 overflow-hidden">
+          <div className="p-6 sm:p-8">
+            <h2 className="text-xl font-bold mb-1">Compare plans</h2>
+            <p className="text-sm text-black/50 mb-6">See what&apos;s included in each Path plan.</p>
           </div>
+          {/* Black header bar */}
+          <div className="flex items-center gap-0 bg-[#0a0a0a]">
+            <div className="flex-1 py-4 px-4 font-bold text-white/40 text-sm"></div>
+            <div className="flex-1 py-4 px-4 text-center">
+              <div className="text-[10px] text-[rgb(var(--accent-text))] font-bold mb-1">ACTIVE PLAN</div>
+              <div className="font-bold text-white text-sm">Standard</div>
+              <div className="text-xs font-bold text-[rgb(var(--accent-text))]">Pay As You Go</div>
+            </div>
+            <div className="flex-1 py-4 px-4 text-center">
+              <div className="font-bold text-white text-sm">Pro</div>
+              <div className="text-xs font-bold text-[rgb(var(--accent-text))]">Path Credits Subscription</div>
+            </div>
+            <div className="flex-1 py-4 px-4 text-center">
+              <div className="font-bold text-white text-sm">Enterprise</div>
+              <div className="text-xs font-bold text-[rgb(var(--accent-text))]">$499/month</div>
+            </div>
+          </div>
+          {/* White body */}
+          <table className="w-full text-sm bg-white">
+            <tbody>
+              {[
+                { label: "Next Morning Turnaround", values: [false, true, true] },
+                { label: "Discount on credits", values: ["0%", "35%", "Custom"] },
+                { label: "Image editing price", values: ["Variable", "Variable", "Flat"] },
+                { label: "Dedicated Account Manager", values: [false, false, true] },
+                { label: "Dedicated Editing Team", values: [false, true, true] },
+                { label: "Monthly billing by invoice", values: [false, false, true] },
+                { label: "Minimum order fee", values: ["$2.5", false, false] },
+              ].map((row, ri) => (
+                <tr key={row.label} className={`border-b border-black/5 ${ri % 2 === 0 ? "bg-white" : "bg-black/[0.02]"}`}>
+                  <td className="py-3.5 px-4 text-black/70 font-medium">{row.label}</td>
+                  {row.values.map((val, i) => {
+                    if (val === true) {
+                      return (
+                        <td key={i} className="py-3.5 px-4 text-center bg-[rgb(var(--accent-500))/15%]">
+                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]">
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </span>
+                        </td>
+                      );
+                    }
+                    if (val === false) {
+                      return <td key={i} className="py-3.5 px-4 text-center text-black/20 font-bold">—</td>;
+                    }
+                    return <td key={i} className="py-3.5 px-4 text-center font-bold text-black/80">{val}</td>;
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         {/* FAQs — sidebar */}

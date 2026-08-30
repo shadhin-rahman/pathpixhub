@@ -197,25 +197,25 @@ export default function PricingPage() {
               Plans at a glance
             </h2>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b-2 border-[rgb(var(--fg-rgb)/10%)]">
-                  <th className="text-left py-4 px-4 font-bold text-[rgb(var(--fg-rgb)/70%)]">Feature</th>
-                  <th className="py-4 px-4 font-bold text-[rgb(var(--fg-rgb)/90%)]">
-                    <div>Standard</div>
-                    <div className="text-sm font-bold text-[rgb(var(--accent-text))]">Pay As You Go</div>
-                  </th>
-                  <th className="py-4 px-4 font-bold text-[rgb(var(--fg-rgb)/90%)]">
-                    <div>Pro</div>
-                    <div className="text-sm font-bold text-[rgb(var(--accent-text))]">Path Credits Subscription</div>
-                  </th>
-                  <th className="py-4 px-4 font-bold text-[rgb(var(--fg-rgb)/90%)]">
-                    <div>Enterprise</div>
-                    <div className="text-sm font-bold text-[rgb(var(--accent-text))]">$499/month</div>
-                  </th>
-                </tr>
-              </thead>
+          <div className="overflow-x-auto rounded-2xl border border-[rgb(var(--fg-rgb)/8%)]">
+            {/* Black header bar */}
+            <div className="flex items-center gap-0 bg-[#0a0a0a] rounded-t-2xl">
+              <div className="flex-1 py-5 px-6 font-bold text-white/40 text-sm">Feature</div>
+              <div className="flex-1 py-5 px-6 text-center">
+                <div className="font-bold text-white">Standard</div>
+                <div className="text-sm font-bold text-[rgb(var(--accent-text))]">Pay As You Go</div>
+              </div>
+              <div className="flex-1 py-5 px-6 text-center">
+                <div className="font-bold text-white">Pro</div>
+                <div className="text-sm font-bold text-[rgb(var(--accent-text))]">Path Credits Subscription</div>
+              </div>
+              <div className="flex-1 py-5 px-6 text-center">
+                <div className="font-bold text-white">Enterprise</div>
+                <div className="text-sm font-bold text-[rgb(var(--accent-text))]">$499/month</div>
+              </div>
+            </div>
+            {/* White body */}
+            <table className="w-full text-sm bg-white">
               <tbody>
                 {[
                   { label: "Next Morning Turnaround", values: [false, true, true] },
@@ -225,13 +225,13 @@ export default function PricingPage() {
                   { label: "Dedicated Editing Team", values: [false, true, true] },
                   { label: "Monthly billing by invoice", values: [false, false, true] },
                   { label: "Minimum order fee", values: ["$2.5", false, false] },
-                ].map((row) => (
-                  <tr key={row.label} className="border-b border-[rgb(var(--fg-rgb)/5%)]">
-                    <td className="py-3.5 px-4 text-[rgb(var(--fg-rgb)/70%)]">{row.label}</td>
+                ].map((row, ri) => (
+                  <tr key={row.label} className={`border-b border-black/5 ${ri % 2 === 0 ? "bg-white" : "bg-black/[0.02]"}`}>
+                    <td className="py-3.5 px-4 text-black/70 font-medium">{row.label}</td>
                     {row.values.map((val, i) => {
                       if (val === true) {
                         return (
-                          <td key={i} className="py-3.5 px-4 text-center">
+                          <td key={i} className="py-3.5 px-4 text-center bg-[rgb(var(--accent-500))/15%]">
                             <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]">
                               <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -242,13 +242,13 @@ export default function PricingPage() {
                       }
                       if (val === false) {
                         return (
-                          <td key={i} className="py-3.5 px-4 text-center text-[rgb(var(--fg-rgb)/20%)] font-bold">
+                          <td key={i} className="py-3.5 px-4 text-center text-black/20 font-bold">
                             —
                           </td>
                         );
                       }
                       return (
-                        <td key={i} className="py-3.5 px-4 text-center font-bold text-[rgb(var(--fg-rgb)/80%)]">
+                        <td key={i} className="py-3.5 px-4 text-center font-bold text-black/80">
                           {val}
                         </td>
                       );
