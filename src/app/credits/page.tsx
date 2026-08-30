@@ -172,7 +172,7 @@ export default function CreditsPage() {
                       if (val === true) {
                         return (
                           <td key={i} className="py-4 px-5 text-center">
-                            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 text-white">
+                            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]">
                               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                               </svg>
