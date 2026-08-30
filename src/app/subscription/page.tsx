@@ -519,7 +519,7 @@ export default function SubscriptionPage() {
           </div>
           <div className="rounded-2xl border border-[rgb(var(--fg-rgb)/8%)]">
             {/* Black header bar */}
-            <div className="flex items-center gap-0 rounded-t-2xl" style={{ backgroundColor: '#0a0a0a' }}>
+            <div className="compare-header flex items-center gap-0 rounded-t-2xl">
               <div className="flex-1 py-5 px-6 font-bold text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>Feature</div>
               <div className="flex-1 py-5 px-6 text-center">
                 <div className="font-bold text-white">Standard</div>
@@ -596,7 +596,7 @@ export default function SubscriptionPage() {
           </div>
           <div className="rounded-2xl border border-[rgb(var(--fg-rgb)/8%)]">
             {/* Black header bar */}
-            <div className="flex items-center gap-0 rounded-t-2xl" style={{ backgroundColor: '#0a0a0a' }}>
+            <div className="compare-header flex items-center gap-0 rounded-t-2xl">
               <div className="flex-[1.5] py-5 px-6 font-bold text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>Feature</div>
               <div className="flex-1 py-5 px-6 text-center font-bold text-orange-400">Free</div>
               <div className="flex-1 py-5 px-6 text-center font-bold text-orange-400">Standard</div>
