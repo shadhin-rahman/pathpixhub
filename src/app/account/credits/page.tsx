@@ -136,24 +136,24 @@ export default function AccountCreditsPage() {
       {/* Row 2: Compare plans + FAQs */}
       <div className="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-6">
         {/* Compare plans — main */}
-        <div className="glass-card rounded-3xl p-6 sm:p-8 min-w-0">
-          <h2 className="text-xl font-bold mb-1">Compare plans</h2>
-          <p className="text-sm text-[rgb(var(--fg-rgb)/55%)] mb-6">See what&apos;s included in each Path plan.</p>
+        <div className="rounded-3xl p-6 sm:p-8 min-w-0 bg-[#0a0a0a] border border-white/5">
+          <h2 className="text-xl font-bold mb-1 text-white">Compare plans</h2>
+          <p className="text-sm text-white/50 mb-6">See what&apos;s included in each Path plan.</p>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b-2 border-[rgb(var(--fg-rgb)/10%)]">
-                  <th className="text-left py-4 px-4 font-bold text-[rgb(var(--fg-rgb)/70%)]"></th>
-                  <th className="py-4 px-4 font-bold text-[rgb(var(--fg-rgb)/90%)]">
-                    <div className="text-[10px] text-emerald-500 font-bold mb-1">ACTIVE PLAN</div>
+                <tr className="border-b-2 border-white/10">
+                  <th className="text-left py-4 px-4 font-bold text-white/60"></th>
+                  <th className="py-4 px-4 font-bold text-white">
+                    <div className="text-[10px] text-[rgb(var(--accent-text))] font-bold mb-1">ACTIVE PLAN</div>
                     <div>Standard</div>
                     <div className="text-xs font-bold text-[rgb(var(--accent-text))]">Pay As You Go</div>
                   </th>
-                  <th className="py-4 px-4 font-bold text-[rgb(var(--fg-rgb)/90%)]">
+                  <th className="py-4 px-4 font-bold text-white">
                     <div>Pro</div>
                     <div className="text-xs font-bold text-[rgb(var(--accent-text))]">Path Credits Subscription</div>
                   </th>
-                  <th className="py-4 px-4 font-bold text-[rgb(var(--fg-rgb)/90%)]">
+                  <th className="py-4 px-4 font-bold text-white">
                     <div>Enterprise</div>
                     <div className="text-xs font-bold text-[rgb(var(--accent-text))]">$499/month</div>
                   </th>
@@ -169,8 +169,8 @@ export default function AccountCreditsPage() {
                   { label: "Monthly billing by invoice", values: [false, false, true] },
                   { label: "Minimum order fee", values: ["$2.5", false, false] },
                 ].map((row) => (
-                  <tr key={row.label} className="border-b border-[rgb(var(--fg-rgb)/5%)]">
-                    <td className="py-3.5 px-4 text-[rgb(var(--fg-rgb)/70%)]">{row.label}</td>
+                  <tr key={row.label} className="border-b border-white/5">
+                    <td className="py-3.5 px-4 text-white/60">{row.label}</td>
                     {row.values.map((val, i) => {
                       if (val === true) {
                         return (
@@ -184,9 +184,9 @@ export default function AccountCreditsPage() {
                         );
                       }
                       if (val === false) {
-                        return <td key={i} className="py-3.5 px-4 text-center text-[rgb(var(--fg-rgb)/20%)] font-bold">—</td>;
+                        return <td key={i} className="py-3.5 px-4 text-center text-white/20 font-bold">—</td>;
                       }
-                      return <td key={i} className="py-3.5 px-4 text-center font-bold text-[rgb(var(--fg-rgb)/80%)]">{val}</td>;
+                      return <td key={i} className="py-3.5 px-4 text-center font-bold text-white/80">{val}</td>;
                     })}
                   </tr>
                 ))}

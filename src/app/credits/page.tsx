@@ -137,20 +137,20 @@ export default function CreditsPage() {
               Plans at a glance
             </h2>
           </div>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto rounded-2xl bg-[#0a0a0a] border border-[rgb(var(--fg-rgb)/8%)]">
             <table className="w-full text-base">
               <thead>
                 <tr className="border-b-2 border-[rgb(var(--fg-rgb)/10%)]">
-                  <th className="text-left py-5 px-5 font-bold text-[rgb(var(--fg-rgb)/70%)]">Feature</th>
-                  <th className="py-5 px-5 font-bold text-[rgb(var(--fg-rgb)/90%)]">
+                  <th className="text-left py-5 px-6 font-bold text-[rgb(var(--fg-rgb)/70%)]">Feature</th>
+                  <th className="py-5 px-6 font-bold text-white">
                     <div>Standard</div>
                     <div className="text-sm font-bold text-[rgb(var(--accent-text))]">Pay As You Go</div>
                   </th>
-                  <th className="py-5 px-5 font-bold text-[rgb(var(--fg-rgb)/90%)]">
+                  <th className="py-5 px-6 font-bold text-white">
                     <div>Pro</div>
                     <div className="text-sm font-bold text-[rgb(var(--accent-text))]">Path Credits Subscription</div>
                   </th>
-                  <th className="py-5 px-5 font-bold text-[rgb(var(--fg-rgb)/90%)]">
+                  <th className="py-5 px-6 font-bold text-white">
                     <div>Enterprise</div>
                     <div className="text-sm font-bold text-[rgb(var(--accent-text))]">$499/month</div>
                   </th>
@@ -166,12 +166,12 @@ export default function CreditsPage() {
                   { label: "Monthly billing by invoice", values: [false, false, true] },
                   { label: "Minimum order fee", values: ["$2.5", false, false] },
                 ].map((row) => (
-                  <tr key={row.label} className="border-b border-[rgb(var(--fg-rgb)/5%)]">
-                    <td className="py-4 px-5 text-[rgb(var(--fg-rgb)/70%)]">{row.label}</td>
+                  <tr key={row.label} className="border-b border-white/5">
+                    <td className="py-4 px-6 text-white/60">{row.label}</td>
                     {row.values.map((val, i) => {
                       if (val === true) {
                         return (
-                          <td key={i} className="py-4 px-5 text-center">
+                          <td key={i} className="py-4 px-6 text-center">
                             <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))]">
                               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -182,13 +182,13 @@ export default function CreditsPage() {
                       }
                       if (val === false) {
                         return (
-                          <td key={i} className="py-4 px-5 text-center text-[rgb(var(--fg-rgb)/20%)] font-bold">
+                          <td key={i} className="py-4 px-6 text-center text-white/20 font-bold">
                             —
                           </td>
                         );
                       }
                       return (
-                        <td key={i} className="py-4 px-5 text-center font-bold text-[rgb(var(--fg-rgb)/80%)]">
+                        <td key={i} className="py-4 px-6 text-center font-bold text-white/80">
                           {val}
                         </td>
                       );
