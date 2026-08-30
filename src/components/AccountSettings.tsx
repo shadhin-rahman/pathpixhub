@@ -207,11 +207,11 @@ export default function AccountSettings({ name, email, role, memberSince }: Prop
       {/* Profile header */}
       <div className="glass-card rounded-3xl p-8 mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center gap-5">
-          <div className="relative shrink-0 w-20 h-20 rounded-full bg-[rgb(var(--accent-500)/15%)] text-[rgb(var(--accent-text))] flex items-center justify-center text-2xl font-black border-2 border-[rgb(var(--accent-500)/30%)]">
-            {initials(name, email)}
+          <div className="relative shrink-0 w-16 h-16 rounded-full bg-[rgb(var(--accent-500)/10%)] flex items-center justify-center border border-[rgb(var(--accent-500)/20%)]">
+            <User className="w-7 h-7 text-[rgb(var(--accent-text))]" />
             {isAdmin && (
-              <span className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[rgb(var(--bg-base,var(--bg)))] border border-[rgb(var(--accent-500)/40%)] flex items-center justify-center">
-                <ShieldCheck className="w-4 h-4 text-[rgb(var(--accent-text))]" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-6 h-6 rounded-full bg-[var(--bg)] border border-[rgb(var(--accent-500)/30%)] flex items-center justify-center">
+                <ShieldCheck className="w-3.5 h-3.5 text-[rgb(var(--accent-text))]" />
               </span>
             )}
           </div>
