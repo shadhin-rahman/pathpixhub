@@ -142,8 +142,8 @@ export default function AccountCreditsPage() {
             <p className="text-sm text-black/50 mb-6">See what&apos;s included in each Path plan.</p>
           </div>
           {/* Black header bar */}
-          <div className="flex items-center gap-0 bg-[#0a0a0a]">
-            <div className="flex-1 py-4 px-4 font-bold text-white/40 text-sm"></div>
+          <div className="flex items-center gap-0" style={{ backgroundColor: '#0a0a0a' }}>
+            <div className="flex-1 py-4 px-4 font-bold text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}></div>
             <div className="flex-1 py-4 px-4 text-center">
               <div className="text-[10px] text-[rgb(var(--accent-text))] font-bold mb-1">ACTIVE PLAN</div>
               <div className="font-bold text-white text-sm">Standard</div>
