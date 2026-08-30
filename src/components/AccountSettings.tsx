@@ -205,7 +205,7 @@ export default function AccountSettings({ name, email, role, memberSince }: Prop
       </a>
 
       {/* Profile header */}
-      <div className="glass-card rounded-3xl p-8 mb-8">
+      <div className="glass-card rounded-3xl p-8 mb-8 -mt-16">
         <div className="flex flex-col sm:flex-row sm:items-center gap-5">
           <div className="relative shrink-0 w-16 h-16 rounded-full bg-[rgb(var(--accent-500)/10%)] flex items-center justify-center border border-[rgb(var(--accent-500)/20%)]">
             <User className="w-7 h-7 text-[rgb(var(--accent-text))]" />
