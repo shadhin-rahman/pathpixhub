@@ -137,7 +137,7 @@ export default function CreditsPage() {
               Plans at a glance
             </h2>
           </div>
-          <div className="overflow-x-auto rounded-2xl border border-[rgb(var(--fg-rgb)/8%)]">
+          <div className="rounded-2xl border border-[rgb(var(--fg-rgb)/8%)]">
             {/* Black header bar */}
             <div className="flex items-center gap-0 bg-[#0a0a0a] rounded-t-2xl">
               <div className="flex-1 py-5 px-6 font-bold text-white/40 text-sm">Feature</div>
@@ -155,6 +155,7 @@ export default function CreditsPage() {
               </div>
             </div>
             {/* White body */}
+            <div className="overflow-x-auto">
             <table className="w-full text-base bg-white">
               <tbody>
                 {[
@@ -197,6 +198,7 @@ export default function CreditsPage() {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
         </div>
       </section>
