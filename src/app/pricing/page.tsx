@@ -9,16 +9,16 @@ import { services, priceMap, serviceImagePath } from "@/data/services";
 import CreditBanner from "@/components/CreditBanner";
 
 const cardColors = [
-  "#fca5a5",
-  "#d8b4fe",
-  "#f9a8d4",
-  "#fde68a",
-  "#93c5fd",
-  "#86efac",
-  "#fdba74",
-  "#5eead4",
-  "#a5b4fc",
-  "#fda4af",
+  "#f5f5f4",
+  "#e7e5e4",
+  "#f5f5f4",
+  "#e7e5e4",
+  "#f5f5f4",
+  "#e7e5e4",
+  "#f5f5f4",
+  "#e7e5e4",
+  "#f5f5f4",
+  "#e7e5e4",
 ];
 
 const slideItems = [...services, ...services, ...services];

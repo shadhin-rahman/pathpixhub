@@ -30,7 +30,7 @@ function GalleryCard({ item }: { item: (typeof galleryItems)[number] }) {
           src={item.src}
           alt={item.title}
           fill
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          className="object-contain transition-transform duration-700 group-hover:scale-105"
           sizes="(max-width: 768px) 220px, 280px"
         />
       </div>
