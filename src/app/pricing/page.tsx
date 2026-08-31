@@ -212,8 +212,8 @@ export default function PricingPage() {
                   { label: "Monthly billing by invoice", values: [false, false, true] },
                   { label: "Minimum order fee", values: ["$2.5", false, false] },
                 ].map((row, ri) => (
-                  <tr key={row.label} className={`border-b border-black/5 ${ri % 2 === 0 ? "bg-white" : "bg-black/[0.02]"}`}>
-                    <td className="py-3.5 px-4 text-black/70 font-medium">{row.label}</td>
+                  <tr key={row.label} className={`border-b border-[rgb(var(--fg-rgb)/5%)] ${ri % 2 === 0 ? "bg-[var(--bg)]" : "bg-[rgb(var(--fg-rgb)/2%)]"}`}>
+                    <td className="py-3.5 px-4 text-[rgb(var(--fg-rgb)/70%)] font-medium">{row.label}</td>
                     {row.values.map((val, i) => {
                       if (val === true) {
                         return (
@@ -228,13 +228,13 @@ export default function PricingPage() {
                       }
                       if (val === false) {
                         return (
-                          <td key={i} className="py-3.5 px-4 text-center text-black/20 font-bold">
+                          <td key={i} className="py-3.5 px-4 text-center text-[rgb(var(--fg-rgb)/20%)] font-bold">
                             —
                           </td>
                         );
                       }
                       return (
-                        <td key={i} className="py-3.5 px-4 text-center font-bold text-black/80">
+                        <td key={i} className="py-3.5 px-4 text-center font-bold text-[rgb(var(--fg-rgb)/80%)]">
                           {val}
                         </td>
                       );

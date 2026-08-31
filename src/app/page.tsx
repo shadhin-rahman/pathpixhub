@@ -310,12 +310,12 @@ export default function Home() {
               { q: "Do you offer bulk editing services?", a: "Yes, we offer scalable solutions for businesses with large image volumes. Contact us for custom pricing." },
               { q: "What is the turnaround time?", a: "Our standard turnaround is 12 hours. Need it faster? Ask about our 6-hour express service." },
             ].map((item) => (
-              <details key={item.q} className="faq-item glass-card rounded-2xl px-6 py-5 border-[rgb(var(--fg-rgb)/5%)]">
-                <summary className="flex items-center justify-between gap-4">
-                  <span className="font-semibold text-[rgb(var(--fg-rgb))]">{item.q}</span>
-                  <span className="faq-icon shrink-0 text-2xl leading-none text-[rgb(var(--accent-text))] transition-transform duration-300">+</span>
+              <details key={item.q} className="faq-item glass-card rounded-2xl px-8 py-7 border-[rgb(var(--fg-rgb)/5%)]">
+                <summary className="flex items-center justify-between gap-6 cursor-pointer">
+                  <span className="text-lg md:text-xl font-semibold text-[rgb(var(--fg-rgb))]">{item.q}</span>
+                  <span className="faq-icon shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-[rgb(var(--accent-500)/12%)] text-xl font-bold text-[rgb(var(--accent-text))] transition-transform duration-300">+</span>
                 </summary>
-                <p className="mt-4 text-sm text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">{item.a}</p>
+                <p className="mt-5 text-base text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">{item.a}</p>
               </details>
             ))}
           </div>
