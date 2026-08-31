@@ -72,7 +72,7 @@ export default function EyeZoomGallery() {
   // Second heading appears once full screen, then fades before the deep zoom
   const heading2Opacity = useTransform(
     scrollYProgress,
-    [EXPAND_END, HOLD_END, ZOOM_END * 0.55, ZOOM_END * 0.7],
+    [EXPAND_END, HOLD_END, ZOOM_END * 0.8, ZOOM_END],
     [0, 1, 1, 0]
   );
 
