@@ -8,30 +8,16 @@ import { ChevronRight } from "lucide-react";
 import { services, priceMap, serviceImagePath } from "@/data/services";
 import CreditBanner from "@/components/CreditBanner";
 
-const cardColors = [
-  "#f5f5f4",
-  "#e7e5e4",
-  "#f5f5f4",
-  "#e7e5e4",
-  "#f5f5f4",
-  "#e7e5e4",
-  "#f5f5f4",
-  "#e7e5e4",
-  "#f5f5f4",
-  "#e7e5e4",
-];
-
 const slideItems = [...services, ...services, ...services];
 const trialRepeats = Array.from({ length: 10 }, (_, i) => i);
 
-function ShowcaseCard({ src, beforeSrc, alt, color, id }: { src: string; beforeSrc: string; alt: string; color: string; id: string }) {
+function ShowcaseCard({ src, beforeSrc, alt, id }: { src: string; beforeSrc: string; alt: string; id: string }) {
   return (
     <Link
       href={`/services/${id}`}
-      className="block rounded-2xl p-4 pb-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group"
-      style={{ backgroundColor: color }}
+      className="block rounded-2xl p-4 pb-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group border border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)]"
     >
-      <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-white/10">
+      <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-[rgb(var(--fg-rgb)/5%)]">
         {/* After image - shown by default */}
         <div className="absolute inset-0 transition-opacity duration-500 group-hover:opacity-0">
           <Image
@@ -155,8 +141,7 @@ export default function PricingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05, duration: 0.4 }}
-                className="rounded-2xl p-5 transition-all duration-300 group hover:-translate-y-1 hover:shadow-xl"
-                style={{ backgroundColor: cardColors[i % cardColors.length] }}
+                className="rounded-2xl p-5 transition-all duration-300 group hover:-translate-y-1 hover:shadow-xl border border-[rgb(var(--fg-rgb)/8%)] bg-[var(--bg-subtle)]"
               >
                 <div className="flex flex-col items-center text-center gap-3 mb-3">
                   <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-all duration-300">
@@ -198,25 +183,25 @@ export default function PricingPage() {
             </h2>
           </div>
           <div className="rounded-2xl border border-[rgb(var(--fg-rgb)/8%)]">
-            {/* Black header bar */}
-            <div className="compare-header flex items-center gap-0 rounded-t-2xl">
-              <div className="flex-1 py-5 px-6 font-bold text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>Feature</div>
+            {/* Header bar - adapts to dark/light mode */}
+            <div className="flex items-center gap-0 rounded-t-2xl" style={{ backgroundColor: 'rgb(var(--fg-rgb))', color: 'var(--bg)' }}>
+              <div className="flex-1 py-5 px-6 font-bold text-sm" style={{ opacity: 0.5 }}>Feature</div>
               <div className="flex-1 py-5 px-6 text-center">
-                <div className="font-bold text-white">Standard</div>
+                <div className="font-bold">Standard</div>
                 <div className="text-sm font-bold text-[rgb(var(--accent-text))]">Pay As You Go</div>
               </div>
               <div className="flex-1 py-5 px-6 text-center">
-                <div className="font-bold text-white">Pro</div>
+                <div className="font-bold">Pro</div>
                 <div className="text-sm font-bold text-[rgb(var(--accent-text))]">Path Credits Subscription</div>
               </div>
               <div className="flex-1 py-5 px-6 text-center">
-                <div className="font-bold text-white">Enterprise</div>
+                <div className="font-bold">Enterprise</div>
                 <div className="text-sm font-bold text-[rgb(var(--accent-text))]">$499/month</div>
               </div>
             </div>
             {/* White body */}
             <div className="overflow-x-auto">
-            <table className="w-full text-sm bg-white">
+            <table className="w-full text-sm bg-[var(--bg)]">
               <tbody>
                 {[
                   { label: "Next Morning Turnaround", values: [false, true, true] },
@@ -280,20 +265,16 @@ export default function PricingPage() {
 
       <section className="py-24 overflow-hidden bg-[var(--bg)] relative">
         <div className="flex gap-8 w-max items-stretch marquee-slide" ref={sliderRef}>
-          {slideItems.map((s, i) => {
-            const ci = i % cardColors.length;
-            return (
+          {slideItems.map((s, i) => (
               <div key={`${s.id}-${i}`} className="flex-shrink-0 w-[18rem] md:w-96 group">
                 <ShowcaseCard
                   src={serviceImagePath(s.id, "pricing", "after")}
                   beforeSrc={serviceImagePath(s.id, "pricing", "before")}
                   alt={s.title}
-                  color={cardColors[ci]}
                   id={s.id}
                 />
               </div>
-            );
-          })}
+          ))}
         </div>
 
         <button

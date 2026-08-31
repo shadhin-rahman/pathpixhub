@@ -138,25 +138,25 @@ export default function CreditsPage() {
             </h2>
           </div>
           <div className="rounded-2xl border border-[rgb(var(--fg-rgb)/8%)]">
-            {/* Black header bar */}
-            <div className="compare-header flex items-center gap-0 rounded-t-2xl">
-              <div className="flex-1 py-5 px-6 font-bold text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>Feature</div>
+            {/* Header bar - adapts to dark/light mode */}
+            <div className="flex items-center gap-0 rounded-t-2xl" style={{ backgroundColor: 'rgb(var(--fg-rgb))', color: 'var(--bg)' }}>
+              <div className="flex-1 py-5 px-6 font-bold text-sm" style={{ opacity: 0.5 }}>Feature</div>
               <div className="flex-1 py-5 px-6 text-center">
-                <div className="font-bold text-white">Standard</div>
+                <div className="font-bold">Standard</div>
                 <div className="text-sm font-bold text-[rgb(var(--accent-text))]">Pay As You Go</div>
               </div>
               <div className="flex-1 py-5 px-6 text-center">
-                <div className="font-bold text-white">Pro</div>
+                <div className="font-bold">Pro</div>
                 <div className="text-sm font-bold text-[rgb(var(--accent-text))]">Path Credits Subscription</div>
               </div>
               <div className="flex-1 py-5 px-6 text-center">
-                <div className="font-bold text-white">Enterprise</div>
+                <div className="font-bold">Enterprise</div>
                 <div className="text-sm font-bold text-[rgb(var(--accent-text))]">$499/month</div>
               </div>
             </div>
-            {/* White body */}
+            {/* Table body */}
             <div className="overflow-x-auto">
-            <table className="w-full text-base bg-white">
+            <table className="w-full text-base bg-[var(--bg)]">
               <tbody>
                 {[
                   { label: "Next Morning Turnaround", values: [false, true, true] },
@@ -167,8 +167,8 @@ export default function CreditsPage() {
                   { label: "Monthly billing by invoice", values: [false, false, true] },
                   { label: "Minimum order fee", values: ["$2.5", false, false] },
                 ].map((row, ri) => (
-                  <tr key={row.label} className={`border-b border-black/5 ${ri % 2 === 0 ? "bg-white" : "bg-black/[0.02]"}`}>
-                    <td className="py-4 px-6 text-black/70 font-medium">{row.label}</td>
+                  <tr key={row.label} className={`border-b border-[rgb(var(--fg-rgb)/5%)] ${ri % 2 === 0 ? "bg-[var(--bg)]" : "bg-[rgb(var(--fg-rgb)/2%)]"}`}>
+                    <td className="py-4 px-6 text-[rgb(var(--fg-rgb)/70%)] font-medium">{row.label}</td>
                     {row.values.map((val, i) => {
                       if (val === true) {
                         return (
@@ -183,13 +183,13 @@ export default function CreditsPage() {
                       }
                       if (val === false) {
                         return (
-                          <td key={i} className="py-4 px-6 text-center text-black/20 font-bold">
+                          <td key={i} className="py-4 px-6 text-center text-[rgb(var(--fg-rgb)/20%)] font-bold">
                             —
                           </td>
                         );
                       }
                       return (
-                        <td key={i} className="py-4 px-6 text-center font-bold text-black/80">
+                        <td key={i} className="py-4 px-6 text-center font-bold text-[rgb(var(--fg-rgb)/80%)]">
                           {val}
                         </td>
                       );

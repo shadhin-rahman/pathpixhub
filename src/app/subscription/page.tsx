@@ -518,25 +518,25 @@ export default function SubscriptionPage() {
             </h2>
           </div>
           <div className="rounded-2xl border border-[rgb(var(--fg-rgb)/8%)]">
-            {/* Black header bar */}
-            <div className="compare-header flex items-center gap-0 rounded-t-2xl">
-              <div className="flex-1 py-5 px-6 font-bold text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>Feature</div>
+            {/* Header bar - adapts to dark/light mode */}
+            <div className="flex items-center gap-0 rounded-t-2xl" style={{ backgroundColor: 'rgb(var(--fg-rgb))', color: 'var(--bg)' }}>
+              <div className="flex-1 py-5 px-6 font-bold text-sm" style={{ opacity: 0.5 }}>Feature</div>
               <div className="flex-1 py-5 px-6 text-center">
-                <div className="font-bold text-white">Standard</div>
+                <div className="font-bold">Standard</div>
                 <div className="text-sm font-bold text-[rgb(var(--accent-text))]">Pay As You Go</div>
               </div>
               <div className="flex-1 py-5 px-6 text-center">
-                <div className="font-bold text-white">Pro</div>
+                <div className="font-bold">Pro</div>
                 <div className="text-sm font-bold text-[rgb(var(--accent-text))]">Path Credits Subscription</div>
               </div>
               <div className="flex-1 py-5 px-6 text-center">
-                <div className="font-bold text-white">Enterprise</div>
+                <div className="font-bold">Enterprise</div>
                 <div className="text-sm font-bold text-[rgb(var(--accent-text))]">$499/month</div>
               </div>
             </div>
-            {/* White body */}
+            {/* Table body */}
             <div className="overflow-x-auto">
-            <table className="w-full text-sm bg-white">
+            <table className="w-full text-sm bg-[var(--bg)]">
               <tbody>
                 {[
                   { label: "Next Morning Turnaround", values: [false, true, true] },
@@ -547,8 +547,8 @@ export default function SubscriptionPage() {
                   { label: "Monthly billing by invoice", values: [false, false, true] },
                   { label: "Minimum order fee", values: ["$2.5", false, false] },
                 ].map((row, ri) => (
-                  <tr key={row.label} className={`border-b border-black/5 ${ri % 2 === 0 ? "bg-white" : "bg-black/[0.02]"}`}>
-                    <td className="py-3.5 px-4 text-black/70 font-medium">{row.label}</td>
+                  <tr key={row.label} className={`border-b border-[rgb(var(--fg-rgb)/5%)] ${ri % 2 === 0 ? "bg-[var(--bg)]" : "bg-[rgb(var(--fg-rgb)/2%)]"}`}>
+                    <td className="py-3.5 px-4 text-[rgb(var(--fg-rgb)/70%)] font-medium">{row.label}</td>
                     {row.values.map((val, i) => {
                       if (val === true) {
                         return (
@@ -563,13 +563,13 @@ export default function SubscriptionPage() {
                       }
                       if (val === false) {
                         return (
-                          <td key={i} className="py-3.5 px-4 text-center text-black/20 font-bold">
+                          <td key={i} className="py-3.5 px-4 text-center text-[rgb(var(--fg-rgb)/20%)] font-bold">
                             —
                           </td>
                         );
                       }
                       return (
-                        <td key={i} className="py-3.5 px-4 text-center font-bold text-black/80">
+                        <td key={i} className="py-3.5 px-4 text-center font-bold text-[rgb(var(--fg-rgb)/80%)]">
                           {val}
                         </td>
                       );
@@ -595,99 +595,99 @@ export default function SubscriptionPage() {
             </h2>
           </div>
           <div className="rounded-2xl border border-[rgb(var(--fg-rgb)/8%)]">
-            {/* Black header bar */}
-            <div className="compare-header flex items-center gap-0 rounded-t-2xl">
-              <div className="flex-[1.5] py-5 px-6 font-bold text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>Feature</div>
-              <div className="flex-1 py-5 px-6 text-center font-bold text-orange-400">Free</div>
-              <div className="flex-1 py-5 px-6 text-center font-bold text-orange-400">Standard</div>
-              <div className="flex-1 py-5 px-6 text-center font-bold text-[rgb(var(--accent-text))]">Pro</div>
-              <div className="flex-1 py-5 px-6 text-center font-bold text-purple-400">Enterprise</div>
+            {/* Header bar - adapts to dark/light mode */}
+            <div className="flex items-center gap-0 rounded-t-2xl" style={{ backgroundColor: 'rgb(var(--fg-rgb))', color: 'var(--bg)' }}>
+              <div className="flex-[1.5] py-5 px-6 font-bold text-sm" style={{ opacity: 0.5 }}>Feature</div>
+              <div className="flex-1 py-5 px-6 text-center font-bold" style={{ color: 'rgb(var(--accent-text))' }}>Free</div>
+              <div className="flex-1 py-5 px-6 text-center font-bold" style={{ color: 'rgb(var(--accent-text))' }}>Standard</div>
+              <div className="flex-1 py-5 px-6 text-center font-bold" style={{ color: 'rgb(var(--accent-text))' }}>Pro</div>
+              <div className="flex-1 py-5 px-6 text-center font-bold" style={{ color: 'rgb(var(--accent-text))' }}>Enterprise</div>
             </div>
-            {/* White body */}
+            {/* Table body */}
             <div className="overflow-x-auto">
-            <table className="w-full text-sm bg-white">
+            <table className="w-full text-sm bg-[var(--bg)]">
               <tbody>
-                <tr><td colSpan={5} className="py-3 px-6 font-bold text-black/50 text-xs uppercase tracking-wider bg-black/[0.03]">Core Editing Services</td></tr>
+                <tr><td colSpan={5} className="py-3 px-6 font-bold text-[rgb(var(--fg-rgb)/50%)] text-xs uppercase tracking-wider bg-[rgb(var(--fg-rgb)/3%)]">Core Editing Services</td></tr>
                 {["Clipping Path & BG Removal", "Color Correction & Retouching", "Ghost Mannequin", "Shadow Creation", "Layer Mask"].map((f, ri) => (
-                  <tr key={f} className={`border-b border-black/5 ${ri % 2 === 0 ? "bg-white" : "bg-black/[0.02]"}`}>
-                    <td className="py-3 px-6 text-black/70 font-medium">{f}</td>
+                  <tr key={f} className={`border-b border-[rgb(var(--fg-rgb)/5%)] ${ri % 2 === 0 ? "bg-[var(--bg)]" : "bg-[rgb(var(--fg-rgb)/2%)]"}`}>
+                    <td className="py-3 px-6 text-[rgb(var(--fg-rgb)/70%)] font-medium">{f}</td>
                     {[1,2,3,4].map(j => <td key={j} className="py-3 px-6 text-center text-[rgb(var(--accent-text))] font-bold">✓</td>)}
                   </tr>
                 ))}
-                <tr className="border-b border-black/5 bg-white">
-                  <td className="py-3 px-6 text-black/70 font-medium">Color Changing</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
+                <tr className="border-b border-[rgb(var(--fg-rgb)/5%)] bg-[var(--bg)]">
+                  <td className="py-3 px-6 text-[rgb(var(--fg-rgb)/70%)] font-medium">Color Changing</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
                   <td className="py-3 px-6 text-center text-[rgb(var(--accent-text))] font-bold">✓</td>
                   <td className="py-3 px-6 text-center text-[rgb(var(--accent-text))] font-bold">✓</td>
                 </tr>
 
-                <tr><td colSpan={5} className="py-3 px-6 font-bold text-black/50 text-xs uppercase tracking-wider bg-black/[0.03]">Delivery & SLA</td></tr>
-                <tr className="border-b border-black/5 bg-white">
-                  <td className="py-3 px-6 text-black/70 font-medium">Delivery Time</td>
+                <tr><td colSpan={5} className="py-3 px-6 font-bold text-[rgb(var(--fg-rgb)/50%)] text-xs uppercase tracking-wider bg-[rgb(var(--fg-rgb)/3%)]">Delivery & SLA</td></tr>
+                <tr className="border-b border-[rgb(var(--fg-rgb)/5%)] bg-[var(--bg)]">
+                  <td className="py-3 px-6 text-[rgb(var(--fg-rgb)/70%)] font-medium">Delivery Time</td>
                   <td className="py-3 px-6 text-center font-bold">24h</td>
-                  <td className="py-3 px-6 text-center font-bold text-orange-400">12h</td>
+                  <td className="py-3 px-6 text-center font-bold text-[rgb(var(--accent-text))]">12h</td>
                   <td className="py-3 px-6 text-center font-bold text-[rgb(var(--accent-text))]">6h</td>
-                  <td className="py-3 px-6 text-center font-bold text-purple-400">45m</td>
+                  <td className="py-3 px-6 text-center font-bold text-[rgb(var(--accent-text))]">45m</td>
                 </tr>
-                <tr className="border-b border-black/5 bg-black/[0.02]">
-                  <td className="py-3 px-6 text-black/70 font-medium">Rush Option</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
+                <tr className="border-b border-[rgb(var(--fg-rgb)/5%)] bg-[rgb(var(--fg-rgb)/2%)]">
+                  <td className="py-3 px-6 text-[rgb(var(--fg-rgb)/70%)] font-medium">Rush Option</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
                   <td className="py-3 px-6 text-center text-[rgb(var(--accent-text))] font-bold">✓ (3h)</td>
                   <td className="py-3 px-6 text-center text-[rgb(var(--accent-text))] font-bold">✓ (1h)</td>
                 </tr>
 
-                <tr><td colSpan={5} className="py-3 px-6 font-bold text-black/50 text-xs uppercase tracking-wider bg-black/[0.03]">Support & Service</td></tr>
-                <tr className="border-b border-black/5 bg-white">
-                  <td className="py-3 px-6 text-black/70 font-medium">Priority Support</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
+                <tr><td colSpan={5} className="py-3 px-6 font-bold text-[rgb(var(--fg-rgb)/50%)] text-xs uppercase tracking-wider bg-[rgb(var(--fg-rgb)/3%)]">Support & Service</td></tr>
+                <tr className="border-b border-[rgb(var(--fg-rgb)/5%)] bg-[var(--bg)]">
+                  <td className="py-3 px-6 text-[rgb(var(--fg-rgb)/70%)] font-medium">Priority Support</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
                   <td className="py-3 px-6 text-center">5/mo</td>
                   <td className="py-3 px-6 text-center text-[rgb(var(--accent-text))] font-bold">Unlimited</td>
                   <td className="py-3 px-6 text-center text-[rgb(var(--accent-text))] font-bold">Unlimited</td>
                 </tr>
-                <tr className="border-b border-black/5 bg-black/[0.02]">
-                  <td className="py-3 px-6 text-black/70 font-medium">Unlimited Revisions</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
+                <tr className="border-b border-[rgb(var(--fg-rgb)/5%)] bg-[rgb(var(--fg-rgb)/2%)]">
+                  <td className="py-3 px-6 text-[rgb(var(--fg-rgb)/70%)] font-medium">Unlimited Revisions</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
                   <td className="py-3 px-6 text-center text-[rgb(var(--accent-text))] font-bold">✓</td>
                   <td className="py-3 px-6 text-center text-[rgb(var(--accent-text))] font-bold">✓</td>
                 </tr>
-                <tr className="border-b border-black/5 bg-white">
-                  <td className="py-3 px-6 text-black/70 font-medium">Dedicated Account Manager</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
+                <tr className="border-b border-[rgb(var(--fg-rgb)/5%)] bg-[var(--bg)]">
+                  <td className="py-3 px-6 text-[rgb(var(--fg-rgb)/70%)] font-medium">Dedicated Account Manager</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
                   <td className="py-3 px-6 text-center text-[rgb(var(--accent-text))] font-bold">✓</td>
                 </tr>
-                <tr className="border-b border-black/5 bg-black/[0.02]">
-                  <td className="py-3 px-6 text-black/70 font-medium">Dedicated Expert Team</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
+                <tr className="border-b border-[rgb(var(--fg-rgb)/5%)] bg-[rgb(var(--fg-rgb)/2%)]">
+                  <td className="py-3 px-6 text-[rgb(var(--fg-rgb)/70%)] font-medium">Dedicated Expert Team</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
                   <td className="py-3 px-6 text-center text-[rgb(var(--accent-text))] font-bold">✓</td>
                 </tr>
 
-                <tr><td colSpan={5} className="py-3 px-6 font-bold text-black/50 text-xs uppercase tracking-wider bg-black/[0.03]">Billing & Value</td></tr>
-                <tr className="border-b border-black/5 bg-white">
-                  <td className="py-3 px-6 text-black/70 font-medium">Path Credit Bonus</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
+                <tr><td colSpan={5} className="py-3 px-6 font-bold text-[rgb(var(--fg-rgb)/50%)] text-xs uppercase tracking-wider bg-[rgb(var(--fg-rgb)/3%)]">Billing & Value</td></tr>
+                <tr className="border-b border-[rgb(var(--fg-rgb)/5%)] bg-[var(--bg)]">
+                  <td className="py-3 px-6 text-[rgb(var(--fg-rgb)/70%)] font-medium">Path Credit Bonus</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
                   <td className="py-3 px-6 text-center">5%</td>
                   <td className="py-3 px-6 text-center">15%</td>
                   <td className="py-3 px-6 text-center">25%</td>
                 </tr>
-                <tr className="border-b border-black/5 bg-black/[0.02]">
-                  <td className="py-3 px-6 text-black/70 font-medium">Pause Subscription</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
+                <tr className="border-b border-[rgb(var(--fg-rgb)/5%)] bg-[rgb(var(--fg-rgb)/2%)]">
+                  <td className="py-3 px-6 text-[rgb(var(--fg-rgb)/70%)] font-medium">Pause Subscription</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
                   <td className="py-3 px-6 text-center text-[rgb(var(--accent-text))] font-bold">✓ ($4/mo)</td>
                   <td className="py-3 px-6 text-center text-[rgb(var(--accent-text))] font-bold">✓ ($4/mo)</td>
                   <td className="py-3 px-6 text-center text-[rgb(var(--accent-text))] font-bold">✓ ($4/mo)</td>
                 </tr>
-                <tr className="border-b border-black/5 bg-white">
-                  <td className="py-3 px-6 text-black/70 font-medium">Business SLA Guarantee</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
-                  <td className="py-3 px-6 text-center text-black/20">✕</td>
+                <tr className="border-b border-[rgb(var(--fg-rgb)/5%)] bg-[var(--bg)]">
+                  <td className="py-3 px-6 text-[rgb(var(--fg-rgb)/70%)] font-medium">Business SLA Guarantee</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
+                  <td className="py-3 px-6 text-center text-[rgb(var(--fg-rgb)/20%)]">✕</td>
                   <td className="py-3 px-6 text-center text-[rgb(var(--accent-text))] font-bold">✓</td>
                 </tr>
               </tbody>

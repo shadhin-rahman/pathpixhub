@@ -139,27 +139,27 @@ export default function AccountCreditsPage() {
         <div className="rounded-3xl min-w-0 border border-black/5 overflow-hidden">
           <div className="p-6 sm:p-8">
             <h2 className="text-xl font-bold mb-1">Compare plans</h2>
-            <p className="text-sm text-black/50 mb-6">See what&apos;s included in each Path plan.</p>
+            <p className="text-sm text-[rgb(var(--fg-rgb)/50%)] mb-6">See what&apos;s included in each Path plan.</p>
           </div>
-          {/* Black header bar */}
-          <div className="compare-header flex items-center gap-0">
-            <div className="flex-1 py-4 px-4 font-bold text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}></div>
+          {/* Header bar - adapts to dark/light mode */}
+          <div className="flex items-center gap-0" style={{ backgroundColor: 'rgb(var(--fg-rgb))', color: 'var(--bg)' }}>
+            <div className="flex-1 py-4 px-4 font-bold text-sm" style={{ opacity: 0.5 }}></div>
             <div className="flex-1 py-4 px-4 text-center">
               <div className="text-[10px] text-[rgb(var(--accent-text))] font-bold mb-1">ACTIVE PLAN</div>
-              <div className="font-bold text-white text-sm">Standard</div>
+              <div className="font-bold text-sm">Standard</div>
               <div className="text-xs font-bold text-[rgb(var(--accent-text))]">Pay As You Go</div>
             </div>
             <div className="flex-1 py-4 px-4 text-center">
-              <div className="font-bold text-white text-sm">Pro</div>
+              <div className="font-bold text-sm">Pro</div>
               <div className="text-xs font-bold text-[rgb(var(--accent-text))]">Path Credits Subscription</div>
             </div>
             <div className="flex-1 py-4 px-4 text-center">
-              <div className="font-bold text-white text-sm">Enterprise</div>
+              <div className="font-bold text-sm">Enterprise</div>
               <div className="text-xs font-bold text-[rgb(var(--accent-text))]">$499/month</div>
             </div>
           </div>
-          {/* White body */}
-          <table className="w-full text-sm bg-white">
+          {/* Table body */}
+          <table className="w-full text-sm bg-[var(--bg)]">
             <tbody>
               {[
                 { label: "Next Morning Turnaround", values: [false, true, true] },
@@ -170,8 +170,8 @@ export default function AccountCreditsPage() {
                 { label: "Monthly billing by invoice", values: [false, false, true] },
                 { label: "Minimum order fee", values: ["$2.5", false, false] },
               ].map((row, ri) => (
-                <tr key={row.label} className={`border-b border-black/5 ${ri % 2 === 0 ? "bg-white" : "bg-black/[0.02]"}`}>
-                  <td className="py-3.5 px-4 text-black/70 font-medium">{row.label}</td>
+                <tr key={row.label} className={`border-b border-[rgb(var(--fg-rgb)/5%)] ${ri % 2 === 0 ? "bg-[var(--bg)]" : "bg-[rgb(var(--fg-rgb)/2%)]"}`}>
+                  <td className="py-3.5 px-4 text-[rgb(var(--fg-rgb)/70%)] font-medium">{row.label}</td>
                   {row.values.map((val, i) => {
                     if (val === true) {
                       return (
@@ -185,9 +185,9 @@ export default function AccountCreditsPage() {
                       );
                     }
                     if (val === false) {
-                      return <td key={i} className="py-3.5 px-4 text-center text-black/20 font-bold">—</td>;
+                      return <td key={i} className="py-3.5 px-4 text-center text-[rgb(var(--fg-rgb)/20%)] font-bold">—</td>;
                     }
-                    return <td key={i} className="py-3.5 px-4 text-center font-bold text-black/80">{val}</td>;
+                    return <td key={i} className="py-3.5 px-4 text-center font-bold text-[rgb(var(--fg-rgb)/80%)]">{val}</td>;
                   })}
                 </tr>
               ))}
