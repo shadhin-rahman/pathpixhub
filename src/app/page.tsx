@@ -17,7 +17,6 @@ import { ScrollProgressBar } from "@/components/HorizontalScroll";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
 import CinematicShowcase from "@/components/CinematicShowcase";
 import BeforeAfterHover from "@/components/BeforeAfterHover";
-import HeroZoomReveal from "@/components/HeroZoomReveal";
 import ServiceMarquee from "@/components/ServiceMarquee";
 import EyeZoomGallery from "@/components/EyeZoomGallery";
 
@@ -100,8 +99,6 @@ export default function Home() {
       </section>
 
       <ServiceMarquee />
-
-      <HeroZoomReveal />
 
       <EyeZoomGallery />
 
