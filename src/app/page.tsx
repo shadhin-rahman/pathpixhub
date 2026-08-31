@@ -17,6 +17,8 @@ import { ScrollProgressBar } from "@/components/HorizontalScroll";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
 import CinematicShowcase from "@/components/CinematicShowcase";
 import BeforeAfterHover from "@/components/BeforeAfterHover";
+import HeroZoomReveal from "@/components/HeroZoomReveal";
+import ServiceMarquee from "@/components/ServiceMarquee";
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -95,6 +97,10 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <ServiceMarquee />
+
+      <HeroZoomReveal />
 
       <section className="relative overflow-hidden mesh-gradient">
         <div className="premium-blur w-[500px] h-[500px] top-[-20%] right-[-10%]" />
