@@ -33,10 +33,7 @@ export default function Footer() {
       <div className="relative max-w-7xl mx-auto px-6 pt-14 pb-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10">
           <div className="lg:col-span-5">
-            <div className="flex items-center gap-3">
-              <Image src="/images/logo-new.png" alt="PathPixHub" width={64} height={64} className="w-16 h-16" />
-              <span className="logo-text text-2xl font-bold text-white">Path<span className="text-[rgb(var(--accent-400))]">Pix</span>Hub</span>
-            </div>
+            <Image src="/images/logo-new.png" alt="PathPixHub" width={80} height={80} className="w-20 h-20" />
             <p className="mt-4 text-sm text-white/60 leading-relaxed max-w-sm">
               Professional photo editing for e-commerce, fashion, and advertising — pixel-perfect
               results with 12hr turnaround. Trusted by studios worldwide.
