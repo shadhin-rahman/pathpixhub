@@ -31,7 +31,7 @@ export default function Header() {
           onClick={(e) => { if (pathname === "/") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
         >
           <span className={`ml-4 md:ml-10 flex items-center gap-3 ${isLegalPage ? "text-white" : "text-[rgb(var(--fg-rgb)/85%)]"}`}>
-            <Image src="/images/logo-new.png" alt="PathPixHub" width={72} height={72} className="w-[72px] h-[72px] rounded-full" />
+            <Image src="/images/logo-new.png" alt="PathPixHub" width={80} height={80} className="w-20 h-20" />
             <span className="text-xl md:text-2xl font-bold tracking-tight hidden sm:inline">Path<span className="text-[rgb(var(--accent-text))]">Pix</span>Hub</span>
           </span>
         </Link>

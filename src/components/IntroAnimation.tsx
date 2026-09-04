@@ -59,13 +59,13 @@ export default function IntroAnimation() {
           exiting ? "opacity-0 scale-95" : "opacity-100 scale-100"
         }`}
       >
-        <div className="relative w-20 h-20 rounded-full overflow-hidden">
+        <div className="relative w-24 h-24">
           <Image
             src="/images/logo-new.png"
             alt="PathPixHub"
-            width={80}
-            height={80}
-            className="w-20 h-20 object-contain"
+            width={96}
+            height={96}
+            className="w-24 h-24"
             style={{ animation: "intro-pop 0.7s ease both" }}
           />
         </div>
