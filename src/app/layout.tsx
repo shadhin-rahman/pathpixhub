@@ -30,8 +30,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
   <head>
-    <link rel="icon" href="/images/logo-new.png" type="image/png" />
-    <link rel="apple-touch-icon" href="/images/logo-new.png" />
     <script
       dangerouslySetInnerHTML={{
         __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme','light');}catch(e){}})();`,
