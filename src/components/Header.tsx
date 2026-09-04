@@ -24,14 +24,14 @@ export default function Header() {
 
   return (
     <nav className={`fixed top-0 left-0 w-full z-50 ${isLegalPage ? "bg-[#081526]/70 backdrop-blur-xl border-b border-white/10" : ""}`}>
-      <div className="flex justify-between items-center py-3 md:py-4">
+      <div className="flex justify-between items-center py-4 md:py-5">
         <Link
           href="/"
           className={isOpen ? "z-40" : "z-[60]"}
           onClick={(e) => { if (pathname === "/") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
         >
           <span className={`ml-4 md:ml-10 block ${isLegalPage ? "text-white" : "text-[rgb(var(--fg-rgb)/85%)]"}`}>
-            <Image src="/images/logo-new.png" alt="PathPixHub" width={80} height={80} className="h-16 w-16 md:h-20 md:w-20" />
+            <Image src="/images/logo-new.png" alt="PathPixHub" width={128} height={128} className="h-24 w-24 md:h-32 md:w-32" />
           </span>
         </Link>
 
