@@ -24,7 +24,7 @@ export default function Header() {
 
   return (
     <nav className={`fixed top-0 left-0 w-full z-50 ${isLegalPage ? "bg-[#081526]/70 backdrop-blur-xl border-b border-white/10" : ""}`}>
-      <div className="flex justify-between items-center py-4 md:py-5">
+      <div className="flex justify-between items-center pt-2 pb-3 md:pt-3 md:pb-4">
         <Link
           href="/"
           className={isOpen ? "z-40" : "z-[60]"}
