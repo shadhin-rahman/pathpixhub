@@ -30,9 +30,9 @@ export default function Header() {
           className={isOpen ? "z-40" : "z-[60]"}
           onClick={(e) => { if (pathname === "/") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
         >
-          <span className={`ml-4 md:ml-10 flex items-center gap-2 text-lg md:text-xl font-bold tracking-tight ${isLegalPage ? "text-white" : "text-[rgb(var(--fg-rgb)/85%)]"}`}>
-            <Image src="/images/logo-new.png" alt="PathPixHub" width={32} height={32} className="w-8 h-8 rounded-full" />
-            Path<span className="text-[rgb(var(--accent-text))]">Pix</span>Hub
+          <span className={`ml-4 md:ml-10 flex items-center gap-3 ${isLegalPage ? "text-white" : "text-[rgb(var(--fg-rgb)/85%)]"}`}>
+            <Image src="/images/logo-new.png" alt="PathPixHub" width={48} height={48} className="w-12 h-12 rounded-full" />
+            <span className="text-xl md:text-2xl font-bold tracking-tight">Path<span className="text-[rgb(var(--accent-text))]">Pix</span>Hub</span>
           </span>
         </Link>
 
