@@ -23,15 +23,15 @@ export default function Header() {
   const closeMenu = () => { setIsOpen(false); setServicesOpen(false); };
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-50 py-4 md:py-6 ${isLegalPage ? "bg-[#081526]/70 backdrop-blur-xl border-b border-white/10" : ""}`}>
-      <div className="flex justify-between items-center">
+    <nav className={`fixed top-0 left-0 w-full z-50 ${isLegalPage ? "bg-[#081526]/70 backdrop-blur-xl border-b border-white/10" : ""}`}>
+      <div className="flex justify-between items-center py-3 md:py-4">
         <Link
           href="/"
           className={isOpen ? "z-40" : "z-[60]"}
           onClick={(e) => { if (pathname === "/") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
         >
-          <span className={`ml-4 md:ml-10 ${isLegalPage ? "text-white" : "text-[rgb(var(--fg-rgb)/85%)]"}`}>
-            <Image src="/images/logo-new.png" alt="PathPixHub" width={80} height={80} className="w-20 h-20" />
+          <span className={`ml-4 md:ml-10 block ${isLegalPage ? "text-white" : "text-[rgb(var(--fg-rgb)/85%)]"}`}>
+            <Image src="/images/logo-new.png" alt="PathPixHub" width={80} height={80} className="h-16 w-16 md:h-20 md:w-20" />
           </span>
         </Link>
 
