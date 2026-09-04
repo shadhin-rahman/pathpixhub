@@ -34,7 +34,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10">
           <div className="lg:col-span-5">
             <div className="flex items-center gap-3">
-              <Image src="/images/logo-new.png" alt="PathPixHub" width={40} height={40} className="w-10 h-10 rounded-full" />
+              <Image src="/images/logo-new.png" alt="PathPixHub" width={48} height={48} className="w-12 h-12 rounded-full" />
               <span className="logo-text text-2xl font-bold text-white">PathPixHub</span>
             </div>
             <p className="mt-4 text-sm text-white/60 leading-relaxed max-w-sm">
