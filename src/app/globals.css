@@ -17,6 +17,23 @@
   color-scheme: dark;
 }
 
+:root[data-theme="light"] {
+  --bg: #faf9f7;
+  --bg-alt: #f0eee9;
+  --bg-subtle: #e8e5df;
+  --fg-rgb: 20 19 17;
+  --glass-bg: rgba(0, 0, 0, 0.03);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --logo-filter: none;
+  --accent-300: 134 239 172;
+  --accent-400: 74 222 128;
+  --accent-500: 34 197 94;
+  --accent-600: 22 163 74;
+  --accent-text: 22 163 74;
+  --accent-contrast: 255 255 255;
+  color-scheme: light;
+}
+
 @layer base {
   * {
     border-color: rgb(var(--fg-rgb) / 10%);
