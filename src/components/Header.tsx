@@ -31,7 +31,7 @@ export default function Header() {
           onClick={(e) => { if (pathname === "/") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
         >
           <span className={`ml-6 md:ml-16 ${isLegalPage ? "" : ""}`}>
-            <Image src="/images/logo-header.png" alt="PathPixHub" width={906} height={239} className="h-9 md:h-10 w-auto" priority />
+            <Image src="/images/logo-header.png" alt="PathPixHub" width={906} height={239} className="h-9 md:h-10 w-auto" style={{ filter: "var(--logo-filter)" }} priority />
           </span>
         </Link>
 
