@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import { services } from "@/data/services";
+import ThemeToggle from "./ThemeToggle";
 import AccountButton from "./AccountButton";
 
 export default function Header() {
@@ -35,6 +36,7 @@ export default function Header() {
         </Link>
 
         <div className="hidden md:flex items-center gap-3 pr-4 md:pr-10">
+          <ThemeToggle className="w-11 h-11 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))]" />
           <AccountButton />
           <Link
             href="/contact"
@@ -101,8 +103,9 @@ export default function Header() {
               transition={{ type: "spring", damping: 30, stiffness: 200 }}
               className="fixed top-0 right-0 h-screen w-full md:w-[500px] bg-[var(--bg-alt)] border-l border-[rgb(var(--fg-rgb)/5%)] z-[56] p-8 md:p-12 flex flex-col justify-start overflow-y-auto pt-24 md:pt-28"
             >
-              <div className="mb-10 md:mb-12">
+              <div className="mb-10 md:mb-12 flex items-center justify-between">
                 <span className="text-[rgb(var(--accent-text))] text-xs uppercase tracking-[0.5em] font-bold">Navigation</span>
+                <ThemeToggle className="w-11 h-11 rounded-full glass-card text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))]" />
               </div>
 
               <motion.div
