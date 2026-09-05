@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import { services } from "@/data/services";
-import ThemeToggle from "./ThemeToggle";
 import AccountButton from "./AccountButton";
 
 export default function Header() {
@@ -31,12 +30,11 @@ export default function Header() {
           onClick={(e) => { if (pathname === "/") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
         >
           <span className={`ml-4 md:ml-10 ${isLegalPage ? "" : ""}`}>
-            <Image src="/images/logo-new.png" alt="PathPixHub" width={256} height={256} className="h-48 w-48 md:h-56 md:w-56" />
+            <Image src="/images/logo-header.png" alt="PathPixHub" width={906} height={239} className="h-9 md:h-10 w-auto" priority />
           </span>
         </Link>
 
         <div className="hidden md:flex items-center gap-3 pr-4 md:pr-10">
-          <ThemeToggle className={`w-11 h-11 rounded-full glass-card ${isLegalPage ? "text-white border-white/25 hover:border-white/50" : "text-[rgb(var(--fg-rgb))] hover:border-[rgb(var(--accent-500)/50%)] hover:text-[rgb(var(--accent-text))]"}`} />
           <AccountButton />
           <Link
             href="/contact"
@@ -69,7 +67,6 @@ export default function Header() {
         </div>
 
         <div className="md:hidden flex items-center gap-1.5 pr-4">
-          <ThemeToggle className={`w-8 h-8 rounded-full glass-card ${isLegalPage ? "text-white border-white/25" : "text-[rgb(var(--fg-rgb))] hover:text-[rgb(var(--accent-text))]"}`} />
           <AccountButton compact />
           <Link
             href="/contact"
