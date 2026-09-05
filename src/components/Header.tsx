@@ -30,7 +30,7 @@ export default function Header() {
           className={isOpen ? "z-40" : "z-[60]"}
           onClick={(e) => { if (pathname === "/") { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
         >
-          <span className={`ml-4 md:ml-10 ${isLegalPage ? "" : ""}`}>
+          <span className={`ml-6 md:ml-16 ${isLegalPage ? "" : ""}`}>
             <Image src="/images/logo-header.png" alt="PathPixHub" width={906} height={239} className="h-9 md:h-10 w-auto" priority />
           </span>
         </Link>
