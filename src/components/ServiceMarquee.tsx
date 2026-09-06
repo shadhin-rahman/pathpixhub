@@ -39,7 +39,7 @@ export default function ServiceMarquee() {
 
       <div className="relative">
         <div className="flex gap-5 md:gap-8 w-max marquee-trial">
-          {galleryItems.map((item, i) => (
+          {[...galleryItems, ...galleryItems, ...galleryItems, ...galleryItems].map((item, i) => (
             <GalleryCard key={`${item.id}-${i}`} item={item} />
           ))}
         </div>
