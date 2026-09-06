@@ -11,14 +11,14 @@ const galleryItems = [
 
 function GalleryCard({ item }: { item: (typeof galleryItems)[number] }) {
   return (
-    <div className="shrink-0 w-[220px] md:w-[280px]">
-      <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-[var(--bg-alt)]">
+    <div className="shrink-0 w-[260px] md:w-[340px]">
+      <div className="relative aspect-[3/4] rounded-3xl overflow-hidden bg-[var(--bg-alt)] shadow-lg">
         <Image
           src={item.src}
           alt=""
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-105"
-          sizes="(max-width: 768px) 220px, 280px"
+          sizes="(max-width: 768px) 260px, 340px"
         />
       </div>
     </div>
