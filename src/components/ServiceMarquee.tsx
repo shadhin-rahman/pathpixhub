@@ -1,43 +1,27 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 
 const galleryItems = [
-  { id: "clipping-path", title: "Clipping Path", src: "/images/covers/clipping-path-cover.jpg", tag: "Popular" },
-  { id: "background-removal", title: "Background Removal", src: "/images/covers/background-removal-cover.jpg", tag: "Popular" },
-  { id: "photo-retouching", title: "Photo Retouching", src: "/images/covers/photo-retouching-cover.jpg", tag: "New" },
-  { id: "multi-clipping-path", title: "Multi Clipping Path", src: "/images/covers/multi-clipping-path-cover.jpg", tag: "Popular" },
-  { id: "color-change", title: "Color Change", src: "/images/covers/color-change-cover.jpg", tag: "New" },
-  { id: "car-editing", title: "Car Editing", src: "/images/covers/car-editing-cover.jpg", tag: "Popular" },
-  { id: "ghost-mannequin", title: "Ghost Mannequin", src: "/images/covers/ghost-mannequin-cover.jpg", tag: "New" },
-  { id: "image-masking", title: "Image Masking", src: "/images/covers/image-masking-cover.jpg", tag: "Popular" },
-  { id: "shadow-creation", title: "Shadow Creation", src: "/images/covers/shadow-creation-cover.jpg", tag: "New" },
-  { id: "ecommerce-editing", title: "Ecommerce Editing", src: "/images/covers/ecommerce-editing-cover.jpg", tag: "Popular" },
+  { id: "gallery-1", src: "/images/gallery/gallery-1.jpg" },
+  { id: "gallery-2", src: "/images/gallery/gallery-2.jpg" },
+  { id: "gallery-3", src: "/images/gallery/gallery-3.jpg" },
+  { id: "gallery-4", src: "/images/gallery/gallery-4.jpg" },
 ];
 
 function GalleryCard({ item }: { item: (typeof galleryItems)[number] }) {
   return (
-    <Link
-      href={`/services/${item.id}`}
-      className="group relative shrink-0 w-[220px] md:w-[280px] flex flex-col gap-3"
-    >
+    <div className="shrink-0 w-[220px] md:w-[280px]">
       <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-[var(--bg-alt)]">
-        <span className="absolute top-3 left-3 z-10 text-[10px] font-bold uppercase tracking-wider bg-white text-[#141311] px-2.5 py-1 rounded-md">
-          {item.tag}
-        </span>
         <Image
           src={item.src}
-          alt={item.title}
+          alt=""
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-105"
           sizes="(max-width: 768px) 220px, 280px"
         />
       </div>
-      <p className="text-xs md:text-sm font-bold uppercase tracking-wide text-[rgb(var(--fg-rgb)/70%)]">
-        {item.title}
-      </p>
-    </Link>
+    </div>
   );
 }
 
