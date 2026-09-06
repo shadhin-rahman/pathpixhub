@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -17,6 +16,7 @@ import BeforeAfterSlider from "@/components/BeforeAfterSlider";
 import CinematicShowcase from "@/components/CinematicShowcase";
 import BeforeAfterHover from "@/components/BeforeAfterHover";
 import ServiceMarquee from "@/components/ServiceMarquee";
+import HeroSlider from "@/components/HeroSlider";
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -37,31 +37,9 @@ export default function Home() {
         className="relative w-full h-screen overflow-hidden"
         style={{ scale: heroScale }}
       >
-        <video
-          className="hero-video absolute inset-0 w-full h-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-        >
-          <source src="/videos/beauty.mp4" type="video/mp4" />
-        </video>
-        {[
-          { src: "/images/hero-slider/bicycle.jpg", alt: "bicycle photo editing", delay: "0s" },
-          { src: "/images/hero-slider/car-editing-1.jpg", alt: "car photo editing", delay: "-7s" },
-          { src: "/images/hero-slider/ecommerce-product.jpg", alt: "ecommerce product photo editing", delay: "-14s" },
-          { src: "/images/hero-slider/background.jpg", alt: "background removal", delay: "-21s" },
-          { src: "/images/hero-slider/Beauty retouching.jpg", alt: "beauty retouching", delay: "-28s" },
-          { src: "/images/hero-slider/Blank poster.jpg", alt: "blank poster", delay: "-35s" },
-          { src: "/images/hero-slider/Skin Retouch.jpg", alt: "skin retouch", delay: "-42s" },
-        ].map((slide) => (
-          <div key={slide.src} className="absolute inset-0" style={{ animation: "hero-fade-7 49s ease-in-out infinite", animationDelay: slide.delay }}>
-            <Image src={slide.src} alt={slide.alt} fill className="object-cover" sizes="100vw" priority />
-          </div>
-        ))}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70" />
-        <motion.div className="absolute inset-0 flex items-center justify-center" style={{ opacity: heroOpacity, y: heroY }}>
+        <HeroSlider />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70 z-10" />
+        <motion.div className="absolute inset-0 flex items-center justify-center z-20" style={{ opacity: heroOpacity, y: heroY }}>
           <div className="text-center px-6 max-w-5xl">
             <motion.div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-card text-xs font-bold text-[rgb(var(--accent-400))] tracking-[0.2em] uppercase mb-8 border-white/20" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}>
               <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))]" />
