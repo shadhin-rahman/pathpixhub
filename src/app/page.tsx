@@ -35,19 +35,22 @@ export default function Home() {
 
       <motion.section
         ref={heroRef}
-        className="relative w-full aspect-video max-h-[85vh] overflow-hidden"
+        className="relative w-full h-screen overflow-hidden"
         style={{ scale: heroScale }}
       >
-        <video
-          className="hero-video absolute inset-0 w-full h-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-        >
-          <source src="/videos/beauty.mp4" type="video/mp4" />
-        </video>
+        {[
+          { src: "/images/hero-slider/bicycle.jpg", alt: "bicycle photo editing", delay: "0s" },
+          { src: "/images/hero-slider/car-editing-1.jpg", alt: "car photo editing", delay: "-7s" },
+          { src: "/images/hero-slider/ecommerce-product.jpg", alt: "ecommerce product photo editing", delay: "-14s" },
+          { src: "/images/hero-slider/background.jpg", alt: "background removal", delay: "-21s" },
+          { src: "/images/hero-slider/Beauty retouching.jpg", alt: "beauty retouching", delay: "-28s" },
+          { src: "/images/hero-slider/Blank poster.jpg", alt: "blank poster", delay: "-35s" },
+          { src: "/images/hero-slider/Skin Retouch.jpg", alt: "skin retouch", delay: "-42s" },
+        ].map((slide) => (
+          <div key={slide.src} className="absolute inset-0" style={{ animation: "hero-fade-7 49s ease-in-out infinite", animationDelay: slide.delay }}>
+            <Image src={slide.src} alt={slide.alt} fill className="object-cover" sizes="100vw" priority />
+          </div>
+        ))}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70" />
         <motion.div className="absolute inset-0 flex items-center justify-center" style={{ opacity: heroOpacity, y: heroY }}>
           <div className="text-center px-6 max-w-5xl">
@@ -143,19 +146,7 @@ export default function Home() {
             <div className="w-full lg:w-2/3 flex items-stretch">
               <ImageScaleScroll scaleFrom={0.9} scaleTo={1} className="w-full rounded-3xl">
                 <div className="relative w-full rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]" style={{ aspectRatio: "1600 / 700", maxHeight: "50rem", minHeight: "10rem" }}>
-                  {[
-                    { src: "/images/hero-slider/bicycle.jpg", alt: "bicycle photo editing", delay: "0s" },
-                    { src: "/images/hero-slider/car-editing-1.jpg", alt: "car photo editing", delay: "-8s" },
-                    { src: "/images/hero-slider/ecommerce-product.jpg", alt: "ecommerce product photo editing", delay: "-16s" },
-                    { src: "/images/hero-slider/background.jpg", alt: "background removal", delay: "-24s" },
-                    { src: "/images/hero-slider/Beauty retouching.jpg", alt: "beauty retouching", delay: "-32s" },
-                    { src: "/images/hero-slider/Blank poster.jpg", alt: "blank poster", delay: "-40s" },
-                    { src: "/images/hero-slider/Skin Retouch.jpg", alt: "skin retouch", delay: "-48s" },
-                  ].map((slide) => (
-                    <div key={slide.src} className="absolute inset-0 flex items-center justify-center" style={{ animation: "hero-fade-7 56s ease-in-out infinite", animationDelay: slide.delay }}>
-                      <Image src={slide.src} alt={slide.alt} fill className="object-cover mobile-object-contain" sizes="66vw" />
-                    </div>
-                  ))}
+                  <Image src="/images/hero-slider/ecommerce-product.jpg" alt="product photo editing" fill className="object-cover" sizes="66vw" />
                 </div>
               </ImageScaleScroll>
             </div>
