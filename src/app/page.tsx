@@ -11,7 +11,6 @@ import StaggerReveal, { StaggerItem } from "@/components/StaggerReveal";
 import ScrollIndicator from "@/components/ScrollIndicator";
 import CountUp from "@/components/CountUp";
 import TextReveal from "@/components/TextReveal";
-import ImageScaleScroll from "@/components/ImageScaleScroll";
 import MagneticButton from "@/components/MagneticButton";
 import { ScrollProgressBar } from "@/components/HorizontalScroll";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
@@ -38,6 +37,16 @@ export default function Home() {
         className="relative w-full h-screen overflow-hidden"
         style={{ scale: heroScale }}
       >
+        <video
+          className="hero-video absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+        >
+          <source src="/videos/beauty.mp4" type="video/mp4" />
+        </video>
         {[
           { src: "/images/hero-slider/bicycle.jpg", alt: "bicycle photo editing", delay: "0s" },
           { src: "/images/hero-slider/car-editing-1.jpg", alt: "car photo editing", delay: "-7s" },
@@ -124,31 +133,42 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-20 lg:py-28 bg-[var(--bg-alt)]">
+      <section className="py-24 lg:py-32 bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col lg:flex-row items-stretch gap-6">
-            <div className="w-full lg:w-1/3 shrink-0 flex flex-col justify-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
               <TextReveal><h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">From Ready Images</h2></TextReveal>
-              <TextReveal><h3 className="text-4xl md:text-5xl font-bold tracking-tight gradient-text pb-2">Every Product, Every Angle</h3></TextReveal>
+              <TextReveal><h3 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[rgb(var(--fg-rgb))] leading-[1.05]">Every Product,<br />Every Angle</h3></TextReveal>
               <TextReveal>
-                <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed max-w-lg">
+                <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/55%)] leading-relaxed max-w-lg">
                   Bicycles, vehicles, apparel, or accessories — whatever you shoot, we edit it with the same pixel-perfect care.
                 </p>
               </TextReveal>
               <TextReveal>
-                <div className="mt-6 flex flex-wrap gap-3">
+                <div className="mt-8 flex flex-wrap gap-3">
                   {["Clipping Path", "Background Removal", "Shadow Creation", "Photo Retouching", "Beauty Airbrushing", "Car Image Editing"].map((tag) => (
-                    <span key={tag} className="px-4 py-2 rounded-full glass-card text-xs font-semibold text-[rgb(var(--fg-rgb)/70%)]">{tag}</span>
+                    <span key={tag} className="px-5 py-2.5 rounded-full border border-[rgb(var(--fg-rgb)/10%)] text-sm font-medium text-[rgb(var(--fg-rgb)/70%)] hover:border-[rgb(var(--accent-500)/40%)] hover:text-[rgb(var(--accent-text))] transition-colors duration-300 cursor-default">{tag}</span>
                   ))}
                 </div>
               </TextReveal>
             </div>
-            <div className="w-full lg:w-2/3 flex items-stretch">
-              <ImageScaleScroll scaleFrom={0.9} scaleTo={1} className="w-full rounded-3xl">
-                <div className="relative w-full rounded-3xl overflow-hidden glass-card border-[rgb(var(--fg-rgb)/10%)] bg-[var(--bg-subtle)]" style={{ aspectRatio: "1600 / 700", maxHeight: "50rem", minHeight: "10rem" }}>
-                  <Image src="/images/hero-slider/ecommerce-product.jpg" alt="product photo editing" fill className="object-cover" sizes="66vw" />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4">
+                <div className="rounded-3xl overflow-hidden aspect-[3/4] bg-[var(--bg-subtle)]">
+                  <Image src="/images/gallery/gallery-1.jpg" alt="" fill className="object-cover" sizes="33vw" />
                 </div>
-              </ImageScaleScroll>
+                <div className="rounded-3xl overflow-hidden aspect-square bg-[var(--bg-subtle)]">
+                  <Image src="/images/gallery/gallery-2.jpg" alt="" fill className="object-cover" sizes="33vw" />
+                </div>
+              </div>
+              <div className="space-y-4 pt-8">
+                <div className="rounded-3xl overflow-hidden aspect-square bg-[var(--bg-subtle)]">
+                  <Image src="/images/gallery/gallery-3.jpg" alt="" fill className="object-cover" sizes="33vw" />
+                </div>
+                <div className="rounded-3xl overflow-hidden aspect-[3/4] bg-[var(--bg-subtle)]">
+                  <Image src="/images/gallery/gallery-4.jpg" alt="" fill className="object-cover" sizes="33vw" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
