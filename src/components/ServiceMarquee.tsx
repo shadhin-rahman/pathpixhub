@@ -7,7 +7,17 @@ const galleryItems = [
   { id: "gallery-2", src: "/images/gallery/gallery-2.jpg" },
   { id: "gallery-3", src: "/images/gallery/gallery-3.jpg" },
   { id: "gallery-4", src: "/images/gallery/gallery-4.jpg" },
+  { id: "gallery-5", src: "/images/gallery/gallery-5.jpg" },
+  { id: "gallery-6", src: "/images/gallery/gallery-6.jpg" },
+  { id: "gallery-7", src: "/images/gallery/gallery-7.jpg" },
+  { id: "gallery-8", src: "/images/gallery/gallery-8.jpg" },
+  { id: "gallery-9", src: "/images/gallery/gallery-9.jpg" },
+  { id: "gallery-10", src: "/images/gallery/gallery-10.jpg" },
+  { id: "gallery-11", src: "/images/gallery/gallery-11.jpg" },
+  { id: "gallery-12", src: "/images/gallery/gallery-12.jpg" },
 ];
+
+const marqueeItems = [...galleryItems, ...galleryItems];
 
 function GalleryCard({ item }: { item: (typeof galleryItems)[number] }) {
   return (
@@ -39,7 +49,7 @@ export default function ServiceMarquee() {
 
       <div className="relative">
         <div className="flex gap-5 md:gap-8 w-max marquee-trial">
-          {[...galleryItems, ...galleryItems, ...galleryItems, ...galleryItems].map((item, i) => (
+          {marqueeItems.map((item, i) => (
             <GalleryCard key={`${item.id}-${i}`} item={item} />
           ))}
         </div>
