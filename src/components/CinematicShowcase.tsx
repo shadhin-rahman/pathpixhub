@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface CinematicServiceProps {
   services: {
@@ -11,76 +13,119 @@ interface CinematicServiceProps {
   }[];
 }
 
-const showcaseImages = [
-  { id: "clipping-path", src: "/images/covers/clipping-path-cover.jpg" },
-  { id: "background-removal", src: "/images/covers/background-removal-cover.jpg" },
-  { id: "photo-retouching", src: "/images/covers/photo-retouching-cover.jpg" },
-  { id: "multi-clipping-path", src: "/images/covers/multi-clipping-path-cover.jpg" },
-  { id: "color-change", src: "/images/covers/color-change-cover.jpg" },
-  { id: "car-editing", src: "/images/covers/car-editing-cover.jpg" },
-  { id: "ghost-mannequin", src: "/images/covers/ghost-mannequin-cover.jpg" },
-  { id: "image-masking", src: "/images/covers/image-masking-cover.jpg" },
-  { id: "shadow-creation", src: "/images/covers/shadow-creation-cover.jpg" },
-  { id: "ecommerce-editing", src: "/images/covers/ecommerce-editing-cover.jpg" },
+const serviceCards = [
+  {
+    id: "photo-editing",
+    title: "PHOTO\nEDITING",
+    src: "/images/covers/photo-retouching-cover.jpg",
+    desc: "A combination of AI and highly skilled photo editors, offering the best image editing experience with the highest quality.",
+    tags: ["Masking", "Retouching", "Clipping Path", "Color Match"],
+    link: "/services/photo-retouching",
+  },
+  {
+    id: "clipping-path",
+    title: "CLIPPING\nPATH",
+    src: "/images/covers/clipping-path-cover.jpg",
+    desc: "Precise hand-drawn clipping paths to isolate subjects from backgrounds with pixel-perfect accuracy.",
+    tags: ["Background Removal", "Product Isolation", "E-commerce", "Packshot"],
+    link: "/services/clipping-path",
+  },
+  {
+    id: "image-masking",
+    title: "IMAGE\nMASKING",
+    src: "/images/covers/image-masking-cover.jpg",
+    desc: "Advanced masking techniques for complex subjects like hair, fur, and transparent objects.",
+    tags: ["Hair Masking", "Fur", "Transparency", "Complex Edges"],
+    link: "/services/image-masking",
+  },
 ];
 
-const leftItems = showcaseImages.slice(0, 5);
-const rightItems = showcaseImages.slice(5);
-
-function MarqueeColumn({ items, direction }: { items: typeof showcaseImages; direction: "up" | "down" }) {
-  const duplicated = [...items, ...items, ...items];
-  return (
-    <div className="relative overflow-hidden h-[500px] md:h-[600px]">
-      <motion.div
-        className="flex flex-col gap-4"
-        animate={{ y: direction === "up" ? ["0%", "-50%"] : ["-50%", "0%"] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      >
-        {duplicated.map((item, i) => (
-          <div key={`${item.id}-${i}`} className="shrink-0 w-[140px] md:w-[180px] aspect-square rounded-2xl overflow-hidden">
-            <Image src={item.src} alt="" width={180} height={180} className="w-full h-full object-cover" />
-          </div>
-        ))}
-      </motion.div>
-    </div>
-  );
-}
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function CinematicShowcase(_props: CinematicServiceProps) {
+  const [expanded, setExpanded] = useState<string | null>(null);
+
   return (
-    <section className="py-24 lg:py-32 bg-[var(--bg-alt)] overflow-hidden">
+    <section className="py-24 lg:py-32 bg-[var(--bg)]">
+      <div className="max-w-7xl mx-auto px-6 mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6"
+        >
+          <h2 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tight text-[rgb(var(--fg-rgb))] uppercase">Our Services</h2>
+          <p className="text-sm text-[rgb(var(--fg-rgb)/50%)] max-w-xs leading-relaxed">We deliver world-class media solutions powered by a network of 250+ elite artists.</p>
+        </motion.div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center gap-6 md:gap-12">
-          {/* Left column - scrolls up */}
-          <div className="hidden lg:block shrink-0">
-            <MarqueeColumn items={leftItems} direction="up" />
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {serviceCards.map((card, idx) => {
+            const isOpen = expanded === card.id;
+            return (
+              <motion.div
+                key={card.id}
+                layout
+                onMouseEnter={() => setExpanded(card.id)}
+                onMouseLeave={() => setExpanded(null)}
+                className="relative rounded-2xl overflow-hidden cursor-pointer group"
+                style={{ minHeight: isOpen ? "500px" : "400px" }}
+                transition={{ layout: { duration: 0.4, ease: "easeInOut" } }}
+              >
+                <Image
+                  src={card.src}
+                  alt={card.title}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
-          {/* Center text */}
-          <div className="flex-1 text-center py-12">
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">What We Offer</h2>
-              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-[rgb(var(--fg-rgb))] leading-[1.1] max-w-lg mx-auto">
-                We&apos;re your virtual photo editing and design studio
-              </h3>
-              <p className="mt-6 text-base md:text-lg text-[rgb(var(--fg-rgb)/50%)] leading-relaxed max-w-md mx-auto">
-                Professional photo editing services for ecommerce, product, sports, headshot, and portrait photography are available 24/7.
-              </p>
-              <div className="mt-8 inline-block px-6 py-3 rounded-full border border-[rgb(var(--fg-rgb)/10%)]">
-                <span className="text-sm font-bold text-[rgb(var(--fg-rgb)/70%)]">Starting at <span className="text-[rgb(var(--accent-text))]">$0.25</span> per image</span>
-              </div>
-            </motion.div>
-          </div>
+                {/* Number */}
+                <div className="absolute top-5 left-5 z-10">
+                  <span className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-xs font-bold text-white/70">
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
+                </div>
 
-          {/* Right column - scrolls down */}
-          <div className="hidden lg:block shrink-0">
-            <MarqueeColumn items={rightItems} direction="down" />
-          </div>
+                {/* Title */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+                  <h3 className="text-3xl md:text-4xl lg:text-5xl font-black text-white/90 leading-[0.9] tracking-tight whitespace-pre-line">
+                    {card.title}
+                  </h3>
+
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <p className="mt-4 text-sm text-white/60 leading-relaxed max-w-xs">
+                          {card.desc}
+                        </p>
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {card.tags.map((tag) => (
+                            <span key={tag} className="text-[10px] font-bold text-white/50 uppercase tracking-wider flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--accent-500))]" />
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        <Link href={card.link} className="mt-5 inline-flex items-center gap-2 text-xs font-bold text-white uppercase tracking-wider hover:text-[rgb(var(--accent-text))] transition-colors">
+                          View Capabilities
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                        </Link>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

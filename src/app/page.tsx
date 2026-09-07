@@ -19,6 +19,31 @@ import BeforeAfterHover from "@/components/BeforeAfterHover";
 import ServiceMarquee from "@/components/ServiceMarquee";
 import HeroSlider from "@/components/HeroSlider";
 
+const heroSliderImages = [
+  "/images/hero-slider/bicycle.jpg",
+  "/images/hero-slider/car-editing-1.jpg",
+  "/images/hero-slider/ecommerce-product.jpg",
+  "/images/hero-slider/background.jpg",
+  "/images/hero-slider/Beauty retouching.jpg",
+  "/images/hero-slider/Blank poster.jpg",
+  "/images/hero-slider/Skin Retouch.jpg",
+];
+
+const galleryImages = [
+  "/images/gallery/gallery-1.jpg",
+  "/images/gallery/gallery-2.jpg",
+  "/images/gallery/gallery-3.jpg",
+  "/images/gallery/gallery-4.jpg",
+  "/images/gallery/gallery-5.jpg",
+  "/images/gallery/gallery-6.jpg",
+  "/images/gallery/gallery-7.jpg",
+  "/images/gallery/gallery-8.jpg",
+  "/images/gallery/gallery-9.jpg",
+  "/images/gallery/gallery-10.jpg",
+  "/images/gallery/gallery-11.jpg",
+  "/images/gallery/gallery-12.jpg",
+];
+
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: heroScroll } = useScroll({
@@ -112,43 +137,43 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-24 lg:py-32 bg-[var(--bg)]">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <TextReveal><h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">From Ready Images</h2></TextReveal>
-              <TextReveal><h3 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[rgb(var(--fg-rgb))] leading-[1.05]">Every Product,<br />Every Angle</h3></TextReveal>
-              <TextReveal>
-                <p className="mt-6 text-lg text-[rgb(var(--fg-rgb)/50%)] leading-relaxed max-w-lg">
-                  Bicycles, vehicles, apparel, or accessories — whatever you shoot, we edit it with the same pixel-perfect care.
-                </p>
-              </TextReveal>
-              <TextReveal>
-                <div className="mt-8 flex flex-wrap gap-3">
-                  {["Clipping Path", "Background Removal", "Shadow Creation", "Photo Retouching", "Beauty Airbrushing", "Car Image Editing"].map((tag) => (
-                    <span key={tag} className="px-5 py-2.5 rounded-full border border-[rgb(var(--fg-rgb)/10%)] text-sm font-medium text-[rgb(var(--fg-rgb)/60%)] hover:border-[rgb(var(--accent-500)/40%)] hover:text-[rgb(var(--accent-text))] transition-colors duration-300 cursor-default">{tag}</span>
-                  ))}
-                </div>
-              </TextReveal>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <div className="rounded-3xl overflow-hidden aspect-[3/4] bg-[var(--bg-subtle)] relative">
-                  <Image src="/images/hero-slider/Beauty retouching.jpg" alt="" fill className="object-cover" sizes="33vw" />
-                </div>
-                <div className="rounded-3xl overflow-hidden aspect-square bg-[var(--bg-subtle)] relative">
-                  <Image src="/images/hero-slider/bicycle.jpg" alt="" fill className="object-cover" sizes="33vw" />
-                </div>
+      <section className="py-24 lg:py-32 bg-[var(--bg)] overflow-hidden relative">
+        {/* Center text overlay */}
+        <div className="relative z-10 text-center py-16">
+          <TextReveal><h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">From Ready Images</h2></TextReveal>
+          <TextReveal><h3 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight text-[rgb(var(--fg-rgb))] leading-[1.05]">Content Done Right.</h3></TextReveal>
+          <TextReveal>
+            <p className="mt-4 text-lg text-[rgb(var(--fg-rgb)/50%)]">Resonating Perfectly With Your Contents.</p>
+          </TextReveal>
+        </div>
+
+        {/* Scrolling image rows */}
+        <div className="space-y-4 relative">
+          {/* Row 1 - scrolls left */}
+          <div className="flex gap-4 animate-scroll-left">
+            {[...heroSliderImages, ...heroSliderImages, ...heroSliderImages].map((src, i) => (
+              <div key={`r1-${i}`} className="shrink-0 w-[180px] md:w-[240px] aspect-[3/4] rounded-2xl overflow-hidden">
+                <Image src={src} alt="" width={240} height={320} className="w-full h-full object-cover" />
               </div>
-              <div className="space-y-4 pt-8">
-                <div className="rounded-3xl overflow-hidden aspect-square bg-[var(--bg-subtle)] relative">
-                  <Image src="/images/hero-slider/car-editing-1.jpg" alt="" fill className="object-cover" sizes="33vw" />
-                </div>
-                <div className="rounded-3xl overflow-hidden aspect-[3/4] bg-[var(--bg-subtle)] relative">
-                  <Image src="/images/hero-slider/ecommerce-product.jpg" alt="" fill className="object-cover" sizes="33vw" />
-                </div>
+            ))}
+          </div>
+
+          {/* Row 2 - scrolls right */}
+          <div className="flex gap-4 animate-scroll-right">
+            {[...galleryImages, ...galleryImages, ...galleryImages].map((src, i) => (
+              <div key={`r2-${i}`} className="shrink-0 w-[180px] md:w-[240px] aspect-square rounded-2xl overflow-hidden">
+                <Image src={src} alt="" width={240} height={240} className="w-full h-full object-cover" />
               </div>
-            </div>
+            ))}
+          </div>
+
+          {/* Row 3 - scrolls left */}
+          <div className="flex gap-4 animate-scroll-left">
+            {[...galleryImages.slice().reverse(), ...galleryImages.slice().reverse(), ...galleryImages.slice().reverse()].map((src, i) => (
+              <div key={`r3-${i}`} className="shrink-0 w-[180px] md:w-[240px] aspect-[4/3] rounded-2xl overflow-hidden">
+                <Image src={src} alt="" width={240} height={180} className="w-full h-full object-cover" />
+              </div>
+            ))}
           </div>
         </div>
       </section>
