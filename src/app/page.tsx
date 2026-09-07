@@ -120,35 +120,57 @@ export default function Home() {
       </section>
 
       <section className="relative h-screen overflow-hidden bg-[var(--bg)]">
-        {/* Vertical scrolling columns - 15 images, no duplicate */}
-        <div className="absolute inset-0 flex gap-1">
-          {/* Col 1 - images 1-5 - scrolls down */}
+        {/* Full screen vertical scrolling columns */}
+        <div className="absolute inset-0 flex gap-2">
+          {/* Col 1 - images 1,6,11 - scrolls down */}
           <div className="flex-1 overflow-hidden relative">
             <div className="absolute top-0 left-0 right-0 animate-scroll-down">
-              {[1,2,3,4,5].map((n) => (
-                <div key={`c1-${n}`} className="w-full aspect-[10/7] rounded-xl overflow-hidden mb-1">
+              {[1,6,11,1,6,11].map((n, i) => (
+                <div key={`c1-${i}`} className="w-full aspect-[10/7] rounded-xl overflow-hidden mb-2">
                   <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={280} className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Col 2 - images 6-10 - scrolls up */}
+          {/* Col 2 - images 2,7,12 - scrolls up */}
           <div className="flex-1 overflow-hidden relative">
             <div className="absolute top-0 left-0 right-0 animate-scroll-up">
-              {[6,7,8,9,10].map((n) => (
-                <div key={`c2-${n}`} className="w-full aspect-[10/7] rounded-xl overflow-hidden mb-1">
+              {[2,7,12,2,7,12].map((n, i) => (
+                <div key={`c2-${i}`} className="w-full aspect-[10/7] rounded-xl overflow-hidden mb-2">
                   <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={280} className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Col 3 - images 11-15 - scrolls down */}
+          {/* Col 3 - images 3,8,13 - scrolls down */}
           <div className="flex-1 overflow-hidden relative">
             <div className="absolute top-0 left-0 right-0 animate-scroll-down">
-              {[11,12,13,14,15].map((n) => (
-                <div key={`c3-${n}`} className="w-full aspect-[10/7] rounded-xl overflow-hidden mb-1">
+              {[3,8,13,3,8,13].map((n, i) => (
+                <div key={`c3-${i}`} className="w-full aspect-[10/7] rounded-xl overflow-hidden mb-2">
+                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={280} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Col 4 - images 4,9,14 - scrolls up (hidden on mobile) */}
+          <div className="flex-1 overflow-hidden relative hidden md:block">
+            <div className="absolute top-0 left-0 right-0 animate-scroll-up">
+              {[4,9,14,4,9,14].map((n, i) => (
+                <div key={`c4-${i}`} className="w-full aspect-[10/7] rounded-xl overflow-hidden mb-2">
+                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={280} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Col 5 - images 5,10,15 - scrolls down (hidden on mobile) */}
+          <div className="flex-1 overflow-hidden relative hidden lg:block">
+            <div className="absolute top-0 left-0 right-0 animate-scroll-down">
+              {[5,10,15,5,10,15].map((n, i) => (
+                <div key={`c5-${i}`} className="w-full aspect-[10/7] rounded-xl overflow-hidden mb-2">
                   <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={280} className="w-full h-full object-cover" />
                 </div>
               ))}
@@ -158,9 +180,9 @@ export default function Home() {
 
         {/* Text overlay on top */}
         <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-          <div className="text-center">
-            <TextReveal><h2 className="text-5xl md:text-6xl lg:text-8xl font-black tracking-tighter text-white leading-[0.9] drop-shadow-lg">Bring Your<br />Visuals to Life.</h2></TextReveal>
-            <TextReveal><p className="mt-4 text-lg md:text-xl text-white/70 drop-shadow">Stunning 2D Images and 3D Visualization.</p></TextReveal>
+          <div className="text-center bg-black/30 backdrop-blur-sm rounded-3xl px-12 py-10">
+            <TextReveal><h2 className="text-5xl md:text-6xl lg:text-8xl font-black tracking-tighter text-white leading-[0.9]">Bring Your<br />Visuals to Life.</h2></TextReveal>
+            <TextReveal><p className="mt-4 text-lg md:text-xl text-white/80">Stunning 2D Images and 3D Visualization.</p></TextReveal>
             <TextReveal>
               <div className="mt-8 pointer-events-auto">
                 <Link href="/free-trial" className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm">
