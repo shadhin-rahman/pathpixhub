@@ -138,7 +138,7 @@ export default function Home() {
                   alt=""
                   width={380}
                   height={280}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover"
                 />
               </div>
             ))}
