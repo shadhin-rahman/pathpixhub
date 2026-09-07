@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { services } from "@/data/services";
+
 import Testimonials from "@/components/Testimonials";
 import CreditPlans from "@/components/CreditPlans";
 import StaggerReveal, { StaggerItem } from "@/components/StaggerReveal";
@@ -27,21 +27,6 @@ const heroSliderImages = [
   "/images/hero-slider/Beauty retouching.jpg",
   "/images/hero-slider/Blank poster.jpg",
   "/images/hero-slider/Skin Retouch.jpg",
-];
-
-const galleryImages = [
-  "/images/gallery/gallery-1.jpg",
-  "/images/gallery/gallery-2.jpg",
-  "/images/gallery/gallery-3.jpg",
-  "/images/gallery/gallery-4.jpg",
-  "/images/gallery/gallery-5.jpg",
-  "/images/gallery/gallery-6.jpg",
-  "/images/gallery/gallery-7.jpg",
-  "/images/gallery/gallery-8.jpg",
-  "/images/gallery/gallery-9.jpg",
-  "/images/gallery/gallery-10.jpg",
-  "/images/gallery/gallery-11.jpg",
-  "/images/gallery/gallery-12.jpg",
 ];
 
 export default function Home() {
@@ -135,8 +120,7 @@ export default function Home() {
       </section>
 
       <section className="py-24 lg:py-32 bg-[var(--bg)] overflow-hidden relative">
-        {/* Center text overlay */}
-        <div className="relative z-10 text-center py-16">
+        <div className="max-w-7xl mx-auto px-6 mb-12 text-center">
           <TextReveal><h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">From Ready Images</h2></TextReveal>
           <TextReveal><h3 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight text-[rgb(var(--fg-rgb))] leading-[1.05]">Content Done Right.</h3></TextReveal>
           <TextReveal>
@@ -144,61 +128,20 @@ export default function Home() {
           </TextReveal>
         </div>
 
-        {/* Scrolling image rows - vertical */}
-        <div className="flex gap-4 relative h-[400px] md:h-[500px]">
-          {/* Column 1 - scrolls down */}
-          <div className="flex-1 overflow-hidden relative">
-            <div className="absolute top-0 left-0 right-0 animate-scroll-down">
-              {[...heroSliderImages, ...heroSliderImages].map((src, i) => (
-                <div key={`c1-${i}`} className="w-full aspect-[3/4] rounded-2xl overflow-hidden mb-4">
-                  <Image src={src} alt="" width={400} height={533} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Column 2 - scrolls up */}
-          <div className="flex-1 overflow-hidden relative">
-            <div className="absolute top-0 left-0 right-0 animate-scroll-up">
-              {[...galleryImages.slice(0, 6), ...galleryImages.slice(0, 6)].map((src, i) => (
-                <div key={`c2-${i}`} className="w-full aspect-square rounded-2xl overflow-hidden mb-4">
-                  <Image src={src} alt="" width={400} height={400} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Column 3 - scrolls down */}
-          <div className="flex-1 overflow-hidden relative">
-            <div className="absolute top-0 left-0 right-0 animate-scroll-down">
-              {[...galleryImages.slice(6, 12), ...galleryImages.slice(6, 12)].map((src, i) => (
-                <div key={`c3-${i}`} className="w-full aspect-[4/3] rounded-2xl overflow-hidden mb-4">
-                  <Image src={src} alt="" width={400} height={300} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Column 4 - scrolls up */}
-          <div className="flex-1 overflow-hidden relative hidden md:block">
-            <div className="absolute top-0 left-0 right-0 animate-scroll-up">
-              {[...heroSliderImages.slice().reverse(), ...heroSliderImages.slice().reverse()].map((src, i) => (
-                <div key={`c4-${i}`} className="w-full aspect-[3/4] rounded-2xl overflow-hidden mb-4">
-                  <Image src={src} alt="" width={400} height={533} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Column 5 - scrolls down */}
-          <div className="flex-1 overflow-hidden relative hidden lg:block">
-            <div className="absolute top-0 left-0 right-0 animate-scroll-down">
-              {[...galleryImages.slice(3, 9), ...galleryImages.slice(3, 9)].map((src, i) => (
-                <div key={`c5-${i}`} className="w-full aspect-square rounded-2xl overflow-hidden mb-4">
-                  <Image src={src} alt="" width={400} height={400} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
+        {/* Static grid - 5 columns, 3 rows */}
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
+            {Array.from({ length: 15 }, (_, i) => (
+              <div key={`cr-${i}`} className="aspect-[10/7] rounded-xl overflow-hidden">
+                <Image
+                  src={`/images/content-ready/${i + 1}.jpg`}
+                  alt=""
+                  width={380}
+                  height={280}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
