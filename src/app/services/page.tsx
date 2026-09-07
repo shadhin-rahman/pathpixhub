@@ -11,7 +11,7 @@ export default function ServicesPage() {
 
   return (
     <>
-      <section className="pt-40 pb-20 bg-[var(--bg)]">
+      <section className="pt-40 pb-16 bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">What We Offer</h2>
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-[rgb(var(--fg-rgb))]">Our Services</h1>
@@ -23,7 +23,7 @@ export default function ServicesPage() {
 
       <section className="pb-32 bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex gap-3 h-[500px] md:h-[550px]">
+          <div className="flex gap-3 h-[550px] md:h-[600px]">
             {services.map((service, idx) => {
               const isHovered = hovered === service.id;
 

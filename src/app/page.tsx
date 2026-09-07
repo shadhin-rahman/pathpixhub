@@ -128,20 +128,54 @@ export default function Home() {
           </TextReveal>
         </div>
 
-        {/* Static grid - 5 columns, 3 rows */}
+        {/* Scrolling rows */}
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
-            {Array.from({ length: 15 }, (_, i) => (
-              <div key={`cr-${i}`} className="aspect-[10/7] rounded-xl overflow-hidden">
-                <Image
-                  src={`/images/content-ready/${i + 1}.jpg`}
-                  alt=""
-                  width={380}
-                  height={280}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
+          {/* Row 1 - scrolls down */}
+          <div className="overflow-hidden mb-2">
+            <div className="flex gap-2 animate-scroll-left">
+              {[1,2,3,4,5,6,7,8].map((n) => (
+                <div key={`r1-${n}`} className="shrink-0 w-[200px] md:w-[260px] aspect-[10/7] rounded-xl overflow-hidden">
+                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={260} height={182} className="w-full h-full object-cover" />
+                </div>
+              ))}
+              {[1,2,3,4,5,6,7,8].map((n) => (
+                <div key={`r1b-${n}`} className="shrink-0 w-[200px] md:w-[260px] aspect-[10/7] rounded-xl overflow-hidden">
+                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={260} height={182} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Row 2 - scrolls right */}
+          <div className="overflow-hidden mb-2">
+            <div className="flex gap-2 animate-scroll-right">
+              {[9,10,11,12,13,14,15].map((n) => (
+                <div key={`r2-${n}`} className="shrink-0 w-[200px] md:w-[260px] aspect-[10/7] rounded-xl overflow-hidden">
+                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={260} height={182} className="w-full h-full object-cover" />
+                </div>
+              ))}
+              {[9,10,11,12,13,14,15].map((n) => (
+                <div key={`r2b-${n}`} className="shrink-0 w-[200px] md:w-[260px] aspect-[10/7] rounded-xl overflow-hidden">
+                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={260} height={182} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Row 3 - scrolls down */}
+          <div className="overflow-hidden">
+            <div className="flex gap-2 animate-scroll-left">
+              {[5,6,7,8,1,2,3,4].map((n) => (
+                <div key={`r3-${n}`} className="shrink-0 w-[200px] md:w-[260px] aspect-[10/7] rounded-xl overflow-hidden">
+                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={260} height={182} className="w-full h-full object-cover" />
+                </div>
+              ))}
+              {[5,6,7,8,1,2,3,4].map((n) => (
+                <div key={`r3b-${n}`} className="shrink-0 w-[200px] md:w-[260px] aspect-[10/7] rounded-xl overflow-hidden">
+                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={260} height={182} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
