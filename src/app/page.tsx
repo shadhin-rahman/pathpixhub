@@ -120,58 +120,36 @@ export default function Home() {
       </section>
 
       <section className="relative h-screen overflow-hidden bg-[var(--bg)]">
-        {/* Vertical scrolling columns */}
-        <div className="absolute inset-0 flex gap-2">
-          {/* Col 1 - scrolls down */}
+        {/* Vertical scrolling columns - 15 images, no duplicate */}
+        <div className="absolute inset-0 flex gap-1">
+          {/* Col 1 - images 1-5 - scrolls down */}
           <div className="flex-1 overflow-hidden relative">
             <div className="absolute top-0 left-0 right-0 animate-scroll-down">
-              {[1,2,3,4,5,6,7,8].flatMap((n) => [n, n]).map((n, i) => (
-                <div key={`c1-${i}`} className="w-full aspect-[3/4] rounded-xl overflow-hidden mb-2">
-                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={533} className="w-full h-full object-cover" />
+              {[1,2,3,4,5].map((n) => (
+                <div key={`c1-${n}`} className="w-full aspect-[10/7] rounded-xl overflow-hidden mb-1">
+                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={280} className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Col 2 - scrolls up */}
+          {/* Col 2 - images 6-10 - scrolls up */}
           <div className="flex-1 overflow-hidden relative">
             <div className="absolute top-0 left-0 right-0 animate-scroll-up">
-              {[9,10,11,12,13,14,15].flatMap((n) => [n, n]).map((n, i) => (
-                <div key={`c2-${i}`} className="w-full aspect-[3/4] rounded-xl overflow-hidden mb-2">
-                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={533} className="w-full h-full object-cover" />
+              {[6,7,8,9,10].map((n) => (
+                <div key={`c2-${n}`} className="w-full aspect-[10/7] rounded-xl overflow-hidden mb-1">
+                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={280} className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Col 3 - scrolls down */}
+          {/* Col 3 - images 11-15 - scrolls down */}
           <div className="flex-1 overflow-hidden relative">
             <div className="absolute top-0 left-0 right-0 animate-scroll-down">
-              {[5,6,7,8,1,2,3,4].flatMap((n) => [n, n]).map((n, i) => (
-                <div key={`c3-${i}`} className="w-full aspect-[3/4] rounded-xl overflow-hidden mb-2">
-                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={533} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Col 4 - scrolls up */}
-          <div className="flex-1 overflow-hidden relative hidden md:block">
-            <div className="absolute top-0 left-0 right-0 animate-scroll-up">
-              {[3,4,5,6,7,8,9].flatMap((n) => [n, n]).map((n, i) => (
-                <div key={`c4-${i}`} className="w-full aspect-[3/4] rounded-xl overflow-hidden mb-2">
-                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={533} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Col 5 - scrolls down */}
-          <div className="flex-1 overflow-hidden relative hidden lg:block">
-            <div className="absolute top-0 left-0 right-0 animate-scroll-down">
-              {[10,11,12,13,14,15,1].flatMap((n) => [n, n]).map((n, i) => (
-                <div key={`c5-${i}`} className="w-full aspect-[3/4] rounded-xl overflow-hidden mb-2">
-                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={533} className="w-full h-full object-cover" />
+              {[11,12,13,14,15].map((n) => (
+                <div key={`c3-${n}`} className="w-full aspect-[10/7] rounded-xl overflow-hidden mb-1">
+                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={280} className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
