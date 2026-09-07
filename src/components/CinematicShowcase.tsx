@@ -5,18 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
-interface CinematicServiceProps {
-  services: {
-    id: string;
-    title: string;
-    tagline: string;
-  }[];
-}
-
 const serviceCards = [
   {
     id: "photo-editing",
-    title: "PHOTO\nEDITING",
+    title: "PHOTO EDITING",
     src: "/images/covers/photo-retouching-cover.jpg",
     desc: "A combination of AI and highly skilled photo editors, offering the best image editing experience with the highest quality.",
     tags: ["Masking", "Retouching", "Clipping Path", "Color Match"],
@@ -24,7 +16,7 @@ const serviceCards = [
   },
   {
     id: "clipping-path",
-    title: "CLIPPING\nPATH",
+    title: "CLIPPING PATH",
     src: "/images/covers/clipping-path-cover.jpg",
     desc: "Precise hand-drawn clipping paths to isolate subjects from backgrounds with pixel-perfect accuracy.",
     tags: ["Background Removal", "Product Isolation", "E-commerce", "Packshot"],
@@ -32,7 +24,7 @@ const serviceCards = [
   },
   {
     id: "image-masking",
-    title: "IMAGE\nMASKING",
+    title: "IMAGE MASKING",
     src: "/images/covers/image-masking-cover.jpg",
     desc: "Advanced masking techniques for complex subjects like hair, fur, and transparent objects.",
     tags: ["Hair Masking", "Fur", "Transparency", "Complex Edges"],
@@ -40,9 +32,9 @@ const serviceCards = [
   },
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function CinematicShowcase(_props: CinematicServiceProps) {
-  const [expanded, setExpanded] = useState<string | null>(null);
+export default function CinematicShowcase() {
+  const [hovered, setHovered] = useState<string | null>(null);
+  const [clicked, setClicked] = useState<string | null>(null);
 
   return (
     <section className="py-24 lg:py-32 bg-[var(--bg)]">
@@ -60,18 +52,24 @@ export default function CinematicShowcase(_props: CinematicServiceProps) {
       </div>
 
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="flex gap-3 h-[450px] md:h-[500px]">
           {serviceCards.map((card, idx) => {
-            const isOpen = expanded === card.id;
+            const isHovered = hovered === card.id;
+            const isClicked = clicked === card.id;
+            const isExpanded = isHovered || isClicked;
+
             return (
               <motion.div
                 key={card.id}
                 layout
-                onMouseEnter={() => setExpanded(card.id)}
-                onMouseLeave={() => setExpanded(null)}
+                onMouseEnter={() => setHovered(card.id)}
+                onMouseLeave={() => setHovered(null)}
+                onClick={() => setClicked(clicked === card.id ? null : card.id)}
                 className="relative rounded-2xl overflow-hidden cursor-pointer group"
-                style={{ minHeight: isOpen ? "500px" : "400px" }}
-                transition={{ layout: { duration: 0.4, ease: "easeInOut" } }}
+                animate={{
+                  flex: isExpanded ? 3 : 1,
+                }}
+                transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
                 <Image
                   src={card.src}
@@ -80,7 +78,7 @@ export default function CinematicShowcase(_props: CinematicServiceProps) {
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
                 {/* Number */}
                 <div className="absolute top-5 left-5 z-10">
@@ -89,20 +87,20 @@ export default function CinematicShowcase(_props: CinematicServiceProps) {
                   </span>
                 </div>
 
-                {/* Title */}
+                {/* Title - always visible */}
                 <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
-                  <h3 className="text-3xl md:text-4xl lg:text-5xl font-black text-white/90 leading-[0.9] tracking-tight whitespace-pre-line">
+                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-black text-white/90 leading-[0.9] tracking-tight">
                     {card.title}
                   </h3>
 
+                  {/* Expanded content */}
                   <AnimatePresence>
-                    {isOpen && (
+                    {isExpanded && (
                       <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="overflow-hidden"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        transition={{ duration: 0.3, delay: 0.1 }}
                       >
                         <p className="mt-4 text-sm text-white/60 leading-relaxed max-w-xs">
                           {card.desc}
