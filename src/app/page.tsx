@@ -180,17 +180,11 @@ export default function Home() {
 
         {/* Text overlay on top */}
         <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-          <div className="text-center bg-black/30 backdrop-blur-sm rounded-3xl px-12 py-10">
-            <TextReveal><h2 className="text-5xl md:text-6xl lg:text-8xl font-black tracking-tighter text-white leading-[0.9]">Bring Your<br />Visuals to Life.</h2></TextReveal>
-            <TextReveal><p className="mt-4 text-lg md:text-xl text-white/80">Stunning 2D Images and 3D Visualization.</p></TextReveal>
-            <TextReveal>
-              <div className="mt-8 pointer-events-auto">
-                <Link href="/free-trial" className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm">
-                  Let&apos;s Talk
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                </Link>
-              </div>
-            </TextReveal>
+          <div className="pointer-events-auto">
+            <Link href="/contact?tab=question" className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm">
+              Let&apos;s Talk
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </Link>
           </div>
         </div>
       </section>
