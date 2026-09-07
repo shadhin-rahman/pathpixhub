@@ -30,8 +30,9 @@ export default function CinematicShowcase() {
         </motion.div>
       </div>
 
-      <motion.div style={{ paddingLeft: paddingX, paddingRight: paddingX }}>
-        <Link href="/services" className="block relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden group" style={{ borderRadius }}>
+        <motion.div style={{ paddingLeft: paddingX, paddingRight: paddingX }}>
+          <motion.div style={{ borderRadius }} className="overflow-hidden">
+          <Link href="/services" className="block relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden group">
           <Image
             src="/images/covers/photo-retouching-cover.jpg"
             alt="Photo Editing"
@@ -68,7 +69,8 @@ export default function CinematicShowcase() {
             </div>
           </div>
         </Link>
-      </motion.div>
+          </motion.div>
+        </motion.div>
     </section>
   );
 }
