@@ -13,26 +13,11 @@ export default function CinematicShowcase() {
   });
 
   const paddingX = useTransform(scrollYProgress, [0, 1], [24, 0]);
-  const borderRadius = useTransform(scrollYProgress, [0, 1], [16, 0]);
 
   return (
     <section ref={sectionRef} className="py-24 lg:py-32 bg-[var(--bg)]">
-      <div className="max-w-7xl mx-auto px-6 mb-16">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6"
-        >
-          <h2 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tight text-[rgb(var(--fg-rgb))] uppercase">Our Services</h2>
-          <p className="text-sm text-[rgb(var(--fg-rgb)/50%)] max-w-xs leading-relaxed">We deliver world-class media solutions powered by a network of 250+ elite artists.</p>
-        </motion.div>
-      </div>
-
-        <motion.div style={{ paddingLeft: paddingX, paddingRight: paddingX }}>
-          <motion.div style={{ borderRadius }} className="overflow-hidden">
-          <Link href="/services" className="block relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden group">
+      <motion.div style={{ paddingLeft: paddingX, paddingRight: paddingX }}>
+        <Link href="/services" className="block relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden group rounded-2xl">
           <Image
             src="/images/covers/photo-retouching-cover.jpg"
             alt="Photo Editing"
@@ -52,9 +37,6 @@ export default function CinematicShowcase() {
             <h3 className="text-4xl md:text-5xl lg:text-7xl font-black text-white/90 leading-[0.9] tracking-tight">
               PHOTO<br />EDITING
             </h3>
-            <p className="mt-4 text-sm md:text-base text-white/50 max-w-md leading-relaxed">
-              A combination of AI and highly skilled photo editors, offering the best image editing experience with the highest quality.
-            </p>
             <div className="mt-6 flex flex-wrap gap-3">
               {["Masking", "Retouching", "Clipping Path", "Color Match"].map((tag) => (
                 <span key={tag} className="text-[10px] font-bold text-white/40 uppercase tracking-wider flex items-center gap-1.5">
@@ -69,8 +51,7 @@ export default function CinematicShowcase() {
             </div>
           </div>
         </Link>
-          </motion.div>
-        </motion.div>
+      </motion.div>
     </section>
   );
 }
