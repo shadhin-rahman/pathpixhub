@@ -203,7 +203,7 @@ export default function Home() {
         </div>
       </section>
 
-      <CinematicShowcase services={services} />
+      <CinematicShowcase />
 
       <section className="py-28 lg:py-36 mesh-gradient">
         <div className="max-w-7xl mx-auto px-6">
