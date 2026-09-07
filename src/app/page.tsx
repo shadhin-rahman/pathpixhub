@@ -100,7 +100,7 @@ export default function Home() {
 
       <ServiceMarquee />
 
-      <section className="relative overflow-hidden bg-[var(--bg)]">
+      <section className="relative overflow-hidden bg-[var(--bg)] py-16">
         <div className="relative h-[300px] md:h-[400px] overflow-hidden">
           {/* Background images grid */}
           <div className="absolute inset-0 grid grid-cols-4 gap-2 p-4 opacity-30">
