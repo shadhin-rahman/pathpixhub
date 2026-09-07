@@ -119,63 +119,78 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-24 lg:py-32 bg-[var(--bg)] overflow-hidden relative">
-        <div className="max-w-7xl mx-auto px-6 mb-12 text-center">
-          <TextReveal><h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">From Ready Images</h2></TextReveal>
-          <TextReveal><h3 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight text-[rgb(var(--fg-rgb))] leading-[1.05]">Content Done Right.</h3></TextReveal>
-          <TextReveal>
-            <p className="mt-4 text-lg text-[rgb(var(--fg-rgb)/50%)]">Resonating Perfectly With Your Contents.</p>
-          </TextReveal>
+      <section className="relative h-screen overflow-hidden bg-[var(--bg)]">
+        {/* Vertical scrolling columns */}
+        <div className="absolute inset-0 flex gap-2">
+          {/* Col 1 - scrolls down */}
+          <div className="flex-1 overflow-hidden relative">
+            <div className="absolute top-0 left-0 right-0 animate-scroll-down">
+              {[1,2,3,4,5,6,7,8].flatMap((n) => [n, n]).map((n, i) => (
+                <div key={`c1-${i}`} className="w-full aspect-[3/4] rounded-xl overflow-hidden mb-2">
+                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={533} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Col 2 - scrolls up */}
+          <div className="flex-1 overflow-hidden relative">
+            <div className="absolute top-0 left-0 right-0 animate-scroll-up">
+              {[9,10,11,12,13,14,15].flatMap((n) => [n, n]).map((n, i) => (
+                <div key={`c2-${i}`} className="w-full aspect-[3/4] rounded-xl overflow-hidden mb-2">
+                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={533} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Col 3 - scrolls down */}
+          <div className="flex-1 overflow-hidden relative">
+            <div className="absolute top-0 left-0 right-0 animate-scroll-down">
+              {[5,6,7,8,1,2,3,4].flatMap((n) => [n, n]).map((n, i) => (
+                <div key={`c3-${i}`} className="w-full aspect-[3/4] rounded-xl overflow-hidden mb-2">
+                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={533} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Col 4 - scrolls up */}
+          <div className="flex-1 overflow-hidden relative hidden md:block">
+            <div className="absolute top-0 left-0 right-0 animate-scroll-up">
+              {[3,4,5,6,7,8,9].flatMap((n) => [n, n]).map((n, i) => (
+                <div key={`c4-${i}`} className="w-full aspect-[3/4] rounded-xl overflow-hidden mb-2">
+                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={533} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Col 5 - scrolls down */}
+          <div className="flex-1 overflow-hidden relative hidden lg:block">
+            <div className="absolute top-0 left-0 right-0 animate-scroll-down">
+              {[10,11,12,13,14,15,1].flatMap((n) => [n, n]).map((n, i) => (
+                <div key={`c5-${i}`} className="w-full aspect-[3/4] rounded-xl overflow-hidden mb-2">
+                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={400} height={533} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* Scrolling rows */}
-        <div className="max-w-7xl mx-auto px-6">
-          {/* Row 1 - scrolls down */}
-          <div className="overflow-hidden mb-2">
-            <div className="flex gap-2 animate-scroll-left">
-              {[1,2,3,4,5,6,7,8].map((n) => (
-                <div key={`r1-${n}`} className="shrink-0 w-[200px] md:w-[260px] aspect-[10/7] rounded-xl overflow-hidden">
-                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={260} height={182} className="w-full h-full object-cover" />
-                </div>
-              ))}
-              {[1,2,3,4,5,6,7,8].map((n) => (
-                <div key={`r1b-${n}`} className="shrink-0 w-[200px] md:w-[260px] aspect-[10/7] rounded-xl overflow-hidden">
-                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={260} height={182} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Row 2 - scrolls right */}
-          <div className="overflow-hidden mb-2">
-            <div className="flex gap-2 animate-scroll-right">
-              {[9,10,11,12,13,14,15].map((n) => (
-                <div key={`r2-${n}`} className="shrink-0 w-[200px] md:w-[260px] aspect-[10/7] rounded-xl overflow-hidden">
-                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={260} height={182} className="w-full h-full object-cover" />
-                </div>
-              ))}
-              {[9,10,11,12,13,14,15].map((n) => (
-                <div key={`r2b-${n}`} className="shrink-0 w-[200px] md:w-[260px] aspect-[10/7] rounded-xl overflow-hidden">
-                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={260} height={182} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Row 3 - scrolls down */}
-          <div className="overflow-hidden">
-            <div className="flex gap-2 animate-scroll-left">
-              {[5,6,7,8,1,2,3,4].map((n) => (
-                <div key={`r3-${n}`} className="shrink-0 w-[200px] md:w-[260px] aspect-[10/7] rounded-xl overflow-hidden">
-                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={260} height={182} className="w-full h-full object-cover" />
-                </div>
-              ))}
-              {[5,6,7,8,1,2,3,4].map((n) => (
-                <div key={`r3b-${n}`} className="shrink-0 w-[200px] md:w-[260px] aspect-[10/7] rounded-xl overflow-hidden">
-                  <Image src={`/images/content-ready/${n}.jpg`} alt="" width={260} height={182} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
+        {/* Text overlay on top */}
+        <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+          <div className="text-center">
+            <TextReveal><h2 className="text-5xl md:text-6xl lg:text-8xl font-black tracking-tighter text-white leading-[0.9] drop-shadow-lg">Bring Your<br />Visuals to Life.</h2></TextReveal>
+            <TextReveal><p className="mt-4 text-lg md:text-xl text-white/70 drop-shadow">Stunning 2D Images and 3D Visualization.</p></TextReveal>
+            <TextReveal>
+              <div className="mt-8 pointer-events-auto">
+                <Link href="/free-trial" className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[rgb(var(--accent-500))] text-[rgb(var(--accent-contrast))] font-bold hover:bg-[rgb(var(--accent-400))] transition-all text-sm">
+                  Let&apos;s Talk
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                </Link>
+              </div>
+            </TextReveal>
           </div>
         </div>
       </section>
