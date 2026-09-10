@@ -39,7 +39,7 @@ export default function ServiceMarquee() {
   return (
     <section className="py-16 md:py-20 overflow-hidden bg-[var(--bg)]">
       <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-4">
+        <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold">
           What We Offer
         </h2>
         <h3 className="text-3xl md:text-5xl font-bold tracking-tight gradient-text">
