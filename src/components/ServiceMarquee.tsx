@@ -37,8 +37,8 @@ function GalleryCard({ item }: { item: (typeof galleryItems)[number] }) {
 
 export default function ServiceMarquee() {
   return (
-    <section className="py-12 md:py-16 overflow-hidden bg-[var(--bg)]">
-      <div className="max-w-7xl mx-auto px-6 mb-10">
+    <section className="py-16 md:py-20 overflow-hidden bg-[var(--bg)]">
+      <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-4">
           What We Offer
         </h2>
