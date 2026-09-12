@@ -56,7 +56,7 @@ export default function Home() {
               <span className="w-2 h-2 rounded-full bg-[rgb(var(--accent-400))]" />
               Professional Photo Editing
             </motion.div>
-            <motion.h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.9] text-white" initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}>
+            <motion.h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold tracking-tighter leading-[0.9] text-white" initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}>
               Pixel Perfect<br /><span className="text-[rgb(var(--accent-400))]">Results</span>
             </motion.h1>
             <motion.p className="mt-6 text-lg sm:text-xl text-white/70 max-w-lg mx-auto" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.8 }}>
@@ -64,13 +64,13 @@ export default function Home() {
             </motion.p>
             <motion.div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1 }}>
               <MagneticButton strength={0.15}>
-                <Link href="/free-trial" className="group px-10 py-5 rounded-full bg-white text-zinc-900 font-bold hover:bg-zinc-200 transition-all text-sm inline-flex items-center gap-3">
+                <Link href="/free-trial" className="group px-6 py-3 sm:px-10 sm:py-5 rounded-full bg-white text-zinc-900 font-bold hover:bg-zinc-200 transition-all text-sm inline-flex items-center gap-3">
                   Start Free Trial
                   <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </Link>
               </MagneticButton>
               <MagneticButton strength={0.15}>
-                <Link href="/services" className="px-10 py-5 rounded-full glass-card text-white font-semibold hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm">
+                <Link href="/services" className="px-6 py-3 sm:px-10 sm:py-5 rounded-full glass-card text-white font-semibold hover:border-[rgb(var(--accent-500)/50%)] transition-all text-sm">
                   Explore Services
                 </Link>
               </MagneticButton>
@@ -101,7 +101,7 @@ export default function Home() {
       <ServiceMarquee />
 
       <section className="relative overflow-hidden bg-[var(--bg)] py-16 md:py-20">
-        <div className="relative h-[300px] md:h-[400px] overflow-hidden">
+        <div className="relative min-h-[250px] md:h-[400px] overflow-hidden">
           {/* Background images grid */}
           <div className="absolute inset-0 grid grid-cols-4 gap-2 p-4 opacity-30">
             {heroSliderImages.slice(0, 4).map((src, i) => (
@@ -112,7 +112,7 @@ export default function Home() {
           </div>
           {/* Big text on top */}
           <div className="absolute inset-0 flex items-center justify-center z-10">
-            <h3 className="text-6xl md:text-8xl lg:text-[10rem] font-black tracking-tighter text-[rgb(var(--fg-rgb))] leading-[0.85] text-center uppercase opacity-90">
+            <h3 className="text-4xl md:text-8xl lg:text-[10rem] font-black tracking-tighter text-[rgb(var(--fg-rgb))] leading-[0.85] text-center uppercase opacity-90">
               Transform<br />Your Photos
             </h3>
           </div>
@@ -195,7 +195,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <TextReveal><div className="text-center mb-16">
             <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">See the Difference</h2>
-            <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Before &amp; After</h3>
+            <h3 className="text-3xl md:text-6xl font-bold tracking-tight gradient-text">Before &amp; After</h3>
             <p className="mt-4 text-[rgb(var(--fg-rgb)/60%)] max-w-xl mx-auto">Drag the slider to see our editing quality in action</p>
           </div></TextReveal>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
@@ -239,7 +239,7 @@ export default function Home() {
             </div>
             <div>
               <TextReveal><h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">About Us</h2></TextReveal>
-              <TextReveal><h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Your Virtual Photo Editing Studio</h3></TextReveal>
+              <TextReveal><h3 className="text-3xl md:text-6xl font-bold tracking-tight gradient-text">Your Virtual Photo Editing Studio</h3></TextReveal>
               <TextReveal>
                 <p className="mt-6 text-[rgb(var(--fg-rgb)/60%)] leading-relaxed">
                   We provide expert image editing services for e-commerce brands, product photographers, Amazon sellers, and businesses worldwide. From clipping path and background removal to multi-clipping paths, color correction, and photo retouching — we handle every detail with care.
@@ -262,7 +262,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <TextReveal><div className="text-center mb-16">
             <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">Why Choose Us</h2>
-            <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Built for Speed &amp; Quality</h3>
+            <h3 className="text-3xl md:text-6xl font-bold tracking-tight gradient-text">Built for Speed &amp; Quality</h3>
           </div></TextReveal>
           <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
             {[
@@ -289,7 +289,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <TextReveal><div className="text-center mb-20">
             <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">How It Works</h2>
-            <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Our Process</h3>
+            <h3 className="text-3xl md:text-6xl font-bold tracking-tight gradient-text">Our Process</h3>
           </div></TextReveal>
           <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 gap-6" staggerDelay={0.06}>
             {[
@@ -303,8 +303,8 @@ export default function Home() {
               { step: "08", title: "Ongoing Support", desc: "We build lasting relationships, staying available for ongoing support on all your future projects." },
             ].map((item) => (
               <StaggerItem key={item.step}>
-                <div className="glass-card rounded-[2rem] p-8 flex gap-6">
-                  <span className="text-4xl font-bold text-[rgb(var(--accent-text)/30%)] shrink-0">{item.step}</span>
+                <div className="glass-card rounded-[1.5rem] md:rounded-[2rem] p-5 md:p-8 flex gap-4 md:gap-6">
+                  <span className="text-3xl md:text-4xl font-bold text-[rgb(var(--accent-text)/30%)] shrink-0">{item.step}</span>
                   <div>
                     <h3 className="text-lg font-bold text-[rgb(var(--fg-rgb))]">{item.title}</h3>
                     <p className="mt-2 text-sm text-[rgb(var(--fg-rgb)/40%)] leading-relaxed">{item.desc}</p>
@@ -324,7 +324,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-6">
           <TextReveal><div className="text-center mb-16">
             <h2 className="text-xs uppercase font-mono tracking-[0.4em] text-[rgb(var(--accent-text))] font-bold mb-6">Good to Know</h2>
-            <h3 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">FAQs</h3>
+            <h3 className="text-3xl md:text-6xl font-bold tracking-tight gradient-text">FAQs</h3>
           </div></TextReveal>
           <div className="space-y-4">
             {[
@@ -336,7 +336,7 @@ export default function Home() {
               { q: "Do you offer bulk editing services?", a: "Yes, we offer scalable solutions for businesses with large image volumes. Contact us for custom pricing." },
               { q: "What is the turnaround time?", a: "Our standard turnaround is 12 hours. Need it faster? Ask about our 6-hour express service." },
             ].map((item) => (
-              <details key={item.q} className="faq-item glass-card rounded-2xl px-8 py-7 border-[rgb(var(--fg-rgb)/5%)]">
+              <details key={item.q} className="faq-item glass-card rounded-2xl px-5 md:px-8 py-5 md:py-7 border-[rgb(var(--fg-rgb)/5%)]">
                 <summary className="flex items-center justify-between gap-6 cursor-pointer">
                   <span className="text-lg md:text-xl font-semibold text-[rgb(var(--fg-rgb))]">{item.q}</span>
                   <span className="faq-icon shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-[rgb(var(--accent-500)/12%)] text-xl font-bold text-[rgb(var(--accent-text))] transition-transform duration-300">+</span>
@@ -350,7 +350,7 @@ export default function Home() {
 
       <section className="py-28 lg:py-36 brand-cta text-center">
         <div className="max-w-7xl mx-auto px-6">
-          <TextReveal><h2 className="text-5xl md:text-6xl font-bold tracking-tight gradient-text">Ready to Start?</h2></TextReveal>
+          <TextReveal><h2 className="text-3xl md:text-6xl font-bold tracking-tight gradient-text">Ready to Start?</h2></TextReveal>
           <TextReveal><p className="mt-4 text-lg max-w-xl mx-auto">Send us 2 images and we&apos;ll edit them for free — no obligation.</p></TextReveal>
           <TextReveal>
             <MagneticButton strength={0.15}>

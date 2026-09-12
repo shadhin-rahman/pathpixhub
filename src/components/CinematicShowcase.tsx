@@ -15,9 +15,9 @@ export default function CinematicShowcase() {
   const paddingX = useTransform(scrollYProgress, [0, 1], [24, 0]);
 
   return (
-    <section ref={sectionRef} className="py-24 lg:py-32 bg-[var(--bg)]">
+    <section ref={sectionRef} className="py-16 lg:py-32 bg-[var(--bg)]">
       <motion.div style={{ paddingLeft: paddingX, paddingRight: paddingX }}>
-        <Link href="/services" className="block relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden group rounded-2xl">
+        <Link href="/services" className="block relative h-[350px] md:h-[600px] lg:h-[700px] overflow-hidden group rounded-2xl">
           <Image
             src="/images/covers/photo-retouching-cover.jpg"
             alt="Photo Editing"
@@ -27,13 +27,13 @@ export default function CinematicShowcase() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-          <div className="absolute top-8 left-8 z-10">
-            <span className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center text-sm font-bold text-white/70">
+          <div className="absolute top-5 left-5 z-10">
+            <span className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-xs font-bold text-white/70">
               01
             </span>
           </div>
 
-          <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12 lg:p-16 z-10">
+          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12 lg:p-16 z-10">
             <h3 className="text-4xl md:text-5xl lg:text-7xl font-black text-white/90 leading-[0.9] tracking-tight">
               PHOTO<br />EDITING
             </h3>

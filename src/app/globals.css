@@ -43,6 +43,10 @@
     background: rgb(var(--accent-500) / 30%);
   }
 
+  html, body {
+    overflow-x: hidden;
+  }
+
   body {
     background: var(--bg);
     color: rgb(var(--fg-rgb));
